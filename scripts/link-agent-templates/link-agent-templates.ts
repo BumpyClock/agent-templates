@@ -10,7 +10,7 @@ import path from "node:path";
 type AgentTool = "claude" | "codex" | "copilot" | "opencode" | "pi" | "all";
 
 type CliOptions = {
-	agentWorkspaceDir: string;
+	agentTemplatesDir: string;
 	setupMode: AgentTool;
 	show: boolean;
 };
@@ -24,7 +24,7 @@ function action(message: string): void {
 }
 
 function parseArgs(argv: string[]): CliOptions {
-	let agentWorkspaceDir = process.cwd();
+	let agentTemplatesDir = process.cwd();
 	let setupMode: AgentTool = "all";
 	let show = false;
 
@@ -36,7 +36,7 @@ function parseArgs(argv: string[]): CliOptions {
 			if (!value) {
 				throw new Error("Missing value for --agent-templates-dir");
 			}
-			agentWorkspaceDir = value;
+			agentTemplatesDir = value;
 			i += 1;
 			continue;
 		}
@@ -83,7 +83,7 @@ function parseArgs(argv: string[]): CliOptions {
 	}
 
 	return {
-		agentWorkspaceDir: path.resolve(agentWorkspaceDir),
+		agentTemplatesDir: path.resolve(agentTemplatesDir),
 		setupMode,
 		show,
 	};
@@ -162,11 +162,11 @@ async function ensureLinked(
 }
 
 async function linkIfPresent(
-	workspaceDir: string,
+	templatesDir: string,
 	sourceRelative: string,
 	targetPath: string,
 ): Promise<void> {
-	const sourcePath = path.join(workspaceDir, sourceRelative);
+	const sourcePath = path.join(templatesDir, sourceRelative);
 	if (!(await pathExists(sourcePath))) {
 		return;
 	}
@@ -178,46 +178,46 @@ async function linkIfPresent(
 // Claude Code linking
 // =============================================================================
 
-async function linkClaude(agentWorkspaceDir: string): Promise<void> {
+async function linkClaude(agentTemplatesDir: string): Promise<void> {
 	info("Linking Claude Code agent templates...");
 
 	const claudeRoot = homePath(".claude");
 	await mkdir(claudeRoot, { recursive: true });
 
 	await linkIfPresent(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"prompts",
 		path.join(claudeRoot, "commands"),
 	);
 	await linkIfPresent(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"skills",
 		path.join(claudeRoot, "skills"),
 	);
 	await linkIfPresent(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"docs",
 		path.join(claudeRoot, "docs"),
 	);
 	await linkIfPresent(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"defaults/AGENTS.md",
 		path.join(claudeRoot, "CLAUDE.md"),
 	);
 	await linkIfPresent(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"defaults/AGENTS.local.md",
 		path.join(claudeRoot, "AGENTS.local.md"),
 	);
 	await linkIfPresent(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"tools.md",
 		path.join(claudeRoot, "tools.md"),
 	);
 
 	// Link compiled agents from agent-templates
 	const agentsSource = path.join(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"agent-templates/dist/claude",
 	);
 	const agentsTarget = path.join(claudeRoot, "agents");
@@ -226,7 +226,7 @@ async function linkClaude(agentWorkspaceDir: string): Promise<void> {
 	}
 
 	// Link settings.json
-	const settingsSource = path.join(agentWorkspaceDir, ".claude/settings.json");
+	const settingsSource = path.join(agentTemplatesDir, ".claude/settings.json");
 	const settingsTarget = path.join(claudeRoot, "settings.json");
 	if (await pathExists(settingsSource)) {
 		await ensureLinked(settingsSource, settingsTarget);
@@ -237,46 +237,46 @@ async function linkClaude(agentWorkspaceDir: string): Promise<void> {
 // Codex linking
 // =============================================================================
 
-async function linkCodex(agentWorkspaceDir: string): Promise<void> {
+async function linkCodex(agentTemplatesDir: string): Promise<void> {
 	info("Linking Codex agent templates...");
 
 	const codexRoot = homePath(".codex");
 	await mkdir(codexRoot, { recursive: true });
 
 	await linkIfPresent(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"prompts",
 		path.join(codexRoot, "prompts"),
 	);
 	await linkIfPresent(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"skills",
 		path.join(codexRoot, "skills"),
 	);
 	await linkIfPresent(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"docs",
 		path.join(codexRoot, "docs"),
 	);
 	await linkIfPresent(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"defaults/AGENTS.md",
 		path.join(codexRoot, "AGENTS.md"),
 	);
 	await linkIfPresent(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"defaults/AGENTS.local.md",
 		path.join(codexRoot, "AGENTS.local.md"),
 	);
 	await linkIfPresent(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"tools.md",
 		path.join(codexRoot, "tools.md"),
 	);
 
 	// Link compiled agents
 	const agentsSource = path.join(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"agent-templates/dist/codex",
 	);
 	const agentsTarget = path.join(codexRoot, "agents");
@@ -285,7 +285,7 @@ async function linkCodex(agentWorkspaceDir: string): Promise<void> {
 	}
 
 	// Link hooks.json
-	const hooksSource = path.join(agentWorkspaceDir, ".codex/hooks.json");
+	const hooksSource = path.join(agentTemplatesDir, ".codex/hooks.json");
 	const hooksTarget = path.join(codexRoot, "hooks.json");
 	if (await pathExists(hooksSource)) {
 		await ensureLinked(hooksSource, hooksTarget);
@@ -296,46 +296,46 @@ async function linkCodex(agentWorkspaceDir: string): Promise<void> {
 // GitHub Copilot linking
 // =============================================================================
 
-async function linkCopilot(agentWorkspaceDir: string): Promise<void> {
+async function linkCopilot(agentTemplatesDir: string): Promise<void> {
 	info("Linking GitHub Copilot agent templates...");
 
 	const copilotRoot = homePath(".copilot");
 	await mkdir(copilotRoot, { recursive: true });
 
 	await linkIfPresent(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"prompts",
 		path.join(copilotRoot, "prompts"),
 	);
 	await linkIfPresent(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"skills",
 		path.join(copilotRoot, "skills"),
 	);
 	await linkIfPresent(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"docs",
 		path.join(copilotRoot, "docs"),
 	);
 	await linkIfPresent(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"defaults/AGENTS.md",
 		path.join(copilotRoot, "copilot-instructions.md"),
 	);
 	await linkIfPresent(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"defaults/AGENTS.local.md",
 		path.join(copilotRoot, "AGENTS.local.md"),
 	);
 	await linkIfPresent(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"tools.md",
 		path.join(copilotRoot, "tools.md"),
 	);
 
 	// Link compiled agents
 	const agentsSource = path.join(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"agent-templates/dist/copilot",
 	);
 	const agentsTarget = path.join(copilotRoot, "agents");
@@ -344,7 +344,7 @@ async function linkCopilot(agentWorkspaceDir: string): Promise<void> {
 	}
 
 	// Link hooks directory
-	const hooksSource = path.join(agentWorkspaceDir, ".copilot/hooks");
+	const hooksSource = path.join(agentTemplatesDir, ".copilot/hooks");
 	const hooksTarget = path.join(copilotRoot, "hooks");
 	if (await pathExists(hooksSource)) {
 		await ensureLinked(hooksSource, hooksTarget);
@@ -355,31 +355,31 @@ async function linkCopilot(agentWorkspaceDir: string): Promise<void> {
 // OpenCode linking
 // =============================================================================
 
-async function linkOpencode(agentWorkspaceDir: string): Promise<void> {
+async function linkOpencode(agentTemplatesDir: string): Promise<void> {
 	info("Linking OpenCode agent templates...");
 
 	const opencodeRoot = homePath(".config/opencode");
 	await mkdir(opencodeRoot, { recursive: true });
 
 	await linkIfPresent(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"prompts",
 		path.join(opencodeRoot, "commands"),
 	);
 	await linkIfPresent(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"skills",
 		path.join(opencodeRoot, "skills"),
 	);
 	await linkIfPresent(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"tools.md",
 		path.join(opencodeRoot, "tools.md"),
 	);
 
 	// Link compiled agents
 	const agentsSource = path.join(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"agent-templates/dist/opencode",
 	);
 	const agentsTarget = path.join(opencodeRoot, "agents");
@@ -392,37 +392,37 @@ async function linkOpencode(agentWorkspaceDir: string): Promise<void> {
 // Pi linking
 // =============================================================================
 
-async function linkPi(agentWorkspaceDir: string): Promise<void> {
+async function linkPi(agentTemplatesDir: string): Promise<void> {
 	info("Linking Pi agent templates...");
 
 	const piRoot = homePath(".pi/agent");
 	await mkdir(piRoot, { recursive: true });
 
 	await linkIfPresent(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"defaults/AGENTS.md",
 		path.join(piRoot, "AGENTS.md"),
 	);
 	await linkIfPresent(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"defaults/AGENTS.local.md",
 		path.join(piRoot, "AGENTS.local.md"),
 	);
 
 	// Link settings files
-	const settingsSource = path.join(agentWorkspaceDir, ".pi/agent/settings.json");
+	const settingsSource = path.join(agentTemplatesDir, ".pi/agent/settings.json");
 	const settingsTarget = path.join(piRoot, "settings.json");
 	if (await pathExists(settingsSource)) {
 		await ensureLinked(settingsSource, settingsTarget);
 	}
 
-	const modelsSource = path.join(agentWorkspaceDir, ".pi/agent/models.json");
+	const modelsSource = path.join(agentTemplatesDir, ".pi/agent/models.json");
 	const modelsTarget = path.join(piRoot, "models.json");
 	if (await pathExists(modelsSource)) {
 		await ensureLinked(modelsSource, modelsTarget);
 	}
 
-	const cloakSource = path.join(agentWorkspaceDir, ".pi/agent/cloak.json");
+	const cloakSource = path.join(agentTemplatesDir, ".pi/agent/cloak.json");
 	const cloakTarget = path.join(piRoot, "cloak.json");
 	if (await pathExists(cloakSource)) {
 		await ensureLinked(cloakSource, cloakTarget);
@@ -430,7 +430,7 @@ async function linkPi(agentWorkspaceDir: string): Promise<void> {
 
 	// Link compiled agents
 	const agentsSource = path.join(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"agent-templates/dist/pi",
 	);
 	const agentsTarget = path.join(piRoot, "agents");
@@ -439,14 +439,14 @@ async function linkPi(agentWorkspaceDir: string): Promise<void> {
 	}
 
 	// Link extensions
-	const extensionsSource = path.join(agentWorkspaceDir, ".pi/agent/extensions");
+	const extensionsSource = path.join(agentTemplatesDir, ".pi/agent/extensions");
 	const extensionsTarget = path.join(piRoot, "extensions");
 	if (await pathExists(extensionsSource)) {
 		await ensureLinked(extensionsSource, extensionsTarget);
 	}
 
 	// Link themes
-	const themesSource = path.join(agentWorkspaceDir, ".pi/agent/themes");
+	const themesSource = path.join(agentTemplatesDir, ".pi/agent/themes");
 	const themesTarget = path.join(piRoot, "themes");
 	if (await pathExists(themesSource)) {
 		await ensureLinked(themesSource, themesTarget);
@@ -457,39 +457,39 @@ async function linkPi(agentWorkspaceDir: string): Promise<void> {
 // Generic .agents linking (shared personalities and prompts)
 // =============================================================================
 
-async function linkAgentsShared(agentWorkspaceDir: string): Promise<void> {
+async function linkAgentsShared(agentTemplatesDir: string): Promise<void> {
 	info("Linking shared .agents directory...");
 
 	const agentsRoot = homePath(".agents");
 	await mkdir(agentsRoot, { recursive: true });
 
 	await linkIfPresent(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"prompts",
 		path.join(agentsRoot, "prompts"),
 	);
 	await linkIfPresent(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"personalities",
 		path.join(agentsRoot, "personalities"),
 	);
 	await linkIfPresent(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"defaults/AGENTS.md",
 		path.join(agentsRoot, "AGENTS.md"),
 	);
 	await linkIfPresent(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"defaults/AGENTS.local.md",
 		path.join(agentsRoot, "AGENTS.local.md"),
 	);
 	await linkIfPresent(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"tools.md",
 		path.join(agentsRoot, "tools.md"),
 	);
 	await linkIfPresent(
-		agentWorkspaceDir,
+		agentTemplatesDir,
 		"skills",
 		path.join(agentsRoot, "skills"),
 	);
@@ -511,30 +511,30 @@ async function main(): Promise<void> {
 	const mode = options.setupMode;
 
 	if (mode === "claude" || mode === "all") {
-		await linkClaude(options.agentWorkspaceDir);
+		await linkClaude(options.agentTemplatesDir);
 	}
 
 	if (mode === "codex" || mode === "all") {
-		await linkCodex(options.agentWorkspaceDir);
+		await linkCodex(options.agentTemplatesDir);
 	}
 
 	if (mode === "copilot" || mode === "all") {
-		await linkCopilot(options.agentWorkspaceDir);
+		await linkCopilot(options.agentTemplatesDir);
 	}
 
 	if (mode === "opencode" || mode === "all") {
-		await linkOpencode(options.agentWorkspaceDir);
+		await linkOpencode(options.agentTemplatesDir);
 	}
 
 	if (mode === "pi" || mode === "all") {
-		await linkPi(options.agentWorkspaceDir);
+		await linkPi(options.agentTemplatesDir);
 	}
 
 	if (mode === "all") {
-		await linkAgentsShared(options.agentWorkspaceDir);
+		await linkAgentsShared(options.agentTemplatesDir);
 	}
 
-	info("Agent workspace linking completed");
+	info("Agent templates linking completed");
 }
 
 if (import.meta.main) {
