@@ -1,0 +1,78 @@
+# Agent Workspace
+
+AI agent configurations, prompts, skills, and personalities for:
+- Claude Code / Claude Agents
+- Codex
+- GitHub Copilot
+- OpenCode
+- Pi
+
+## Quick Start
+
+```bash
+git clone https://github.com/BumpyClock/agent-workspace.git ~/Projects/agent-workspace
+cd agent-workspace
+
+# macOS/Linux
+./bootstrap.sh
+
+# Windows (PowerShell)
+.\bootstrap.ps1
+```
+
+## Repository Layout
+
+```
+agent-workspace/
+├── prompts/              # Claude commands and prompts
+├── skills/               # Agent skills and capabilities
+├── agents-archive/       # Historical agent definitions
+├── agent-hooks/          # Agent lifecycle hooks
+├── agent-templates/      # Agent compilation templates
+├── claude-code-workflows/# Claude Code workflow definitions
+├── codex_configs/        # Codex-specific configurations
+├── personalities/        # Agent personality definitions
+├── scripts/              # Installation and linking scripts
+│   └── link-agent-workspace.ts
+├── bootstrap.sh          # Unix/macOS bootstrap
+├── bootstrap.ps1         # Windows PowerShell bootstrap
+├── AGENTS.md             # Agent documentation
+└── AGENTS.local.md       # Local agent overrides
+```
+
+## Linking
+
+The `link-agent-workspace.ts` script creates symlinks from this repo to the appropriate locations:
+
+- **Claude**: `~/.claude/commands`, `~/.claude/skills`, `~/.claude/docs`, etc.
+- **Codex**: `~/.codex/prompts`, `~/.codex/skills`, `~/.codex/agents`, etc.
+- **Copilot**: `~/.copilot/prompts`, `~/.copilot/skills`, etc.
+- **OpenCode**: `~/.config/opencode/...`
+- **Pi**: `~/.pi/agent/...`
+
+## Platform Support
+
+- **macOS**: Full support (Homebrew + zsh)
+- **Linux**: Full support (distro-specific packages + zsh/bash)
+- **Windows**: Full support (PowerShell)
+
+## Integration with Dotfiles
+
+This repo is designed to work alongside your system dotfiles:
+- Install system configs first (shell, tools, etc.) via `dotfiles` repo
+- Then install AI agent configs via this `agent-workspace` repo
+- Both repos can be synced independently across machines
+
+## Updates
+
+To pull latest changes and re-link:
+
+```bash
+cd ~/Projects/agent-workspace
+git pull
+bun scripts/link-agent-workspace/link-agent-workspace.ts --setup all
+```
+
+## License
+
+MIT

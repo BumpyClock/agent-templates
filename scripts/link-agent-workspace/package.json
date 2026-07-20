@@ -1,0 +1,13 @@
+{
+  "name": "agent-workspace-linker",
+  "version": "1.0.0",
+  "description": "Link agent workspace configs to AI tools",
+  "type": "module",
+  "scripts": {
+    "link": "bun link-agent-workspace.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "bun-types": "latest"
+  }
+}
