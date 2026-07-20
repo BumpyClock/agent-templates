@@ -1,4 +1,5 @@
 import {
+	copyFile,
 	mkdir,
 	readlink,
 	rm,
@@ -11,9 +12,17 @@ type AgentTool = "claude" | "codex" | "copilot" | "opencode" | "pi" | "all";
 
 type CliOptions = {
 	agentTemplatesDir: string;
+	secretsDir: string;
 	setupMode: AgentTool;
 	show: boolean;
 };
+
+// The machine-local agent instructions file. The private baseline lives in the
+// secrets repo and is seeded (copied, not linked) into defaults/ once, so each
+// device can diverge without those edits syncing back. The seeded copy is
+// gitignored in agent-templates and is what every tool's AGENTS.local.md links to.
+const LOCAL_AGENTS_RELATIVE = "defaults/AGENTS.local.md";
+const SECRETS_LOCAL_AGENTS_NAME = "AGENTS.local.md";
 
 function info(message: string): void {
 	console.log(`[INFO] ${message}`);
@@ -23,8 +32,19 @@ function action(message: string): void {
 	console.log(`[ACTION] ${message}`);
 }
 
+function defaultSecretsDir(): string {
+	// The secrets submodule lives in the dotfiles repo, separate from this repo.
+	// Prefer an explicit env override, else fall back to the conventional path.
+	const fromEnv = process.env.DOTFILES_SECRETS_DIR;
+	if (fromEnv) {
+		return fromEnv;
+	}
+	return path.join(os.homedir(), "Projects", "dotfiles", "secrets");
+}
+
 function parseArgs(argv: string[]): CliOptions {
 	let agentTemplatesDir = process.cwd();
+	let secretsDir = defaultSecretsDir();
 	let setupMode: AgentTool = "all";
 	let show = false;
 
@@ -37,6 +57,16 @@ function parseArgs(argv: string[]): CliOptions {
 				throw new Error("Missing value for --agent-templates-dir");
 			}
 			agentTemplatesDir = value;
+			i += 1;
+			continue;
+		}
+
+		if (arg === "--secrets-dir") {
+			const value = argv[i + 1];
+			if (!value) {
+				throw new Error("Missing value for --secrets-dir");
+			}
+			secretsDir = value;
 			i += 1;
 			continue;
 		}
@@ -73,6 +103,15 @@ function parseArgs(argv: string[]): CliOptions {
 				"  --agent-templates-dir <path>  Agent templates repo root (default: cwd)",
 			);
 			console.log(
+				"  --secrets-dir <path>          Dotfiles secrets dir holding the private",
+			);
+			console.log(
+				"                                AGENTS.local.md baseline (default:",
+			);
+			console.log(
+				"                                ~/Projects/dotfiles/secrets, or $DOTFILES_SECRETS_DIR)",
+			);
+			console.log(
 				"  --setup <tool>               Setup specific tool or 'all' (default: all)",
 			);
 			console.log("  --show, -s                    Show current link status");
@@ -84,6 +123,7 @@ function parseArgs(argv: string[]): CliOptions {
 
 	return {
 		agentTemplatesDir: path.resolve(agentTemplatesDir),
+		secretsDir: path.resolve(secretsDir),
 		setupMode,
 		show,
 	};
@@ -496,6 +536,41 @@ async function linkAgentsShared(agentTemplatesDir: string): Promise<void> {
 }
 
 // =============================================================================
+// Machine-local AGENTS.local.md seeding
+// =============================================================================
+
+// Seed defaults/AGENTS.local.md from the secrets baseline exactly once. Copied,
+// not linked, so per-device edits stay local and never sync back to secrets. An
+// existing local copy is left untouched; delete it and re-run to reset from the
+// baseline.
+async function seedLocalAgents(
+	agentTemplatesDir: string,
+	secretsDir: string,
+): Promise<void> {
+	const localPath = path.join(agentTemplatesDir, LOCAL_AGENTS_RELATIVE);
+
+	if (await pathExists(localPath)) {
+		info(
+			`Local AGENTS.local.md already present (leaving device-specific edits intact): ${localPath}`,
+		);
+		return;
+	}
+
+	const baselinePath = path.join(secretsDir, SECRETS_LOCAL_AGENTS_NAME);
+	if (!(await pathExists(baselinePath))) {
+		info(
+			`No AGENTS.local.md baseline at ${baselinePath}; skipping seed. ` +
+				`Create it or pass --secrets-dir to enable local agent instructions.`,
+		);
+		return;
+	}
+
+	await mkdir(path.dirname(localPath), { recursive: true });
+	await copyFile(baselinePath, localPath);
+	action(`Seeded local AGENTS.local.md from ${baselinePath}`);
+}
+
+// =============================================================================
 // Main entrypoint
 // =============================================================================
 
@@ -507,6 +582,10 @@ async function main(): Promise<void> {
 		// TODO: Implement show status
 		return;
 	}
+
+	// Seed the machine-local AGENTS.local.md before linking so the tool links
+	// below resolve to a present file.
+	await seedLocalAgents(options.agentTemplatesDir, options.secretsDir);
 
 	const mode = options.setupMode;
 
