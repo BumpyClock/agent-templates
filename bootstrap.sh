@@ -56,6 +56,15 @@ if [[ ! -d "scripts/link-agent-templates/node_modules" ]]; then
     cd "$AGENT_TEMPLATES_DIR"
 fi
 
+# Compile agent templates into per-tool formats (dist/). dist/ is gitignored, so
+# a fresh clone has none; without this the linker silently skips every tool's
+# agents/ link and no agents get installed.
+log_info "Compiling agent templates..."
+if [[ ! -d "agent-templates/scripts/node_modules" ]]; then
+    (cd agent-templates/scripts && bun install)
+fi
+(cd agent-templates/scripts && bun run compile-agents)
+
 # Parse arguments
 SETUP_MODE="${1:-all}"
 
