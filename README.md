@@ -1,4 +1,4 @@
-# Agent Workspace
+# Agent Templates
 
 AI agent configurations, prompts, skills, and personalities for:
 - Claude Code / Claude Agents
@@ -10,8 +10,8 @@ AI agent configurations, prompts, skills, and personalities for:
 ## Quick Start
 
 ```bash
-git clone https://github.com/BumpyClock/agent-workspace.git ~/Projects/agent-workspace
-cd agent-workspace
+git clone https://github.com/BumpyClock/agent-templates.git ~/Projects/agent-templates
+cd agent-templates
 
 # macOS/Linux
 ./bootstrap.sh
@@ -23,17 +23,16 @@ cd agent-workspace
 ## Repository Layout
 
 ```
-agent-workspace/
+agent-templates/
 ├── prompts/              # Claude commands and prompts
 ├── skills/               # Agent skills and capabilities
 ├── agents-archive/       # Historical agent definitions
 ├── agent-hooks/          # Agent lifecycle hooks
 ├── agent-templates/      # Agent compilation templates
-├── claude-code-workflows/# Claude Code workflow definitions
 ├── codex_configs/        # Codex-specific configurations
 ├── personalities/        # Agent personality definitions
 ├── scripts/              # Installation and linking scripts
-│   └── link-agent-workspace.ts
+│   └── link-agent-templates.ts
 ├── bootstrap.sh          # Unix/macOS bootstrap
 ├── bootstrap.ps1         # Windows PowerShell bootstrap
 ├── AGENTS.md             # Agent documentation
@@ -42,7 +41,7 @@ agent-workspace/
 
 ## Linking
 
-The `link-agent-workspace.ts` script creates symlinks from this repo to the appropriate locations:
+The `link-agent-templates.ts` script creates symlinks from this repo to the appropriate locations:
 
 - **Claude**: `~/.claude/commands`, `~/.claude/skills`, `~/.claude/docs`, etc.
 - **Codex**: `~/.codex/prompts`, `~/.codex/skills`, `~/.codex/agents`, etc.
@@ -60,7 +59,7 @@ The `link-agent-workspace.ts` script creates symlinks from this repo to the appr
 
 This repo is designed to work alongside your system dotfiles:
 - Install system configs first (shell, tools, etc.) via `dotfiles` repo
-- Then install AI agent configs via this `agent-workspace` repo
+- Then install AI agent configs via this `agent-templates` repo
 - Both repos can be synced independently across machines
 
 ## Updates
@@ -68,9 +67,9 @@ This repo is designed to work alongside your system dotfiles:
 To pull latest changes and re-link:
 
 ```bash
-cd ~/Projects/agent-workspace
+cd ~/Projects/agent-templates
 git pull
-bun scripts/link-agent-workspace/link-agent-workspace.ts --setup all
+bun scripts/link-agent-templates/link-agent-templates.ts --setup all
 ```
 
 ## License

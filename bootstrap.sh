@@ -1,5 +1,5 @@
 #!/bin/bash
-# Bootstrap script for agent-workspace
+# Bootstrap script for agent-templates
 # Clones the repo (if needed) and links all agent configurations
 
 set -euo pipefail
@@ -24,22 +24,22 @@ log_warn() {
 }
 
 # Check if this script is being run from the repo
-if [[ -d "scripts/link-agent-workspace" && -f "AGENTS.md" ]]; then
-    AGENT_WORKSPACE_DIR="$(pwd)"
-    log_info "Running from existing agent-workspace directory: $AGENT_WORKSPACE_DIR"
+if [[ -d "scripts/link-agent-templates" && -f "AGENTS.md" ]]; then
+    AGENT_TEMPLATES_DIR="$(pwd)"
+    log_info "Running from existing agent-templates directory: $AGENT_TEMPLATES_DIR"
 else
     # Default location
-    AGENT_WORKSPACE_DIR="$HOME/Projects/agent-workspace"
+    AGENT_TEMPLATES_DIR="$HOME/Projects/agent-templates"
 
-    if [[ -d "$AGENT_WORKSPACE_DIR" ]]; then
-        log_info "Agent workspace exists at: $AGENT_WORKSPACE_DIR"
+    if [[ -d "$AGENT_TEMPLATES_DIR" ]]; then
+        log_info "Agent templates exists at: $AGENT_TEMPLATES_DIR"
     else
-        log_info "Cloning agent-workspace to: $AGENT_WORKSPACE_DIR"
-        git clone https://github.com/BumpyClock/agent-workspace.git "$AGENT_WORKSPACE_DIR"
+        log_info "Cloning agent-templates to: $AGENT_TEMPLATES_DIR"
+        git clone https://github.com/BumpyClock/agent-templates.git "$AGENT_TEMPLATES_DIR"
     fi
 fi
 
-cd "$AGENT_WORKSPACE_DIR"
+cd "$AGENT_TEMPLATES_DIR"
 
 # Check for bun
 if ! command -v bun &> /dev/null; then
@@ -49,11 +49,11 @@ if ! command -v bun &> /dev/null; then
 fi
 
 # Install dependencies for the linker
-if [[ ! -d "scripts/link-agent-workspace/node_modules" ]]; then
+if [[ ! -d "scripts/link-agent-templates/node_modules" ]]; then
     log_info "Installing linker dependencies..."
-    cd scripts/link-agent-workspace
+    cd scripts/link-agent-templates
     bun install
-    cd "$AGENT_WORKSPACE_DIR"
+    cd "$AGENT_TEMPLATES_DIR"
 fi
 
 # Parse arguments
@@ -67,16 +67,16 @@ if [[ ! " ${VALID_MODES[@]} " =~ " ${SETUP_MODE} " ]]; then
     exit 1
 fi
 
-log_info "Linking agent workspace for: $SETUP_MODE"
+log_info "Linking agent templates for: $SETUP_MODE"
 
 # Run the linker
-bun scripts/link-agent-workspace/link-agent-workspace.ts \
-    --agent-workspace-dir "$AGENT_WORKSPACE_DIR" \
+bun scripts/link-agent-templates/link-agent-templates.ts \
+    --agent-templates-dir "$AGENT_TEMPLATES_DIR" \
     --setup "$SETUP_MODE"
 
-log_info "Agent workspace bootstrap complete!"
+log_info "Agent templates bootstrap complete!"
 echo ""
 echo "Next steps:"
 echo "  1. Restart your AI tools to pick up the new configurations"
-echo "  2. To re-link: cd $AGENT_WORKSPACE_DIR && bun scripts/link-agent-workspace/link-agent-workspace.ts --setup all"
-echo "  3. To update: cd $AGENT_WORKSPACE_DIR && git pull"
+echo "  2. To re-link: cd $AGENT_TEMPLATES_DIR && bun scripts/link-agent-templates/link-agent-templates.ts --setup all"
+echo "  3. To update: cd $AGENT_TEMPLATES_DIR && git pull"

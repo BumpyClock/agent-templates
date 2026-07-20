@@ -1,4 +1,4 @@
-# Bootstrap script for agent-workspace on Windows
+# Bootstrap script for agent-templates on Windows
 # Clones the repo (if needed) and links all agent configurations
 
 [CmdletBinding()]
@@ -28,24 +28,24 @@ function Write-Warn {
 
 # Check if running from the repo
 $CurrentDir = Get-Location
-if ((Test-Path "scripts\link-agent-workspace") -and (Test-Path "AGENTS.md")) {
-    $AgentWorkspaceDir = $CurrentDir.Path
-    Write-Info "Running from existing agent-workspace directory: $AgentWorkspaceDir"
+if ((Test-Path "scripts\link-agent-templates") -and (Test-Path "AGENTS.md")) {
+    $AgentTemplatesDir = $CurrentDir.Path
+    Write-Info "Running from existing agent-templates directory: $AgentTemplatesDir"
 }
 else {
     # Default location
-    $AgentWorkspaceDir = Join-Path $env:USERPROFILE "Projects\agent-workspace"
+    $AgentTemplatesDir = Join-Path $env:USERPROFILE "Projects\agent-templates"
 
-    if (Test-Path $AgentWorkspaceDir) {
-        Write-Info "Agent workspace exists at: $AgentWorkspaceDir"
+    if (Test-Path $AgentTemplatesDir) {
+        Write-Info "Agent templates exists at: $AgentTemplatesDir"
     }
     else {
-        Write-Info "Cloning agent-workspace to: $AgentWorkspaceDir"
-        git clone https://github.com/BumpyClock/agent-workspace.git $AgentWorkspaceDir
+        Write-Info "Cloning agent-templates to: $AgentTemplatesDir"
+        git clone https://github.com/BumpyClock/agent-templates.git $AgentTemplatesDir
     }
 }
 
-Set-Location $AgentWorkspaceDir
+Set-Location $AgentTemplatesDir
 
 # Check for bun
 if (-not (Get-Command bun -ErrorAction SilentlyContinue)) {
@@ -55,23 +55,23 @@ if (-not (Get-Command bun -ErrorAction SilentlyContinue)) {
 }
 
 # Install dependencies for the linker
-if (-not (Test-Path "scripts\link-agent-workspace\node_modules")) {
+if (-not (Test-Path "scripts\link-agent-templates\node_modules")) {
     Write-Info "Installing linker dependencies..."
-    Set-Location scripts\link-agent-workspace
+    Set-Location scripts\link-agent-templates
     bun install
-    Set-Location $AgentWorkspaceDir
+    Set-Location $AgentTemplatesDir
 }
 
-Write-Info "Linking agent workspace for: $SetupMode"
+Write-Info "Linking agent templates for: $SetupMode"
 
 # Run the linker
-bun scripts\link-agent-workspace\link-agent-workspace.ts `
-    --agent-workspace-dir $AgentWorkspaceDir `
+bun scripts\link-agent-templates\link-agent-templates.ts `
+    --agent-templates-dir $AgentTemplatesDir `
     --setup $SetupMode
 
-Write-Info "Agent workspace bootstrap complete!"
+Write-Info "Agent templates bootstrap complete!"
 Write-Host ""
 Write-Host "Next steps:" -ForegroundColor Cyan
 Write-Host "  1. Restart your AI tools to pick up the new configurations"
-Write-Host "  2. To re-link: cd $AgentWorkspaceDir; bun scripts\link-agent-workspace\link-agent-workspace.ts --setup all"
-Write-Host "  3. To update: cd $AgentWorkspaceDir; git pull"
+Write-Host "  2. To re-link: cd $AgentTemplatesDir; bun scripts\link-agent-templates\link-agent-templates.ts --setup all"
+Write-Host "  3. To update: cd $AgentTemplatesDir; git pull"

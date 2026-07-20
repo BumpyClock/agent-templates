@@ -31,10 +31,10 @@ function parseArgs(argv: string[]): CliOptions {
 	for (let i = 0; i < argv.length; i += 1) {
 		const arg = argv[i];
 
-		if (arg === "--agent-workspace-dir") {
+		if (arg === "--agent-templates-dir") {
 			const value = argv[i + 1];
 			if (!value) {
-				throw new Error("Missing value for --agent-workspace-dir");
+				throw new Error("Missing value for --agent-templates-dir");
 			}
 			agentWorkspaceDir = value;
 			i += 1;
@@ -65,12 +65,12 @@ function parseArgs(argv: string[]): CliOptions {
 
 		if (arg === "--help" || arg === "-h") {
 			console.log(
-				"Usage: bun scripts/link-agent-workspace/link-agent-workspace.ts [options]",
+				"Usage: bun scripts/link-agent-templates/link-agent-templates.ts [options]",
 			);
 			console.log("");
 			console.log("Options:");
 			console.log(
-				"  --agent-workspace-dir <path>  Agent workspace repo root (default: cwd)",
+				"  --agent-templates-dir <path>  Agent templates repo root (default: cwd)",
 			);
 			console.log(
 				"  --setup <tool>               Setup specific tool or 'all' (default: all)",
@@ -179,7 +179,7 @@ async function linkIfPresent(
 // =============================================================================
 
 async function linkClaude(agentWorkspaceDir: string): Promise<void> {
-	info("Linking Claude Code agent workspace...");
+	info("Linking Claude Code agent templates...");
 
 	const claudeRoot = homePath(".claude");
 	await mkdir(claudeRoot, { recursive: true });
@@ -201,12 +201,12 @@ async function linkClaude(agentWorkspaceDir: string): Promise<void> {
 	);
 	await linkIfPresent(
 		agentWorkspaceDir,
-		"AGENTS.md",
+		"defaults/AGENTS.md",
 		path.join(claudeRoot, "CLAUDE.md"),
 	);
 	await linkIfPresent(
 		agentWorkspaceDir,
-		"AGENTS.local.md",
+		"defaults/AGENTS.local.md",
 		path.join(claudeRoot, "AGENTS.local.md"),
 	);
 	await linkIfPresent(
@@ -238,7 +238,7 @@ async function linkClaude(agentWorkspaceDir: string): Promise<void> {
 // =============================================================================
 
 async function linkCodex(agentWorkspaceDir: string): Promise<void> {
-	info("Linking Codex agent workspace...");
+	info("Linking Codex agent templates...");
 
 	const codexRoot = homePath(".codex");
 	await mkdir(codexRoot, { recursive: true });
@@ -260,12 +260,12 @@ async function linkCodex(agentWorkspaceDir: string): Promise<void> {
 	);
 	await linkIfPresent(
 		agentWorkspaceDir,
-		"AGENTS.md",
+		"defaults/AGENTS.md",
 		path.join(codexRoot, "AGENTS.md"),
 	);
 	await linkIfPresent(
 		agentWorkspaceDir,
-		"AGENTS.local.md",
+		"defaults/AGENTS.local.md",
 		path.join(codexRoot, "AGENTS.local.md"),
 	);
 	await linkIfPresent(
@@ -297,7 +297,7 @@ async function linkCodex(agentWorkspaceDir: string): Promise<void> {
 // =============================================================================
 
 async function linkCopilot(agentWorkspaceDir: string): Promise<void> {
-	info("Linking GitHub Copilot agent workspace...");
+	info("Linking GitHub Copilot agent templates...");
 
 	const copilotRoot = homePath(".copilot");
 	await mkdir(copilotRoot, { recursive: true });
@@ -319,12 +319,12 @@ async function linkCopilot(agentWorkspaceDir: string): Promise<void> {
 	);
 	await linkIfPresent(
 		agentWorkspaceDir,
-		"AGENTS.md",
+		"defaults/AGENTS.md",
 		path.join(copilotRoot, "copilot-instructions.md"),
 	);
 	await linkIfPresent(
 		agentWorkspaceDir,
-		"AGENTS.local.md",
+		"defaults/AGENTS.local.md",
 		path.join(copilotRoot, "AGENTS.local.md"),
 	);
 	await linkIfPresent(
@@ -356,7 +356,7 @@ async function linkCopilot(agentWorkspaceDir: string): Promise<void> {
 // =============================================================================
 
 async function linkOpencode(agentWorkspaceDir: string): Promise<void> {
-	info("Linking OpenCode agent workspace...");
+	info("Linking OpenCode agent templates...");
 
 	const opencodeRoot = homePath(".config/opencode");
 	await mkdir(opencodeRoot, { recursive: true });
@@ -393,19 +393,19 @@ async function linkOpencode(agentWorkspaceDir: string): Promise<void> {
 // =============================================================================
 
 async function linkPi(agentWorkspaceDir: string): Promise<void> {
-	info("Linking Pi agent workspace...");
+	info("Linking Pi agent templates...");
 
 	const piRoot = homePath(".pi/agent");
 	await mkdir(piRoot, { recursive: true });
 
 	await linkIfPresent(
 		agentWorkspaceDir,
-		"AGENTS.md",
+		"defaults/AGENTS.md",
 		path.join(piRoot, "AGENTS.md"),
 	);
 	await linkIfPresent(
 		agentWorkspaceDir,
-		"AGENTS.local.md",
+		"defaults/AGENTS.local.md",
 		path.join(piRoot, "AGENTS.local.md"),
 	);
 
@@ -475,12 +475,12 @@ async function linkAgentsShared(agentWorkspaceDir: string): Promise<void> {
 	);
 	await linkIfPresent(
 		agentWorkspaceDir,
-		"AGENTS.md",
+		"defaults/AGENTS.md",
 		path.join(agentsRoot, "AGENTS.md"),
 	);
 	await linkIfPresent(
 		agentWorkspaceDir,
-		"AGENTS.local.md",
+		"defaults/AGENTS.local.md",
 		path.join(agentsRoot, "AGENTS.local.md"),
 	);
 	await linkIfPresent(
@@ -539,7 +539,7 @@ async function main(): Promise<void> {
 
 if (import.meta.main) {
 	main().catch((error) => {
-		console.error("link-agent-workspace failed:", error);
+		console.error("link-agent-templates failed:", error);
 		process.exit(1);
 	});
 }

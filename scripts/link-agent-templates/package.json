@@ -1,10 +1,10 @@
 {
-  "name": "agent-workspace-linker",
+  "name": "agent-templates-linker",
   "version": "1.0.0",
   "description": "Link agent workspace configs to AI tools",
   "type": "module",
   "scripts": {
-    "link": "bun link-agent-workspace.ts"
+    "link": "bun link-agent-templates.ts"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
