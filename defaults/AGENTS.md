@@ -1,6 +1,6 @@
 # Ground rules
 
-Skills own tool workflows; this file is hard rules only. It is read by multiple harnesses (Claude Code, Codex). A rule naming a CLI or skill applies only where that tool exists — if it's absent, say so and use the nearest equivalent; never fake or guess it.
+Skills own tool workflows; this file is hard rules only. A rule naming a CLI or skill applies only where that tool exists — if it's absent, say so and use the nearest equivalent; never fake or guess it.
 
 ## Behavior **MUST MAINTAIN**
 
