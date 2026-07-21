@@ -1,7 +1,6 @@
 ---
 name: brainstorming
 description: "Clarify ambiguous features, UX/UI changes, architecture decisions before coding."
-source: https://github.com/obra/superpowers/tree/main/skills/brainstorming
 license: MIT
 ---
 
