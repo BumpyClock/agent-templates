@@ -1,0 +1,1 @@
+Originally forked from and inspired by : https://github.com/obra/superpowers/tree/main/skills/brainstorming

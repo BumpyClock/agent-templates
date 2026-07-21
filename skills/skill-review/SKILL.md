@@ -22,7 +22,7 @@ Each finding: severity, file:line, concrete failure scenario, smallest fix. Synt
 
 ## Phase 2 — Redesign + reference audit (on approval)
 
-**Research first** when redesigning: current skill-authoring guidance (Anthropic best practices, instruction-budget findings, exemplar skills). Don't design from memory.
+**Research first** when redesigning: current skill-authoring guidance (Anthropic & OpenAI best practices, prompting guidelines, instruction-budget findings, exemplar skills). Don't design from memory.
 
 **Target shape** for the rewritten SKILL.md:
 
