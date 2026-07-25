@@ -1,11 +1,6 @@
 ---
 name: brainstorming
-<<<<<<< HEAD
 description: "Clarify ambiguous features, UX/UI changes, architecture decisions before coding."
-=======
-description: "Resolves a vague or unsettled request — new feature, behavior change, UX/UI direction, architecture decision — into a user-approved design spec, then hands off to the planner agent for implementation planning. Use before creative or behavior-changing work whenever the request leaves real design choices open (add/build/redesign/should-we asks). Not for answering questions, explaining existing code, executing a fully specified mechanical change, or producing visual design deliverables (ux-designer owns those)."
-source: https://github.com/obra/superpowers/tree/main/skills/brainstorming
->>>>>>> f4ae83e2ae84b27c6ea3e20805de4b6411d814cf
 license: MIT
 ---
 
@@ -36,7 +31,7 @@ Match ceremony to risk: gates are fixed, ceremony volume scales.
 
 Contents: problem/purpose, approved scope, requirements, approach, constraints/non-goals, risks and open questions resolved so far, testing expectations.
 
-Self-review before user review — fix inline:
+Independent adversarial-review before user review — fix inline:
 
 1. Placeholders: no TBD/TODO, incomplete sections, or vague requirements.
 2. Consistency: no contradictions.
