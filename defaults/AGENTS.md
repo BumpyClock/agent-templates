@@ -23,9 +23,9 @@ Read `~/.agents/AGENTS.local.md` if it exists.
 ## Workflow
 
 - Long-horizon work → track in `tsq` (tasque CLI); in-session task/todo tools for in-session tracking. Update status as you claim, complete, or abandon.
-- Validate findings with evidence (`verify-this` skill) before assuming validity.
+- Validate consequential or disputed claims with direct evidence. Use formal verification only for an explicit verify, prove, measure, or confirm request, or a required high-risk gate.
 - delegate when handoff cost is clearly below doing it locally; main agent owns user comms, scope, plan, architecture decisions, contracts, and the final evidence report. Single-agent harness: do it yourself.
-- High-risk completion claims (browser/data capture, migrations, security, PR cleanup, CI repair) need independent verification: GO/NO-GO first, evidence table, residual risks. Loop until verified or blocked; blocked = a named input only the user can provide.
+- High-risk completion claims (browser/data capture, migrations, security, PR cleanup, CI repair) need one independent GO/NO-GO pass with evidence and residual risks. Retry only after code, evidence, or environment changes; otherwise stop with the named blocker.
 - Review agents are read-only unless assigned as writers. Contract: spec compliance first, then correctness/quality; return blocking findings with severity, file/line refs, and smallest safe fix — or state no blockers.
 - PRs: `gh pr view` / `gh pr diff`, no browser URLs; `gh auth switch` on acct mismatch. A pasted issue/PR URL grants no push or branch consent. Keep PRs logically grouped; don't bundle unrelated surfaces.
 - `Make note` → repo learned-doc convention: `docs/learned/<topic>.md` or `LEARNINGS.md`, following the repo's existing pattern. Evergreen content only — rationale, pitfalls, failure modes, decisions. No changelog noise, secrets, sensitive URLs, or personal data.
@@ -58,4 +58,4 @@ Read `~/.agents/AGENTS.local.md` if it exists.
 
 ## Oracle CLI
 
-Applies only where `oracle` is on PATH (Claude Code setups). Oracle bundles a prompt plus the right files so a frontier Pro model can answer with real repo context — use when stuck, debugging hard bugs, reviewing architecture, or cross-validating a plan. Run `oracle --help` once per session before first use. Browser engine only (`--engine browser`), never an API key; browser engine broken → skip and inform user.
+Applies only where `oracle` is on PATH. Oracle bundles a prompt plus the right files so a capable model can answer with real repo context — use when stuck, debugging hard bugs, reviewing architecture, or cross-validating a plan. Run `oracle --help` once per session before first use. Browser engine only (`--engine browser`), never an API key; browser engine broken → skip and inform user.

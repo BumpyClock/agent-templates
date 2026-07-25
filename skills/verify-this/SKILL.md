@@ -1,15 +1,17 @@
 ---
 name: verify-this
-description: "Verify concrete claims with fresh evidence; return VERIFIED/NOT VERIFIED/INCONCLUSIVE."
+description: "Formal proof of one concrete claim. Use only for an explicit verify, prove, measure, or confirm request, or when a required high-risk acceptance gate needs a verdict."
 source: https://github.com/shaneholloman/cursor-plugins/tree/main/cursor-team-kit/skills/verify-this
 license: MIT
 ---
 
 # Verify This
 
-Use when user asks to verify, prove, measure, confirm a fix, or show evidence for a concrete claim. Goal: prove or disprove one falsifiable statement. Not for vague quality claims ("the code is cleaner") — ask for a measurable claim first.
+Use only for an explicit verification request or a required high-risk acceptance gate. Goal: prove or disprove one falsifiable statement. Not for routine completion checks, ordinary test/lint runs, general research, or vague quality claims ("the code is cleaner").
 
 Use GO/NO-GO mode for acceptance gates: high-risk completion checks, migration readiness, PR cleanup readiness, or independent verifier decisions.
+
+Invoke once per claim. Do not reread this skill or restart the workflow in the same task unless the claim, threshold, evidence, or environment changed.
 
 ## Workflow
 
