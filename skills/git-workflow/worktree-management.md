@@ -23,7 +23,14 @@ Report: path, baseline result, next step.
 
 ## Cleanup
 
-Only when asked: `git worktree list`, `git worktree remove <path>`. Branch delete → `commits-and-branches.md` rules.
+Only when asked: `git worktree list`, then per worktree prove content coverage before removal:
+
+- Uncommitted changes → show diff, ask keep/discard.
+- `git merge-base --is-ancestor <sha> main` — commit landed verbatim.
+- `git patch-id --stable` compare vs main — rebased/cherry-picked under a different SHA.
+- `git log -S'<distinctive token>' --all` — reworked-and-landed vs never landed.
+
+Unlanded content → report, ask before removing. Then `git worktree remove <path>`; branch delete → `commits-and-branches.md` rules.
 
 ## Never
 

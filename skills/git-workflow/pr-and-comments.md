@@ -1,14 +1,14 @@
 # PRs and Comments
 
-Goal: reviewable PRs, low-noise feedback handling.
+Goal: reviewable PRs, low-noise feedback handling, reply+resolve that survives independent verification.
 
 ## Create/update PR
 
 Inspect first: `git log --oneline origin/main..HEAD`, `git diff --stat origin/main...HEAD`, existing `gh pr view`. Why unclear → ask.
 
-Body: repo PR template when one exists (`.github/PULL_REQUEST_TEMPLATE.md` or variants); else cover Summary (why + what), Changes, Testing (commands/results, not-run reasons), Review Notes (risky files, reviewer focus). Title prefixes: SKILL.md defaults; repo convention wins. Breaking change → `[BREAKING]`, `**BREAKING CHANGE:**`, migration steps, affected API.
+Body: repo PR template when one exists (`.github/PULL_REQUEST_TEMPLATE.md` or variants); else cover Summary (why + what), Changes, Testing (commands/results, not-run reasons), Review Notes (risky files, reviewer focus). Title prefixes: SKILL.md defaults; repo convention wins. Titles, bodies, comments, replies: mitchellh voice — plain concrete prose, explains why, no filler. Breaking change → `[BREAKING]`, `**BREAKING CHANGE:**`, migration steps, affected API.
 
-Create only when user asks: `gh pr create --title "..." --body "..."` (`--draft` ok).
+Create only when user asks: `gh pr create --title "..." --body "..."` (`--draft` ok). Long body → build in a file, `--body-file`.
 
 ## Reviewability pass
 
@@ -20,45 +20,78 @@ For tidy-PR / reduce-noise asks:
 4. Rewrite/rebase/squash/force-push needs plan + user approval. Snapshot `git rev-parse origin/<head>^{tree}` before; verify final diff still matches intended code after. Don't push if tree changed unintentionally.
 5. Too large → recommend split; don't polish wrong PR shape.
 
+## Resolve target PR first
+
+"The PR" ambiguous, or fetched comments don't match what user described → `gh pr list --state open --limit 30 --json number,title,headRefName` before anything else. Wrong-PR mis-targets happen.
+
+Be on the PR branch, up to date, before addressing comments. Current checkout dirty with unrelated work → isolated worktree or temp clone (`git clone --branch <br> --single-branch <url> <tmpdir>`), never manual stash.
+
 ## Fetch comments
 
+Quick triage read: `pr-comments [<pr>] [--repo <owner/repo>] [--json] [--all]` — counts + full bodies in one call. Read-only: output lacks the GraphQL thread IDs resolution needs.
+
+Resolution-capable fetch — one GraphQL call returns thread IDs + comments:
+
 ```bash
-pr-comments [<pr>] [--repo <owner/repo>] [--json] [--all]
+gh api graphql -f query='query($owner:String!,$repo:String!,$pr:Int!){repository(owner:$owner,name:$repo){pullRequest(number:$pr){reviewThreads(first:100){nodes{id isResolved isOutdated path line comments(first:20){nodes{databaseId author{login} createdAt body}}}}}}}' -F owner={o} -F repo={r} -F pr={n}
 ```
 
-Default: unresolved review threads + open conversation comments + review bodies, full text. `--json` for triage, `--all` when resolved/outdated context matters.
+REST fallback — all three endpoints, always `--paginate`:
 
-Fallbacks: `gh pr view <pr> --comments`; `gh api repos/{o}/{r}/pulls/{pr}/comments` / `issues/{pr}/comments` / `pulls/{pr}/reviews`; `python3 <skill-dir>/scripts/fetch_comments.py` (`<skill-dir>` = this skill's install directory, not repo-relative). Auth fails → user runs `gh auth login`.
+```bash
+gh api repos/{o}/{r}/pulls/{pr}/comments --paginate    # inline review comments
+gh api repos/{o}/{r}/issues/{pr}/comments --paginate   # conversation comments
+gh api repos/{o}/{r}/pulls/{pr}/reviews --paginate     # review bodies
+```
 
-## Handle feedback
+Bot quirks: always include `claude` / `codex` / `coderabbit` comments even when resolved-status is missing or ambiguous — actionable feedback often sits in child replies. `claude` may leave one long comment instead of threads; treat as one unresolved thread. Failed-check annotations are feedback too: `gh api repos/{o}/{r}/check-runs/{id}/annotations`.
 
-1. Fetch unresolved/open first; read all relevant comments before editing.
-2. Validate each against current code; skip stale/invalid with evidence.
-3. Triage and act:
+Auth fails → user runs `gh auth login`. `gh` hangs → network, not auth: run slow calls separately with a timeout; skip non-essential data (labels) rather than block the task.
 
-| Label | Action |
-| --- | --- |
-| Blocking | Fix first |
-| Suggestion | Consider; ask if scope unclear |
-| Question | Answer with evidence |
-| Nit | Optional unless user wants polish |
-| Praise | No action |
-| Stale/invalid | Reply with current-code evidence |
-| Architecture smell | Investigate; real → stop, tell user, propose boundary/owner/contract path; not real → continue |
+## Validate and triage
 
-4. Ambiguous scope → ask which numbered items to address.
-5. Reply per thread with exact fix/file/commit, reason for no change, or clarifying question. Resolve only safe conversations after reply/fix; reviewer resolves significant threads unless repo expects agent resolution.
-6. Re-fetch, repeat until nothing actionable or a blocker needs user decision. Recurring nits → step back, look for architecture smell/deeper cause; delegate investigation to sub-agents when harness allows.
-7. Push only when user asks. Long loop done → notify via `speak` skill when available; else normal summary.
+1. Read all fetched comments before editing. Normalize: thread id, resolved state, path/line, author, body, severity.
+2. Validate each against current code with evidence. Classify `valid` / `invalid` / `needs-info`, confidence 0–100 (0 false positive, 50 verified minor, 75 verified important, 100 reproduced high-impact).
+3. Explicit repo rules (CLAUDE.md/AGENTS.md near touched files) beat preference.
+4. Skip as false positives: pre-existing issues the PR didn't introduce; linter-catchable nits (unless CI fails); style without repo-rule backing; lines outside the diff; intentional changes already explained in the PR body.
+5. Non-comment issues found while scanning: surface only at confidence ≥75.
+6. Subagents available → parallelize: one cheap intake agent fetches+normalizes once (validators reuse its output, don't re-fetch per agent), one validator per thread, fixes sequential. Every delegated prompt gets absolute repo path + explicit authorization scope — consent does not survive hops implicitly.
+
+## Fix
+
+Group valid comments by area and severity; implement sequentially; tests where behavior changes. Large/risky fix → ask first. Recurring nits → look for architecture smell; real → stop, tell user, propose boundary/owner/contract path.
+
+## Reply + resolve
+
+Reply FIRST, resolve second. Never resolve a thread without a reply. Can't post → draft replies, leave unresolved, report.
+
+GraphQL preferred — same `PRRT_` thread id drives both mutations:
+
+```bash
+gh api graphql -f query='mutation($t:ID!,$b:String!){addPullRequestReviewThreadReply(input:{pullRequestReviewThreadId:$t,body:$b}){comment{url}}}' -F t=<PRRT_id> -f b='<reply>'
+gh api graphql -f query='mutation($t:ID!){resolveReviewThread(input:{threadId:$t}){thread{isResolved}}}' -F t=<PRRT_id>
+```
+
+REST alternate: `gh api -X POST repos/{o}/{r}/pulls/{pr}/comments/{databaseId}/replies -f body='...'` — keyed on comment id; resolving still needs the GraphQL thread id (extra mapping query). Empty/wrong id → opaque `Could not resolve to a node with the global id of ''`.
+
+Reply content: verdict + evidence, 2–4 sentences. Fixed → what changed + commit hash; verify cited refs/paths resolve before posting. Invalid → why, with current-code evidence. Needs-info → targeted question. Already addressed elsewhere → short reply pointing at the mechanism, then resolve. Deferred → name the tracking task. Follow-up PR for a closed issue → `Refs #n`, never `Closes`.
+
+Mutation fails → record failure + draft text, continue with remaining threads, report failures explicitly. Optional summary comment: list fixes AND deliberate rejections.
+
+## Verify, loop, merge
+
+1. After posting: one fresh query re-fetches threads, asserts every reply landed and unresolved count is 0 (or lists leftovers). Never trust a delegate's own count.
+2. Delegate died or stalled mid-post → re-fetch what actually landed before re-posting anything. Double-post guard.
+3. New-comment loop: record `createdAt` baseline; bot reviewer pending → poll `gh pr checks <pr> --json name,bucket,state` filtered to the gates that matter (`gh pr checks` exits 1 on any failure, including unrelated infra); re-fetch filtered `createdAt > baseline`; repeat until nothing actionable.
+4. Bot reviewer down (billing/limits) → substitute local adversarial review; tell user.
+5. Merge only on user authorization: `gh pr merge <pr> --merge --match-head-commit <sha>` guards the race.
+6. Push only when user asks. Long loop done → notify via WhatsApp (`wacli`) or `speak` skill when available; else normal summary.
 
 Conflicting reviewers: summarize both, tag reviewers, propose middle path only if clear.
 
 ## Second opinions
 
-Optional — when stuck on architecture smells or deeper causes, not routine fixes:
-
-- `claude -p`, `copilot -p`, `codex exec` — parallel independent takes.
-- `oracle` CLI — Pro-tier second opinion.
+Optional — architecture smells, deeper causes, or user-requested adversarial passes: `codex review`, `coderabbit review --agent`, `agy --model ...`, `pi --model ...` — whichever are installed; parallel independent takes.
 
 ## Re-request review
 

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Speak"
+  short_description: "Generate a voice note to get the user's attention"
+policy:
+  allow_implicit_invocation: false

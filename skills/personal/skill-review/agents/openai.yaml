@@ -1,0 +1,5 @@
+interface:
+  display_name: "Skill Review"
+  short_description: "Adversarial review and overhaul of an agent skill"
+policy:
+  allow_implicit_invocation: false

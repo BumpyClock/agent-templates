@@ -1,0 +1,5 @@
+interface:
+  display_name: "SSH Doctor"
+  short_description: "SSH triage: Remote Login, sshd, pre-auth closes"
+policy:
+  allow_implicit_invocation: false

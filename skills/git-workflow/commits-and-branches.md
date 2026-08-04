@@ -6,6 +6,10 @@ Goal: reviewable changes. No surprise pushes, branch moves, hidden staging.
 
 `git status --short`, `git diff`, `git branch --show-current`. Unexpected delete/rename → stop, ask.
 
+## Stale lock
+
+`fatal: Unable to create '.git/index.lock': File exists` → check no live git process first (`pgrep -fl git`). None running → report, remove only the lock file (`trash .git/index.lock`), retry once. A blocked destructive command is a decision, not an obstacle: never re-route it through another tool (`python os.unlink`, etc.) — surface to user instead.
+
 ## Commits
 
 - Check repo style first: `git log --oneline -20`. Repo convention wins; else Conventional Commits (types + voice in AGENTS.md).

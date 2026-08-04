@@ -13,7 +13,7 @@ Design precise, crafted UX for consumer apps, enterprise software, SaaS dashboar
 1. **COMMIT A DESIGN DIRECTION BEFORE SPECIFYING ANYTHING.** State it in the doc (for marketing/landing: the one-line design read + dial values). Blocks the reflex of jumping straight to a default aesthetic — the root cause of templated output.
 2. **LOCK ONE SYSTEM PER PAGE.** One accent with meaning, one radius language, one theme, one type scale — committed up front and held across every section. Blocks mid-page drift, the most common way multi-section work falls apart.
 3. **RUN THE MECHANICAL ANTI-SLOP SCAN BEFORE DELIVERY.** The scan list lives at the bottom of `references/anti-slop-tells.md` — load it and run it item by item on the final artifact. "I kept the tells in mind while designing" is not running the scan.
-4. **VERIFY RENDERED OUTPUT BEFORE CLAIMING IT WORKS.** Open the mockup/built page and look at it (screenshot tooling when available; the screenshot-critique skill for visual-bug claims). A ticked checklist is not verification; only the rendered page is.
+4. **VERIFY RENDERED OUTPUT BEFORE CLAIMING IT WORKS.** Open the mockup/built page and look at it (screenshot tooling when available; the screenshot-review skill (critique mode) for visual-bug claims). A ticked checklist is not verification; only the rendered page is.
 5. **HONOR REDUCED-MOTION AND WCAG AA.** Spec the `prefers-reduced-motion` variant explicitly and meet AA contrast for text, controls, and focus states — `references/accessibility.md` is the contract. Blocks "polish later" deferral; later never comes.
 
 ## Philosophy

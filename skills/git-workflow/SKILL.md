@@ -2,7 +2,6 @@
 name: git-workflow
 description: "Git/GitHub: PRs, commits, branches, worktrees, conflicts, comments, CI, interactive PR review canvas."
 context: fork
-model: claude-sonnet-5
 ---
 
 # Git Workflow
@@ -31,7 +30,7 @@ Three tiers of authority:
 | Task | Read |
 | --- | --- |
 | Commit, amend, branch, rebase, cleanup | `commits-and-branches.md` |
-| Create PR, write PR body, improve reviewability, handle review comments, or when user says "resolve pr comments" or similar. | `pr-and-comments.md` |
+| Create PR, write PR body, improve reviewability, or the full PR-comment loop — fetch, validate, fix, reply, resolve, verify — when user says "resolve pr comments", "address review feedback", or similar. | `pr-and-comments.md` |
 | Merge PR, resolve conflicts, fix CI | `merge-and-ci.md` |
 | Parallel/isolated branch work | `worktree-management.md` |
 | Changelog setup/update | `add-changelog.md` |
@@ -51,7 +50,7 @@ committer "fix(scope): concise change" path/to/file.ts
 # PR data
 gh pr view --json number,title,url,headRefName,baseRefName
 
-# Comments (installed pr-comments binary)
+# Comments triage (read-only — no thread IDs; reply/resolve mechanics in pr-and-comments.md)
 pr-comments [<pr>] [--repo <owner/repo>] [--json] [--all]
 
 # Checks

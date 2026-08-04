@@ -1,0 +1,5 @@
+interface:
+  display_name: "Change Amplification"
+  short_description: "Find PR change-amplification from missing owners/contracts"
+policy:
+  allow_implicit_invocation: false

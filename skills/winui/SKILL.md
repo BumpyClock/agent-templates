@@ -32,4 +32,4 @@ Open the guide that matches the task before acting:
 
 ## Reference Layout
 
-Former standalone WinUI skills live under `references/` as nested guides. They intentionally use `guide.md`, not `SKILL.md`, so only this parent skill is live.
+Former standalone WinUI skills live under `references/` as nested guides. They intentionally use `guide.md`, not `SKILL.md`, so only this parent skill is live. The guides are condensed rewrites; the verbatim official originals from the WinUI team are archived in `skills_archive/merged-into-parent/winui-*` for re-syncing when upstream updates.

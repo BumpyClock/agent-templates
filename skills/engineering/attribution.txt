@@ -1,0 +1,6 @@
+Source: https://github.com/mattpocock/skills/tree/main/skills/engineering
+License: MIT
+Author: mattpocock
+
+All skills in this folder were sourced from the above repository and are
+unmodified from upstream unless noted otherwise.

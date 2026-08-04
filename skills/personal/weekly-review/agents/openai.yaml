@@ -1,0 +1,5 @@
+interface:
+  display_name: "Weekly Review"
+  short_description: "Weekly synthesis of authored commits"
+policy:
+  allow_implicit_invocation: false

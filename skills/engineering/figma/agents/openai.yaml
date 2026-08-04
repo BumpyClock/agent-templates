@@ -1,0 +1,5 @@
+interface:
+  display_name: "Figma"
+  short_description: "Figma router: Code Connect, screens, design systems, FigJam"
+policy:
+  allow_implicit_invocation: false
