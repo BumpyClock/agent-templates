@@ -10,6 +10,7 @@ Default structure — adapt sections to the task; drop what doesn't apply:
 ## Overview
 - Goals
 - Primary users
+- Primary user job (the one thing this page must make doable or clear)
 - Success criteria
 
 ## Inputs and Constraints

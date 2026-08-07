@@ -13,6 +13,8 @@ Good starting values — adjust to product and platform:
 - Body: 400 to 500 weight, normal tracking.
 - Labels: 500 weight, slight positive tracking for uppercase.
 - Scale: 11, 12, 13, 14 (base), 16, 18, 24, 32 px.
+- Body measure ~60-75 characters per line. Rewrite or reflow before shrinking type to make content fit; never use tiny gray copy to solve density.
+- Equivalent peers (stats, card titles, table cells) share role, size, weight, and numeric treatment — never resize one because its string is longer.
 
 ## Text Wrapping
 - Use balanced wrapping for headings, titles, and short blocks where even line length matters.

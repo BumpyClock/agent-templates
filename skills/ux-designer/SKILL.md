@@ -1,6 +1,6 @@
 ---
 name: ux-designer
-description: "UX/UI design and production frontend: layout specs, interaction flows, style guides, design systems, HTML design mockups, accessibility plans, and production implementation — for apps, SaaS dashboards, enterprise/admin UI, mobile flows, landing pages, portfolios, and redesigns. Aesthetic directions (editorial minimalism, premium/agency, glass) are selectable presets inside the skill. Auditing or improving existing motion in a codebase goes to improve-animations."
+description: "UX/UI design and production frontend: layout specs, interaction flows, style guides, design systems, HTML design mockups, accessibility plans, and production implementation — for apps, SaaS dashboards, enterprise/admin UI, mobile flows, landing pages, portfolios, redesigns, and data-heavy reports, tables, and calculators. Aesthetic directions (editorial minimalism, premium/agency, glass) are selectable presets inside the skill. Auditing or improving existing motion in a codebase goes to improve-animations."
 context: fork
 ---
 
@@ -13,7 +13,7 @@ Design precise, crafted UX for consumer apps, enterprise software, SaaS dashboar
 1. **COMMIT A DESIGN DIRECTION BEFORE SPECIFYING ANYTHING.** State it in the doc (for marketing/landing: the one-line design read + dial values). Blocks the reflex of jumping straight to a default aesthetic — the root cause of templated output.
 2. **LOCK ONE SYSTEM PER PAGE.** One accent with meaning, one radius language, one theme, one type scale — committed up front and held across every section. Blocks mid-page drift, the most common way multi-section work falls apart.
 3. **RUN THE MECHANICAL ANTI-SLOP SCAN BEFORE DELIVERY.** The scan list lives at the bottom of `references/anti-slop-tells.md` — load it and run it item by item on the final artifact. "I kept the tells in mind while designing" is not running the scan.
-4. **VERIFY RENDERED OUTPUT BEFORE CLAIMING IT WORKS.** Open the mockup/built page and look at it (screenshot tooling when available; the screenshot-review skill (critique mode) for visual-bug claims). A ticked checklist is not verification; only the rendered page is.
+4. **VERIFY RENDERED OUTPUT BEFORE CLAIMING IT WORKS.** Open the mockup/built page and look at it (screenshot tooling when available; the screenshot-review skill (critique mode) for visual-bug claims). Run the squint and text-mask tests from `references/page-composition.md`; fix the highest-impact defect, re-render, repeat until nothing material remains. A ticked checklist is not verification; only the rendered page is.
 5. **HONOR REDUCED-MOTION AND WCAG AA.** Spec the `prefers-reduced-motion` variant explicitly and meet AA contrast for text, controls, and focus states — `references/accessibility.md` is the contract. Blocks "polish later" deferral; later never comes.
 
 ## Philosophy
@@ -24,6 +24,17 @@ Precision with intentional personality. **Craft is in the choice, not the comple
 
 Reference files encode strong defaults, not law. Deviate when product context, platform conventions, or user requirements justify it — and state the reason in the design doc. For the high-value bans (serif-by-default, AI-purple, banned display serifs), the reason must cite a brand-specific fact (brand names the font, genuine heritage/publication context), not a self-generated adjective. Existing project conventions (tokens, fonts, icon set, motion style, component library) beat skill defaults: extend them, don't replace them.
 
+## When Requirements Compete
+
+Protect in this order — never sacrifice a higher item for a lower one:
+
+1. Supplied facts, content, formulas, units, and task constraints.
+2. The project's stack, conventions, and established design system.
+3. Clarity of the user's primary job and the evidence that supports it.
+4. The committed direction and locked visual system.
+5. A composition specific to this material over any template — generic or house.
+6. Micro-polish, motion, and detail refinement.
+
 ## Scale to Scope
 
 - New product, page, or feature: full workflow below.
@@ -33,6 +44,8 @@ Reference files encode strong defaults, not law. Deviate when product context, p
 ## Reference Index
 
 - `references/design-direction.md` — personality, color foundation, layout approach, typography, named aesthetic recipes (incl. Editorial minimalism).
+- `references/page-composition.md` — user-job framing, two reading speeds, rejecting the category-default layout, focal hierarchy, pacing, perceptual tests, feels-wrong diagnosis. Load when composing any full page or screen.
+- `references/data-and-evidence.md` — tables, stat/KPI displays, honest chart encoding in layout, calculators and interactive tools. Load for dashboards, reports, comparisons, pricing, or any data-heavy surface.
 - `references/craft-foundations.md` — spacing, padding, radius, depth, surface treatment rules.
 - `references/components-typography-icons.md` — control treatment, type hierarchy, data formatting, icons, editorial-minimal components.
 - `references/interaction-visual-clarity.md` — motion, contrast, color usage, navigation context, dark mode, anti-patterns.
@@ -55,10 +68,10 @@ Two modes — pick by what the user asked for:
 
 ## Workflow
 
-1. **Gather inputs** — goals, users, platforms, constraints, content requirements. Identify existing design system/tokens/components (theme configs, CSS vars, Storybook).
+1. **Gather inputs** — goals, users, platforms, constraints, content requirements. Identify existing design system/tokens/components (theme configs, CSS vars, Storybook). Missing input that changes meaning (data, claims, brand facts) → ask once, grouped; otherwise label the unknown honestly and proceed.
 2. **Commit direction** (Gate 1) — use `references/design-direction.md`. For marketing/landing, state the design read; if it genuinely diverges from the brief, ask exactly one clarifying question.
-3. **Define structure** — information architecture, key flows, primary tasks.
-4. **Compose layout** — regions, grid, responsive behavior, navigation and hierarchy.
+3. **Define structure** — frame the user's job and order sections by user need (`references/page-composition.md`); information architecture, key flows, primary tasks.
+4. **Compose layout** — name the category-reflex layout and reject it unless the material earns it; for layout-level work compare two materially different composition hypotheses (`references/page-composition.md`); then regions, grid, responsive behavior, navigation and hierarchy.
 5. **Specify interactions** — states, transitions, feedback; loading/empty/error/validation.
 6. **Specify visual system** — color roles, type scale, spacing, tokens (Gate 2 locks it).
 7. **Micro-polish pass** — concentric radius math, optical alignment, text wrapping, tabular numbers, hit areas, image outlines, motion behavior. Implementation-ready specs, not vibes.

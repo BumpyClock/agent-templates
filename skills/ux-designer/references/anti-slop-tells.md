@@ -29,6 +29,8 @@ These are patterns that mark a design as AI-generated. Each is banned as a *defa
 - Eyebrow spam: small uppercase tracked label above *every* section heading. Ration to at most 1 per 3 sections; the headline alone is usually enough. Mechanical check: count `uppercase tracking` labels.
 - Bento grids with empty filler cells, or all-white text-only cells. N items → N cells; 2-3 cells need real visual variation (image, tint, pattern).
 - Hairline dividers on every row of a long list or spec table. Group into chunks or use a different component.
+- Identical section silhouettes across sections answering unrelated questions. Vary topology with the content, not just the background.
+- A row of interchangeable metric boxes where one composed relationship would be clearer (see `data-and-evidence.md`).
 - Marquees: maximum one per page.
 - Scoring/progress bars with filled background tracks as landing-page comparison visuals.
 - Hero that overflows the first viewport: headline over 2 lines, subtext over 20 words, or the primary CTA pushed below the fold. Cut copy or reduce scale until the CTA is visible without scrolling. A 4-line hero headline is a font-size error, not a copy-length one.
@@ -47,6 +49,8 @@ Placeholder content must be realistic — these break the illusion:
 - Quotes: max 3 lines, real typographic quotes or none, attribution = name + role (never name alone).
 - Em-dash (`—`) as a visible design flourish in mockup copy — headlines, eyebrows, pills, captions, attribution. The #1 copy tell. Restructure with period, comma, or colon.
 - Middle-dot (`·`) chains as universal separator. Max one per metadata line.
+- Authoring-process narration in visible copy ("We organized this page into...", "Below is a summary of..."). The interface shows; it doesn't explain itself. Interpretive captions that state a takeaway or limitation are fine.
+- The same number restated at equal prominence in two places (hero stat + chart annotation + summary card). One evidence home per claim.
 
 ## Decoration Tells
 - Section-number eyebrows (`00 / INDEX`, `001 · Capabilities`) and `01 / 4` pagination labels.
@@ -67,4 +71,7 @@ Placeholder content must be realistic — these break the illusion:
 - Duplicate CTA intent: "Get in touch" + "Let's talk" + "Reach out" on one page. One label per intent, reused everywhere.
 
 ## Mechanical Pre-Delivery Check
-Scan the mockup/spec for: em-dashes in visible copy; eyebrow count > ceil(sections/3) — count by role (any small uppercase/tracked/small-caps label above a heading, however it's styled); accent color drift; radius system drift; theme flip mid-page; CTA labels that wrap or duplicate intent; button/form text below WCAG AA contrast; hero CTA below the fold; hero top padding beyond ~`pt-24`; hero stack over 4 text elements; nav wrapping to 2 lines or taller than 80px at desktop; any tell above without a stated override reason.
+Scan the mockup/spec for: em-dashes in visible copy; eyebrow count > ceil(sections/3) — count by role (any small uppercase/tracked/small-caps label above a heading, however it's styled); accent color drift; radius system drift; theme flip mid-page; CTA labels that wrap or duplicate intent; button/form text below WCAG AA contrast; hero CTA below the fold; hero top padding beyond ~`pt-24`; hero stack over 4 text elements; nav wrapping to 2 lines or taller than 80px at desktop; table headers whose alignment doesn't match their column's cells; the same value at equal prominence in two places; any tell above without a stated override reason.
+
+## The Counterweight
+Avoiding every tell can still produce recognizable slop: the sterile anti-design template — black, white, thin rules, big margins, nothing committed. Restraint is precise hierarchy, strong alignment, and deliberate tension, not absence. A page with no focal commitment fails this file's spirit with none of its tells; fix it with the too-safe remedy in `page-composition.md`, not with decoration.

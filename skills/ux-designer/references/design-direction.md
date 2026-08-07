@@ -45,7 +45,7 @@ Fuller starting points when the direction calls for them (vibe archetypes for ma
 
 ### Choose a Layout Approach
 
-The content should drive the layout:
+The content should drive the layout (topology-level composition — focal relationship, rejecting the category default, pacing — lives in `page-composition.md`):
 
 - **Dense grids** for information-heavy interfaces where users scan and compare
 - **Generous spacing** for focused tasks where users need to concentrate

@@ -10,6 +10,14 @@ Read when: you are setting spacing, padding, radius, depth, and surface treatmen
 - 24px: generous spacing (between sections).
 - 32px: major separation.
 
+## Rhythm From Relationships
+The 4px grid supplies the values; the relationship picks which one:
+- Heading → its first paragraph: close.
+- Paragraph → sibling paragraph or list: one body rhythm.
+- Label → value → detail: identical across all peers.
+- Content group → new section: clearly larger than any gap inside a group.
+Give every gap one owner: the parent stack/grid sets it; children don't add competing margins. Judge the whole transition, not the token — a valid section gap beside an underfilled row still reads as a hole (reflow rules in `page-composition.md`).
+
 ## Symmetrical Padding
 - Match top, left, bottom, and right padding by default.
 - Break symmetry only when content balance demands it.
