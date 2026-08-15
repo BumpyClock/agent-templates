@@ -5,7 +5,10 @@
 param(
     [Parameter(Position = 0)]
     [ValidateSet("claude", "codex", "copilot", "opencode", "pi", "all")]
-    [string]$SetupMode = "all"
+    [string]$SetupMode = "all",
+
+    # Skip interactive prompts in the linker (for non-interactive/CI runs)
+    [switch]$NoPrompt
 )
 
 $ErrorActionPreference = "Stop"
@@ -60,14 +63,27 @@ if (-not (Test-Path "scripts\link-agent-templates\node_modules")) {
     Set-Location scripts\link-agent-templates
     bun install
     Set-Location $AgentTemplatesDir
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error-Message "bun install failed with exit code $LASTEXITCODE"
+        exit $LASTEXITCODE
+    }
 }
 
 Write-Info "Linking agent templates for: $SetupMode"
 
 # Run the linker
-bun scripts\link-agent-templates\link-agent-templates.ts `
-    --agent-templates-dir $AgentTemplatesDir `
-    --setup $SetupMode
+$BunArgs = @(
+    "scripts\link-agent-templates\link-agent-templates.ts",
+    "--agent-templates-dir", $AgentTemplatesDir,
+    "--setup", $SetupMode
+)
+if ($NoPrompt) { $BunArgs += "--no-prompt" }
+
+bun @BunArgs
+if ($LASTEXITCODE -ne 0) {
+    Write-Error-Message "Linker failed with exit code $LASTEXITCODE; see output above"
+    exit $LASTEXITCODE
+}
 
 Write-Info "Agent templates bootstrap complete!"
 Write-Host ""

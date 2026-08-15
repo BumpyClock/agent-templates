@@ -3,10 +3,14 @@ import {
 	mkdir,
 	readlink,
 	rm,
+	rmdir,
+	symlink,
+	writeFile,
 	lstat,
 } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
+import readline from "node:readline/promises";
 
 type AgentTool = "claude" | "codex" | "copilot" | "opencode" | "pi" | "all";
 
@@ -15,6 +19,7 @@ type CliOptions = {
 	secretsDir: string;
 	setupMode: AgentTool;
 	show: boolean;
+	prompt: boolean;
 };
 
 // The machine-local agent instructions file. The private baseline lives in the
@@ -47,6 +52,7 @@ function parseArgs(argv: string[]): CliOptions {
 	let secretsDir = defaultSecretsDir();
 	let setupMode: AgentTool = "all";
 	let show = false;
+	let prompt = true;
 
 	for (let i = 0; i < argv.length; i += 1) {
 		const arg = argv[i];
@@ -93,6 +99,11 @@ function parseArgs(argv: string[]): CliOptions {
 			continue;
 		}
 
+		if (arg === "--no-prompt") {
+			prompt = false;
+			continue;
+		}
+
 		if (arg === "--help" || arg === "-h") {
 			console.log(
 				"Usage: bun scripts/link-agent-templates/link-agent-templates.ts [options]",
@@ -115,6 +126,12 @@ function parseArgs(argv: string[]): CliOptions {
 				"  --setup <tool>               Setup specific tool or 'all' (default: all)",
 			);
 			console.log("  --show, -s                    Show current link status");
+			console.log(
+				"  --no-prompt                   Never prompt; skip seeding when the",
+			);
+			console.log(
+				"                                AGENTS.local.md baseline is missing",
+			);
 			process.exit(0);
 		}
 
@@ -126,6 +143,7 @@ function parseArgs(argv: string[]): CliOptions {
 		secretsDir: path.resolve(secretsDir),
 		setupMode,
 		show,
+		prompt,
 	};
 }
 
@@ -160,6 +178,43 @@ async function getSymlinkTarget(
 	}
 }
 
+async function removeExisting(targetPath: string): Promise<void> {
+	try {
+		await rm(targetPath, { force: true, recursive: true });
+	} catch (rmError) {
+		// Bun on Windows fails with EFAULT when rm'ing directory symlinks and
+		// junctions (dangling ones included). rmdir removes just the reparse
+		// point, so it works for all of those; surface the original rm error
+		// if even that fails.
+		try {
+			await rmdir(targetPath);
+		} catch {
+			throw rmError;
+		}
+	}
+}
+
+async function createSymlink(
+	sourcePath: string,
+	targetPath: string,
+): Promise<void> {
+	const sourceIsDir = (await lstat(sourcePath)).isDirectory();
+
+	if (process.platform === "win32") {
+		try {
+			await symlink(sourcePath, targetPath, sourceIsDir ? "dir" : "file");
+		} catch (error) {
+			if (!sourceIsDir) throw error;
+			// Real symlinks need Windows Developer Mode (or elevation);
+			// junctions work unprivileged for directories.
+			await symlink(sourcePath, targetPath, "junction");
+		}
+		return;
+	}
+
+	await symlink(sourcePath, targetPath);
+}
+
 async function ensureLinked(
 	sourcePath: string,
 	targetPath: string,
@@ -172,7 +227,11 @@ async function ensureLinked(
 		if (stat.isSymbolicLink()) {
 			const existingTarget = await getSymlinkTarget(targetPath);
 			if (existingTarget) {
-				const normalizedExisting = await normalizeForCompare(existingTarget);
+				// Stored targets may be relative (symlinks) or absolute
+				// (junctions); resolve before comparing against sourcePath.
+				const resolvedExisting = path.resolve(targetDir, existingTarget);
+				const normalizedExisting =
+					await normalizeForCompare(resolvedExisting);
 				const normalizedSource = await normalizeForCompare(sourcePath);
 				if (normalizedExisting === normalizedSource) {
 					// Already linked correctly
@@ -180,24 +239,14 @@ async function ensureLinked(
 				}
 			}
 			// Wrong symlink target, remove and recreate
-			await rm(targetPath, { force: true });
+			await removeExisting(targetPath);
 		} else {
 			// Regular file or directory exists, remove it
-			await rm(targetPath, { force: true, recursive: true });
+			await removeExisting(targetPath);
 		}
 	}
 
-	// Create the symlink
-	const relativeSource = path.relative(targetDir, sourcePath);
-	const proc = Bun.spawn(["ln", "-s", relativeSource, targetPath], {
-		stdin: "inherit",
-		stdout: "inherit",
-		stderr: "inherit",
-	});
-	const exitCode = await proc.exited;
-	if (exitCode !== 0) {
-		throw new Error(`Failed to create symlink: ${targetPath} -> ${sourcePath}`);
-	}
+	await createSymlink(sourcePath, targetPath);
 	action(`Linked: ${targetPath} -> ${sourcePath}`);
 }
 
@@ -539,13 +588,39 @@ async function linkAgentsShared(agentTemplatesDir: string): Promise<void> {
 // Machine-local AGENTS.local.md seeding
 // =============================================================================
 
+// Ask what to do about a missing AGENTS.local.md baseline. Only called when
+// stdin is an interactive TTY; non-interactive runs skip seeding instead.
+async function promptMissingBaseline(
+	baselinePath: string,
+): Promise<"skip" | "create" | "quit"> {
+	const rl = readline.createInterface({
+		input: process.stdin,
+		output: process.stdout,
+	});
+	try {
+		const answer = await rl.question(
+			`No AGENTS.local.md baseline at ${baselinePath}\n` +
+				`[S]kip seeding (default) · [C]reate an empty local copy · [Q]uit: `,
+		);
+		const choice = answer.trim().toLowerCase();
+		if (choice.startsWith("c")) return "create";
+		if (choice.startsWith("q")) return "quit";
+		return "skip";
+	} finally {
+		rl.close();
+	}
+}
+
 // Seed defaults/AGENTS.local.md from the secrets baseline exactly once. Copied,
 // not linked, so per-device edits stay local and never sync back to secrets. An
 // existing local copy is left untouched; delete it and re-run to reset from the
-// baseline.
+// baseline. When the baseline is missing, interactive runs are asked whether to
+// skip or create an empty local copy; non-interactive runs (or --no-prompt)
+// degrade to skipping.
 async function seedLocalAgents(
 	agentTemplatesDir: string,
 	secretsDir: string,
+	prompt: boolean,
 ): Promise<void> {
 	const localPath = path.join(agentTemplatesDir, LOCAL_AGENTS_RELATIVE);
 
@@ -558,10 +633,29 @@ async function seedLocalAgents(
 
 	const baselinePath = path.join(secretsDir, SECRETS_LOCAL_AGENTS_NAME);
 	if (!(await pathExists(baselinePath))) {
-		info(
+		const skipMessage =
 			`No AGENTS.local.md baseline at ${baselinePath}; skipping seed. ` +
-				`Create it or pass --secrets-dir to enable local agent instructions.`,
-		);
+			`Create it or pass --secrets-dir to enable local agent instructions.`;
+
+		if (!prompt || !process.stdin.isTTY) {
+			info(skipMessage);
+			return;
+		}
+
+		const choice = await promptMissingBaseline(baselinePath);
+		if (choice === "quit") {
+			throw new Error(
+				`Aborted: no AGENTS.local.md baseline at ${baselinePath}. ` +
+					`Create it or pass --secrets-dir, then re-run.`,
+			);
+		}
+		if (choice === "create") {
+			await mkdir(path.dirname(localPath), { recursive: true });
+			await writeFile(localPath, "");
+			action(`Created empty AGENTS.local.md at ${localPath}`);
+			return;
+		}
+		info(skipMessage);
 		return;
 	}
 
@@ -585,7 +679,11 @@ async function main(): Promise<void> {
 
 	// Seed the machine-local AGENTS.local.md before linking so the tool links
 	// below resolve to a present file.
-	await seedLocalAgents(options.agentTemplatesDir, options.secretsDir);
+	await seedLocalAgents(
+		options.agentTemplatesDir,
+		options.secretsDir,
+		options.prompt,
+	);
 
 	const mode = options.setupMode;
 
