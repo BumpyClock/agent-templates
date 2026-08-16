@@ -43,7 +43,7 @@ Do not add features beyond the test.
 
 Before marking work complete:
 
-- [ ] New or changed behavior has coverage at the practical public surface
+- [ ] Each named regression risk has one guard at the practical public surface
 - [ ] Watched new/regression tests fail when feasible
 - [ ] Each test failed for expected reason (feature missing, not typo)
 - [ ] Wrote minimal code to pass each test
@@ -52,7 +52,7 @@ Before marking work complete:
 - [ ] Output and exit code read
 - [ ] Tests use real code or mocks at seams
 - [ ] No test named for a path its body doesn't exercise
-- [ ] Edge cases and errors covered where the contract branches
+- [ ] Edge cases covered where a plausible regression exists, not every branch
 
 Can't check applicable boxes? State what proof is missing and why.
 

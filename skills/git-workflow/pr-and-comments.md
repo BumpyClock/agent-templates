@@ -6,7 +6,14 @@ Goal: reviewable PRs, low-noise feedback handling, reply+resolve that survives i
 
 Inspect first: `git log --oneline origin/main..HEAD`, `git diff --stat origin/main...HEAD`, existing `gh pr view`. Why unclear → ask.
 
-Body: repo PR template when one exists (`.github/PULL_REQUEST_TEMPLATE.md` or variants); else cover Summary (why + what), Changes, Testing (commands/results, not-run reasons), Review Notes (risky files, reviewer focus). Title prefixes: SKILL.md defaults; repo convention wins. Titles, bodies, comments, replies: mitchellh voice — plain concrete prose, explains why, no filler. Breaking change → `[BREAKING]`, `**BREAKING CHANGE:**`, migration steps, affected API.
+Body: repo PR template when one exists (`.github/PULL_REQUEST_TEMPLATE.md` or variants); else these sections:
+
+- **Summary** — first sentence states what changes and why; problem before solution; link the issue.
+- **Changes** — grouped by area, not a commit replay; call out anything surprising in the diff.
+- **Testing** — exact commands and results; name what was not run and why.
+- **Review Notes** — risky files, suggested read order, decisions that need reviewer judgement.
+
+Titles: SKILL.md prefix defaults; repo convention wins; wording follows commit-subject rules. Voice for titles, bodies, comments, replies: SKILL.md "Message voice". Write for the reviewer: front-load conclusions, meaningful headings and link text, state facts without hedging. Breaking change → `[BREAKING]`, `**BREAKING CHANGE:**`, migration steps, affected API.
 
 Create only when user asks: `gh pr create --title "..." --body "..."` (`--draft` ok). Long body → build in a file, `--body-file`.
 

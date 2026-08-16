@@ -225,20 +225,20 @@ BEFORE creating mock responses:
   If uncertain: use a real fixture, schema builder, or test one layer up
 ```
 
-## Anti-Pattern 5: Integration Tests as Afterthought
+## Anti-Pattern 5: Test Volume as a Completion Signal
 
-**The violation:**
+**The violations (symmetric):**
 ```
-✅ Implementation complete
-❌ No tests written
-"Ready for testing"
+❌ Risky behavior change handed off with no test and no stated rationale
+❌ Small change handed off with 8 new tests, none of which names a regression it catches
 ```
 
 **Why this is wrong:**
-- Testing is part of implementation, not optional follow-up
-- Changed behavior without coverage is an incomplete change
+- A missing guard on a risky contract leaves the bug boundary unprotected
+- A pile of low-value tests costs maintenance forever and buries the one assert that matters
+- Test count signals effort, not protection
 
-**The fix:** cover the changed behavior before claiming complete. TDD preferred; explicit test-after is acceptable when declared (see `tdd-rules.md`). What's not acceptable: handing off behavior changes with no tests and no stated rationale.
+**The fix:** apply Gate 2 from SKILL.md. Name the plausible regression each test catches at an observable contract; no nameable regression → no test. Zero new tests is a valid outcome for most changes. A risky change with no test needs a stated rationale (TDD preferred when warranted; explicit test-after is acceptable when declared — see `tdd-rules.md`).
 
 ## Anti-Pattern 6: Coverage Theater
 
@@ -314,7 +314,7 @@ BEFORE keeping any test:
 | Test-only methods in production | Move to test utilities |
 | Mock without understanding | Understand dependencies first, mock minimally |
 | Incomplete mocks | Include contract fields the code under test consumes |
-| Tests as afterthought | Cover changed behavior before claiming complete |
+| Test count as completion signal | One named regression per test; stated rationale when none |
 | Over-complex mocks | Consider integration tests |
 
 ## Red Flags

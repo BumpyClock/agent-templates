@@ -12,8 +12,11 @@ Goal: reviewable changes. No surprise pushes, branch moves, hidden staging.
 
 ## Commits
 
-- Check repo style first: `git log --oneline -20`. Repo convention wins; else Conventional Commits (types + voice in AGENTS.md).
-- Imperative subject, no period, body = what/why. Breaking → `!` or `BREAKING CHANGE:` footer.
+- Check repo style first: `git log --oneline -20`. Repo convention wins; else Conventional Commits (`feat|fix|refactor|build|ci|chore|docs|style|perf|test`), voice per SKILL.md "Message voice".
+- Subject: `type(scope): summary` — lowercase, imperative, no trailing period. Aim ~50 chars, hard max 72. Test the part after the colon: "if applied, this commit will <summary>". Lowercase is deliberate: Conventional Commits style, not cbeams rule 3.
+- Blank line between subject and body — rebase and format-patch tooling misparse without it. Wrap body at 72.
+- Body = what and why, not how: the problem, why this solution, unintuitive consequences. Subject-only is fine for trivial changes; everything else gets a body.
+- Breaking → `!` or `BREAKING CHANGE:` footer.
 - Stage explicit paths only; prefer `committer "<type>(scope): msg" <paths…>`. Never `git add .` / `-A`. `git add -p` ok for partial.
 - Before commit: `git diff --staged`; run relevant tests/checks or state not run.
 - Failed hook → fix root cause, stage explicit paths, new commit (not amend).

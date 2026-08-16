@@ -6,7 +6,7 @@ Core rule: a good test fails **only** when real behavior or an explicit contract
 
 ## Workflow: tracer bullets, not a batch
 
-1. **Write ONE test at a time.** Assert first, watch it go red on the un-fixed code when feasible, make the code earn green, learn, then write the next. A batch written up front against *imagined* behavior pins what you guessed — those tests pass when the mechanism breaks and fail when it's fine. Each green cycle tells you what the next test should actually assert. (Exception: table-driven cases enumerating an already-stated contract can land together.)
+1. **Write ONE test at a time.** Assert first, watch it go red on the un-fixed code when feasible, make the code earn green, learn, then write the next. A batch written up front against *imagined* behavior pins what you guessed — those tests pass when the mechanism breaks and fail when it's fine. Each green cycle tells you what the next test should actually assert. (Exception: table-driven cases enumerating an already-stated contract can land together.) **Stop when each named regression has one guard** — an additional test needs a new named failure mode, not the same path re-asserted at another layer.
 2. **Iterate on the fastest focused runner** (one file, one test name), and run the relevant full gate only before handing off. Check the exit code, not just the output — a runner that prints nothing and a green run look the same. On failures, read EVERY red test before fixing one; they often share a root cause.
 3. **Before calling it done**, prove the test can fail (below) and walk the review checklist.
 
@@ -63,3 +63,4 @@ Walk this on any test diff, apply fixes in the same pass, re-run the suite:
 8. Does the name claim a path (error/timeout/cancel/retry) the body never exercises? → fix the body or rename.
 9. Is the function under test still called in production? → if the only callers are tests, delete the function and the test together.
 10. Can it fail for the right reason? → falsify once to confirm (or state why not).
+11. Would another test in the diff or suite already fail on the same regression? → delete the weaker duplicate.

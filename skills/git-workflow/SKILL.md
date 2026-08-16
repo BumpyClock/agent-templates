@@ -36,30 +36,16 @@ Three tiers of authority:
 | Changelog setup/update | `add-changelog.md` |
 | Interactive HTML PR walkthrough ("review canvas") | `pr-review-canvas.md` |
 
-## Quick commands
+## Message voice
 
-```bash
-# Status
-git status --short
-git diff
-git diff --staged
+Applies to commit messages, PR titles/bodies, review comments/replies, branch names. Repo convention wins over all of it.
 
-# Commit explicit paths
-committer "fix(scope): concise change" path/to/file.ts
-
-# PR data
-gh pr view --json number,title,url,headRefName,baseRefName
-
-# Comments triage (read-only — no thread IDs; reply/resolve mechanics in pr-and-comments.md)
-pr-comments [<pr>] [--repo <owner/repo>] [--json] [--all]
-
-# Checks
-gh pr checks <pr>
-python3 <skill-dir>/scripts/inspect_pr_checks.py --repo . --pr <pr>
-# <skill-dir> = this skill's install directory (bundled script), not repo-relative
-```
+- Lowercase imperative subject/title; active voice; plain concrete words; no filler, hedging, or hype.
+- Bodies use complete sentences: no contractions, one topic per sentence, keep sentences short (~20 words).
+- Explain why, not how — the diff shows how.
+- Idiomatic git terms ("clean up", "roll back", "set up") are fine; jargon the reader must decode is not.
 
 ## PR title prefixes
 
 - Default when repo has no convention of its own: `[Feature]`, `[Fix]`, `[Refactor]`, `[Perf]`, `[Docs]`, `[Test]`, `[Build]`, `[BREAKING]`.
-- Prefix sets category; wording stays plain. Commit/PR voice: AGENTS.md rules.
+- Prefix sets category; wording follows Message voice above.

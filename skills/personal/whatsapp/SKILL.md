@@ -13,6 +13,8 @@ First stop for WhatsApp work. use when user wants you to read/search/archive Wha
   - Start background live sync using tmux to watch for user responses on incoming messages.
   - use `speak` skill to record voice messages if needed.
   - send screen recordings and screenshots as necessary for efficient communication.
+- `me` account is mine, use when I ask you to check my messages or act on my behalf explicitly.
+- `agent` account is the agent's WhatsApp account, use when the user asks you to send a message or reply to a message.
 
 
 ## PRIME DIRECTIVE
@@ -101,3 +103,4 @@ wacli --account me send text --to JID_OR_NAME --message "message"
 wacli --account me send file --to JID_OR_NAME --file ./file.jpg --caption "caption"
 wacli --account me send text --to JID --reply-to MESSAGE_ID --message "reply"
 ```
+read `skills\personal\whatsapp\references\Troubleshooting.md` when needed.
