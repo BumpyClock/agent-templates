@@ -71,5 +71,4 @@ Bug found? Default to a failing test that reproduces it when feasible and apt, t
 
 ## References
 
-- [tdd-examples.md](tdd-examples.md) - examples and rationale
-- [test-anti-patterns.md](test-anti-patterns.md) - testing anti-patterns
+- [write-tests.md](write-tests.md) - test quality, seams, mocks, coverage theater, falsification proof

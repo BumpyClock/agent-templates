@@ -58,11 +58,11 @@ Auth fails → user runs `gh auth login`. `gh` hangs → network, not auth: run 
 ## Validate and triage
 
 1. Read all fetched comments before editing. Normalize: thread id, resolved state, path/line, author, body, severity.
-2. Validate each against current code with evidence. Classify `valid` / `invalid` / `needs-info`, confidence 0–100 (0 false positive, 50 verified minor, 75 verified important, 100 reproduced high-impact).
+2. Validate each against current code with evidence. Classify `valid` / `invalid` / `needs-info`.
 3. Explicit repo rules (CLAUDE.md/AGENTS.md near touched files) beat preference.
 4. Skip as false positives: pre-existing issues the PR didn't introduce; linter-catchable nits (unless CI fails); style without repo-rule backing; lines outside the diff; intentional changes already explained in the PR body.
-5. Non-comment issues found while scanning: surface only at confidence ≥75.
-6. Subagents available → parallelize: one cheap intake agent fetches+normalizes once (validators reuse its output, don't re-fetch per agent), one validator per thread, fixes sequential. Every delegated prompt gets absolute repo path + explicit authorization scope — consent does not survive hops implicitly.
+5. Non-comment issues found while scanning: report verified ones, one line each, separate from comment triage; do not fix unasked.
+6. Subagents available → parallelize validation when thread count warrants it. Fetch and normalize once; validators reuse that output rather than re-fetching. Every delegated prompt gets absolute repo path + explicit authorization scope — consent does not survive hops implicitly.
 
 ## Fix
 
@@ -92,7 +92,7 @@ Mutation fails → record failure + draft text, continue with remaining threads,
 3. New-comment loop: record `createdAt` baseline; bot reviewer pending → poll `gh pr checks <pr> --json name,bucket,state` filtered to the gates that matter (`gh pr checks` exits 1 on any failure, including unrelated infra); re-fetch filtered `createdAt > baseline`; repeat until nothing actionable.
 4. Bot reviewer down (billing/limits) → substitute local adversarial review; tell user.
 5. Merge only on user authorization: `gh pr merge <pr> --merge --match-head-commit <sha>` guards the race.
-6. Push only when user asks. Long loop done → notify via WhatsApp (`wacli`) or `speak` skill when available; else normal summary.
+6. Push only when user asks.
 
 Conflicting reviewers: summarize both, tag reviewers, propose middle path only if clear.
 

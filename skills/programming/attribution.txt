@@ -1,0 +1,6 @@
+systematic-debugging/ originally derived from: https://github.com/obra/superpowers/tree/main/skills/systematic-debugging (MIT, Jesse Vincent)
+references/write-tests.md coverage-theater and mock/test-only-method content derived from: https://github.com/obra/superpowers (testing-anti-patterns, later skills/test-driven-development/writing-good-tests.md) (MIT, Jesse Vincent)
+systematic-debugging/guide.md feedback-loop, minimise, ranked-falsifiable-hypotheses, tagged-instrumentation, and cleanup structure adapted from: https://github.com/mattpocock/skills/blob/main/skills/engineering/diagnosing-bugs/SKILL.md (MIT, Matt Pocock)
+references/write-tests.md mutation-check idea adapted from superpowers writing-good-tests.md (above); tautological/horizontal-slicing framing cross-checked against: https://github.com/mattpocock/skills/blob/main/skills/engineering/tdd/SKILL.md (MIT, Matt Pocock)
+systematic-debugging/guide.md stale-persistent-state heuristic adapted from: https://github.com/cursor/plugins (pstack/principle-fix-root-causes) (MIT)
+Concepts summarized, no text copied: David Agans "Debugging: The 9 Indispensable Rules" (check the plug, fresh view); Google Testing Blog "Change-Detector Tests Considered Harmful" (term).

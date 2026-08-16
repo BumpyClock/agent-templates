@@ -1,6 +1,6 @@
 # Write Tests
 
-Use when adding tests for new behavior, writing a regression test, fixing a brittle or flaky test, reviewing a test diff, or when a test breaks after a refactor or config change that didn't change behavior.
+Use when adding tests for new behavior, writing a regression test, fixing a brittle or flaky test, reviewing a test diff or suspicious existing tests, adding mocks, or when a test breaks after a refactor or config change that didn't change behavior.
 
 Core rule: a good test fails **only** when real behavior or an explicit contract breaks, and passes through every refactor or config change that preserves it. Most bad tests fail the opposite way: red on harmless changes, green while the real path is broken. Every rule below serves that one goal.
 
@@ -25,6 +25,8 @@ Core rule: a good test fails **only** when real behavior or an explicit contract
 - **Don't over-mock — every mock is a frozen assumption.** Mock at the system's edges (network, clock, filesystem, process/env, third-party SDK, config lookup), not internal collaborators — mocking an internal needs a stated reason (fault injection, prohibitive cost); convenience isn't one. Stubbing an internal hard-codes its current contract; refactor it and the test lies. Don't make "was called with" the primary assertion when an observable outcome exists. Mocking three internal modules to test one function means: test one layer up, where they're real.
 - **Test doubles must preserve the behavior the test depends on.** If unsure what the real collaborator does, run with it first and observe the required side effects, then mock minimally. Mock data should be schema-valid and include the contract fields the code under test consumes; a partial fixture fails silently when code reads an omitted field.
 - **Harnesses must wire the system the way production does.** If a bug only showed up against a real environment, the harness skipped an input production always sets — fix the harness, don't just fix the bug.
+- **Never assert that a mock exists or was rendered.** That verifies the mock works, not the component. Test the real thing, or don't assert on the double.
+- **No test-only methods on production classes.** A method whose only callers are tests pollutes the production API and can be called there by accident. Put cleanup/setup helpers in test utilities.
 
 ## Control variables and probes
 
@@ -37,6 +39,28 @@ Core rule: a good test fails **only** when real behavior or an explicit contract
 A test you never saw fail is decoration. For any regression test — especially one written *after* the fix — falsify it once: revert or break the production code the way the bug would, confirm red *for the expected reason*, restore, confirm green. Verify the revert actually took: a stash or checkout with a wrong pathspec reverts nothing, silently, and the "red" run quietly tests the fixed code. The tell: the "red" numbers equal the green numbers.
 
 If falsifying is disproportionate or unsafe (irreversible migration, destructive external call), say so and use the strongest practical proof.
+
+Gate 2 names the regression a test exists for; the falsification run names the break. Before calling a suite done, run a quick mutation check: for each mutation class the contract forbids — wrong constant, flipped branch, missing side effect, missing zero/empty/nil validation — confirm some test goes red.
+
+## Coverage theater
+
+Tests that look like coverage but cannot fail. Worse than no test: they suppress the "untested" signal. (The mirror failure is the **change-detector test** — red on every refactor while catching no bugs; the core rule above kills both.)
+
+Violations, each backed by an observed failure in `../evals/cases/`:
+
+- Assertion-free or tautological bodies: `assertTrue(true)`, a loop that calls the SUT and asserts nothing, a constructor input asserted straight back out.
+- Expected value is a literal copied from production source — fails only if you forget to edit both places.
+- Test name contains error/timeout/cancel/retry with no throw/clock/cancellation in the body.
+- Setup destroys the evidence: it manufactures the state the SUT is supposed to produce, then asserts on it.
+- SUT deleted or caller-less; test retained "for coverage."
+
+Gate, before keeping any test:
+
+- "What production change makes this fail?" No answer → delete it.
+- "Does it fail via the mechanism the name claims?" No → fix the body or rename.
+- "Is any expected value a literal copied from production source?" Yes → read from the real source of truth, or delete the assertion.
+- "Does setup manufacture the state the SUT is supposed to produce?" Yes → remove that setup; let the SUT produce it.
+- "Does the SUT still have non-test callers?" No → delete the SUT's tests with the SUT.
 
 ## When a test goes red after a change
 

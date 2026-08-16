@@ -30,10 +30,10 @@ User explicitly waives a gate → comply, and state what evidence is being skipp
 
 ## References — load on demand
 
-References are an exception path, not a reading list. Do not open them at skill start. Open one only when a concrete decision remains unresolved, and do not preload adjacent files.
+Open a reference when its trigger matches the work. Do not preload the rest.
 
 - Cause unclear after direct inspection → `systematic-debugging/guide.md`
-- Test is warranted but its seam or assertion is unclear → `references/write-tests.md`
+- Writing or changing a test, reviewing a test diff, or existing tests look suspicious (mock-heavy, cannot fail) → `references/write-tests.md`
 - User or repo explicitly requires TDD → `references/tdd-rules.md`
 - Completion evidence is ambiguous or high-risk → `references/verification-before-completion.md`
 - Structural refactor → `references/refactoring/clean-refactoring.md`
