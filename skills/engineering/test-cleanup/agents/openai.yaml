@@ -1,0 +1,5 @@
+interface:
+  display_name: "Test Cleanup"
+  short_description: "Audit existing tests against the programming skill's standards; delete/rewrite/keep with evidence"
+policy:
+  allow_implicit_invocation: false
