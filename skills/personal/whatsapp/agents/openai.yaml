@@ -1,0 +1,5 @@
+interface:
+  display_name: "WhatsApp"
+  short_description: "Route WhatsApp history, search, reads, and sends"
+policy:
+  allow_implicit_invocation: false
