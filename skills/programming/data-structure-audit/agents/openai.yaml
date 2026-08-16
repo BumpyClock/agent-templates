@@ -1,0 +1,5 @@
+interface:
+  display_name: "Data Structure Audit"
+  short_description: "Audit codebase models, algorithms, and ownership"
+policy:
+  allow_implicit_invocation: true
