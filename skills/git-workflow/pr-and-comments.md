@@ -2,6 +2,8 @@
 
 Goal: reviewable PRs, low-noise feedback handling, reply+resolve that survives independent verification.
 
+"Resolve pr comments", "address review feedback", or similar → run the full loop: fetch, validate, fix, reply, resolve, verify.
+
 ## Create/update PR
 
 Inspect first: `git log --oneline origin/main..HEAD`, `git diff --stat origin/main...HEAD`, existing `gh pr view`. Why unclear → ask.
@@ -51,9 +53,9 @@ gh api repos/{o}/{r}/issues/{pr}/comments --paginate   # conversation comments
 gh api repos/{o}/{r}/pulls/{pr}/reviews --paginate     # review bodies
 ```
 
-Bot quirks: always include `claude` / `codex` / `coderabbit` comments even when resolved-status is missing or ambiguous — actionable feedback often sits in child replies. `claude` may leave one long comment instead of threads; treat as one unresolved thread. Failed-check annotations are feedback too: `gh api repos/{o}/{r}/check-runs/{id}/annotations`.
+Bot quirks: always include review-bot comments (e.g. `claude`, `codex`, `coderabbit`) even when resolved-status is missing or ambiguous — actionable feedback often sits in child replies. Some bots leave one long comment instead of threads; treat as one unresolved thread. Failed-check annotations are feedback too: `gh api repos/{o}/{r}/check-runs/{id}/annotations`.
 
-Auth fails → user runs `gh auth login`. `gh` hangs → network, not auth: run slow calls separately with a timeout; skip non-essential data (labels) rather than block the task.
+Auth fails → SKILL.md globals. `gh` hangs → network, not auth: run slow calls separately with a timeout; skip non-essential data (labels) rather than block the task.
 
 ## Validate and triage
 

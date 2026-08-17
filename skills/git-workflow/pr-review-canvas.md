@@ -4,7 +4,7 @@ Interactive local HTML PR walkthrough — grouped diffs + annotations, reads lik
 
 Assets bundled in `<skill-dir>/canvas/`: `styles.css`, `renderer.js`, `template.html` (MIT, `canvas/LICENSE.txt`; source: cursor-team-kit). `<skill-dir>` = this skill's install directory, not repo-relative. Read all three before assembling — they define the available CSS classes (`.file-card`, `.file-note`, `.bp-section`, `.verdict`, …) and JS helpers (`toggle`, `toggleBP`, `renderDiff`, `esc`).
 
-Work dir: session scratchpad if the harness provides one, else `/tmp/pr-review-{number}`. Sandboxed sessions often block shell `>` redirection and `cd`-in-compound commands — prefer the Write tool for files you author, keep commands `cd`-free, run from the work dir's parent only via absolute paths.
+Work dir: session scratchpad if the harness provides one, else `<OS temp dir>/pr-review-{number}` (`/tmp` on POSIX, `$env:TEMP` on Windows). Sandboxed sessions often block shell `>` redirection and `cd`-in-compound commands — prefer the Write tool for files you author, keep commands `cd`-free, run from the work dir's parent only via absolute paths.
 
 ## 1. Fetch
 
@@ -32,7 +32,7 @@ Write only `<body>` contents to `{workdir}/body.html`:
 
 ## 3. Assemble
 
-Never hand-embed patch text into executable JS — patches can contain `</script>`. Use:
+Never hand-embed patch text into executable JS — patches can contain `</script>`. Use (`python` instead of `python3` on Windows):
 
 ```bash
 python3 <<'PY'
@@ -65,9 +65,11 @@ Assertion fires → template markers drifted; diff `template.html` against the r
 
 ## 4. Serve
 
+Check the port is free (taken → try 8433, 8434…), then serve:
+
 ```bash
-lsof -nP -iTCP:8432 -sTCP:LISTEN || true   # port taken → try 8433, 8434…
-python3 -m http.server 8432 --bind 127.0.0.1 --directory {workdir} &
+lsof -nP -iTCP:8432 -sTCP:LISTEN || true   # Windows: Get-NetTCPConnection -LocalPort 8432 -State Listen
+python3 -m http.server 8432 --bind 127.0.0.1 --directory {workdir} &   # Windows: python, run_in_background
 ```
 
 Serve the dedicated dir only (`--directory` avoids `cd`) — never all of /tmp. Run in background, report `http://127.0.0.1:<port>/`, kill server when task done unless user wants it kept.

@@ -7,6 +7,7 @@ disable-model-invocation: true
 # WhatsApp
 
 First stop for WhatsApp work. use when user wants you to read/search/archive WhatsApp data or reach user using WhatsApp.
+- Get the user's WhatsApp phone number from `~/.agents/AGENTS.local.md` before WhatsApp work.
 - When sending user a message using Whatapp:
   - start a new group chat with a relevant title.
     - Title should be concise and descriptive. If an existing group exists with the user use that.

@@ -6,6 +6,8 @@ Goal: merge safely, resolve conflicts deliberately, inspect CI with `gh` evidenc
 
 Repo convention wins: check recent merged PRs (`gh pr list --state merged --limit 5`) or repo settings. Else: merge commit when branch history meaningful; squash for WIP/noisy commits; rebase for small clean linear commits. Squash/rebase flatten branch context — avoid when individual commits carry meaning.
 
+Squash subject defaults to the PR title (multi-commit PRs), which follows PR-title convention, not commit convention. Rewrite it: `gh pr merge --squash --subject "type(scope): summary"` — the subject lands in `git log --oneline` on main forever.
+
 Pre-merge gate: CI green, required reviews approved, no unresolved conversations, branch current per repo policy, no conflicts, significant changes tested (or reason stated), user asked/approved merge. Verify: `gh pr view <pr> --json mergeStateStatus,reviewDecision`, `gh pr checks <pr>`.
 
 After merge: branch delete still needs explicit ask; cleanup rules in `commits-and-branches.md`.
@@ -27,13 +29,15 @@ Summary: files resolved, notable choices, test/build outcome, risks/checks not r
 
 ## CI failures
 
-CI red on user's branch/PR → inspect and fix proactively; push still needs user ask. Auth fails → ask user to run `gh auth login`.
+CI red on user's branch/PR → inspect and fix proactively; push still needs user ask. Auth fails → SKILL.md globals.
 
 Preferred script (bundled; `<skill-dir>` = this skill's install directory, not repo-relative):
 
 ```bash
 python3 <skill-dir>/scripts/inspect_pr_checks.py --repo . --pr <number-or-url> [--json]
 ```
+
+(`python` instead of `python3` on Windows.)
 
 Script preserves: `gh pr checks` field drift, Actions log snippets, external URL-only checks, pending/missing logs; non-zero exit while failures remain. Fail states: `failure`, `error`, `cancelled`, `timed_out`, `action_required`, `bucket=fail`.
 
