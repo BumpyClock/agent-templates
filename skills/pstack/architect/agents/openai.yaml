@@ -1,0 +1,6 @@
+interface:
+  display_name: "Architect"
+  short_description: "Sketch types, signatures, and module structure before code"
+  default_prompt: "Use $architect to sketch types, signatures, and module structure before implementation."
+policy:
+  allow_implicit_invocation: false

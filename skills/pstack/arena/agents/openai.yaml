@@ -1,0 +1,6 @@
+interface:
+  display_name: "Arena"
+  short_description: "Spawn parallel candidates, pick a base, and graft the strongest parts"
+  default_prompt: "Use $arena to spawn parallel candidates, pick a base, and graft the strongest parts of the losers."
+policy:
+  allow_implicit_invocation: false

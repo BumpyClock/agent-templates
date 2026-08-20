@@ -1,0 +1,6 @@
+interface:
+  display_name: "Blast Radius"
+  short_description: "Find what a change could break and prove safety with real code"
+  default_prompt: "Use $blast-radius to find what this change could break and prove the safety fact with real code."
+policy:
+  allow_implicit_invocation: false
