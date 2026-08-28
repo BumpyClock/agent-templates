@@ -1,10 +1,12 @@
 import {
 	copyFile,
 	mkdir,
+	readdir,
 	readlink,
 	rm,
 	rmdir,
 	symlink,
+	unlink,
 	writeFile,
 	lstat,
 } from "node:fs/promises";
@@ -264,6 +266,102 @@ async function linkIfPresent(
 }
 
 // =============================================================================
+// Flat skill linking
+// =============================================================================
+
+// Claude Code discovers skills one level deep: <root>/<name>/SKILL.md. The repo
+// groups some skills under a parent dir (skills/pstack/unslop, ...), which a
+// whole-dir symlink hides. This links each skill dir individually into a real
+// target dir so grouped skills appear flat.
+//
+// Discovery: a top-level dir with SKILL.md is a skill. A top-level dir without
+// SKILL.md is a group; each child dir with SKILL.md is a skill. Dot dirs and
+// plain files are skipped. Groups do not nest further.
+async function discoverSkills(
+	skillsDir: string,
+): Promise<Map<string, string>> {
+	const skills = new Map<string, string>();
+
+	const addSkill = (name: string, sourcePath: string): void => {
+		const existing = skills.get(name);
+		if (existing) {
+			throw new Error(
+				`Skill name collision: "${name}" at ${existing} and ${sourcePath}`,
+			);
+		}
+		skills.set(name, sourcePath);
+	};
+
+	const isSkill = (dir: string): Promise<boolean> =>
+		pathExists(path.join(dir, "SKILL.md"));
+
+	for (const entry of await readdir(skillsDir, { withFileTypes: true })) {
+		if (!entry.isDirectory() || entry.name.startsWith(".")) continue;
+		const entryPath = path.join(skillsDir, entry.name);
+
+		if (await isSkill(entryPath)) {
+			addSkill(entry.name, entryPath);
+			continue;
+		}
+
+		for (const child of await readdir(entryPath, { withFileTypes: true })) {
+			if (!child.isDirectory() || child.name.startsWith(".")) continue;
+			const childPath = path.join(entryPath, child.name);
+			if (await isSkill(childPath)) {
+				addSkill(child.name, childPath);
+			}
+		}
+	}
+
+	return skills;
+}
+
+async function linkSkillsFlat(
+	skillsDir: string,
+	targetDir: string,
+): Promise<void> {
+	if (!(await pathExists(skillsDir))) {
+		return;
+	}
+
+	const skills = await discoverSkills(skillsDir);
+
+	// The target may be a whole-dir symlink from an earlier layout. mkdir on a
+	// symlink-to-dir succeeds silently, and every link created afterwards would
+	// land inside the repo through it. Remove the link itself first, never its
+	// contents.
+	if (await pathExists(targetDir)) {
+		const stat = await lstat(targetDir);
+		if (stat.isSymbolicLink()) {
+			await unlink(targetDir);
+			action(`Removed whole-dir symlink: ${targetDir}`);
+		} else if (!stat.isDirectory()) {
+			await removeExisting(targetDir);
+		}
+	}
+	await mkdir(targetDir, { recursive: true });
+
+	for (const [name, sourcePath] of skills) {
+		await ensureLinked(sourcePath, path.join(targetDir, name));
+	}
+
+	// Prune stale links that point into the repo skills dir but no longer match
+	// a discovered skill. Real dirs and links to other places stay untouched.
+	const repoPrefix = skillsDir + path.sep;
+	for (const entry of await readdir(targetDir, { withFileTypes: true })) {
+		if (skills.has(entry.name) || !entry.isSymbolicLink()) continue;
+		const entryPath = path.join(targetDir, entry.name);
+		const target = await getSymlinkTarget(entryPath);
+		if (!target) continue;
+		const resolved = path.resolve(targetDir, target);
+		if (resolved.startsWith(repoPrefix)) {
+			await unlink(entryPath);
+			action(`Pruned stale skill link: ${entryPath}`);
+		}
+	}
+}
+
+// =============================================================================
 // Claude Code linking
 // =============================================================================
 
@@ -278,9 +376,8 @@ async function linkClaude(agentTemplatesDir: string): Promise<void> {
 		"prompts",
 		path.join(claudeRoot, "commands"),
 	);
-	await linkIfPresent(
-		agentTemplatesDir,
-		"skills",
+	await linkSkillsFlat(
+		path.join(agentTemplatesDir, "skills"),
 		path.join(claudeRoot, "skills"),
 	);
 	await linkIfPresent(

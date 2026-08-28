@@ -43,7 +43,7 @@ agent-templates/
 
 The `link-agent-templates.ts` script creates symlinks from this repo to the appropriate locations:
 
-- **Claude**: `~/.claude/commands`, `~/.claude/skills`, `~/.claude/docs`, etc.
+- **Claude**: `~/.claude/commands`, `~/.claude/skills`, `~/.claude/docs`, etc. Skills link one per skill, so grouped skills (`skills/pstack/unslop`) appear flat as `~/.claude/skills/unslop`. Group dirs are any `skills/<group>/` without a `SKILL.md`.
 - **Codex**: `~/.codex/prompts`, `~/.codex/skills`, `~/.codex/agents`, etc.
 - **Copilot**: `~/.copilot/prompts`, `~/.copilot/skills`, etc.
 - **OpenCode**: `~/.config/opencode/...`
