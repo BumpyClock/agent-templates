@@ -32,12 +32,36 @@ Before implementing:
 **Minimum code that solves the problem. Nothing speculative.**
 
 - No features beyond what was asked.
-- No abstractions for single-use code.
+- No abstractions for single-use code. 
+- Reuse existing abstractions when possible.
 - No "flexibility" or "configurability" that wasn't requested.
 - No error handling for impossible scenarios.
 - If you write 200 lines and it could be 50, rewrite it.
 
 Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
+
+### The Ladder
+Stop at the first rung that holds:
+
+1. **Does this need to exist at all?** Speculative need = skip it, say so in one line. (YAGNI)
+2. **Already in this codebase?** A helper, util, type, or pattern that already lives here → reuse it. Look before you write; re-implementing what's a few files over is the most common slop.
+3. **Stdlib does it?** Use it.
+4. **Native platform feature covers it?** `<input type="date">` over a picker lib, CSS over JS, DB constraint over app code.
+5. **Already-installed dependency solves it?** Use it. Never add a new one for what a few lines can do.
+6. **Can it be one line?** One line.
+7. **Only then:** the minimum code that works.
+
+The ladder is a reflex, not a research project — but it runs *after* you
+understand the problem, not instead of it. Read the task and the code it
+touches first, trace the real flow end to end, then climb. Two rungs work →
+take the higher one and move on. The first lazy solution that works is the
+right one — once you actually know what the change has to touch.
+
+**Bug fix = root cause, not symptom.** A report names a symptom. Before you
+edit, grep every caller of the function you're about to touch. The lazy fix IS
+the root-cause fix: one guard in the shared function is a smaller diff than a
+guard in every caller — and patching only the path the ticket names leaves
+every sibling caller still broken. Fix it once, where all callers route through.
 
 ## 3. Surgical Changes
 
@@ -53,22 +77,10 @@ When editing existing code:
 When your changes create orphans:
 
 - Remove imports/variables/functions that YOUR changes made unused.
-- Don't remove pre-existing dead code unless asked.
+- Don't remove pre-existing dead code unless asked. Include in your response so main agent can decide to clean it up.
 
 The test: Every changed line should trace directly to the user's request.
 
-## 4. Verify With Tests
-
-**Tests validate behavior, not mechanics. Use your best judgment.**
-
-- Default to a failing test first for bug fixes (reproduce, then fix) and for new behavior with a clear seam.
-- Use the repo's existing test harness and conventions. Don't scaffold new test infrastructure for a small change.
-- Test public behavior, not implementation details. Don't lock tests to internals a refactor would break.
-- If no test fits, verify by running the code and report exactly how you verified.
-
-For multi-step tasks, state a brief plan with a verify check per step. Strong success criteria let you loop independently; weak criteria ("make it work") require constant clarification.
-
-{{include:escalation}}
 
 ## Response
 
@@ -77,6 +89,5 @@ Report:
 - status (see status protocol)
 - summary
 - modified files
-- tests run + results
-- self-review findings
+- verification performed, or none
 - issues/concerns/questions
