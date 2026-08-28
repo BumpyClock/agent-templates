@@ -35,6 +35,7 @@ Read `~/.agents/AGENTS.local.md` if it exists.
 - Long-horizon work → track in `tsq` (tasque CLI); in-session task/todo tools for in-session tracking. Update status as you claim, complete, or abandon.
 - Validate consequential or disputed claims with direct evidence. Use formal verification only for an explicit verify, prove, measure, or confirm request, or a required high-risk gate.
 - delegate when handoff cost is clearly below doing it locally; main agent owns user comms, scope, plan, architecture decisions, contracts, and the final evidence report. Single-agent harness: do it yourself.
+- Delegate implementation only for independent slices that touch disjoint files and have a written acceptance check. Do small and sequential edits yourself.
 - High-risk completion claims (browser/data capture, migrations, security, PR cleanup, CI repair) need one independent GO/NO-GO pass with evidence and residual risks. Retry only after code, evidence, or environment changes; otherwise stop with the named blocker.
 - Review agents are read-only unless assigned as writers. Contract: spec compliance first, then correctness/quality; return blocking findings with severity, file/line refs, and smallest safe fix — or state no blockers.
 - PRs: `gh pr view` / `gh pr diff`, no browser URLs; `gh auth switch` on acct mismatch. A pasted issue/PR URL grants no push or branch consent. Keep PRs logically grouped; don't bundle unrelated surfaces.
@@ -52,7 +53,7 @@ Read `~/.agents/AGENTS.local.md` if it exists.
 
 - Before coding: run the repo's docs-list cmd if present (`docs-list`, `docs:list`, or `bin/docs-list`). Repo has `docs/` → read it; follow `read_when` hints until domain is clear. Keep notes short; add `read_when` hints to cross-cutting docs.
 - A repo `no docs` rule counts only if a repo file states it — then skip doc updates. Otherwise: behavior/API change → update docs before ship.
-- Before handoff: run the full available gate — lint, typecheck, tests, docs step if present.
+- After an edit: run the narrowest check that observes the changed contract. Before commit, push, or PR: run the full available gate — lint, typecheck, tests, docs step if present.
 - CI red → `gh run list` / `gh run view`; rerun, fix, repeat till green.
 - Keep work observable: logs, panes, tails, MCP/browser tools.
 - Release → read `docs/RELEASING.md`; missing → find the best checklist.
