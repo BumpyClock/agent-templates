@@ -1,5 +1,5 @@
 ---
-name: researcher
+name: web-researcher
 description: Conducting web research and analysis
 model_class: balanced
 claude:
