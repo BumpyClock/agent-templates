@@ -89,7 +89,7 @@ src/
 
 ## Signs You Need More Structure
 
-- Files exceed 300-500 lines
+- Files exceed 300-500 lines *and* mix responsibilities (size alone is a signal, not a hard limit — split when there is an architectural seam, not to hit a number)
 - Related files are hard to identify
 - You're adding `_` prefixes for grouping (`user_model.rs`, `user_service.rs`)
 - New team members get lost

@@ -19,8 +19,8 @@ Three tiers of authority:
 
 - Branch changes need consent: create, switch, rebase, merge, delete. Destructive ops need explicit ask: force-delete, force-push, overwrite, history rewrite. These gates hold on their own; an AGENTS.md/CLAUDE.md can add gates, never remove them.
 - Inspect first: `git status --short`, then relevant `git diff` / `git log`.
-- Stage explicit paths only. Never `git add .` or `git add -A`. Prefer `committer` when installed (stages explicit paths, rejects `.`); else `git add <paths>`.
-- Auth fails → ask user to run `gh auth login`; don't invent tokens.
+- Stage explicit paths only. Never `git add .` or `git add -A`.
+- Auth fails → ask user to run `gh auth login`; don't invent tokens. When multiple accounts logged in, ensure correct account is used, switch if needed.
 
 Each rule above is defined only here; sub-docs reference or remind, never redefine.
 
