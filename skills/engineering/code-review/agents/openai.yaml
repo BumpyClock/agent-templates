@@ -1,3 +1,4 @@
 interface:
   display_name: "Code Review"
-  short_description: "Review a diff on standards and spec"
+  short_description: "Review fixed-point diffs against strict standards and spec"
+  default_prompt: "Use $code-review to review this fixed-point diff. Apply the nuclear maintainability baseline by default, report an explicit Standards disposition, and keep Standards and Spec findings separate."
