@@ -1,4 +1,4 @@
 interface:
   display_name: "Resolve PR Comments"
-  short_description: "Validate, fix, reply to, and resolve PR feedback"
-  default_prompt: "Use $resolve-pr-comments to fetch and validate all pull request feedback, apply approved fixes, reply before resolving review threads, and verify no actionable comments remain."
+  short_description: "Triage PR feedback as fix, dismiss, or ask"
+  default_prompt: "Use $resolve-pr-comments to assess human and automated PR feedback against current code. Classify each claim as fix, dismiss, or ask. Apply approved fixes, reply with evidence before thread resolution, and leave unresolved decisions open."

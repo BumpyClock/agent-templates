@@ -1,13 +1,13 @@
 ---
 name: resolve-pr-comments
-description: Use when creating or updating GitHub pull requests, improving PR reviewability, or resolving review comments. Fetches and validates all feedback, applies approved fixes, replies before resolving threads, and verifies no actionable comments remain.
+description: Use when creating or updating GitHub pull requests, improving PR reviewability, or triaging human or automated review feedback. Classifies feedback as fix, dismiss, or ask, applies approved fixes, and replies before thread resolution.
 ---
 
-# PRs and Comments
+# PRs and comments
 
-Goal: reviewable PRs, low-noise feedback handling, reply+resolve that survives independent verification.
+Produce reviewable PRs and evidence-based replies. A review comment does not automatically require a code change.
 
-"Resolve pr comments", "address review feedback", or similar → run the full loop: fetch, validate, fix, reply, resolve, verify.
+For a review-resolution request, fetch, triage, apply authorized fixes, reply, and confirm thread state.
 
 ## Create/update PR
 
@@ -57,22 +57,23 @@ gh api repos/{o}/{r}/issues/{pr}/comments --paginate   # conversation comments
 gh api repos/{o}/{r}/pulls/{pr}/reviews --paginate     # review bodies
 ```
 
-Bot quirks: always include review-bot comments (e.g. `claude`, `codex`, `coderabbit`) even when resolved-status is missing or ambiguous — actionable feedback often sits in child replies. Some bots leave one long comment instead of threads; treat as one unresolved thread. Failed-check annotations are feedback too: `gh api repos/{o}/{r}/check-runs/{id}/annotations`.
+Include human and automated feedback, even when resolved status is absent or ambiguous. Read child replies. Split long summary comments into distinct claims. Record conversation comments and check annotations without thread IDs separately. Fetch annotations with `gh api repos/{o}/{r}/check-runs/{id}/annotations`.
 
 Auth fails → SKILL.md globals. `gh` hangs → network, not auth: run slow calls separately with a timeout; skip non-essential data (labels) rather than block the task.
 
 ## Validate and triage
 
-1. Read all fetched comments before editing. Normalize: thread id, resolved state, path/line, author, body, severity.
-2. Validate each against current code with evidence. Classify `valid` / `invalid` / `needs-info`.
-3. Explicit repo rules (CLAUDE.md/AGENTS.md near touched files) beat preference.
-4. Skip as false positives: pre-existing issues the PR didn't introduce; linter-catchable nits (unless CI fails); style without repo-rule backing; lines outside the diff; intentional changes already explained in the PR body.
-5. Non-comment issues found while scanning: report verified ones, one line each, separate from comment triage; do not fix unasked.
-6. Subagents available → parallelize validation when thread count warrants it. Fetch and normalize once; validators reuse that output rather than re-fetching. Every delegated prompt gets absolute repo path + explicit authorization scope — consent does not survive hops implicitly.
+Read `references/review-triage.md` before any review decision. It owns the `fix` / `dismiss` / `ask` rubric and pattern boundaries.
+
+1. Read all fetched feedback before any edit.
+2. Record each claim with its thread or comment ID, state, path/line, author, severity, and current PR head SHA.
+3. Apply the rubric to each claim against current code and local repo rules. Record the decision and evidence.
+4. Report unrelated discoveries separately. Keep fixes within the approved scope.
+5. When delegation helps, share the fetched claims, rubric, absolute repo path, and explicit authorization scope. Require evidence for every returned decision.
 
 ## Fix
 
-Group valid comments by area and severity; implement sequentially; tests where behavior changes. Large/risky fix → ask first. Recurring nits → look for architecture smell; real → stop, tell user, propose boundary/owner/contract path.
+Group `fix` decisions by area and severity. Apply authorized fixes on the branch that owns the code. Add regression tests for behavior changes. Keep `ask` decisions open for user input. Repeated comments alone do not justify code or architecture changes.
 
 ## Reply + resolve
 
@@ -87,13 +88,15 @@ gh api graphql -f query='mutation($t:ID!){resolveReviewThread(input:{threadId:$t
 
 REST alternate: `gh api -X POST repos/{o}/{r}/pulls/{pr}/comments/{databaseId}/replies -f body='...'` — keyed on comment id; resolving still needs the GraphQL thread id (extra mapping query). Empty/wrong id → opaque `Could not resolve to a node with the global id of ''`.
 
-Reply content: verdict + evidence, 2–4 sentences. Fixed → what changed + commit hash; verify cited refs/paths resolve before posting. Invalid → why, with current-code evidence. Needs-info → targeted question. Already addressed elsewhere → short reply pointing at the mechanism, then resolve. Deferred → name the tracking task. Follow-up PR for a closed issue → `Refs #n`, never `Closes`.
+Write 2-4 sentences with the decision and evidence. For `fix`, cite the change and commit on the PR head. For local-only fixes, report the pending push and leave the thread open. For `dismiss`, cite the disproof, existing fix, or approved deferral task. For `ask`, state the unresolved question and leave the thread open.
+
+Confirm cited paths and commits exist before any reply. Resolve only when every claim has a completed `fix` or supported `dismiss` decision. Report comments without thread IDs separately. For a follow-up PR for a closed issue, use `Refs #n` instead of `Closes`.
 
 Mutation fails → record failure + draft text, continue with remaining threads, report failures explicitly. Optional summary comment: list fixes AND deliberate rejections.
 
 ## Verify, loop, merge
 
-1. After posting: one fresh query re-fetches threads, asserts every reply landed and unresolved count is 0 (or lists leftovers). Never trust a delegate's own count.
+1. Fetch threads again after replies. Confirm each reply and resolution independently. List open `ask` decisions, failed mutations, and other unresolved claims. Claim completion only when no actionable feedback remains.
 2. Delegate died or stalled mid-post → re-fetch what actually landed before re-posting anything. Double-post guard.
 3. New-comment loop: record `createdAt` baseline; bot reviewer pending → poll `gh pr checks <pr> --json name,bucket,state` filtered to the gates that matter (`gh pr checks` exits 1 on any failure, including unrelated infra); re-fetch filtered `createdAt > baseline`; repeat until nothing actionable.
 4. Bot reviewer down (billing/limits) → substitute local adversarial review; tell user.

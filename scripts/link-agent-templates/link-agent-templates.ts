@@ -269,10 +269,10 @@ async function linkIfPresent(
 // Flat skill linking
 // =============================================================================
 
-// Claude Code discovers skills one level deep: <root>/<name>/SKILL.md. The repo
-// groups some skills under a parent dir (skills/pstack/unslop, ...), which a
-// whole-dir symlink hides. This links each skill dir individually into a real
-// target dir so grouped skills appear flat.
+// Claude Code and Copilot CLI discover skills one level deep:
+// <root>/<name>/SKILL.md. The repo groups some skills under a parent dir
+// (skills/pstack/unslop, ...), which a whole-dir symlink hides. This links each
+// skill dir individually into a real target dir so grouped skills appear flat.
 //
 // Discovery: a top-level dir with SKILL.md is a skill. A top-level dir without
 // SKILL.md is a group; each child dir with SKILL.md is a skill. Dot dirs and
@@ -493,9 +493,8 @@ async function linkCopilot(agentTemplatesDir: string): Promise<void> {
 		"prompts",
 		path.join(copilotRoot, "prompts"),
 	);
-	await linkIfPresent(
-		agentTemplatesDir,
-		"skills",
+	await linkSkillsFlat(
+		path.join(agentTemplatesDir, "skills"),
 		path.join(copilotRoot, "skills"),
 	);
 	await linkIfPresent(
