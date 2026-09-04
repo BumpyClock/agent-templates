@@ -1,9 +1,3 @@
----
-name: principle-experience-first
-description: "Apply when product, UX, or feature-scope tradeoffs come up. Choose user delight over implementation convenience; ship fewer polished features over more rough ones."
-disable-model-invocation: true
----
-
 # Experience First
 
 The product is the experience. Every technical decision either helps or hurts it. When implementation convenience conflicts with user delight, choose delight.
