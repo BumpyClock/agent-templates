@@ -1,0 +1,4 @@
+interface:
+  display_name: "Peekaboo"
+  short_description: "Inspect and automate macOS apps and windows"
+  default_prompt: "Use $peekaboo to inspect the macOS UI, capture screenshots, and perform the requested app or window automation."

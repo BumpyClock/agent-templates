@@ -1,13 +1,13 @@
 ---
 name: winui-packaging
-description: "Package/sign/release WinUI 3 apps: Release builds, MSIX, cert generate/install/sign, self-contained deployment, GitHub Actions CI/CD, Microsoft Store."
+description: "MSIX packaging, code signing, and distribution for WinUI 3 apps — build for release, certificate generation (winapp cert generate), certificate trust, code signing (winapp sign), self-contained deployment, CI/CD with GitHub Actions, and Microsoft Store submission. Use when preparing for release, creating MSIX installers, managing certificates, setting up CI/CD packaging, or publishing to the Microsoft Store."
 ---
 
 ### Quick Reference
 
 | Task | Command |
 |------|---------|
-| Build for release | `.\BuildAndRun.ps1 /p:Configuration=Release` |
+| Build for release | `.\BuildAndRun.ps1 . -c Release --arch x64 --no-launch` |
 | Package + sign | `winapp package <dir> --cert devcert.pfx` |
 | Generate + sign + package | `winapp package <dir> --generate-cert --install-cert` |
 | Generate dev certificate | `winapp cert generate` |
@@ -18,29 +18,31 @@ description: "Package/sign/release WinUI 3 apps: Release builds, MSIX, cert gene
 ### End-to-End Workflow
 
 #### Step 1: Build for Release
-Build Release without launch using `BuildAndRun.ps1` from `references/winui-dev-workflow/guide.md`:
+Build the project in Release configuration without launching it. Use the `BuildAndRun.ps1` wrapper from `references/winui-dev-workflow/guide.md` — plain `dotnet build` does **not** load the bundled `Microsoft.WindowsAppSDK.Analyzers`, so release builds would ship without the analyzer gate that development builds get:
 
 ```powershell
-.\BuildAndRun.ps1 /p:Configuration=Release -SkipRun
+.\BuildAndRun.ps1 . -c Release --arch x64 --no-launch
 ```
+
+`--no-launch` builds and registers a development package without starting the app. Run `winapp unregister` before installing the signed `.msix` in Step 5, so the development registration does not conflict with the packaged identity.
 
 #### Step 2: Generate Certificate (one-time)
 ```powershell
 winapp cert generate --manifest .
 ```
-Creates `devcert.pfx`; default password: `password`. `--manifest` auto-matches `Publisher` in `Package.appxmanifest`.
+Creates `devcert.pfx` (default password: `password`). The `--manifest` flag auto-matches the `Publisher` field in `Package.appxmanifest`.
 
 #### Step 3: Trust Certificate (one-time, requires admin)
 ```powershell
 winapp cert install ./devcert.pfx
 ```
-Adds cert to machine Trusted Root store; persists across reboots.
+Adds cert to machine Trusted Root store. Persists across reboots.
 
 #### Step 4: Package and Sign
 ```powershell
 winapp package <build-output-dir> --cert ./devcert.pfx
 ```
-Finds `appxmanifest.xml`, stages layout, generates `resources.pri`, creates `.msix`, signs it.
+This locates `appxmanifest.xml`, stages the layout, generates `resources.pri`, creates `.msix`, and signs it.
 
 #### Step 5: Install or Distribute
 ```powershell
@@ -52,15 +54,15 @@ Add-AppxPackage ./MyApp.msix
 
 ### Key Rules
 
-- **Publisher must match** cert and manifest `Identity.Publisher` — use `winapp cert generate --manifest`.
-- **Prefer `winapp package --cert`** over separate `winapp sign`.
-- **`cert install` requires admin** — run terminal as Administrator.
-- **Default PFX password** is `password` — override with `--password`.
-- **`--timestamp`** matters for production — without it, signatures expire with cert:
+- **Publisher must match** between certificate and manifest `Identity.Publisher` — use `winapp cert generate --manifest` to auto-match
+- **Prefer `winapp package --cert`** over separate `winapp sign` — one step instead of two
+- **`cert install` requires admin** — run terminal as Administrator
+- **Default PFX password** is `password` — override with `--password`
+- **`--timestamp`** is critical for production — without it, signatures expire with the cert:
   ```powershell
   winapp package <dir> --cert prod.pfx --timestamp http://timestamp.digicert.com
   ```
-- **`--self-contained`** bundles Windows App SDK runtime — larger, no runtime dependency.
+- **`--self-contained`** bundles Windows App SDK runtime — larger but no runtime dependency
 
 ### CI/CD with GitHub Actions
 
@@ -89,15 +91,19 @@ jobs:
           path: "*.msix"
 ```
 
-**CI/CD tips:** use `--quiet`; use `--if-exists skip` with `cert generate`; store production PFX as repo secret.
+**CI/CD tips:**
+- Use plain `dotnet build` on the runner, not `BuildAndRun.ps1` — the wrapper registers a development package and needs the plugin's local analyzer payload, neither of which belongs in CI. Enforce analyzer coverage on the dev machine instead.
+- Use `--quiet` for clean output
+- Use `--if-exists skip` with `cert generate` to avoid failures on re-runs
+- Store production PFX as a repository secret
 
 ### Store Submission
 
-1. **Partner Center account** — register at [partner.microsoft.com](https://partner.microsoft.com).
-2. **Age ratings** — complete Partner Center questionnaire.
-3. **Screenshots** — capture at 1366x768 minimum.
-4. **Privacy policy** — required for internet or user-data access.
-5. **Submit** — upload signed `.msix` / `.msixbundle` from `winapp package` via [Microsoft Partner Center](https://partner.microsoft.com/dashboard) → Apps and games → your app → Packages. Store submission is browser-based; no first-party CLI submit command yet.
+1. **Partner Center account** — register at [partner.microsoft.com](https://partner.microsoft.com)
+2. **Age ratings** — complete the questionnaire in Partner Center
+3. **Screenshots** — capture at 1366x768 minimum resolution
+4. **Privacy policy** — required for apps that access internet or user data
+5. **Submit:** upload the signed `.msix` / `.msixbundle` produced by `winapp package` via [Microsoft Partner Center](https://partner.microsoft.com/dashboard) — Apps and games → your app → Packages. Microsoft Store submission is browser-based; there is no first-party CLI submit command yet.
 
 ### Troubleshooting
 

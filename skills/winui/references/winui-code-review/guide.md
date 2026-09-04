@@ -1,19 +1,17 @@
 ---
 name: winui-code-review
-description: "Review WinUI 3 code quality: MVVM, x:Bind, accessibility, theming, security, performance. Use before commit to catch compiler/UI-test misses."
+description: "Code quality review for WinUI 3 apps — MVVM compliance, x:Bind correctness, accessibility, theming, security, and performance. Use before committing to catch issues that the compiler and UI tests won't find."
 ---
 
 ### When to Use
 
-Run **after app builds, before commit**. Goal: catch issues compiler/UI tests miss: code that runs but is wrong, fragile, slow, inaccessible, or hard to maintain.
+Run a code review **after the app builds and before committing**. This catches quality issues that aren't build errors and aren't visible in UI tests — patterns that compile and run but are wrong, fragile, or slow.
 
 ### How to Review
 
-Read project XAML + C#. Check every section below.
+Read through the project's XAML and C# files and check each section below. The `Microsoft.WindowsAppSDK.Analyzers` Roslyn analyzer ships with `references/winui-dev-workflow/guide.md` and is injected when `BuildAndRun.ps1` calls project-mode `winapp run`. The wrapper supplies a temporary file through the environment-backed MSBuild `CustomAfterDirectoryBuildProps` hook, preserving SDK composition and each project's normal `Directory.Build.props` discovery (including referenced projects), then restores the environment and removes the temporary file. Plain `winapp run`, `dotnet build`, and Visual Studio do **not** load the analyzer automatically; to enable it outside the wrapper, add the `<Analyzer Include="..." />` and `<Import Project="..." />` entries to the project's own `Directory.Build.props` (or wait for the planned NuGet package).
 
-`Microsoft.WindowsAppSDK.Analyzers` ships with `references/winui-dev-workflow/guide.md`. `BuildAndRun.ps1` injects it during build by writing temporary `Directory.Build.props` with analyzer DLL + `.targets`, then cleans up. Plain `dotnet build` or VS does **not** load it. For diagnostics outside script, add `<Analyzer Include="..." />` + `<Import Project="..." />` to project `Directory.Build.props` or wait for planned NuGet package.
-
-Analyzer catches WinUI 3 / Windows App SDK issues by 4-digit ID:
+The analyzer catches a curated set of WinUI 3 / Windows App SDK issues with categorized 4-digit IDs:
 
 * **WUI0xxx** — UWP → WinUI 3 API compatibility (`UwpXamlNamespace`, `Window.Current`, `CoreDispatcher`, `GetForCurrentView`)
 * **WUI1xxx** — Migration-table data-driven hints (UWP API has WinAppSDK equivalent, no equivalent, feature-area hint)
@@ -21,7 +19,7 @@ Analyzer catches WinUI 3 / Windows App SDK issues by 4-digit ID:
 * **WUI3xxx** — MVVM patterns (old `[ObservableProperty]` field syntax)
 * **WUI4xxx** — Interop (`WebView2` not initialized, removed ONNX Runtime GenAI APIs `WUI4101`-`WUI4103`)
 
-All diagnostics are `Warning`, none `Error`, each with `helpLinkUri`. Suppress via `#pragma warning disable WUIxxxx` or `<NoWarn>`; analyzer `SuppressionTests` verify pragma suppression round-trips.
+Every diagnostic ships at `Warning` severity (no rule is `Error`) and includes a `helpLinkUri`. Suppress noise with `#pragma warning disable WUIxxxx` or `<NoWarn>` as usual — the analyzer's `SuppressionTests` verify that pragma suppression round-trips correctly.
 
 ### MVVM Compliance
 
@@ -80,11 +78,11 @@ All diagnostics are `Warning`, none `Error`, each with `helpLinkUri`. Suppress v
 
 ### Review Report
 
-After review, report:
-1. **Issues found:** file, line, problem
-2. **Severity:** Error (must fix), Warning (should fix), Note (could improve)
-3. **Suggested fixes:** exact code changes
+After reviewing, summarize:
+1. **Issues found:** List each with file, line, and what's wrong
+2. **Severity:** Error (must fix), Warning (should fix), or Note (could improve)
+3. **Suggested fixes:** Specific code changes for each issue
 
 ### References
 
-Detailed rules + examples: `references/quality-rules.md` for x:Phase, layout optimization, PasswordVault, DPAPI, WebView2 hardening, keyboard nav, screen readers, `.editorconfig`, naming, x:Uid, RTL, pluralization.
+For detailed rules with code examples, see `references/quality-rules.md` — covers performance deep dives (x:Phase, layout optimization), security (PasswordVault, DPAPI, WebView2 hardening), accessibility (keyboard nav, screen readers), code quality (.editorconfig, naming), and globalization (x:Uid patterns, RTL, pluralization).

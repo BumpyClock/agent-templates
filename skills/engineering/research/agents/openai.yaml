@@ -1,3 +1,4 @@
 interface:
   display_name: "Research"
   short_description: "Research from high-trust sources"
+  default_prompt: "Use $research to investigate this question through high-trust primary sources and save the findings as Markdown."

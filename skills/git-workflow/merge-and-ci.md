@@ -1,48 +1,33 @@
 # Merge and CI
 
-Goal: merge safely, resolve conflicts deliberately, inspect CI with `gh` evidence.
+Apply the authorization and preservation rules in `SKILL.md`.
 
 ## Merge
 
-Repo convention wins: check recent merged PRs (`gh pr list --state merged --limit 5`) or repo settings. Else: merge commit when branch history meaningful; squash for WIP/noisy commits; rebase for small clean linear commits. Squash/rebase flatten branch context — avoid when individual commits carry meaning.
+Establish merge readiness from current PR evidence and repository requirements for checks, reviews, conversations, and branch state. Report unmet requirements before a merge.
 
-Squash subject defaults to the PR title (multi-commit PRs), which follows PR-title convention, not commit convention. Rewrite it: `gh pr merge --squash --subject "type(scope): summary"` — the subject lands in `git log --oneline` on main forever.
+Choose the merge method from repository policy and the value of individual commits. For a squash merge, check the final commit message against repository conventions.
 
-Pre-merge gate: CI green, required reviews approved, no unresolved conversations, branch current per repo policy, no conflicts, significant changes tested (or reason stated), user asked/approved merge. Verify: `gh pr view <pr> --json mergeStateStatus,reviewDecision`, `gh pr checks <pr>`.
-
-After merge: branch delete still needs explicit ask; cleanup rules in `commits-and-branches.md`.
+Confirm the merge result before you report completion. Treat branch deletion as a separate action under `SKILL.md`, section `Cleanup`.
 
 ## Conflicts
 
-Branch-change consent before local merge/rebase. Find conflicted files: `git diff --name-only --diff-filter=U`.
+Resolve conflicts from the intended behavior of both changes and the current repository context. Ask only when the evidence cannot determine a material choice.
 
-Rules:
-
-- Minimal correctness-first edits; preserve both sides when clearly compatible.
-- Neither side clearly right → stop, ask.
-- Binary conflict → ask before choosing/replacing.
-- Lockfiles/generated files: regenerate with repo's own package manager/generator, stage only those exact files.
-- No leftover conflict markers; no broad refactors during resolution.
-- Test with repo's own commands after resolving.
-
-Summary: files resolved, notable choices, test/build outcome, risks/checks not run.
+Regenerate lockfiles and generated files with the repository's own tools where appropriate. Inspect the complete resolution for lost changes and conflict markers. Validate the affected behavior with repository checks.
 
 ## CI failures
 
-CI red on user's branch/PR → inspect and fix proactively; push still needs user ask. Auth fails → SKILL.md globals.
+Use check results and logs to identify the cause before a correction or rerun. Distinguish code failures from infrastructure failures and unavailable evidence.
 
-Preferred script (bundled; `<skill-dir>` = this skill's install directory, not repo-relative):
+Use the bundled helper when it simplifies failure inspection. Replace `<skill-dir>` with this skill's install directory.
 
 ```bash
-python3 <skill-dir>/scripts/inspect_pr_checks.py --repo . --pr <number-or-url> [--json]
+python3 <skill-dir>/scripts/inspect_pr_checks.py --repo . --pr <number-or-url> --json
 ```
 
-(`python` instead of `python3` on Windows.)
+The helper collects failed checks and available GitHub Actions log excerpts. For direct inspection, use `gh pr checks` and `gh run view`. If run logs are unavailable, job logs may be accessible through `gh api repos/<owner>/<repo>/actions/jobs/<job_id>/logs`.
 
-Script preserves: `gh pr checks` field drift, Actions log snippets, external URL-only checks, pending/missing logs; non-zero exit while failures remain. Fail states: `failure`, `error`, `cancelled`, `timed_out`, `action_required`, `bucket=fail`.
+Validate corrections locally where possible. Retry when a correction, environment change, or evidence of a transient failure justifies another attempt. Continue until relevant CI checks pass or a concrete blocker prevents progress.
 
-Manual fallback: `gh pr checks <pr> --json name,state,bucket,link,workflow` (fields rejected → use fields gh shows); `gh run view <run_id> --log`; log pending with job id → `gh api /repos/<owner>/<repo>/actions/jobs/<job_id>/logs`. External checks: report name + URL; don't chase other providers unless asked.
-
-Fix loop: inspect failed check set → extract first actionable error with exact log text → identify root cause (no blind retries) → smallest safe fix → run matching local command when available → push only on ask → re-check only with new evidence.
-
-Report per check: name, run URL, status, exact failure snippet, likely cause, proposed next fix. Never say green until `gh pr checks`/CI evidence says green.
+Report observed CI status for the current revision, with links and unresolved causes. Distinguish local test results from CI results. Identify checks whose logs or results remain unavailable.

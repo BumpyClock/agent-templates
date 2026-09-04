@@ -1,5 +1,6 @@
 interface:
   display_name: "What Did I Get Done"
   short_description: "Summarize authored commits into a status update"
+  default_prompt: "Use $what-did-i-get-done to summarize authored commits from the requested time range as a concise status update."
 policy:
   allow_implicit_invocation: false

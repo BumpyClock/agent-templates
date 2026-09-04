@@ -1,5 +1,6 @@
 interface:
   display_name: "Speak"
   short_description: "Generate a voice note to get the user's attention"
+  default_prompt: "Use $speak to generate and play a voice note when the user needs an audible notification."
 policy:
   allow_implicit_invocation: false

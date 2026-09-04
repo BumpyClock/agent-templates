@@ -1,4 +1,4 @@
 interface:
   display_name: "Programming"
-  short_description: "Programming first principles: root-cause debugging, test quality, verification gates"
+  short_description: "Root-cause coding, regression tests, and verification"
   default_prompt: "Use $programming when implementing features, fixing bugs, refactoring, or writing tests."

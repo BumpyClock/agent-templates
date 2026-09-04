@@ -1,0 +1,6 @@
+interface:
+  display_name: "Make Bot UI"
+  short_description: "Build a secure webhook UI that wakes a Grok Bot"
+  default_prompt: "Use $make-bot-ui to build a secure custom UI that wakes a Grok Bot through its webhook."
+policy:
+  allow_implicit_invocation: false

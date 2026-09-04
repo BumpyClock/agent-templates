@@ -1,3 +1,4 @@
 interface:
   display_name: "Wizard"
   short_description: "Generate an interactive setup wizard"
+  default_prompt: "Use $wizard to generate an interactive Bash guide for the manual setup, credential, migration, or cutover steps a human must perform."

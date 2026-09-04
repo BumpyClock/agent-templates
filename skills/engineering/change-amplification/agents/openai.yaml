@@ -1,5 +1,6 @@
 interface:
   display_name: "Change Amplification"
   short_description: "Find PR change-amplification from missing owners/contracts"
+  default_prompt: "Use $change-amplification to find and rank missing owners, contracts, or boundaries evidenced by PR change amplification."
 policy:
   allow_implicit_invocation: false

@@ -1,12 +1,14 @@
 # test-mock-traits
 
-> Use traits for dependencies to enable mocking in tests
+> Use dependency traits when test doubles justify the boundary
 
 ## Why It Matters
 
-Concrete dependencies make testing hard—you can't easily test error paths, timeouts, or edge cases without real external systems. Extracting dependencies behind traits lets you inject test doubles (mocks, fakes, stubs), enabling isolated unit tests that run fast and cover edge cases.
+Use [Write tests](../../programming/references/write-tests.md) to choose the test boundary and dependency strategy.
+A trait can permit controlled errors or external responses when real dependencies are impractical.
+Keep concrete dependencies when they provide practical contract checks without an extra abstraction.
 
-## Bad
+## Concrete dependency
 
 ```rust
 struct UserService {
@@ -29,7 +31,7 @@ async fn test_get_user() {
 }
 ```
 
-## Good
+## Trait boundary for controlled responses
 
 ```rust
 // Define trait for dependency

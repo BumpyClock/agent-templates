@@ -1,149 +1,150 @@
 ---
 name: winui-setup
-description: "Install/verify WinUI 3 prerequisites: .NET SDK 10, WinApp CLI, WinUI 3 .NET templates, Developer Mode. Use for new/reset machines or missing `winapp`/`dotnet`/templates/Developer Mode."
-disable-model-invocation: true
+description: "Install and verify the prerequisites the win-dev-skills WinUI 3 toolchain depends on — .NET SDK 8.0.100+, WinApp CLI 0.6+, and Developer Mode. Use only when the user explicitly asks to set up or repair the toolchain. Do not invoke automatically when another skill reports a missing prerequisite; tell the user what is missing and ask them to invoke this skill."
 ---
 
 ### Purpose
 
-Install + verify prerequisites every other `winui-*` skill assumes.
+Install and verify the prerequisites every other `winui-*` skill assumes. WinApp CLI 0.6 owns WinUI template discovery and installation through `winapp new`; **do not install the template pack separately**.
 
-Idempotent: every step checks first, skips if satisfied, prints `[OK] already installed`, moves on. Re-run on ready machine = fast no-op.
+> [!IMPORTANT]
+> Run this skill only when the user explicitly asks to set up or repair the toolchain. If it is loaded without an explicit request, do not run checks or installations; explain what the skill changes and wait for confirmation.
+
+This skill is idempotent: detect everything first, install or upgrade only what is needed, and print one final summary.
 
 ### Steps
 
-First: **batch all detection up front**. Run checks together, show full status before installs. Then install only missing/old items, except always upgrade WinApp CLI + templates.
-
 #### Detect everything
 
-Run together; collect results:
+Run these checks together so the user sees the full state before anything changes:
 
 ```powershell
-# .NET SDK — accept any installed SDK >= 8.0
-$dotnetSdks = (& dotnet --list-sdks 2>$null) -replace ' \[.*$',''
-$dotnetOk   = $dotnetSdks | ForEach-Object { [version]($_ -split '-')[0] } |
-              Where-Object { $_.Major -ge 8 } | Select-Object -First 1
+$minimumDotNet = [version]'8.0.100'
+$minimumWinApp = [version]'0.6.0'
 
-# WinApp CLI — needs to be present AND >= 0.3
+# .NET SDK — project-mode winapp run requires SDK 8.0.100+
+$dotnetSdks = @(& dotnet --list-sdks 2>$null) | ForEach-Object {
+    $text = ($_ -replace ' \[.*$','').Trim()
+    $parsed = $null
+    if ([version]::TryParse(($text -split '-')[0], [ref]$parsed)) { $parsed }
+}
+$dotnetVersion = $dotnetSdks |
+    Where-Object { $_ -ge $minimumDotNet } |
+    Sort-Object -Descending |
+    Select-Object -First 1
+$dotnetOk = $null -ne $dotnetVersion
+
+# WinApp CLI — require 0.6+ for winapp new, find-ui, and project-mode run
+$winappCmd = Get-Command winapp -ErrorAction SilentlyContinue
 $winappVersion = $null
-$winappOk      = $false
-$winappCmd     = Get-Command winapp -ErrorAction SilentlyContinue
 if ($winappCmd) {
-    $raw = (& winapp --version 2>$null) -as [string]
-    if ($raw) {
-        $base = ($raw -split '-')[0]   # strip "-prerelease.N" if present
-        try {
-            $winappVersion = [version]$base
-            $winappOk      = $winappVersion -ge [version]'0.3'
-        } catch {}
+    foreach ($line in @(& winapp --version 2>$null)) {
+        $match = [regex]::Match(
+            [string]$line,
+            '^\s*v?(?<version>\d+\.\d+\.\d+)(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?\s*$'
+        )
+        if ($match.Success) {
+            $parsed = $null
+            if ([version]::TryParse($match.Groups['version'].Value, [ref]$parsed)) {
+                $winappVersion = $parsed
+            }
+        }
     }
 }
-
-# WinUI 3 templates
-$templatesOk = [bool](dotnet new list winui 2>$null | Select-String 'winui-mvvm' -Quiet)
+$winappOk = $winappVersion -ge $minimumWinApp
 
 # Developer Mode
 $devModeOk = ((Get-ItemProperty `
-  -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock' `
-  -Name AllowDevelopmentWithoutDevLicense -ErrorAction SilentlyContinue
+    -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock' `
+    -Name AllowDevelopmentWithoutDevLicense -ErrorAction SilentlyContinue
 ).AllowDevelopmentWithoutDevLicense) -eq 1
 ```
 
-Print one-shot status table before changes:
+Print a one-shot status table:
 
+```text
+.NET SDK >= 8.0.100     [OK] found 10.0.100
+WinApp CLI >= 0.6.0     [!] found 0.5.1 — will upgrade
+Developer Mode          [X] disabled — needs admin to enable
 ```
-.NET SDK ≥ 8           ✅ found 10.0.100   (or ❌ missing — will install Microsoft.DotNet.SDK.10)
-WinApp CLI             ⚠ found 0.3.1 — will upgrade to latest
-                       (or ❌ missing/too old — will install Microsoft.WinAppCLI)
-WinUI 3 templates      ✅ found — will reinstall to make sure they're at latest
-Developer Mode         ❌ disabled — needs admin to enable
-```
-
-> **Always upgrade WinApp CLI and WinUI templates**, even if present. They ship breaking changes. Other `winui-*` skills assume latest. Minimum: "WinApp CLI ≥ 0.3 and templates installed at all"; goal: "both at latest".
 
 #### Install what's missing
 
-Skip already-OK items from detection. Remaining steps:
+##### .NET SDK
 
-##### .NET SDK (only if no SDK ≥ 8.0 was found)
+Only when no SDK at or above `8.0.100` was found:
 
 ```powershell
 winget install --id Microsoft.DotNet.SDK.10 --exact --silent --accept-package-agreements --accept-source-agreements
 ```
 
-`.NET 8.0` is floor. If user has 8.0, 9.0, or 10.0 (any patch), requirement met; do not install another SDK side-by-side.
+Do not install another SDK when 8.0.100+, 9.x, or 10.x is already present.
 
-##### WinApp CLI — install if missing/old, then always upgrade
+##### WinApp CLI
 
-If `$winappOk` false (missing or `< 0.3`), install. Then **always** run `winget upgrade`, so existing installs move to latest:
-
-```powershell
-# Install only if missing or too old
-winget install --id Microsoft.WinAppCLI --exact --silent --accept-package-agreements --accept-source-agreements
-
-# Always — upgrade to latest (no-op if already at latest)
-winget upgrade --id Microsoft.WinAppCLI --exact --silent --accept-package-agreements --accept-source-agreements
-```
-
-##### Refresh `$env:Path`
-
-If winget installed .NET SDK or any tool this session, **refresh PATH** so later steps find new tools. Without this, `dotnet new install` can fail with "command not found" despite SDK on disk:
+If `winapp` is missing, install it. If it is present but below 0.6.0, try to upgrade it. Skip both commands when the installed version already meets the minimum:
 
 ```powershell
-$env:Path = [Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [Environment]::GetEnvironmentVariable('Path','User')
+# When winapp is missing
+winget install --id Microsoft.WinAppCli --exact --silent --accept-package-agreements --accept-source-agreements
+
+# When winapp is present but older than 0.6.0
+winget upgrade --id Microsoft.WinAppCli --exact --silent --accept-package-agreements --accept-source-agreements
 ```
 
-##### WinUI 3 .NET templates — always reinstall to get latest
-
-Run every time, regardless of `$templatesOk`. `dotnet new install` upgrades installed template package in place:
+Refresh PATH after any winget install or upgrade:
 
 ```powershell
-dotnet new install Microsoft.WindowsAppSDK.WinUI.CSharp.Templates
+$env:Path = [Environment]::GetEnvironmentVariable('Path','Machine') + ';' +
+            [Environment]::GetEnvironmentVariable('Path','User')
 ```
 
-##### Developer Mode (ask the user first!)
+Run the version detection again. If the result is still below `0.6.0`, report the actual version and mark setup failed; do not continue with old command fallbacks.
 
-Developer Mode = DWORD `AllowDevelopmentWithoutDevLicense` under `HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock`. Setting it needs admin -> UAC prompt. **Ask user before UAC**. Use language like:
+> `winapp new` installs the official `Microsoft.WindowsAppSDK.WinUI.CSharp.Templates` pack on demand and can update it with `--template-version latest`. Do not run `dotnet new install` during setup.
 
-> Developer Mode is currently disabled. Enabling it requires a one-time admin elevation (a UAC prompt will appear). Would you like me to enable it now? (yes / no / I'll do it later)
+##### Developer Mode (ask first)
 
-Only after user agrees, re-elevate **only this step** via UAC:
+Developer Mode requires admin elevation. **Ask the user before triggering UAC.** Only if they agree, elevate this one operation:
 
 ```powershell
 Start-Process powershell -Verb RunAs -ArgumentList @(
-  '-NoProfile','-Command',
-  "New-Item -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock' -Force | Out-Null; " +
-  "Set-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock' " +
-  "-Name AllowDevelopmentWithoutDevLicense -Type DWord -Value 1"
+    '-NoProfile','-Command',
+    "New-Item -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock' -Force | Out-Null; " +
+    "Set-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock' " +
+    "-Name AllowDevelopmentWithoutDevLicense -Type DWord -Value 1"
 ) -Wait
 ```
 
-If user declines or dismisses UAC, do not abort. Print literal command above for elevated PowerShell later, then continue to summary.
+If the user declines or dismisses UAC, continue to the summary and print the command for later use.
 
-### Final summary — always print this
+### Final summary
 
-After everything, print single-table summary:
+Always print a single summary:
 
-```
+```text
 ==== winui-setup summary ====
-.NET SDK ≥ 8               ⏭ already present (9.0.313)
-WinApp CLI                 ✅ upgraded to 0.4.0  (or ✅ installed, ⏭ already at latest, ❌ failed)
-WinUI 3 templates          ✅ updated to latest
-Developer Mode             ✅ enabled  (or ⏭ skipped — user declined, or ❌ failed: <reason>)
-
-You're ready. Try:
-  copilot --agent winui:winui-dev -p "build me a WinUI 3 markdown editor"
+.NET SDK >= 8.0.100     [>] already present (10.0.100)
+WinApp CLI >= 0.6.0     [OK] upgraded to 0.6.0
+Developer Mode          [OK] enabled
 ```
+
+You're ready. If the current harness exposes the `winui-dev` orchestrator agent,
+start a fresh session with that agent and ask it to build a WinUI app. Otherwise,
+start a fresh session in the current harness and ask it to perform the WinUI task;
+it will load the relevant `winui-*` skills on demand.
+
+For GitHub Copilot CLI, for example:
+
+    copilot --agent winui:winui-dev -p "build me a WinUI 3 markdown editor"
 
 ### Things to NOT do
 
-- ❌ **Do not install Visual Studio.** Optional, multi-GB. If user wants full Visual Studio + WinUI workload (recommended for XAML-diagnostic workaround in `winui-dev-workflow`), tell them at summary end they can install it:
-  ```powershell
-  winget install Microsoft.VisualStudio.Community --override "--add Microsoft.VisualStudio.Workload.Universal"
-  ```
-- ❌ **Do not install GitHub Copilot CLI.** If this skill runs, already installed.
-- ❌ **Do not elevate the entire session** — only step 5 needs admin. Earlier elevation installs winget packages into admin user's profile, wrong user.
-- ❌ **Do not skip the PATH refresh** — skipping installs SDK then fails on `dotnet new install`.
-- ❌ **Do not trigger UAC for Developer Mode without asking first** — prompt appears unannounced. Always confirm before elevating.
-- ❌ **Do not silently retry on failure.** If `winget install` fails (network, package source, permissions), record error in summary and move on.
-- ❌ **Do not install .NET 10 if machine already has any .NET SDK ≥ 8.0** — floor is 8.0; side-by-side wastes disk.
+- Do not install Visual Studio; these skills build and run with `dotnet` and `winapp`.
+- Do not install or upgrade the user's AI coding harness; this skill manages Windows/WinUI development prerequisites only.
+- Do not install the WinUI template pack separately; `winapp new` owns it in 0.6+.
+- Do not elevate the entire session; only the Developer Mode registry write needs admin.
+- Do not skip the PATH refresh after a winget install or upgrade.
+- Do not trigger UAC without asking the user first.
+- Do not silently retry failed installs or accept WinApp CLI below 0.6.0.
+- Do not install .NET 10 when any SDK at or above 8.0.100 is already available.

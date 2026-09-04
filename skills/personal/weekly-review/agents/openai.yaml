@@ -1,5 +1,6 @@
 interface:
   display_name: "Weekly Review"
   short_description: "Weekly synthesis of authored commits"
+  default_prompt: "Use $weekly-review to turn the last week of authored commits into a concise synthesis grouped by work type."
 policy:
   allow_implicit_invocation: false

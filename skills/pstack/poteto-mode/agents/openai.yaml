@@ -1,0 +1,6 @@
+interface:
+  display_name: "Poteto Mode"
+  short_description: "Apply Poteto's concise, rigorous agent workflow"
+  default_prompt: "Use $poteto-mode to handle this task with Poteto's concise, rigorous, and verified workflow."
+policy:
+  allow_implicit_invocation: false

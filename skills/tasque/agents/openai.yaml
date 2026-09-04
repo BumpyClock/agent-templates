@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tasque"
+  short_description: "Manage local tasks and plans with Tasque"
+  default_prompt: "Use $tasque to manage this local task, plan, or specification with the Tasque CLI."

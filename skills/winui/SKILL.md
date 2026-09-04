@@ -1,11 +1,11 @@
 ---
 name: winui
-description: "WinUI 3 uber skill: setup, build/run/debug, UI/XAML design, code review, UI automation, packaging, WPF migration, and agent session reports."
+description: "WinUI 3 uber skill: setup, winapp new/run, UI/XAML design, winapp find-ui samples, code review, UI automation, packaging, WPF migration, and agent session reports."
 ---
 
 # WinUI 3
 
-Use for WinUI 3 / Windows App SDK apps in C# and XAML: new app setup, build/run loops, Fluent UI design, code review, UI testing, packaging, WPF migration, and WinUI-related agent session review.
+Use for WinUI 3 / Windows App SDK apps in C# and XAML: toolchain setup, `winapp new` / `winapp run`, Fluent UI design, code review, UI testing, packaging, WPF migration, and WinUI-related agent session review.
 
 ## Routing
 
@@ -13,7 +13,7 @@ Open the guide that matches the task before acting:
 
 | Task | Guide |
 | --- | --- |
-| Install or verify prerequisites: .NET SDK, WinApp CLI, templates, Developer Mode | `references/winui-setup/guide.md` |
+| Install or verify prerequisites: .NET SDK 8.0.100+, WinApp CLI 0.6+, Developer Mode | `references/winui-setup/guide.md` |
 | Create, build, run, debug, or fix WinUI app errors | `references/winui-dev-workflow/guide.md` |
 | Design or review WinUI UI/XAML, Fluent styling, theme resources, accessibility, layout | `references/winui-design/guide.md` |
 | Review code quality before commit: MVVM, x:Bind, security, perf, globalization | `references/winui-code-review/guide.md` |
@@ -24,12 +24,12 @@ Open the guide that matches the task before acting:
 
 ## Shared Rules
 
-- Start with `references/winui-setup/guide.md` if `dotnet`, `winapp`, templates, Developer Mode, or Windows App SDK state is unknown.
-- Use `references/winui-dev-workflow/BuildAndRun.ps1` for build/run unless repo provides a stronger local script.
-- For UI work, search samples first with `references/winui-design/winui-search.exe`, then write XAML. Read whenever doing XAML work.
+- Start with `references/winui-setup/guide.md` if `dotnet`, `winapp`, Developer Mode, or Windows App SDK state is unknown.
+- Use `references/winui-dev-workflow/BuildAndRun.ps1` for build/run unless the repo provides a stronger local script. WinApp CLI 0.6+ owns templates through `winapp new`; do not install the template pack separately.
+- For UI work, search samples first with `winapp find-ui`, then write XAML. Read `references/winui-design/guide.md` whenever doing XAML work.
 - For verification, prefer scripted `winapp ui` tests over manual click-throughs when behavior matters.
 - Keep fixes scoped: root cause first, minimal change at right boundary, then rerun build/test gate.
 
 ## Reference Layout
 
-Former standalone WinUI skills live under `references/` as nested guides. They intentionally use `guide.md`, not `SKILL.md`, so only this parent skill is live. The guides are condensed rewrites; the verbatim official originals from the WinUI team are archived in `skills_archive/merged-into-parent/winui-*` for re-syncing when upstream updates.
+Former standalone WinUI skills live under `references/` as nested guides. They intentionally use `guide.md`, not `SKILL.md`, so only this parent skill is live. Nested content tracks [microsoft/win-dev-skills](https://github.com/microsoft/win-dev-skills) plugin `winui` 0.6.0 (`68ae65d`, 2026-08-26) with local path rewrites. Verbatim official originals are archived in `skills_archive/merged-into-parent/winui-*` for the next upstream sync.

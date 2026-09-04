@@ -1,0 +1,6 @@
+interface:
+  display_name: "Create Verification Skill"
+  short_description: "Create a skill that verifies real app behavior"
+  default_prompt: "Use $create-verification-skill to generate and prove a project-local verification skill for this app."
+policy:
+  allow_implicit_invocation: false

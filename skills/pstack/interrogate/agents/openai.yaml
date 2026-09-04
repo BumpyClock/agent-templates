@@ -1,0 +1,6 @@
+interface:
+  display_name: "Interrogate"
+  short_description: "Run a diverse multi-model adversarial code review"
+  default_prompt: "Use $interrogate to run an adversarial multi-model review of these code changes and synthesize a verdict."
+policy:
+  allow_implicit_invocation: false

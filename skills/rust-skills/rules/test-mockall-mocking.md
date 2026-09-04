@@ -1,10 +1,12 @@
 # test-mockall-mocking
 
-> Use mockall for trait mocking
+> Use mockall when trait mocks suit the test
 
 ## Why It Matters
 
-Unit tests should isolate the code under test from external dependencies (databases, APIs, file systems). Mockall generates mock implementations of traits, allowing you to control and verify behavior without real dependencies.
+Use [Write tests](../../programming/references/write-tests.md) to choose real dependencies or test doubles.
+Mockall generates trait implementations for controlled responses and fault injection when a double fits the contract.
+The examples below illustrate Mockall APIs. Assertions on the mock itself demonstrate configuration, not production behavior.
 
 ## Setup
 

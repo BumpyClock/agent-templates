@@ -1,5 +1,6 @@
 interface:
   display_name: "Wayfinder"
   short_description: "Map a large effort as decision tickets"
+  default_prompt: "Use $wayfinder to map this large effort as decision tickets and resolve them until the route to the destination is clear."
 policy:
   allow_implicit_invocation: false

@@ -1,0 +1,6 @@
+interface:
+  display_name: "TypeScript Best Practices"
+  short_description: "Apply strict TypeScript type and coding practices"
+  default_prompt: "Use $typescript-best-practices to apply strict type-system and coding practices to these TypeScript files."
+policy:
+  allow_implicit_invocation: false

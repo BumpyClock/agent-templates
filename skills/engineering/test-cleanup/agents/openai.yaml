@@ -1,5 +1,6 @@
 interface:
   display_name: "Test Cleanup"
-  short_description: "Audit existing tests against the programming skill's standards; delete/rewrite/keep with evidence"
+  short_description: "Remove low-value tests with retained coverage evidence"
+  default_prompt: "Use $test-cleanup to assess the selected suite. Report evidence-backed keep, delete, rewrite, or unresolved verdicts. Apply test edits when the task authorizes cleanup."
 policy:
   allow_implicit_invocation: false

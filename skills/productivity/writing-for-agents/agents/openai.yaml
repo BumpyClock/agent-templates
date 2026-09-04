@@ -1,3 +1,4 @@
 interface:
   display_name: "Writing for Agents"
   short_description: "Write documents agents consume"
+  default_prompt: "Use $writing-for-agents to create or revise agent-facing instructions, skills, or context documents for reliable behavior."

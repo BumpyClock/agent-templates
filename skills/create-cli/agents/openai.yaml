@@ -1,0 +1,4 @@
+interface:
+  display_name: "Create CLI"
+  short_description: "Design clear command-line interfaces and behavior"
+  default_prompt: "Use $create-cli to define this command-line interface, including arguments, help, output, errors, configuration, and dry-run behavior."

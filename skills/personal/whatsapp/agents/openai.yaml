@@ -1,5 +1,6 @@
 interface:
   display_name: "WhatsApp"
   short_description: "Route WhatsApp history, search, reads, and sends"
+  default_prompt: "Use $whatsapp to route WhatsApp history, search, reading, archival, or message-sending work through the correct tool."
 policy:
   allow_implicit_invocation: false

@@ -114,18 +114,21 @@ callers, then remove old path.)
 
 ## Test plan
 
-- New tests to write, in which file, covering which cases (list them:
-  happy path, the specific bug/regression this plan fixes, named edge cases).
-- Which existing test to use as the structural pattern:
-  "model after `src/users/api.test.ts`".
-- Verification: `<test command>` → all pass, including N new tests.
+Use [test quality](../../programming/references/write-tests.md) to select coverage.
+
+- Existing tests that protect the affected contract.
+- Material coverage gaps and any new or revised tests needed to address them.
+- Relevant repository test conventions when test changes are necessary.
+- Verification command, expected result, and known evidence limits.
+
+No new tests is a valid plan when existing checks cover the risk.
 
 ## Done criteria
 
 Machine-checkable. ALL must hold:
 
 - [ ] `pnpm typecheck` exits 0
-- [ ] `pnpm test` exits 0; new tests for <X> exist and pass
+- [ ] Relevant checks pass and the affected contract has sufficient evidence
 - [ ] `grep -rn "<old pattern>" src/` returns no matches
 - [ ] No files outside the in-scope list are modified (`git status`)
 - [ ] `plans/README.md` status row updated

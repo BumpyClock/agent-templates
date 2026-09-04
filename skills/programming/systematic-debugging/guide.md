@@ -1,79 +1,52 @@
 ---
 title: Systematic Debugging
-description: Root-cause debugging workflow for bugs, test failures, build failures, regressions, performance problems, and unexpected behavior.
+description: Evidence-proportional diagnosis for defects, test failures, build failures, and performance regressions.
 ---
 
-# Systematic Debugging
+# Systematic diagnosis
 
-Core rule: no fix without a named root cause. Before you propose a fix, state the mechanism — "X produces bad value Y, which breaks Z" — not just a suspect. When the error message plus a read of the code reveals the cause directly, the phases collapse to: confirm cause, fix, verify. When the cause is unclear, work the phases in order and spend effort proportional to how unclear it still is.
+Use evidence to explain the failure mechanism and select a proportionate correction. Source inspection, logs, traces, and partial reproductions can support diagnosis. A deterministic local reproduction is useful evidence, not a prerequisite.
 
-Cheap, reversible diagnostic probes — logs, a debugger, a temp toggle you revert — are always fine. The failure this guide prevents is landing an untested guess as the fix.
+## Workflow
 
-## Phase 0 — Check the plug
+1. Establish the symptom and expected behavior from the report and available artifacts.
+2. Inspect the relevant code, environment, and recent changes for evidence that explains the difference.
+3. Choose the next check that best distinguishes plausible causes at reasonable cost.
+4. Apply a correction within the authorized scope when the evidence supports its mechanism.
+5. Check the affected behavior and report the result with any unresolved uncertainty.
 
-Rule out trivial causes before deep investigation: wrong branch, wrong environment, stale build, wrong service instance, mismatched versions. If behavior changed with no code change — after a restart, between runs, between machines — suspect stale persistent state first: caches, lock files, config files, serialized state.
+For an obvious cause, these steps can collapse into a source check, correction, and focused validation. For an unclear cause, repeat evidence collection as each result narrows the question.
 
-## Phase 1 — Build a feedback loop
+## Evidence and probes
 
-A tight pass/fail signal that goes red on this bug is the core of the work; hypotheses and instrumentation all consume it. Read the full error message and stack trace first — they often contain the answer. Then name one command (test invocation, curl script, CLI run against a fixture, headless-browser script, replayed captured trace) that:
+Check branch, build, service instance, versions, and persistent state when those could explain the symptom. Use a test, request replay, CLI fixture, browser check, or captured trace when it offers a useful feedback loop.
 
-- drives the actual bug path and asserts the user's exact symptom — not "runs without erroring";
-- gives the same verdict every run;
-- finishes in seconds and runs unattended.
+When a reproduction costs more than it resolves, continue with source and available operational evidence. State which parts of the original failure remain unobserved. Simplify a reproduction only while that effort helps isolate the mechanism or creates a useful regression test.
 
-Check recent changes (`git diff`, recent commits, new dependencies) while building it — the trigger is often there. Non-deterministic bug → raise the reproduction rate until it is debuggable: loop the trigger, parallelize, add stress, narrow timing windows. If you genuinely cannot build a loop, stop and say so; list what you tried and what access or captured artifact (log dump, HAR, recording) would unblock it. Do not hypothesize without a loop.
+For uncertain causes, state predictions that available evidence can support or reject. Use the number of hypotheses the evidence warrants. Prefer a debugger, targeted log, or reversible probe that answers a specific question. Control unrelated variables when the comparison depends on them.
 
-## Phase 2 — Minimise
+For intermittent failures, consider repeated trials, stress, or controlled scheduling. Preserve the conditions that matter to the failure. Report trial counts and observed failures instead of treating one successful run as proof of absence.
 
-Shrink the repro to the smallest scenario that still goes red. Cut inputs, callers, config, and steps one at a time, re-running the loop after each cut. Done when every remaining element is load-bearing. A minimal repro shrinks the hypothesis space and becomes the regression test.
+Keep credentials out of commands and captured output. Use bounded probes that respect the environment and authorization for external effects.
 
-Bug appeared between two known states → bisect (`git bisect run` with the loop as the verdict). Test pollution (state appearing during test runs from an unknown test) → `find-polluter.sh` in this directory.
+## Cause and correction
 
-## Phase 3 — Hypothesise
+Trace bad values or transitions to the component that owns their invariant. Correct that mechanism within the task scope. Validate data where trust changes, then preserve validated invariants through internal contracts.
 
-Generate several ranked hypotheses before testing any — a single hypothesis anchors on the first plausible idea. Each must be falsifiable: "if X is the cause, then Y will change the outcome." If you cannot state the prediction, discard or sharpen it. Compare against working examples of the same pattern in the codebase and list every difference, however small.
+When the cause is external or inaccessible, a bounded mitigation can still be useful. Identify it as a mitigation and state what cause remains unresolved. If a correction fails, reassess the evidence before another edit and remove changes that no longer have a basis.
 
-## Phase 4 — Probe
+For performance work, use a baseline measurement, profile, or query plan before a correction. Compare results under relevant conditions. Use bisection when known good and bad states permit a meaningful comparison.
 
-Each probe maps to one hypothesis prediction; change one variable at a time. Prefer a debugger or REPL breakpoint over logs; targeted logs at the boundaries that distinguish hypotheses over log-everything-and-grep. Tag every debug log with a unique prefix (for example `[DEBUG-a4f2]`) so cleanup is a single grep.
+## Validation and report
 
-In multi-component systems, log what enters and exits each component boundary, run once, and locate which layer breaks before investigating inside it.
+Select regression tests under [Programming](../SKILL.md) and [Write tests](../references/write-tests.md). A partial reproduction can justify a focused test without proving the full incident resolved.
 
-Trace bad values backward to their origin: what called this, what passed the value, where it was created. Fix at the source, not where the error surfaced. A symptom-point fix is acceptable only as a deliberate stopgap (source is external or out of scope) — name it as one and file the follow-up.
+When the original scenario is available, check it after the correction. Otherwise, report the checks completed and the evidence still required. Remove temporary probes or retain useful diagnostics deliberately within the agreed scope.
 
-Performance regressions: measure a baseline first (profiler, timing harness, query plan), then bisect. Do not guess from logs.
+Report the supported cause, correction or mitigation, observed results, and residual uncertainty. If progress requires unavailable evidence or access, name the smallest concrete next step. For report-only work, present supported hypotheses and discriminating checks without a speculative correction.
 
-## Phase 5 — Fix and verify
+## References
 
-Implement one fix that addresses the named cause. No bundled refactoring or "while I'm here" improvements. Regression test per SKILL.md Gates 2–3: turn the minimised repro into a failing test at a correct seam, watch it fail, apply the fix, watch it pass, then re-run the loop against the original scenario. No correct seam exists → that is itself a finding; record it instead of writing a false-confidence test.
-
-For a bug caused by invalid data, validate at each layer on the traced path of this bug — entry point, business logic, environment guard — so the bug becomes structurally impossible. Speculative validation elsewhere is the impossible-case handling SKILL.md pushes back on.
-
-Fix did not work → do not stack another on top. Return to Phase 1 with the new information.
-
-## When stuck
-
-- Repeated failed fixes (~3 is a signal, not a quota), each revealing a new problem elsewhere, or fixes that need "massive refactoring" → the architecture is likely wrong. Stop and surface the architectural question to the user before sinking more effort; working autonomously, write it down and lead with it in the report.
-- Get a fresh view: restate the problem from scratch, or hand the evidence to a fresh agent or reviewer. Tunnel vision on a stale hypothesis is a named failure mode, not a character flaw.
-- Sustained user pushback ("stop guessing", repeated correction) signals an unverified assumption — re-check it before continuing.
-
-## Cleanup — before declaring done
-
-- Original repro loop is green on the un-minimised scenario.
-- Regression test passes, or the missing-seam finding is recorded.
-- Tagged instrumentation removed (grep the prefix); throwaway probes deleted or promoted to real tests.
-- The confirmed hypothesis is stated in the commit or PR message so the next debugger learns.
-
-## Report-only / multi-hypothesis triage
-
-Use when the ask is investigate-and-report (no fix expected), or more than ~3 plausible hypotheses are live:
-
-- Generate distinct, non-overlapping hypotheses; for each, state why it fits, what would disconfirm it, and the fastest test.
-- Spawn one sub-agent per active hypothesis when parallelism helps; each returns evidence and next action.
-- Synthesize: eliminate weak hypotheses, rank the survivors, report most likely cause(s), recommended fix, verification plan, open questions.
-
-## Related
-
-- `condition-based-waiting.md` — replace arbitrary sleeps with condition polling (flaky/async repros).
-- `find-polluter.sh` — bisect which test creates unwanted files or state.
-- `../references/verification-before-completion.md` — evidence standard before claiming the fix works.
+- [Condition-based waiting](condition-based-waiting.md): use for asynchronous checks that rely on arbitrary delays.
+- [Find polluter](find-polluter.sh): inspect and adapt for tests that create unwanted files or state.
+- [Verification before completion](../references/verification-before-completion.md): use when completion evidence is ambiguous or high-risk.

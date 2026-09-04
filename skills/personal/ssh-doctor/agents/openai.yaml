@@ -1,5 +1,6 @@
 interface:
   display_name: "SSH Doctor"
   short_description: "SSH triage: Remote Login, sshd, pre-auth closes"
+  default_prompt: "Use $ssh-doctor to diagnose macOS SSH, Remote Login, sshd, pre-authentication closes, or stale sessions safely."
 policy:
   allow_implicit_invocation: false

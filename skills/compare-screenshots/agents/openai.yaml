@@ -1,0 +1,4 @@
+interface:
+  display_name: "Compare Screenshots"
+  short_description: "Compare screenshots with objective visual telemetry"
+  default_prompt: "Use $compare-screenshots to compare these images with visual metrics and explain which result is less wrong."

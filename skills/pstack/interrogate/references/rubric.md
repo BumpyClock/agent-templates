@@ -46,10 +46,8 @@ Don't penalize simple code for lacking abstraction. Premature abstraction is wor
 
 Can you tell that this code works from reading it?
 
-- Are there tests? Do they test behavior or implementation details?
-- Are there assertions/invariants that would catch regressions?
-- If this is a bug fix: is there a test for the bug?
-- If this touches an integration boundary: is the full path tested?
+Use [test quality](../../../programming/references/write-tests.md) to assess coverage and assertions.
+Use [verification](../../../programming/references/verification-before-completion.md) to assess completion evidence.
 - Check the real thing, not a proxy: if the code checks liveness via file mtime or cached state instead of reading the actual value, that's a verification gap.
 - For delegated or async work: does the code verify actual output artifacts, or does it trust self-reports and summaries?
 

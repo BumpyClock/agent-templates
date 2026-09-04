@@ -305,14 +305,18 @@ Reference these guidelines when:
 
 ### 20. Testing (MEDIUM)
 
-- [`test-cfg-test-module`](rules/test-cfg-test-module.md) - Put unit tests in `#[cfg(test)] mod tests { }` within each module
+Use [Write tests](../programming/references/write-tests.md) for generic test policy.
+When the user or repository requires TDD, use [TDD rules](../programming/references/tdd-rules.md).
+Use the rules below for Rust mechanics after test selection.
+
+- [`test-cfg-test-module`](rules/test-cfg-test-module.md) - Place selected unit tests in `#[cfg(test)] mod tests { }`
 - [`test-use-super`](rules/test-use-super.md) - Use `use super::*;` in test modules to access parent module items
 - [`test-integration-dir`](rules/test-integration-dir.md) - Put integration tests in the `tests/` directory
 - [`test-descriptive-names`](rules/test-descriptive-names.md) - Use descriptive test names that explain what is being tested
 - [`test-arrange-act-assert`](rules/test-arrange-act-assert.md) - Structure tests with clear Arrange, Act, Assert sections
 - [`test-proptest-properties`](rules/test-proptest-properties.md) - Use proptest for property-based testing
-- [`test-mockall-mocking`](rules/test-mockall-mocking.md) - Use mockall for trait mocking
-- [`test-mock-traits`](rules/test-mock-traits.md) - Use traits for dependencies to enable mocking in tests
+- [`test-mockall-mocking`](rules/test-mockall-mocking.md) - Use mockall when trait mocks suit the test
+- [`test-mock-traits`](rules/test-mock-traits.md) - Use dependency traits when test doubles justify the boundary
 - [`test-fixture-raii`](rules/test-fixture-raii.md) - Use RAII pattern (Drop trait) for automatic test cleanup
 - [`test-tokio-async`](rules/test-tokio-async.md) - Use `#[tokio::test]` for async tests
 - [`test-should-panic`](rules/test-should-panic.md) - Use `#[should_panic]` to test that code panics as expected

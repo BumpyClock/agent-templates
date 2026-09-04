@@ -1,0 +1,4 @@
+interface:
+  display_name: "Playwriter"
+  short_description: "Automate JavaScript-heavy sites in Chrome"
+  default_prompt: "Use $playwriter to load its current guidance and automate this JavaScript-heavy site in Chrome with Playwright."

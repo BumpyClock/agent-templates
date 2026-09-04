@@ -13,6 +13,10 @@ OpenTUI provides:
 
 Use this reference when you need snapshot tests, interaction testing, or renderer-based regression checks.
 
+Use [Write tests](../../../../../programming/references/write-tests.md) for test selection, assertions, and snapshot value.
+When the user or repository requires TDD, use [TDD rules](../../../../../programming/references/tdd-rules.md).
+Use the examples below for renderer and input mechanics after test selection.
+
 ## Test Setup
 
 ### Bun Test Runner

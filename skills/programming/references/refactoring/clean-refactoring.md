@@ -24,7 +24,7 @@ Core rule: refactoring replaces the old shape with the simpler shape the codebas
 - Do not re-derive values already owned elsewhere. Export or consume the owner's computed value so checks and consumers share one source of truth.
 - When divergence was the bug class, make ownership visible in tests, debug output, logs, or stats.
 - Use real or asymmetric fixtures/assets for orientation, geometry, layout, ordering, and framing bugs. Symmetric placeholders can hide flipped coordinate frames or swapped axes.
-- If behavior must survive, pin it with tests at the consumer surface, then change architecture underneath.
+- Assess existing coverage before a refactor under [test quality](../write-tests.md). Add tests only for material gaps.
 - Update docs/specs with the new invariant and owner, not a mechanical file list.
 - If scope widens into unrelated behavior, slice it: land the shared contract first, then port consumers in reviewable passes.
 
@@ -40,7 +40,7 @@ Core rule: refactoring replaces the old shape with the simpler shape the codebas
 
 ## Verification
 
-- Consumer-level tests or focused integration checks cover paths that used to diverge.
+- Relevant existing or revised checks cover paths that used to diverge.
 - Old and new surfaces report or exercise the same source of truth.
 - Stale owner/adapter path is deleted, or remaining bridge has explicit removal condition.
 - Diff does not include unrelated cleanup.

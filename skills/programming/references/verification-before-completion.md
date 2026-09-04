@@ -1,63 +1,49 @@
-# Verification Before Completion
+# Verification before completion
 
-Use before claiming work is done, fixed, passing, green, ready, reviewed, safe to merge, or before committing, pushing, creating a PR, handing off, or moving to the next task.
+Use when completion evidence is ambiguous or consequential.
 
-Core rule: evidence before claims.
+## Choose evidence for the claim
 
-## Gate
+1. Identify the behavior, artifact, or property that the claim concerns.
+2. Select checks that can distinguish the intended result from a plausible failure.
+3. Run the relevant checks against the changed artifact.
+4. Inspect their results and report the scope and limits of the evidence.
 
-Before a success claim:
+Use repository-required checks and add broader checks when dependencies or risk justify them.
+A compiler check can establish a type property. Runtime behavior usually needs an execution check.
+A successful test run establishes only what those tests cover.
 
-1. Identify the command or check that proves the claim.
-2. Run the full command or check fresh in this turn.
-3. Read the full output and exit code.
-4. Verify the output matches the claim.
-5. State only what the evidence proves.
+## Reuse valid evidence
 
-If the check fails, report failure with the exact failing command and key output. If the check was not run, say it was not run.
+Associate results with the checked revision or file state, environment, inputs, and command.
+Reuse prior results when those conditions remain applicable.
+Repeat checks after changes that could invalidate their results, or when an explicit policy requires another run.
+A conversation turn does not invalidate evidence.
 
-## Evidence Matrix
+## Match the check to the work
 
-| Claim | Requires | Not enough |
-| --- | --- | --- |
-| Tests pass | Test command output with zero failures | Prior run, expectation, partial run unless scoped claim says partial |
-| Lint clean | Lint command output with zero errors | Formatting only, compiler only |
-| Build succeeds | Build command exit 0 | Tests or lint passing |
-| Bug fixed | Original symptom reproduced and now passes | Code changed, manual inspection |
-| Regression test works | Red-green proof when feasible | Test only passes once |
-| Requirements met | Requirement checklist checked against code | Tests passing alone |
-| Agent completed | Diff + verification checked by orchestrator | Agent report |
-| No regressions from this change | Pre-edit baseline run diffed against post-edit run; pre-existing failures named as pre-existing, not claimed fixed | Post-edit run alone with no baseline |
+| Claim | Useful evidence |
+| --- | --- |
+| Tests pass | Relevant runner result and exit status, with suite scope stated. |
+| Build succeeds | Build result for the relevant target and configuration. |
+| Bug fixed | The original scenario now succeeds, or equivalent evidence with reproduction limits stated. |
+| Regression test detects the defect | Expected failure against defective behavior when practical. |
+| Requirements met | Contract comparison plus checks of material behaviors. |
+| Visual result is correct | Inspection of the current rendered artifact under relevant conditions. |
+| Delegate completed the task | Inspection of the actual artifact and acceptance evidence. |
 
-## Red Flags
+Use baseline comparisons when they help distinguish new failures from pre-existing failures or establish a performance change.
+Avoid universal absence-of-regression claims from a limited suite.
 
-Stop and verify before continuing if you are about to claim success, completion, or fitness to ship — `done`, `fixed`, `passes`, `green`, `ready`, `looks good`, or any equivalent — without current evidence behind it.
+## Scale execution
 
-This targets unevidenced claims, not specific words. Calibrated uncertainty stays fine to report ("probably fixes it, couldn't repro the race locally"); an unverified claim stated as fact is not.
+Group dependent edits into coherent units that admit a meaningful check.
+Use focused checks during development and broader checks at the relevant integration point.
+Prefer existing runners and tools before a new verification script.
+Use manual inspection when it observes the contract sufficiently.
 
-Also stop before commit, push, PR, task closure, or handoff.
+## Report limits
 
-## Regression Tests
-
-For bug fixes, prefer proof that the test catches the bug:
-
-1. Add or run test against broken behavior.
-2. Confirm it fails for the expected reason.
-3. Apply fix.
-4. Confirm it passes.
-
-If red-green proof is infeasible or disproportionate, state why and use the strongest practical check.
-
-## Interactive Checks
-
-When automated tests are infeasible, verify interactively (e.g. tmux pane driving the app). Show the attach command so the user can watch; close panes when done.
-
-## Delegated Work
-
-Subagent status is a signal, not evidence.
-
-Before accepting delegated work:
-- Inspect changed files or diff.
-- Run the relevant checks yourself when feasible.
-- Compare implementation against acceptance criteria.
-- Report gaps, blocked checks, or residual risk explicitly.
+Report failed checks with the command and relevant output.
+Distinguish an unexecuted check from a failed check.
+State uncertainty when evidence supports a likely explanation but cannot establish the full claim.

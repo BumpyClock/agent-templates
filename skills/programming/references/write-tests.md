@@ -1,90 +1,66 @@
-# Write Tests
+# Test quality
 
-Use when adding tests for new behavior, writing a regression test, fixing a brittle or flaky test, reviewing a test diff or suspicious existing tests, adding mocks, or when a test breaks after a refactor or config change that didn't change behavior.
+Use for new tests, test changes, suspected test defects, and test review.
 
-Core rule: a good test fails **only** when real behavior or an explicit contract breaks, and passes through every refactor or config change that preserves it. Most bad tests fail the opposite way: red on harmless changes, green while the real path is broken. Every rule below serves that one goal.
+## Select useful coverage
 
-## Workflow: tracer bullets, not a batch
+- Identify the behavior or contract each test protects.
+- Select the test level by coverage, execution cost, and diagnostic value.
+- Use unit tests for local contracts and integration tests for interactions between components.
+- Retain overlapping tests when speed, diagnosis, or distinct integration coverage justifies their maintenance cost.
+- Compare proposed tests with existing coverage before an addition.
+- Add tests where existing coverage leaves material risk unprotected.
+- Use static checks for compiler-enforced contracts when they provide sufficient evidence.
 
-1. **Write ONE test at a time.** Assert first, watch it go red on the un-fixed code when feasible, make the code earn green, learn, then write the next. A batch written up front against *imagined* behavior pins what you guessed — those tests pass when the mechanism breaks and fail when it's fine. Each green cycle tells you what the next test should actually assert. (Exception: table-driven cases enumerating an already-stated contract can land together.) **Stop when each named regression has one guard** — an additional test needs a new named failure mode, not the same path re-asserted at another layer.
-2. **Iterate on the fastest focused runner** (one file, one test name), and run the relevant full gate only before handing off. Check the exit code, not just the output — a runner that prints nothing and a green run look the same. On failures, read EVERY red test before fixing one; they often share a root cause.
-3. **Before calling it done**, prove the test can fail (below) and walk the review checklist.
+Test count has no quota. A change can need zero, one, or several new tests.
 
-## What to assert
+## Keep expectations independent
 
-- **Observable behavior through the outermost practical entry point** — return values, exit codes, persisted rows, HTTP responses, rendered output — never which internal functions ran or how a value is computed. A test on the public surface survives a rewrite of everything underneath; a test that reaches into internals breaks on every refactor and pins implementation, not behavior. Reserve isolated unit tests for genuinely tricky pure logic (parsers, schedulers, state machines, math).
-- **Nothing the compiler already guarantees.** A test that re-asserts a type signature — field shapes, rejected argument types — can only fail if the compiler failed first. Spend the budget on business rules, arithmetic, branching, ordering, edge cases, side effects.
-- **Actual values, not collection sizes.** For dedup/normalize/idempotency/persistence paths, `length == 1` passes even when normalization is broken; also assert the stored value equals the expected canonical form.
-- **The smallest scale that can show the behavior.** Two entities and one mechanism before crowds and integration; small tests fail fast with readable state and don't entangle five behaviors in one assert.
-- **The design contract, not current behavior.** When a test goes red, the reflex is to re-measure and pin the new number — resist it: a bar calibrated to whatever the code currently does silently encodes bugs as baseline. Write the assert from the stated contract and make the code earn it; if no contract exists, that's a question for the owner, not a number to measure-and-pin. Recalibrating is legitimate only when the contract itself changed.
-- **Deterministic claims tight, stochastic claims as distributions.** An invariant that holds every run gets an exact threshold. Anything noisy or tuning-dependent ("A usually beats B", "load balances evenly") must be asserted over a set of runs/seeds as a band — a single-sample pin on a stochastic outcome is not a weak test, it is a **blind** one: it certifies whatever the lucky sample did and can mask a systematic bias for months. If you must assert a noisy differential, widen the margin and name it chaos-marginal in a comment.
+- Derive expected results from the specification, known examples, or an independent reference.
+- Preserve literal expectations that encode a contractual value, such as a protocol byte or business limit.
+- For configuration consistency tests, read the authoritative configuration when configuration changes should preserve the test's claim.
+- Assert the observable contract. Counts or successful execution are sufficient when they are the contract.
+- Let the operation under test produce the state that the assertion examines.
+- Match test names to the paths and outcomes the tests actually exercise.
 
-## Seams and mocks
+An expectation derived from the production calculation cannot independently detect an error in that calculation.
 
-- **Don't couple tests to config — mock the seam.** A test keyed to a live config value (which flag is on, which tier is default) breaks when someone legitimately edits config. `skipIf`/conditionals are not the fix — a skipped assertion hides the coupling and stops covering the path. Feed the function fixed inputs, or stub the lookup so fixture ids resolve to fixed values. Litmus: "would this break if a config value changed with no logic change?"
-- **Don't over-mock — every mock is a frozen assumption.** Mock at the system's edges (network, clock, filesystem, process/env, third-party SDK, config lookup), not internal collaborators — mocking an internal needs a stated reason (fault injection, prohibitive cost); convenience isn't one. Stubbing an internal hard-codes its current contract; refactor it and the test lies. Don't make "was called with" the primary assertion when an observable outcome exists. Mocking three internal modules to test one function means: test one layer up, where they're real.
-- **Test doubles must preserve the behavior the test depends on.** If unsure what the real collaborator does, run with it first and observe the required side effects, then mock minimally. Mock data should be schema-valid and include the contract fields the code under test consumes; a partial fixture fails silently when code reads an omitted field.
-- **Harnesses must wire the system the way production does.** If a bug only showed up against a real environment, the harness skipped an input production always sets — fix the harness, don't just fix the bug.
-- **Never assert that a mock exists or was rendered.** That verifies the mock works, not the component. Test the real thing, or don't assert on the double.
-- **No test-only methods on production classes.** A method whose only callers are tests pollutes the production API and can be called there by accident. Put cleanup/setup helpers in test utilities.
+## Control dependencies
 
-## Control variables and probes
+- Prefer stable interfaces over incidental implementation details.
+- Assert interactions when the interaction itself is the contract, such as a required external notification.
+- Use test doubles where isolation, fault injection, or execution cost justifies them.
+- Preserve the collaborator behavior on which the test depends.
+- Include production integration coverage where doubles could conceal incompatible assumptions.
+- Use framework waits or condition checks for asynchronous completion.
 
-- **One variable per comparison.** Pin everything else — same seed, same counts, same configuration on both arms; disable mechanisms that aren't the subject. When a comparison test breaks, first ask whether an unrelated mechanism leaked into the experiment before touching the code under test.
-- **Wait on conditions, not clocks.** Replace sleeps with condition-based polling; arbitrary delays pass on fast machines and flake under load (`../systematic-debugging/condition-based-waiting.md`).
-- **Validate, don't assume.** Don't stop at a plausible story for *cause* — which path fired, where the failures come from — verify it with a probe before acting on it. Write a throwaway probe that reads public state and prints; the plausible story is wrong often enough to burn a session, and one probe redirects the whole effort. Probes are scratch: put them where they cannot be committed, delete them the moment the question is answered, or promote them into a real test if the behavior deserves a permanent guard.
+## Investigate failures
 
-## Prove the test can fail
+Treat implementation regressions, outdated expectations, fixture defects, and environmental changes as competing hypotheses.
 
-A test you never saw fail is decoration. For any regression test — especially one written *after* the fix — falsify it once: revert or break the production code the way the bug would, confirm red *for the expected reason*, restore, confirm green. Verify the revert actually took: a stash or checkout with a wrong pathspec reverts nothing, silently, and the "red" run quietly tests the fixed code. The tell: the "red" numbers equal the green numbers.
+- Compare the failure with the intended contract and the relevant change.
+- Require contract or measurement evidence before a weaker assertion or wider tolerance.
+- Control relevant variables in comparisons.
+- For stochastic behavior, choose samples and statistical criteria that can distinguish acceptable behavior from a material regression.
+- Inspect related failures when they can reveal a shared cause.
 
-If falsifying is disproportionate or unsafe (irreversible migration, destructive external call), say so and use the strongest practical proof.
+## Check test effectiveness
 
-Gate 2 names the regression a test exists for; the falsification run names the break. Before calling a suite done, run a quick mutation check: for each mutation class the contract forbids — wrong constant, flipped branch, missing side effect, missing zero/empty/nil validation — confirm some test goes red.
+- When practical, run a regression test against the defective implementation and confirm the expected failure.
+- Use a targeted mutation when the test's sensitivity remains uncertain and the cost is justified.
+- Preserve unrelated work when you restore defective code for a check.
+- State the evidence limit when a failure demonstration is unsafe or disproportionate.
 
-## Coverage theater
+Several tests can precede an implementation or share a runner invocation when their contracts are clear.
+Use the [TDD workflow](tdd-rules.md) when the user or repository requires it.
+Use the [verification reference](verification-before-completion.md) for completion evidence.
 
-Tests that look like coverage but cannot fail. Worse than no test: they suppress the "untested" signal. (The mirror failure is the **change-detector test** — red on every refactor while catching no bugs; the core rule above kills both.)
+## Remove tests with evidence
 
-Violations, each backed by an observed failure in `../evals/cases/`:
+- Remove tautologies, irrelevant assertions, and tests for behavior that the supported contract has removed.
+- Compare coverage and diagnostic value before deletion of overlapping tests.
+- Confirm external and indirect use before deletion of an apparently unused API or its tests.
 
-- Assertion-free or tautological bodies: `assertTrue(true)`, a loop that calls the SUT and asserts nothing, a constructor input asserted straight back out.
-- Expected value is a literal copied from production source — fails only if you forget to edit both places.
-- Test name contains error/timeout/cancel/retry with no throw/clock/cancellation in the body.
-- Setup destroys the evidence: it manufactures the state the SUT is supposed to produce, then asserts on it.
-- SUT deleted or caller-less; test retained "for coverage."
+An absent local caller does not establish that a public API, plugin, reflection target, or FFI export is unused.
 
-Gate, before keeping any test:
-
-- "What production change makes this fail?" No answer → delete it.
-- "Does it fail via the mechanism the name claims?" No → fix the body or rename.
-- "Is any expected value a literal copied from production source?" Yes → read from the real source of truth, or delete the assertion.
-- "Does setup manufacture the state the SUT is supposed to produce?" Yes → remove that setup; let the SUT produce it.
-- "Does the SUT still have non-test callers?" No → delete the SUT's tests with the SUT.
-
-## When a test goes red after a change
-
-Triage in order of likelihood before editing anything:
-
-1. The test encodes **deleted semantics** — it pinned an accident of the old implementation. Re-spec it to the contract's real claim.
-2. The experiment **lost control of a variable** — a new mechanism leaks in. Pin the variable.
-3. The **margin was chaos-tight**. Widen it, with a comment saying so.
-4. The code is **actually wrong**. Probe the state, find the mechanism.
-
-Never tune constants to make one test pass without rerunning the neighbors: coupled systems reshuffle. If two consecutive tweaks each break different tests, stop poking — the control surface is wrong; find the mechanism.
-
-## Review checklist
-
-Walk this on any test diff, apply fixes in the same pass, re-run the suite:
-
-1. Does an assertion restate a type guarantee? → delete it.
-2. Would it break on a harmless refactor or a config edit with no logic change, or is it `skipIf`-conditional on config? → assert the public surface; mock the seam.
-3. Are assertions mostly mocked-internal "called with"? → test a layer up against observable output.
-4. Does it pin a single sample of a stochastic outcome? → assert a distribution.
-5. Does it assert a count without the value on a dedup/normalize path? → add the value assertion.
-6. Is mock data missing contract fields downstream code consumes? → complete the fixture or test one layer up.
-7. Is an expected value a literal copied from production source? → read it from the real source of truth.
-8. Does the name claim a path (error/timeout/cancel/retry) the body never exercises? → fix the body or rename.
-9. Is the function under test still called in production? → if the only callers are tests, delete the function and the test together.
-10. Can it fail for the right reason? → falsify once to confirm (or state why not).
-11. Would another test in the diff or suite already fail on the same regression? → delete the weaker duplicate.
+Use [test cleanup](../../engineering/test-cleanup/SKILL.md) when the user requests an audit or cleanup of an existing suite.

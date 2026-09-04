@@ -1,54 +1,47 @@
 ---
 name: git-workflow
-description: "Git/GitHub: PRs, commits, branches, worktrees, conflicts, comments, CI, interactive PR review canvas."
+description: Use when managing Git commits, branches, pull requests, conflicts, or CI checks.
 ---
 
-# Git Workflow
+# Git workflow
 
-Git/GitHub ops. Safety first. Small explicit commands. No surprise state moves.
-
-## How to apply this skill
-
-Three tiers of authority:
-
-1. **Safety/consent rules** (Global rules below, plus any ask/consent/never rule in a sub-doc): absolute. Never relax.
-2. **Repo convention**: beats any format/template in these docs. Check existing history, templates, and settings before applying a default.
-3. **Everything else** (naming formats, PR bodies, reply/report templates): defaults and examples. Use judgement; adapt wording and structure to context. Content requirements matter, exact phrasing doesn't.
+Follow repository conventions for branches, commit messages, PR templates, and merge methods. Without a convention, choose a concise format appropriate to the change.
 
 ## Global rules
 
-- Branch changes need consent: create, switch, rebase, merge, delete. Destructive ops need explicit ask: force-delete, force-push, overwrite, history rewrite. These gates hold on their own; an AGENTS.md/CLAUDE.md can add gates, never remove them.
-- Inspect first: `git status --short`, then relevant `git diff` / `git log`.
-- Stage explicit paths only. Never `git add .` or `git add -A`.
-- Auth fails → ask user to run `gh auth login`; don't invent tokens. When multiple accounts logged in, ensure correct account is used, switch if needed.
+- Perform routine local Git operations within the authorized task without separate approval for each command.
+- Use authorization already present in the conversation. Require explicit authorization for destructive actions and published history rewrites.
+- Before an external action, establish that the user's request authorizes it. A local edit request alone does not authorize publication.
+- Inspect the relevant repository state before a write. Preserve unrelated work, including changes already in the index.
+- If an operation would overwrite unrelated work, stop and ask for direction.
+- Use `gh` for GitHub operations. Confirm the target repository and account before an external write.
 
-Each rule above is defined only here; sub-docs reference or remind, never redefine.
+## Task guides
 
-## Tooling defaults
-
-- Use `gh` for GitHub. Prefer API/JSON for PR comments/checks.
-
-## Read needed guide
+Read only the guide relevant to the task.
 
 | Task | Read |
 | --- | --- |
-| Commit, amend, branch, rebase, cleanup | `commits-and-branches.md` |
-| Create PR, PR body, reviewability pass, PR-comment loop | `pr-and-comments.md` |
-| Merge PR, resolve conflicts, fix CI | `merge-and-ci.md` |
-| Parallel/isolated branch work | `worktree-management.md` |
-| Changelog setup/update | `add-changelog.md` |
-| Interactive HTML PR walkthrough ("review canvas") | `pr-review-canvas.md` |
+| Merge a PR, resolve conflicts, repair CI | `merge-and-ci.md` |
+| Create or update a changelog | `add-changelog.md` |
+| Create an interactive HTML PR walkthrough | `../pr-review-canvas/SKILL.md` |
 
-## Message voice
+## Commits
 
-Applies to commit messages, PR titles/bodies, review comments/replies. Branch naming: `commits-and-branches.md`. Repo convention wins over all of it.
+Create coherent commits that contain only intended changes. Inspect the complete proposed commit, including any existing staged changes. Select explicit paths or hunks to exclude unrelated work.
 
-- Lowercase imperative subject/title; active voice; plain concrete words; no filler, hedging, or hype.
-- Bodies use complete sentences: no contractions, one topic per sentence, keep sentences short (~20 words). Bullet lists are fine; each bullet is a complete sentence.
-- Explain what and why, not how — the diff shows how.
-- Idiomatic git terms ("clean up", "roll back", "set up") are fine; jargon the reader must decode is not.
+Complete the repository's required checks before the commit. Report actual results and any unavailable checks. If a hook fails, correct its cause and inspect the index before another attempt.
 
-## PR title prefixes
+Explain the change and its reason in the commit message. Add detail when the subject alone does not explain a material decision or consequence.
 
-- Default when repo has no convention of its own: `[Feature]`, `[Fix]`, `[Refactor]`, `[Perf]`, `[Docs]`, `[Test]`, `[Build]`, `[BREAKING]`.
-- Prefix sets category; wording follows Message voice above.
+Amend agent-created, unpublished commits when the amendment belongs to the authorized task. Use session evidence to establish ownership. Obtain explicit authorization before changes to published or unrelated commits.
+
+## Branches
+
+Choose branch names and update methods from repository policy and branch ownership. Preserve collaborators' work when you choose merge or rebase. Apply the authorization rules above to any published history rewrite.
+
+## Cleanup
+
+Identify the actual base branch and exact deletion targets. Check for unique commits and active worktrees before branch deletion. Delete only branches within the authorized cleanup scope.
+
+Report what changed, validation results, and any unresolved risk. Distinguish local completion from push, merge, and CI status.

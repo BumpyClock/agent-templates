@@ -1,5 +1,6 @@
 interface:
   display_name: "Skill Review"
   short_description: "Adversarial review and overhaul of an agent skill"
+  default_prompt: "Use $skill-review to adversarially audit and tighten this agent skill and its references using evidence from distinct review lenses."
 policy:
   allow_implicit_invocation: false

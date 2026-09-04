@@ -1,34 +1,21 @@
-# Skill Evals
+# Programming skill evaluations
 
-Test cases for the `programming` skill, built from observed failures — not imagined ones.
+Use these cases to assess task outcomes, not compliance with a particular wording of the skill.
+Historical failures explain the motivation for a case. They do not establish that a general rule improves other tasks or models.
 
-## How to add a case
+## Record a case
 
-When an agent violates a rule this skill should have prevented:
+Record the task, repository state, expected outcome, and observed failure with the model and date when known.
+Separate observed incidents from proposed counterexamples.
+Preserve historical observations when an expected outcome needs clarification.
 
-1. Capture the trigger: the task prompt and repo state that produced the failure.
-2. Note the expected behavior (which rule applies) and the observed behavior.
-3. Save as `cases/<slug>.md` using the template below.
+## Compare outcomes
 
-```markdown
-# <slug>
+Compare the current skill, a proposed revision, and no skill under equivalent task conditions.
+Assess correctness, completeness, unnecessary changes, validation quality, and execution cost.
+Include counterexamples where a broad rule could harm a valid solution.
+Examples include independent protocol constants, public APIs without local callers, overlapping useful tests, and diagnosis without local reproduction.
 
-## Trigger
-<task prompt + minimal repo context>
-
-## Expected
-<rule from SKILL.md or reference that should fire, and the correct behavior>
-
-## Observed failure
-<what the agent actually did, date, model>
-```
-
-## How to run
-
-Replay each case's trigger against a fresh agent session with the skill loaded. Pass = expected behavior; fail = rule ignored. Before adding a new rule or absolute (NEVER/ALWAYS/mandatory) to SKILL.md or any reference, confirm at least one case here demonstrates the failure it prevents — otherwise the rule is speculative weight.
-
-The standard runs both directions. Periodic prescriptiveness audit:
-
-1. Absolutes without a backing case → demote to default + "state the deviation and reason".
-2. Cases whose quoted rule has drifted out of the skill → restore the rule; the evidence already exists.
-3. Contradictions between files → the file with the rationale wins; fix the other.
+Retain a rule when outcome evidence supports its benefit across relevant cases.
+Revise a case or rule when its assumptions no longer hold, rather than restoring obsolete instructions automatically.
+Report which cases and models were actually evaluated.

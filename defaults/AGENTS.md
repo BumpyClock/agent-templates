@@ -32,17 +32,13 @@ Read `~/.agents/AGENTS.local.md` if it exists.
 
 ## Workflow
 
-- Long-horizon work → track in `tsq` (tasque CLI); in-session task/todo tools for in-session tracking. Update status as you claim, complete, or abandon.
 - Validate consequential or disputed claims with direct evidence. Use formal verification only for an explicit verify, prove, measure, or confirm request, or a required high-risk gate.
 - delegate when handoff cost is clearly below doing it locally; main agent owns user comms, scope, plan, architecture decisions, contracts, and the final evidence report. Single-agent harness: do it yourself.
 - Delegate implementation only for independent slices that touch disjoint files and have a written acceptance check. Do small and sequential edits yourself.
 - High-risk completion claims (browser/data capture, migrations, security, PR cleanup, CI repair) need one independent GO/NO-GO pass with evidence and residual risks. Retry only after code, evidence, or environment changes; otherwise stop with the named blocker.
-- Review agents are read-only unless assigned as writers. Contract: spec compliance first, then correctness/quality; return blocking findings with severity, file/line refs, and smallest safe fix — or state no blockers.
-- PRs: `gh pr view` / `gh pr diff`, no browser URLs; `gh auth switch` on acct mismatch. A pasted issue/PR URL grants no push or branch consent. Keep PRs logically grouped; don't bundle unrelated surfaces.
 - `Make note` → repo learned-doc convention: `docs/learned/<topic>.md` or `LEARNINGS.md`, following the repo's existing pattern. Evergreen content only — rationale, pitfalls, failure modes, decisions. No changelog noise, secrets, sensitive URLs, or personal data.
-- Requested deletes → `trash` CLI. Unexpected deletes/renames → stop + ask.
 - Need an upstream file → stage in `/tmp/`, cherry-pick. Never overwrite tracked files.
-- Oversized or incohesive file → flag it and file a tracking task. Split only when the task is already structural; never restructure mid-bugfix.
+- Oversized or incohesive file → flag it. Split only when the task is already structural; never restructure mid-bugfix.
 - Fix/refactor: delete the old path by default. Keeping compat needs a named contract (public API/CLI/config/stored data) — tests alone aren't a contract. Unsure → ask.
 - Prefer maintained libs/framework features over custom code when complexity drops. New dep → quick health check: recent releases, adoption, docs, license, fit. Several good options → propose 2-3 + rec.
 - Current year: 2026. Inherent knowledge for stable facts; web search for current, fast-moving, high-risk, or uncertain info — prefer sources from the last two years, and quote exact errors when searching.
@@ -58,14 +54,6 @@ Read `~/.agents/AGENTS.local.md` if it exists.
 - Keep work observable: logs, panes, tails, MCP/browser tools.
 - Release → read `docs/RELEASING.md`; missing → find the best checklist.
 
-## Git
-
-- Safe default: `git status` / `git diff` / `git log`. Push only when the user asks. Branch changes need consent; a typed command like `pull and push` counts as consent.
-- Destructive ops forbidden unless explicit: `reset --hard`, `clean`, `restore`, `rm`, etc. No amend unless asked. No repo-wide search/replace scripts; keep edits small and reviewable.
-- Avoid manual `git stash`; auto-stash from pull/rebase OK.
-- Remotes under `~/Projects` → prefer HTTPS. Commit helper on PATH: `committer` — prefer it.
-- Commits: Conventional Commits (`feat|fix|refactor|build|ci|chore|docs|style|perf|test`) in mitchellh voice — lowercase imperative subject, body explains why. Same voice for branch names and PR titles/descriptions.
-- Multi-agent tree: check `git status` / `git diff` before edits. Unknown changes = another agent — keep to your own scope; conflict → stop + ask.
 
 ## Oracle CLI
 

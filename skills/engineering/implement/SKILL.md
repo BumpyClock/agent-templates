@@ -6,9 +6,9 @@ disable-model-invocation: true
 
 Implement the work described by the user in the spec or tickets.
 
-Use /tdd where possible, at pre-agreed seams.
-
-Run typechecking regularly, single test files regularly, and the full test suite once at the end.
+Use [test quality](../../programming/references/write-tests.md) to select coverage.
+When the user or repository requires TDD, use the [TDD workflow](../../programming/references/tdd-rules.md).
+Use [verification](../../programming/references/verification-before-completion.md) to select checks and completion evidence.
 
 Once done, use /code-review to review the work.
 

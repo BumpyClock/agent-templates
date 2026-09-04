@@ -1,0 +1,4 @@
+interface:
+  display_name: "Screenshot Review"
+  short_description: "Critique or preview screenshots and visual artifacts"
+  default_prompt: "Use $screenshot-review to critique these visual artifacts with a second set of eyes or open them together for preview, as appropriate."

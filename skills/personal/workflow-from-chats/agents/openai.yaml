@@ -1,5 +1,6 @@
 interface:
   display_name: "Workflow From Chats"
   short_description: "Extract preferences from agent chats into skills/rules/docs"
+  default_prompt: "Use $workflow-from-chats to extract durable preferences and recurring workflows from recent agent conversations into reusable guidance."
 policy:
   allow_implicit_invocation: false

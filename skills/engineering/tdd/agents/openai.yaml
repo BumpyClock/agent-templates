@@ -1,3 +1,4 @@
 interface:
   display_name: "TDD"
   short_description: "Test-driven red-green-refactor"
+  default_prompt: "Use $tdd to develop this feature or bug fix through behavior-focused red-green-refactor cycles."

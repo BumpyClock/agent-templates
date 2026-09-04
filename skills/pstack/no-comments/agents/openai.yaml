@@ -1,0 +1,6 @@
+interface:
+  display_name: "No Comments"
+  short_description: "Review comments and encode accepted constraints"
+  default_prompt: "Use $no-comments to review these comments, fix accepted findings, and encode durable constraints."
+policy:
+  allow_implicit_invocation: false

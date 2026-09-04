@@ -32,7 +32,7 @@ Map the territory before judging it:
 - Note repo conventions: code style, naming, folder layout, error-handling and state-management patterns. Plans must tell the executor to *match* these, with examples.
 - Tag key directories with the trust boundaries they touch (user-input, network, filesystem, secrets, process-exec, database, auth, permissions, concurrency, external-api, serialization). Subagent prompts point at boundaries, not at "the codebase" — "`src/webhooks/` handles unauthenticated network input" beats "look for security issues".
 - Check git signal where useful (`git log --oneline -30`; churn hotspots via `git log --format= --name-only | sort | uniq -c | sort -rn | head -30`, crossed with file size/complexity — high churn × high complexity is where audits pay off) for what's actively evolving vs. frozen.
-- Snapshot cheap quality metrics into the scoreboard table in `plans/README.md` (format in [references/plan-template.md](references/plan-template.md)): LOC, dependency count, test count, coverage (only if cheap to run), typecheck/lint error count, build time. Every future audit and `reconcile` re-snapshots — the trajectory is the proof the codebase is actually improving.
+- Snapshot cheap quality metrics into the scoreboard table in `plans/README.md` (format in [references/plan-template.md](references/plan-template.md)): LOC, dependency count, test count, coverage (only if cheap to run), typecheck/lint error count, build time. Every future audit and `reconcile` re-snapshots — interpret these metrics against task outcomes; test count alone does not measure quality.
 
 If the repo has no working verification command (no tests, broken build), record that — "establish a verification baseline" is often finding #1, and it must precede risky plans in the dependency order.
 
@@ -113,7 +113,7 @@ Write each plan **for the weakest plausible executor**. That means:
 - Steps that are explicit and ordered, each with its own verification command and expected output.
 - Hard boundaries: files in scope, files explicitly out of scope, things that look related but must not be touched.
 - Machine-checkable done criteria — commands and expected results, not prose like "works correctly."
-- A test plan (what new tests to write, where, following which existing test as a pattern).
+- A test plan that identifies existing coverage and any material gaps, under [test quality](../programming/references/write-tests.md).
 - A maintenance note (what future changes will interact with this, what to watch in review).
 - Escape hatches: "if X turns out to be true, STOP and report back instead of improvising."
 

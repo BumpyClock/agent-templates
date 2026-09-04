@@ -1,0 +1,4 @@
+interface:
+  display_name: "PR Review Canvas"
+  short_description: "Build annotated local HTML pull request walkthroughs"
+  default_prompt: "Use $pr-review-canvas to build an interactive local HTML walkthrough of this pull request with grouped diffs and annotations."

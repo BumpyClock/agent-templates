@@ -1,0 +1,4 @@
+interface:
+  display_name: "Improve"
+  short_description: "Audit codebases and produce prioritized handoff plans"
+  default_prompt: "Use $improve to audit this codebase read-only and produce prioritized, self-contained implementation plans for other agents."

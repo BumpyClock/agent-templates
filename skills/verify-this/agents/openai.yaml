@@ -1,0 +1,4 @@
+interface:
+  display_name: "Verify This"
+  short_description: "Prove one concrete claim with a clear verdict"
+  default_prompt: "Use $verify-this to formally verify this concrete claim and return an evidence-backed verdict."

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Automate Me"
+  short_description: "Turn working preferences into a personal mode skill"
+  default_prompt: "Use $automate-me to create or refresh a personal mode skill from my working preferences."
+policy:
+  allow_implicit_invocation: false

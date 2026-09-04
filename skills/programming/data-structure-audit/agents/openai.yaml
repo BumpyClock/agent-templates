@@ -1,5 +1,6 @@
 interface:
   display_name: "Data Structure Audit"
   short_description: "Audit codebase models, algorithms, and ownership"
+  default_prompt: "Use $data-structure-audit to run a complete read-only audit of data structures, state models, algorithms, control flow, and ownership."
 policy:
   allow_implicit_invocation: true

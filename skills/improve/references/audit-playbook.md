@@ -77,7 +77,7 @@ Look for the algorithmic and architectural wins, not micro-optimizations.
 
 ## 4. Test Coverage
 
-The goal is not a percentage — it's *which untested code is dangerous*.
+Use [test quality](../../programming/references/write-tests.md) to assess gaps and existing coverage.
 
 - Map the critical paths (money, auth, data mutation, the feature the repo exists for) and check which have zero or trivial coverage.
 - Modules with high churn (git log) + no tests = top refactor risk; flag as "characterization tests first" candidates.
@@ -164,7 +164,7 @@ Every finding, from every category and every subagent, comes back in this shape:
 - **Evidence**: `path/file.ts:123-127` — one-sentence description, plus a **verbatim quote (≤3 lines) copied exactly from those lines**. (Repeat per location; 2–5 strongest locations, note "and ~N similar sites" if widespread.) Quotes are mechanically validated against the repo after the audit — a finding whose quote doesn't match the file at the cited lines is dropped.
 - **Impact**: What goes wrong / what's being paid because of this. Concrete: "every order-list render issues 1+N queries", not "suboptimal".
 - **Failure scenario**: the concrete input/state → wrong output/crash, stated so it could be turned into a test. If you can't write one, the finding is LOW confidence at best. (Non-bug categories: the concrete situation where the cost is paid — "any new endpoint author copies this pattern", "page load on a 200-order account".)
-- **Why tests miss it**: the nearest existing test(s) and why they don't catch this. Included tests are first-class evidence of intended behavior — if a test contradicts the suspected bug, skip the finding or downgrade to LOW and explain the conflict.
+- **Why tests miss it**: the nearest existing test(s) and why they don't catch this. Treat contradictory tests as evidence to investigate against the supported contract before a verdict.
 - **Effort**: S (hours) / M (a day-ish) / L (multi-day) — for the *fix*, including tests.
 - **Risk**: What the fix could break; LOW/MED/HIGH plus one line why.
 - **Confidence**: HIGH (read the code, certain) / MED (strong signal, needs verification) / LOW (smell, needs investigation). LOW-confidence findings may be reported but get an "investigate" plan, not a "fix" plan.

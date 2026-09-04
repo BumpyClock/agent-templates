@@ -1,0 +1,4 @@
+interface:
+  display_name: "Browser Use"
+  short_description: "Automate existing Chrome tabs with DevTools"
+  default_prompt: "Use $browser-use to inspect and automate the existing Chrome tab through Chrome DevTools."

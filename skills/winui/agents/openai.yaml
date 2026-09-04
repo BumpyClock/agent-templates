@@ -1,0 +1,4 @@
+interface:
+  display_name: "WinUI 3"
+  short_description: "Build, debug, review, and package WinUI 3 apps"
+  default_prompt: "Use $winui to build, debug, review, automate, migrate, or package this WinUI 3 application as requested."

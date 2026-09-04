@@ -1,0 +1,4 @@
+interface:
+  display_name: "Resolve PR Comments"
+  short_description: "Validate, fix, reply to, and resolve PR feedback"
+  default_prompt: "Use $resolve-pr-comments to fetch and validate all pull request feedback, apply approved fixes, reply before resolving review threads, and verify no actionable comments remain."

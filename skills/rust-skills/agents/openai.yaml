@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rust Best Practices"
+  short_description: "Apply comprehensive Rust coding best practices"
+  default_prompt: "Use $rust-skills to apply the relevant Rust best-practice rules while writing, reviewing, or refactoring this code."

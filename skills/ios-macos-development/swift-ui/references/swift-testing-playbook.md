@@ -11,6 +11,12 @@ A hands-on, comprehensive guide for migrating from XCTest to Swift Testing and m
 
 ---
 
+## Scope and test policy
+
+Use [Write tests](../../../programming/references/write-tests.md) for test selection, assertions, doubles, and regression value.
+When the user or repository requires TDD, use [TDD rules](../../../programming/references/tdd-rules.md).
+Use the migration sections only when framework migration is part of the task. Preserve the repository's existing framework otherwise.
+
 ## **1. Migration & Tooling Baseline**
 
 Ensure your environment is set up for a smooth, gradual migration.
@@ -721,8 +727,8 @@ swift test --filter .gitRepository
 ### Action Items for Swift 6.2 Adoption
 
 - [ ] **Audit Disabled Tests**: Replace broad `.disabled()` with specific condition traits
-- [ ] **Add Exit Tests**: Identify critical process lifecycle scenarios and add exit tests
-- [ ] **Enhance Debugging**: Add attachments to complex tests and all performance tests
+- [ ] **Exit Tests**: Select process lifecycle checks when the affected contract requires them
+- [ ] **Diagnostics**: Add attachments when the captured evidence helps explain failures
 - [ ] **Update Tag Strategy**: Add Swift 6.2 tags and update filtering strategies
 - [ ] **Create Condition Traits**: Build reusable conditions for common system requirements
 - [ ] **Document Skip Reasons**: Ensure all conditional tests have clear skip explanations
@@ -730,14 +736,8 @@ swift test --filter .gitRepository
 
 ---
 
-## **Appendix: Evergreen Testing Principles (The F.I.R.S.T. Principles)**
+## Test isolation mechanics
 
-These foundational principles are framework-agnostic, and Swift Testing is designed to make adhering to them easier than ever.
-
-| Principle | Meaning | Swift Testing Application |
-|---|---|---|
-| **Fast** | Tests must execute in milliseconds. | Lean on default parallelism. Use `.serialized` sparingly. |
-| **Isolated**| Tests must not depend on each other. | Swift Testing enforces this by creating a new suite instance for every test. Random execution order helps surface violations. |
-| **Repeatable** | A test must produce the same result every time. | Control all inputs (dates, network responses) with mocks/stubs. Reset state in `init`/`deinit`. |
-| **Self-Validating**| The test must automatically report pass or fail. | Use `#expect` and `#require`. Never rely on `print()` for validation. |
-| **Timely**| Write tests alongside the production code. | Use parameterized tests (`@Test(arguments:)`) to easily cover edge cases as you write code. |
+Swift Testing creates a suite instance for each test. Shared files, global state, and external services still need deliberate isolation.
+Use `#expect` for assertions and `#require` for prerequisites that later assertions depend on.
+Choose serialization when tests must share an exclusive resource.
