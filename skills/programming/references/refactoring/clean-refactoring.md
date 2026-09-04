@@ -21,7 +21,7 @@ Core rule: refactoring replaces the old shape with the simpler shape the codebas
 - Search before building a new mechanism. Reuse, consolidate near-duplicates, extract shared core, or build new deliberately after seeing what exists.
 - Prefer one shared primitive over N adapters. Adapters belong at external boundaries or short-lived migrations.
 - Do not preserve dev-only compatibility by default. Unshipped scaffolding should move to the clean contract immediately.
-- Do not re-derive values already owned elsewhere. Export or consume the owner's computed value so checks and consumers share one source of truth.
+- Reuse owned values in consumers and consistency checks. Preserve independent expectations for computational and external contracts in tests.
 - When divergence was the bug class, make ownership visible in tests, debug output, logs, or stats.
 - Use real or asymmetric fixtures/assets for orientation, geometry, layout, ordering, and framing bugs. Symmetric placeholders can hide flipped coordinate frames or swapped axes.
 - Assess existing coverage before a refactor under [test quality](../write-tests.md). Add tests only for material gaps.

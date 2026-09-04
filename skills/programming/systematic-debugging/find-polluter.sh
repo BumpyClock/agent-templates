@@ -1,15 +1,13 @@
 #!/usr/bin/env bash
-# ABOUTME: Bisection script to find which test creates unwanted files/state
-# ABOUTME: Runs tests one by one and reports the first that creates the target path
-# Usage: ./find-polluter.sh <file_or_dir_to_check> <test_pattern>
-# Example: ./find-polluter.sh '.git' 'src/**/*.test.ts'
+# Run each matched test file and report whether it creates the target path.
+# Exit 0 means no target observed, 1 means target found, and 2 means inconclusive.
+# Usage: ./find-polluter.sh <target_path> <test_pattern>
 
-set -e
+set -euo pipefail
 
-if [ $# -ne 2 ]; then
-  echo "Usage: $0 <file_to_check> <test_pattern>"
-  echo "Example: $0 '.git' 'src/**/*.test.ts'"
-  exit 1
+if [ "$#" -ne 2 ]; then
+  echo "Usage: $0 <target_path> <test_pattern>" >&2
+  exit 2
 fi
 
 POLLUTION_CHECK="$1"
@@ -20,50 +18,56 @@ else
   TEST_PATTERN="./$RAW_TEST_PATTERN"
 fi
 
-echo "🔍 Searching for test that creates: $POLLUTION_CHECK"
-echo "Test pattern: $RAW_TEST_PATTERN"
-echo ""
+if [ -e "$POLLUTION_CHECK" ] || [ -L "$POLLUTION_CHECK" ]; then
+  echo "Inconclusive: target already exists: $POLLUTION_CHECK" >&2
+  exit 2
+fi
 
-# Get list of test files
-TEST_FILES=$(find . -path "$TEST_PATTERN" | sort)
-TOTAL=$(echo "$TEST_FILES" | wc -l | tr -d ' ')
+TEST_LIST=$(mktemp)
+trap 'rm -f "$TEST_LIST"' EXIT
+if ! find . -type f -path "$TEST_PATTERN" -print0 > "$TEST_LIST"; then
+  echo "Inconclusive: test discovery failed." >&2
+  exit 2
+fi
 
-echo "Found $TOTAL test files"
-echo ""
+TEST_FILES=()
+while IFS= read -r -d '' TEST_FILE; do
+  TEST_FILES+=("$TEST_FILE")
+done < "$TEST_LIST"
+TOTAL=${#TEST_FILES[@]}
+if [ "$TOTAL" -eq 0 ]; then
+  echo "Inconclusive: no test files match $RAW_TEST_PATTERN" >&2
+  exit 2
+fi
 
 COUNT=0
-for TEST_FILE in $TEST_FILES; do
-  COUNT=$((COUNT + 1))
-
-  # Skip if pollution already exists
-  if [ -e "$POLLUTION_CHECK" ]; then
-    echo "⚠️  Pollution already exists before test $COUNT/$TOTAL"
-    echo "   Skipping: $TEST_FILE"
-    continue
+for TEST_FILE in "${TEST_FILES[@]}"; do
+  if [ -e "$POLLUTION_CHECK" ] || [ -L "$POLLUTION_CHECK" ]; then
+    echo "Inconclusive: target exists before test execution: $POLLUTION_CHECK" >&2
+    exit 2
   fi
 
-  echo "[$COUNT/$TOTAL] Testing: $TEST_FILE"
+  COUNT=$((COUNT + 1))
+  echo "[$COUNT/$TOTAL] Run: $TEST_FILE"
+  if npm test -- "$TEST_FILE"; then
+    RUN_STATUS=0
+  else
+    RUN_STATUS=$?
+  fi
 
-  # Run the test
-  npm test "$TEST_FILE" > /dev/null 2>&1 || true
+  if [ "$RUN_STATUS" -ne 0 ]; then
+    echo "Inconclusive: runner exited $RUN_STATUS for $TEST_FILE" >&2
+    if [ -e "$POLLUTION_CHECK" ] || [ -L "$POLLUTION_CHECK" ]; then
+      echo "Target also appeared during this failed run: $POLLUTION_CHECK" >&2
+    fi
+    exit 2
+  fi
 
-  # Check if pollution appeared
-  if [ -e "$POLLUTION_CHECK" ]; then
-    echo ""
-    echo "🎯 FOUND POLLUTER!"
-    echo "   Test: $TEST_FILE"
-    echo "   Created: $POLLUTION_CHECK"
-    echo ""
-    echo "Pollution details:"
-    ls -la "$POLLUTION_CHECK"
-    echo ""
-    echo "To investigate:"
-    echo "  npm test $TEST_FILE    # Run just this test"
-    echo "  cat $TEST_FILE         # Review test code"
+  if [ -e "$POLLUTION_CHECK" ] || [ -L "$POLLUTION_CHECK" ]; then
+    echo "Target appeared during $TEST_FILE: $POLLUTION_CHECK"
     exit 1
   fi
 done
 
-echo ""
-echo "✅ No polluter found - all tests clean!"
+echo "No target observed after $COUNT successful test-file runs."
 exit 0

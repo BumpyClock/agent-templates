@@ -49,4 +49,6 @@ Report the supported cause, correction or mitigation, observed results, and resi
 
 - [Condition-based waiting](condition-based-waiting.md): use for asynchronous checks that rely on arbitrary delays.
 - [Find polluter](find-polluter.sh): inspect and adapt for tests that create unwanted files or state.
+  Run from the test root with an initially absent target. The helper passes each matched file to `npm test`.
+  Exit 0 means no target observed after successful runs, 1 means target observed, and 2 means inconclusive.
 - [Verification before completion](../references/verification-before-completion.md): use when completion evidence is ambiguous or high-risk.

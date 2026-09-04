@@ -12,11 +12,11 @@ Flaky tests often guess timing with arbitrary delays. This creates race conditio
 digraph when_to_use {
     "Test uses setTimeout/sleep?" [shape=diamond];
     "Testing timing behavior?" [shape=diamond];
-    "Document WHY timeout needed" [shape=box];
+    "Use a controlled scheduler" [shape=box];
     "Use condition-based waiting" [shape=box];
 
     "Test uses setTimeout/sleep?" -> "Testing timing behavior?" [label="yes"];
-    "Testing timing behavior?" -> "Document WHY timeout needed" [label="yes"];
+    "Testing timing behavior?" -> "Use a controlled scheduler" [label="yes"];
     "Testing timing behavior?" -> "Use condition-based waiting" [label="no"];
 }
 ```
@@ -28,8 +28,7 @@ digraph when_to_use {
 - Waiting for async operations to complete
 
 **Don't use when:**
-- Testing actual timing behavior (debounce, throttle intervals)
-- Always document WHY if using arbitrary timeout
+- For debounce or throttle contracts, use a controlled scheduler and assert behavior at the relevant time boundaries.
 
 ## Core Pattern
 
@@ -84,7 +83,7 @@ async function waitFor<T>(
 ## Common Mistakes
 
 **❌ Polling too fast:** `setTimeout(check, 1)` - wastes CPU
-**✅ Fix:** Poll every 10ms
+**✅ Fix:** Choose an interval appropriate to the operation cost and response requirements.
 
 **❌ No timeout:** Loop forever if condition never met
 **✅ Fix:** Always include timeout with clear error
@@ -92,16 +91,20 @@ async function waitFor<T>(
 **❌ Stale data:** Cache state before loop
 **✅ Fix:** Call getter inside loop for fresh data
 
-## When Arbitrary Timeout IS Correct
+## Timer intervals and output completion
+
+Use a controlled scheduler when the contract concerns timer intervals.
+Advance the scheduler to the relevant boundaries and assert the expected callbacks or state.
+
+When the contract concerns output completion, wait for the output condition with a bounded timeout:
 
 ```typescript
-// Tool ticks every 100ms - need 2 ticks to verify partial output
-await waitForEvent(manager, 'TOOL_STARTED'); // First: wait for condition
-await new Promise(r => setTimeout(r, 200));   // Then: wait for timed behavior
-// 200ms = 2 ticks at 100ms intervals - documented and justified
+await waitFor(
+  () => outputs.length >= 2,
+  'two output chunks',
+  5000
+);
 ```
 
-**Requirements:**
-1. First wait for triggering condition
-2. Based on known timing (not guessing)
-3. Comment explaining WHY
+Elapsed wall-clock time does not guarantee that scheduled callbacks have executed.
+A 200 ms delay cannot prove two callbacks occurred at a 100 ms interval.
