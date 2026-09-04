@@ -1,7 +1,6 @@
 ---
 name: data-structure-audit
 description: Use when the user requests a complete, read-only codebase audit of data structures, state models, algorithms, control flow, or ownership.
-user-invocable: false
 ---
 
 # Data Structure Audit
