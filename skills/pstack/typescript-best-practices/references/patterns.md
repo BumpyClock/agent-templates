@@ -1,6 +1,6 @@
 # TypeScript patterns
 
-Code examples for each rule in `SKILL.md`. The underlying principles are language-agnostic; see the **type-system-discipline** and **boundary-discipline** principle skills.
+These examples apply [Type System Discipline](../../../programming/references/principles/principle-type-system-discipline.md) and [Boundary Discipline](../../../programming/references/principles/principle-boundary-discipline.md) to TypeScript.
 
 ## Branded types
 
@@ -258,11 +258,11 @@ const config = { theme: "dark", cols: 3 } satisfies Config;
 
 ## Boundary validation
 
-Validate once where data crosses in; trust types inside. See the **boundary-discipline** principle skill.
+Use [Boundary Discipline](../../../programming/references/principles/principle-boundary-discipline.md) for input validation and invariant preservation.
 
 - **Wire formats** (proto, JSON-RPC): parse with `ignoreUnknownFields` so forward-compatible changes don't break old clients.
 - **Persisted JSON:** versioned blob with a try/catch around the parse.
-- **Don't re-validate** deep in call chains.
+- Remove repeated validation only while the upstream guarantee holds.
 
 ## Schema-derived types
 

@@ -7,10 +7,18 @@ description: "Use for \"how does X work\", code walkthroughs before changing som
 
 Explore the codebase to answer "how does X work?" questions. Produce clear architectural explanations at the level of a senior engineer onboarding onto a subsystem. Enough to build a working mental model, not annotated source code.
 
+## Investigation contract
+
+Treat an explanation or recommendation request as read-only.
+Use relevant source, history, and documented decisions to support the answer.
+Distinguish observed behavior, documented intent, and inferred rationale.
+State unresolved uncertainty without a speculative code change.
+Do not create a prototype, commit, or pull request unless the task authorizes it.
+
 Two modes:
 
 1. **Explain** (default). Explore the codebase and produce a clear explanation
-2. **Critique.** Explain first, then spawn multiple models to independently identify architectural issues
+2. **Critique.** Explain first, then assess architectural issues. Use independent reviewers when their separate perspectives justify the cost.
 
 ## Explain Mode
 
@@ -28,19 +36,19 @@ Identify the scope. If ambiguous, state your best-guess interpretation before ex
 **Assess complexity to decide the approach:**
 
 - **Simple** (a single module, a small utility, a narrow question like "how does function X work"): skip explorer agents; the explainer explores and explains in a single pass. Go to Step 2b.
-- **Complex** (a subsystem spanning multiple files/services, a cross-cutting feature, a full architectural overview): spawn parallel explorer agents first, then hand off to the explainer. Go to Step 2a.
+- **Complex** (a subsystem spanning multiple files/services, a cross-cutting feature, a full architectural overview): use Step 2a only for independent research that warrants separate contexts. Otherwise use Step 2b.
 
-When in doubt, lean simple. You can always spawn explorers if the explainer hits a wall.
+Prefer direct inspection for a small scope or a single continuous call chain.
 
 ### Step 2a. Explore (complex questions only)
 
-Decompose the question into 2-4 parallel exploration angles, each a distinct slice of the subsystem so explorers don't duplicate work. Example split for "how does the rate limiter work?":
+Choose independent research questions with explicit boundaries so explorers do not duplicate work. Example split for "how does the rate limiter work?":
 
 - Explorer 1: data model and state management
 - Explorer 2: request path and enforcement
 - Explorer 3: configuration and metrics infrastructure
 
-The right decomposition depends on the question. Use your judgment. Narrow questions: 2 explorers is fine. Broad subsystems: up to 4.
+Choose the number of explorers from the independent questions and their context needs, not a fixed quota.
 
 Spawn all explorers in a single message:
 
@@ -61,29 +69,24 @@ Then proceed to Step 3.
 
 ### Step 2b. Direct Explain (simple questions)
 
-Spawn a single subagent that explores and explains in one pass:
-
-- `subagent_type`: `generalPurpose`
-- `model`: your configured how-explainer model, or the harness default
-- `readonly`: `true`
-
-The agent does its own exploration (Glob, Grep, Read) and writes the explanation directly. Read `references/explainer-prompt.md` for the communication style and output format. Same structure, just no explorer findings as input.
+Inspect the relevant source directly and answer the question.
+Use only the output sections that help explain the result.
+A narrow question does not need a delegated explainer or a complete architecture report.
 
 Proceed to Step 4.
 
 ### Step 3. Synthesize (complex questions only)
 
-Once all explorers return, spawn a single subagent to synthesize their findings into one coherent explanation:
-
-- `subagent_type`: `generalPurpose`
-- `model`: your configured how-explainer model, or the harness default
-- `readonly`: `true`
-
-The explainer gets all explorers' findings and writes the human-facing explanation (output format below). Read `references/explainer-prompt.md` for the full prompt template. The explainer reconciles overlapping findings, resolves contradictions, and weaves the slices into a unified picture.
+Synthesize the findings after the independent research is complete.
+Resolve contradictions against source evidence before the final answer.
+Use a separate explainer only when the volume of findings justifies another context.
+For that case, use `references/explainer-prompt.md` with the original question and bounded research results.
 
 ### Step 4. Present
 
-Present the explainer's output to the user. You may lightly edit for clarity or add context from the conversation, but don't substantially rewrite. The explainer's communication is the product.
+Present the supported answer, relevant source locations, and unresolved limits.
+For a decision request, give a recommendation with its tradeoffs.
+Retain responsibility for the evidence even when an agent supplied it.
 
 ### Output Format
 
@@ -107,9 +110,12 @@ Triggered when the user asks for architectural issues, problems, or improvements
 
 Run the full explain flow above (Steps 1-4). You must understand the architecture before critiquing it.
 
-### Step 2. Spawn Critics
+### Step 2. Assess the architecture
 
-After the explanation is complete, spawn four architectural critics as parallel subagents, on diverse strong model families when the harness offers them, all in a single message.
+Apply `references/critique-rubric.md` to the question and its evidence.
+Use independent critics only when distinct perspectives or substantial separate context justify them.
+Assess a small scope directly.
+When critics are useful, choose their number from the questions rather than require a fixed panel.
 
 For each critic:
 - `subagent_type`: `generalPurpose`

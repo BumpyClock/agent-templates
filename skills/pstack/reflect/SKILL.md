@@ -50,7 +50,7 @@ One `Task` call, `subagent_type: generalPurpose`, using your configured reflect-
 
 ### 4. Structural enforcement check
 
-Sanity-check the synthesizer's Accepted list. For any item that would be enforced more reliably by a lint rule, script, metadata flag, or runtime check, move it from Accepted to Backlog. The synthesizer already applies this criterion; this is a final pass before edits land. See the **encode-lessons-in-structure** principle skill.
+Sanity-check the synthesizer's Accepted list. For any item that would be enforced more reliably by a lint rule, script, metadata flag, or runtime check, move it from Accepted to Backlog. The synthesizer already applies this criterion; this is a final pass before edits land. See [Encode Lessons in Structure](../../programming/references/principles/principle-encode-lessons-in-structure.md).
 
 ### 5. Apply
 

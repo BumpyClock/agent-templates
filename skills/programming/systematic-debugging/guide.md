@@ -29,7 +29,7 @@ For intermittent failures, consider repeated trials, stress, or controlled sched
 
 Keep credentials out of commands and captured output. Use bounded probes that respect the environment and authorization for external effects.
 
-## Cause and correction
+## Fix Root Causes
 
 Trace bad values or transitions to the component that owns their invariant. Correct that mechanism within the task scope. Validate data where trust changes, then preserve validated invariants through internal contracts.
 

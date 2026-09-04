@@ -6,21 +6,33 @@ Core rule: refactoring replaces the old shape with the simpler shape the codebas
 
 ## Workflow
 
-1. Name the duplicated concept: config source, pricing rule, geometry source, state machine, data contract, renderer phase, API shape, UI state, test oracle, or derived value.
-2. Find current owners and consumers before editing.
-3. Treat wrappers, aliases, pass-local constants, copied structs, temporary branches, and compatibility paths as sediment until proven necessary.
-4. Pick the natural owner: the module that would own the concept if designed from scratch.
-5. Move consumers to that owner directly.
-6. Delete or collapse the stale path in the same pass when feasible.
-7. If a bridge must stay, make it tiny, name it as compatibility, and write its removal condition.
-8. Verify through consumers that used to diverge, not only through the new owner module.
+1. Establish the behavior contract and relevant evidence before structural edits. Include outputs, errors, side effects, and required compatibility.
+2. Identify the concept, current owners, and consumers. Include configuration, documentation, and string-based references where they can affect behavior.
+3. Choose the target owner and representation. Use [Redesign from First Principles](../principles/principle-redesign-from-first-principles.md) when new constraints expose repeated exceptions.
+4. Move consumers in coherent behavior-preserving units. Apply the API migration rule below when one interface replaces another.
+5. Assess the result through affected consumers under [verification](../verification-before-completion.md). Account for stale references and any retained bridge.
+
+Use [Subtract Before You Add](../principles/principle-subtract-before-you-add.md) when a bounded removal simplifies the requested change.
+For a discovered defect or new behavior, separate that work from the refactor contract.
+
+## Migrate Callers Then Delete Legacy APIs
+
+Use coordinated migration when an internal API replaces an old API and its consumers can change together.
+Inventory consumers before retirement, including callers outside the immediate package when the contract permits them.
+Migrate those consumers and remove the obsolete path in the same coherent change when feasible.
+Remove duplicate implementations after the replacement serves the required contract.
+
+For required public API, CLI, configuration, or stored-data compatibility, preserve an explicit bridge or use an authorized migration plan.
+Name the consumer contract, owner, and removal condition for a temporary bridge.
+An absent local caller does not prove that an externally supported API is unused.
 
 ## Rules
 
 - Do not let sunk cost decide architecture. Size the refactor by end-state quality, behavior risk, and reviewability, not by how much old code exists.
 - Search before building a new mechanism. Reuse, consolidate near-duplicates, extract shared core, or build new deliberately after seeing what exists.
-- Prefer one shared primitive over N adapters. Adapters belong at external boundaries or short-lived migrations.
+- Prefer one shared primitive over duplicate adapters when their semantics match.
 - Do not preserve dev-only compatibility by default. Unshipped scaffolding should move to the clean contract immediately.
+- Preserve required public API, CLI, configuration, and stored-data compatibility unless the authorized migration replaces that contract.
 - Reuse owned values in consumers and consistency checks. Preserve independent expectations for computational and external contracts in tests.
 - When divergence was the bug class, make ownership visible in tests, debug output, logs, or stats.
 - Use real or asymmetric fixtures/assets for orientation, geometry, layout, ordering, and framing bugs. Symmetric placeholders can hide flipped coordinate frames or swapped axes.
@@ -36,7 +48,7 @@ Core rule: refactoring replaces the old shape with the simpler shape the codebas
 - Test oracle computes the expected value by duplicating production logic.
 - Compatibility wrapper with no removal trigger.
 - "Temporary" branch older than the feature it supported.
-- New abstraction exists for one caller and no clear boundary.
+- An abstraction hides no useful decision or invariant, regardless of caller count.
 
 ## Verification
 

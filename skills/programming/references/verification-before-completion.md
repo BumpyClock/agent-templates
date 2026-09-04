@@ -38,6 +38,7 @@ Avoid universal absence-of-regression claims from a limited suite.
 ## Scale execution
 
 Group dependent edits into coherent units that admit a meaningful check.
+Keep incomplete intermediate states local unless the repository explicitly permits them in published artifacts.
 Use focused checks during development and broader checks at the relevant integration point.
 Prefer existing runners and tools before a new verification script.
 Use manual inspection when it observes the contract sufficiently.

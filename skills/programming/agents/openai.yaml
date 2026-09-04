@@ -1,4 +1,4 @@
 interface:
   display_name: "Programming"
-  short_description: "Root-cause coding, regression tests, and verification"
-  default_prompt: "Use $programming when implementing features, fixing bugs, refactoring, or writing tests."
+  short_description: "Risk-proportional code, design principles, and checks"
+  default_prompt: "Use $programming for code changes, diagnosis, refactors, tests, or agent-guidance comparisons."

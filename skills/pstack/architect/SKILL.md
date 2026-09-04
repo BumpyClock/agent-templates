@@ -32,7 +32,7 @@ Run the **arena** skill with the design-sketch task and the Phase A grounding ar
 
 Use one subagent per candidate, on the strongest available models, with diverse model families when the harness offers them.
 
-Design it twice. Require at least two structurally distinct candidates before synthesis, even when the first looks sufficient. This is the **exhaust-the-design-space** principle skill made concrete. Whole-shape alternatives, not point fixes inside one shape.
+Design it twice. Require at least two structurally distinct candidates before synthesis, even when the first looks sufficient. This is an explicit workflow choice beyond the conditional [Exhaust the Design Space](../../programming/references/principles/principle-exhaust-the-design-space.md) reference. Whole-shape alternatives, not point fixes inside one shape.
 
 Screen every candidate against [`references/design-red-flags.md`](references/design-red-flags.md) before synthesis. Reject or revise shallow modules, information leakage, temporal decomposition, and pass-through methods.
 
@@ -46,7 +46,9 @@ Default: proceed directly to implementation with the synthesized design. No huma
 
 Opt in to a checkpoint when the invoker explicitly asks: "/architect with checkpoint," "stop and show me before implementing," or similar. Then surface the synthesized design and pause for sign-off.
 
-The synthesis can ship as its own commit either way. That's the "scaffold first" mode of the **foundational-thinking** principle skill; subsequent commits read as filling in bodies against a stable contract. Planned and scoped breakage during fill-in is fine, per the **outcome-oriented-execution** principle skill. For adversarial pressure on the design before implementing, run the **interrogate** skill on the synthesized sketch.
+Use [architecture guidance](../../programming/references/architecture/architecture-planning.md) to sequence the sketch and its consumers.
+Use [verification guidance](../../programming/references/verification-before-completion.md) to distinguish local incomplete states from publishable artifacts.
+For adversarial pressure on the design, run the **interrogate** skill before implementation.
 
 If the human pushes back on the shape (in a checkpoint or after the fact), treat that as Phase A evidence. Re-ground and re-run Phase B before writing more code.
 
@@ -58,7 +60,7 @@ Deviations from the sketch are signal worth surfacing, not friction to absorb si
 
 ## Phase E: Scrap when the architecture is wrong
 
-If implementation keeps producing friction the sketch can't absorb, throw the sketch out. Don't bolt fixes onto a wrong design, per the **redesign-from-first-principles** and **fix-root-causes** principle skills.
+If implementation keeps producing friction the sketch can't absorb, throw the sketch out. Use [clean refactoring](../../programming/references/refactoring/clean-refactoring.md) and [systematic diagnosis](../../programming/systematic-debugging/guide.md) to reassess the design and its failure mechanism.
 
 The signal is a *pattern*, not single instances. Tells:
 
@@ -74,8 +76,8 @@ Use judgment. A few edge cases don't condemn an architecture. Some problems are 
 When you scrap:
 
 1. Re-run the **how** skill over what's been built. The implementation lessons enter the new design as inputs, not vibes.
-2. Redesign as if the new constraints had been day-one assumptions, per redesign-from-first-principles.
-3. Subtract before adding, per the **subtract-before-you-add** principle skill. The new sketch should be smaller than the old one before it grows.
+2. Use [Redesign from First Principles](../../programming/references/principles/principle-redesign-from-first-principles.md) to reassess the target against the new constraints.
+3. Use [clean refactoring](../../programming/references/refactoring/clean-refactoring.md) to remove obsolete structure within the authorized scope.
 4. Return to Phase B and re-run arena.
 
 ## Outputs

@@ -11,10 +11,55 @@ read_when: Update coding workflow skills or their shared references.
 - `skills/programming/systematic-debugging/guide.md` owns diagnosis.
 - `skills/programming/references/verification-before-completion.md` owns completion evidence and its reuse.
 
-The `diagnosing-bugs`, `tdd`, and `principle-prove-it-works` skills route to these references.
-The sequence principle defines coherent work units and uses the same verification reference.
+The `diagnosing-bugs` and `tdd` skills route to these references.
+Poteto's proof and sequence references use the same verification owner.
 Keep shared rules in their owner instead of duplicate workflow checklists.
 Platform guides retain runner APIs and domain-specific examples, with links to the shared test policy.
+
+## Design principles
+
+`skills/programming/references/principles/` owns conditional code and design principles.
+Each `principle-*.md` file defines a trigger, a decision, and a limit.
+The index in `skills/programming/SKILL.md` selects references by the current decision.
+Use these principles through `programming` without a Poteto mode invocation.
+
+The library also preserves named decisions for subtraction, first-principles redesign, foundations, and consumer experience.
+Type reviews use `references/design/type-design.md`, which points to the shared type principle.
+Keep the reference index conditional rather than require every principle on every task.
+
+Migrate Callers Then Delete Legacy APIs is a named rule in `references/refactoring/clean-refactoring.md`.
+Fix Root Causes is a named rule in `systematic-debugging/guide.md`.
+These names use the existing procedures rather than duplicate them in separate principle files.
+Guard the Context Window lives in `references/execution/`, separate from design principles.
+Laziness Protocol uses the shared refactor contract.
+Outcome-Oriented Execution uses `references/verification-before-completion.md` and the refactor contract.
+Keep the adapted rules in their shared owners rather than duplicate active workflow checklists.
+
+## Shared workflows
+
+`programming` routes by the requested deliverable.
+Shared workflows do not require Poteto mode, mandatory delegation, fixed agent panels, or automatic PR creation.
+
+| Workflow | Owner |
+| --- | --- |
+| Bug fix | [Systematic diagnosis](../skills/programming/systematic-debugging/guide.md) |
+| Eval | [Agent-guidance evaluation](../skills/programming/evals/README.md) |
+| Feature | [Feature workflow](../skills/programming/references/workflows/feature.md) |
+| Investigation | [How](../skills/pstack/how/SKILL.md) |
+| Perf issue | [Performance workflow](../skills/programming/references/performance/perf-issue.md) |
+| Prototype | [Prototype skill](../skills/engineering/prototype/SKILL.md) |
+| Refactoring | [Clean refactoring](../skills/programming/references/refactoring/clean-refactoring.md) |
+| Runtime forensics | [Live diagnosis](../skills/programming/references/performance/runtime-forensics.md) |
+| Trace forensics | [Capture analysis](../skills/programming/references/performance/trace-forensics.md) |
+
+The prototype skill separates interactive state demonstrations, UI alternatives, and bounded behavioral probes.
+A prototype-only request stops at its decision and evidence.
+Live diagnostics require explicit authority for code injection or shared-state mutation.
+An evaluation compares artifacts under equivalent conditions rather than reward principle citations.
+
+Preserve `skills/pstack/poteto-mode/` as reference material.
+Apply adaptations in the shared owners above, not in the preserved Poteto files.
+The adapted workflows do not inherit the original mode's orchestration requirements.
 
 ## Existing test cleanup
 

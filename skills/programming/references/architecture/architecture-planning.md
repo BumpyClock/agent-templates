@@ -2,6 +2,8 @@
 
 Use for hard problems that need boundaries, contracts, sequencing, or trade-off decisions before implementation.
 
+Use [Foundational Thinking](../principles/principle-foundational-thinking.md) when dependent work needs a shared prerequisite.
+
 ## Workflow
 
 1. Orient on existing project shape: stack, services, data flow, deployment targets, docs, and local constraints.

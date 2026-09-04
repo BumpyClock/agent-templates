@@ -2,6 +2,9 @@
 
 Use when creating or reviewing domain models, public APIs, schemas, protocol types, state machines, or any type meant to enforce business rules.
 
+Read [Type System Discipline](../principles/principle-type-system-discipline.md) for representation choices and their limits.
+Use the framework below to assess a concrete type.
+
 ## Core mission
 
 Evaluate whether type designs express useful invariants and make invalid states hard or impossible to construct.
@@ -29,10 +32,3 @@ state OK or a concrete concern with the invalid state it allows.
 ### Recommended Improvements
 - <change> — <bug class it prevents>
 ```
-
-## Principles
-
-- Prefer compile-time guarantees over runtime checks when feasible.
-- Value clarity over cleverness.
-- Keep improvements pragmatic and proportionate.
-- Make illegal states unrepresentable when the complexity is justified.

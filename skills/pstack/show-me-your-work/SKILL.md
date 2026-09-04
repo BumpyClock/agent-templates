@@ -49,7 +49,7 @@ Commit it only when the work is ambitious enough that a reviewer needs the trail
 
 - One row is one decision or checkpoint. If it doesn't fit on one line, the decision isn't crisp yet.
 - Append-only. A wrong call gets a new row that supersedes it. Never edit or delete history.
-- Prefer evidence produced by committed scripts over hand-made one-offs, so a reviewer can re-run it (the **encode-lessons-in-structure** principle skill).
+- Prefer evidence produced by committed scripts over hand-made one-offs, so a reviewer can re-run it (the [Encode Lessons in Structure](../../programming/references/principles/principle-encode-lessons-in-structure.md) reference).
 
 ## Audit the log against the transcript
 
