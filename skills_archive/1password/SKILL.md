@@ -2,7 +2,6 @@
 name: 1password
 description: using 1Password cli to manage secrets via op cli.
 homepage: https://developer.1password.com/docs/cli/get-started/
-metadata: {"clawdbot":{"emoji":"🔐","requires":{"bins":["op"]},"install":[{"id":"brew","kind":"brew","formula":"1password-cli","bins":["op"],"label":"Install 1Password CLI (brew)"}]}}
 ---
 
 # 1Password CLI
