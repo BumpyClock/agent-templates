@@ -2,6 +2,8 @@
 
 **Load when:** repo contains TypeScript or React/Next.js code. Match the framework and library versions in `package.json`; check installed versions before reaching for newer APIs (Server Components, Actions, etc.).
 
+For TypeScript domain types or external input contracts, use [TypeScript patterns](typescript-patterns.md).
+
 ## React / Next.js
 
 - Server state via TanStack Query or SWR; local/global state via lightweight tools (Zustand, Jotai) when component state is not enough.

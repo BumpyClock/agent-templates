@@ -8,7 +8,10 @@ context: fork
 
 Design precise, crafted UX for consumer apps, enterprise software, SaaS dashboards, admin interfaces, web apps, marketing pages — and CLI/TUI, which benefits from the same principles. Treat UX as end-to-end experience, not just visuals.
 
-## Hard Gates
+## Full Design Gates
+
+Apply these gates to new pages, screens, or a requested full redesign.
+For a small edit, use the scope rule below instead.
 
 1. **COMMIT A DESIGN DIRECTION BEFORE SPECIFYING ANYTHING.** State it in the doc (for marketing/landing: the one-line design read + dial values). Blocks the reflex of jumping straight to a default aesthetic — the root cause of templated output.
 2. **LOCK ONE SYSTEM PER PAGE.** One accent with meaning, one radius language, one theme, one type scale — committed up front and held across every section. Blocks mid-page drift, the most common way multi-section work falls apart.
@@ -38,8 +41,11 @@ Protect in this order — never sacrifice a higher item for a lower one:
 ## Scale to Scope
 
 - New product, page, or feature: full workflow below.
-- Small change — one component or one flow tweak, no new layout or flow: short spec (affected components, states, measurements, accessibility notes); skip the HTML mockup. Anything larger gets the full workflow.
-- Direction, craft, and micro-polish apply proportionally: a button tweak needs a micro-polish note, not a full visual system.
+- Small change: edit the affected component or state within the existing design system.
+- Preserve relevant accessibility and interaction behavior.
+- Check the rendered result when layout, appearance, or interaction can change.
+- A small edit needs no design document, mockup, direction statement, or micro-polish note.
+- Use only references needed for the affected behavior.
 
 ## Reference Index
 
@@ -66,7 +72,7 @@ Two modes — pick by what the user asked for:
 - **Design (default)**: implementation-ready UX documentation (per `references/design-doc-template.md`) plus self-contained HTML mockup(s) for layout-level work. Mockups are throwaway design artifacts, not production code.
 - **Build**: when asked to implement for real, write production frontend code following `references/production-implementation.md` — after the direction, craft, and anti-slop passes. A heavyweight design doc is optional in build mode; the design read, dial values, and key decisions still get stated.
 
-## Workflow
+## Full Design Workflow
 
 1. **Gather inputs** — goals, users, platforms, constraints, content requirements. Identify existing design system/tokens/components (theme configs, CSS vars, Storybook). Missing input that changes meaning (data, claims, brand facts) → ask once, grouped; otherwise label the unknown honestly and proceed.
 2. **Commit direction** (Gate 1) — use `references/design-direction.md`. For marketing/landing, state the design read; if it genuinely diverges from the brief, ask exactly one clarifying question.
@@ -95,4 +101,5 @@ When an image-generation tool is available and the user wants visual comps: one 
 
 ## Quality Bar
 
-Before handoff: requirements captured; direction stated with rationale; layout hierarchy per breakpoint; components and states listed; existing tokens reused or gaps confirmed; micro-polish specs cover what the task touches; accessibility documented; Gates 3-5 run on the final artifact; rationale given wherever a reference default was overridden.
+For small edits, report the change and relevant checks without a separate design artifact.
+For full design work, before handoff: requirements captured; direction stated with rationale; layout hierarchy per breakpoint; components and states listed; existing tokens reused or gaps confirmed; micro-polish specs cover what the task touches; accessibility documented; Gates 3-5 run on the final artifact; rationale given wherever a reference default was overridden.

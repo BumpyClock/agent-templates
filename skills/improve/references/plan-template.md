@@ -1,5 +1,9 @@
 # Handoff Plan Template
 
+Use this template for a detailed executor handoff, not every plan.
+Select sections and verification gates by task risk and executor needs.
+The [plan route](plans.md) governs scope, authorization, and optional baseline metrics.
+
 Every plan is written for an executor model that has **zero context**: it has not seen the advisor session, the audit, the other plans, or any prior conversation. It may be a smaller/cheaper model. Assume it is competent at following explicit instructions and weak at filling gaps, recovering from ambiguity, or knowing when to stop.
 
 Three properties make a plan executable by a weaker model:
@@ -200,9 +204,8 @@ here is permanent until the code it cites changes.
 
 ## Baseline metrics
 
-Snapshotted at each audit and `reconcile` — the scoreboard for whether this
-codebase is actually improving. Only include columns that are cheap to
-measure in this repo; N/A the rest.
+Include this section only for requested longitudinal comparisons or acceptance criteria that require baseline measurements.
+Omit unrelated metrics.
 
 | Date | Commit | LOC | Deps | Tests | Coverage | Typecheck errs | Build time |
 |------|--------|-----|------|-------|----------|----------------|------------|
