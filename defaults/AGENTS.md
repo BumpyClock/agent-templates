@@ -24,6 +24,7 @@ Skills own tool workflows; this file is hard rules only. A rule naming a CLI or 
 - After the user reports "still broken" three times, stop corrections. State the questionable assumption. Ask one diagnostic question.
 - Explanations can have the necessary length. Use headers to make navigation easy. Keep the first and last lines concise.
 - When I must decide, give no more than two alternatives. Provide the necessary context and your recommendation.
+- If at any point you can parallelize work by delegating tasks to another agent (no matter if you are the root or subagent), you should do so using collaboration tools if it could save time or improve quality.
 
 ## Agent protocols
 

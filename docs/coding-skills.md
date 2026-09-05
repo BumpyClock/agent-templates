@@ -110,3 +110,25 @@ Their replacements avoid duplicate aliases and mandatory review or publication s
 
 After archive moves, run `bun scripts/link-agent-templates/link-agent-templates.ts --setup all` to refresh linked configurations.
 The flat skill linker removes stale repository skill symlinks and preserves real directories.
+
+## Additional workflow archives
+
+These skill directories retain their original files under the corresponding group in `skills_archive/`.
+
+| Archived skill | Replacement |
+| --- | --- |
+| `research` | Request source research directly, with a cited report when needed. |
+| `resolving-merge-conflicts` | Request conflict resolution under the repository's Git authorization rules. |
+| `improve-codebase-architecture` | Use `improve` with `codebase-design`. |
+| `architect` | Use `codebase-design` and the architecture references under `programming`. |
+| `blast-radius` | Request dependency-impact analysis with `code-review`. |
+| `interrogate` | Request independent reviewers with `code-review` when needed. |
+| `swarm` | Specify parallel work, ownership, and the required result in the task. |
+| `handoff` | Request a context summary with artifact references for the next session. |
+| `to-questionnaire` | Request a questionnaire for the named recipient and decision. |
+| `make-bot-ui` | Request a webhook UI for the available runtime. |
+
+`wayfinder`, `to-spec`, `to-tickets`, `triage`, and `teach` remain active.
+Wayfinder assigns source research directly rather than invokes the archived `research` skill.
+`technical-writing` retains explicit invocation and routes document-type guidance to a separate reference.
+Its root owns technical accuracy and document scope without a duplicate global prose standard.

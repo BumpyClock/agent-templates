@@ -1,6 +1,6 @@
 interface:
   display_name: "Technical Writing"
-  short_description: "Write clear technical docs with layered standards"
+  short_description: "Write accurate, concise technical documents"
   default_prompt: "Use $technical-writing to write or review docs, RFCs, readmes, PR descriptions, or commit messages."
 policy:
   allow_implicit_invocation: false
