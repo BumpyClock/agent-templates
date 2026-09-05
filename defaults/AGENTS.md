@@ -2,11 +2,10 @@
 
 Skills own tool workflows; this file is hard rules only. A rule naming a CLI or skill applies only where that tool exists — if it's absent, say so and use the nearest equivalent; never fake or guess it.
 
-## Behavior **MUST MAINTAIN**
+## Behavior 
 
 - Be direct. State disagreements and problems clearly. State uncertainty instead of making a guess.
 - Investigate the root cause when something fails. Do not retry or correct only the symptom.
-- Keep changes within the task scope. Do not reformat or refactor unrelated code.
 - Use terse, technical, and clear prose. Remove filler, pleasantries, and weak qualifiers. Use fragments only in headings, labels, and status lines.
 - Apply ASD-STE100 Issue 9 to technical prose that you write. Use American English and consistent terms. Use one word for one meaning.
 - Prefer approved STE words. Use each approved word only with its approved meaning and part of speech.
@@ -32,18 +31,15 @@ Read `~/.agents/AGENTS.local.md` if it exists.
 
 ## Workflow
 
-- Validate consequential or disputed claims with direct evidence. Use formal verification only for an explicit verify, prove, measure, or confirm request, or a required high-risk gate.
-- delegate when handoff cost is clearly below doing it locally; main agent owns user comms, scope, plan, architecture decisions, contracts, and the final evidence report. Single-agent harness: do it yourself.
-- Delegate implementation only for independent slices that touch disjoint files and have a written acceptance check. Do small and sequential edits yourself.
+- Validate consequential or disputed claims with direct evidence. Use formal verification only for an explicit verify, prove, measure, or confirm request, or a required high-risk gate. Use best judgement on when to verify, small mechanical changes don't need verification and test theater.
 - High-risk completion claims (browser/data capture, migrations, security, PR cleanup, CI repair) need one independent GO/NO-GO pass with evidence and residual risks. Retry only after code, evidence, or environment changes; otherwise stop with the named blocker.
-- `Make note` → repo learned-doc convention: `docs/learned/<topic>.md` or `LEARNINGS.md`, following the repo's existing pattern. Evergreen content only — rationale, pitfalls, failure modes, decisions. No changelog noise, secrets, sensitive URLs, or personal data.
 - Need an upstream file → stage in `/tmp/`, cherry-pick. Never overwrite tracked files.
 - Oversized or incohesive file → flag it. Split only when the task is already structural; never restructure mid-bugfix.
-- Fix/refactor: delete the old path by default. Keeping compat needs a named contract (public API/CLI/config/stored data) — tests alone aren't a contract. Unsure → ask.
-- Prefer maintained libs/framework features over custom code when complexity drops. New dep → quick health check: recent releases, adoption, docs, license, fit. Several good options → propose 2-3 + rec.
+
 - Current year: 2026. Inherent knowledge for stable facts; web search for current, fast-moving, high-risk, or uncertain info — prefer sources from the last two years, and quote exact errors when searching.
 - ast-grep is installed: default to `ast-grep --lang <lang> -p '<pattern>'` for structural code search; plain-text tools for plain-text search.
 - If you need a paragraph-long comment to justify why the workaround is OK, the code is wrong — fix the code.
+- code is the documentation. comments describe why not what and how. comments only evergreen never transient.
 
 ## Docs / build / test
 
@@ -52,7 +48,7 @@ Read `~/.agents/AGENTS.local.md` if it exists.
 - After an edit: run the narrowest check that observes the changed contract. Before commit, push, or PR: run the full available gate — lint, typecheck, tests, docs step if present.
 - CI red → `gh run list` / `gh run view`; rerun, fix, repeat till green.
 - Keep work observable: logs, panes, tails, MCP/browser tools.
-- Release → read `docs/RELEASING.md`; missing → find the best checklist.
+- Release → read `docs/RELEASING.md`; missing → find the best checklist. create if necessary.
 
 
 ## Oracle CLI
