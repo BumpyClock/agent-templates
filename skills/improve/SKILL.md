@@ -1,6 +1,6 @@
 ---
 name: improve
-description: Survey any codebase as a senior advisor and produce prioritized, self-contained implementation plans for OTHER models/agents to execute. Strictly read-only on source code — never implements, fixes, or refactors anything itself. Use when asked to audit a codebase, find improvement opportunities (bugs, security, performance, test coverage, tech debt, migrations, DX), suggest features or where to take the project next (roadmap, product direction), or generate handoff plans for another agent to implement.
+description: Audit a codebase and prioritize evidence-backed improvements. Use for codebase audits, roadmaps, or implementation plans.
 license: MIT
 metadata:
   author: shadcn
@@ -9,25 +9,24 @@ metadata:
 
 # Improve
 
-You are a **senior advisor, not an implementer**. Your job is to deeply understand a codebase, find the highest-value improvement opportunities, and write implementation plans good enough that a *different, less capable model with zero context from this session* can execute, test, and maintain them.
-
-The economics of this skill: an expensive, high-ceiling model does the part where intelligence compounds (understanding, judging, specifying). Cheaper models do the execution. The plan is the product — its quality determines whether the executor succeeds.
+Produce evidence-backed findings or self-contained plans for the requested scope. Keep audit-only requests read-only.
+When the user explicitly requests implementation, continue through [Programming](../programming/SKILL.md) within that scope.
 
 ## Hard Rules
 
-1. **Never modify source code yourself.** No edits, no fixes, no "quick wins while you're in there." The ONLY files you may create or modify live under `plans/` in the repo root (create it if absent). The `execute` variant dispatches a *separate executor subagent* that edits code in an isolated git worktree — you review its diff and render a verdict; you still never edit code directly, and you never merge, push, or commit to the user's branch.
-2. **Never run commands that mutate the user's working tree** — no installs, no builds that write artifacts outside standard ignored dirs, no git commits, no formatters. Read, search, and run read-only analysis only (e.g. `tsc --noEmit`, lint in check mode, `npm audit` / `pnpm audit`, test suite if cheap and side-effect free). Two scoped exceptions: verification commands inside an executor's disposable worktree during `execute` review, and `gh issue create` under an explicit `--issues` flag.
+1. **Preserve audit scope.** Do not edit source during an audit-only request. Write requested plans under `plans/` or an agreed report directory.
+2. **Keep audit operations read-only.** Use inspection and side-effect-free checks. Implementation, commits, and external writes require authorization from the task.
 3. **Every plan must be fully self-contained.** The executor has not seen this conversation, this codebase survey, or any other plan. If a plan references "the pattern discussed above," it is broken.
 4. **Never reproduce secret values.** If the audit finds credentials, tokens, or `.env` contents, findings and plans reference the `file:line` and credential type only, and recommend rotation. The value itself must never appear in anything you write.
-5. **If the user asks you to implement directly, decline and point at the plan** — offer `execute <plan>` (dispatched executor + your review) or plan refinement instead.
+5. **Honor task transitions.** An explicit request to apply findings authorizes the selected implementation scope. No special command or repeated approval is required.
 
 ## Workflow
 
-### Phase 1 — Recon (always)
+### Phase 1 — Scope the audit
 
 Map the territory before judging it:
 
-- Read `README`, `CLAUDE.md`/`AGENTS.md`, `CONTRIBUTING`, root config files (`package.json`, `pyproject.toml`, `go.mod`, etc.), CI config, and the directory structure.
+- Read repository instructions and the documents or configuration needed to establish the requested scope and its contracts.
 - Identify: language(s), framework(s), package manager, **how to build / test / lint / typecheck** (exact commands — these go into every plan as verification gates), test coverage shape, deployment target.
 - Note repo conventions: code style, naming, folder layout, error-handling and state-management patterns. Plans must tell the executor to *match* these, with examples.
 - Tag key directories with the trust boundaries they touch (user-input, network, filesystem, secrets, process-exec, database, auth, permissions, concurrency, external-api, serialization). Subagent prompts point at boundaries, not at "the codebase" — "`src/webhooks/` handles unauthenticated network input" beats "look for security issues".
@@ -42,7 +41,7 @@ Audit the codebase across the categories in [references/audit-playbook.md](refer
 
 **Run the mechanical sweep first** — the playbook's "Run the tools first" table (dead-code detectors, duplication, `ast-grep` bug patterns, strict typecheck, coverage). Static tools have near-perfect recall on mechanical patterns; spend model attention on judging their output and on what tools can't find. Tool hits are leads, not findings — each still needs the evidence/impact/confidence treatment.
 
-For repos of any real size, fan out with parallel read-only subagents (in Claude Code: **general-purpose** agents explicitly instructed to make no edits — *not* Explore agents, which locate code by skimming excerpts rather than reviewing it; that under-delivers for audits) — one per category (or cluster of related categories). If the host agent can't spawn subagents, audit directly yourself in category-priority order. **Subagents do not inherit this skill's context**, so each subagent prompt must include:
+Delegate independent audit boundaries when separate context or expertise justifies the cost. Otherwise inspect directly. Choose agent count from the work, not a category quota. Each delegated prompt must include:
 
 - the **absolute path** to this skill's `references/audit-playbook.md` plus the exact section headings to read — **always including "## Finding format"** (subagents can read files — this is far cheaper than pasting; paste the sections only if the path may not resolve in the subagent's environment),
 - the recon facts that scope the search (languages, frameworks, key directories, what to skip),
@@ -74,9 +73,9 @@ node <this skill's directory>/scripts/validate-evidence.mjs --repo <repo-root> -
 
 The script drops any finding whose cited file, line range, or quote doesn't match the repo's actual bytes (exit 1 when anything drops; per-drop reasons on stderr). A dropped finding gets **one re-cite attempt** — subagent line numbers drift more often than they fabricate — then goes to "considered and rejected" with the script's reason. **No finding enters the table without a kept row in the script's report.** This is the cheap deterministic gate; the judgment gates below run only on what survives it.
 
-**Vet before presenting — subagents over-report.** For every finding that will make the table, open the cited code yourself and confirm it. Expect three failure classes: **by-design behavior** reported as a bug or vulnerability (e.g. honoring `https_proxy` flagged as SSRF — it's the standard proxy convention); **mis-attributed evidence** (real finding, wrong file or line); and duplicates across subagents. Downgrade, correct, or reject accordingly, and record rejections in the index's "considered and rejected" section so they aren't re-audited next run.
+**Validate substance before presentation.** Check cited code for by-design behavior, incorrect attribution, duplicates, and unsupported impact. Reuse source reads and valid evidence from this audit. Record rejected findings so they do not return without new evidence.
 
-**Then try to kill what survives.** Self-vetting misses the findings you *want* to be true; a refuter with no stake catches them. For each HIGH-impact finding headed for a plan, dispatch a fresh-context read-only subagent given only the finding text and cited files, prompted to **refute** it — "argue this is by-design, mis-read, or unreachable; default to refuted if uncertain." At `deep`, use three refuters and majority vote. Only survivors become plans; refuted findings go to "considered and rejected" with the refuter's reasoning.
+**Review consequential findings independently.** Use one bounded review across the relevant findings when risk or an acceptance requirement justifies it. Ask the reviewer to challenge evidence and assumptions. Add reviewers only for unresolved disagreement or distinct expertise. Deep coverage does not require a reviewer quota or majority vote. Report uncertainty rather than treat it as proof for either verdict.
 
 **Check ground-truth claims against ground truth.** A finding asserting something "does not exist" or "is unpublished" — package versions, APIs, config options — gets verified against the live source (`npm view <pkg>@<ver>`, official docs via web) before it survives; knowledge-cutoff hallucinations dress up as facts. Fail open: only a confirmed contradiction drops the finding — 404s, timeouts, and offline keep it.
 
@@ -88,9 +87,9 @@ Present the vetted findings table to the user, ordered by leverage (impact ÷ ef
 
 Present **direction findings separately**, after the table — they're options for the maintainer to weigh, not problems ranked against bugs, and burying "build a plugin system" under "fix the N+1" serves neither. 2–4 grounded suggestions max, each with its evidence and trade-offs in two or three sentences.
 
-Then ask which findings to turn into plans (default suggestion: the top 3–5 plus anything they flag). Also surface **dependency ordering** — e.g. "characterization tests for module X (plan 02) must land before the refactor of X (plan 05)."
-
-Wait for the selection. Do not write 30 plans nobody asked for. If running non-interactively (no user available to choose), write plans for the top 3–5 by leverage and record that default in `plans/README.md`.
+Report dependencies between findings. For an audit-only request, finish with findings and a recommended next scope.
+Write plans when requested. Ask for selection only when the requested scope remains materially ambiguous.
+Continue with already authorized plans or implementation without another selection gate.
 
 ### Phase 4 — Write the plans
 
@@ -127,8 +126,8 @@ Finish by writing `plans/README.md` with the recommended execution order, depend
 - `branch` → audit only the current working branch's changes: scope = files changed since the merge-base with the default branch (`git diff --name-only $(git merge-base origin/<default> HEAD)..HEAD`) plus their direct importers/callers. Light recon, all categories, usually no subagents. **Tag every finding `introduced` (by this branch) or `pre-existing` (in touched files)** — the table separates them; don't blame the branch for legacy debt, but do surface what it's building on top of. If on the default branch or zero commits ahead, say so and offer a full audit instead.
 - `next` (or `features`, `roadmap`) → run Recon, then audit only the direction category, in more depth: 4–6 grounded suggestions, each with evidence, trade-offs, and a coarse effort estimate. Selected ones become design/spike plans, not build-everything plans.
 - `plan <description>` → skip the audit; the user already knows what they want. Run Recon, investigate just enough to specify it properly, and write a single plan. If the description is too ambiguous to specify honestly, first try to resolve each ambiguity from the codebase itself; only what's left becomes questions to the user — asked one at a time, each with a recommended answer.
-- `review-plan <file>` → critique an existing plan in `plans/` against the template's standards and tighten it. If you authored the plan in this same session, also have a fresh-context subagent read it cold and report ambiguities — self-critique misses gaps you mentally fill from context the executor won't have.
-- `execute <plan>` → dispatch a cheaper executor subagent on one plan (isolated worktree), then review its diff like a tech lead — re-run done criteria, check scope, read the code — and render a verdict. Requires a host agent that can spawn subagents in an isolated worktree; if yours can't, say so and hand the plan over for manual execution instead. **Read [references/closing-the-loop.md](references/closing-the-loop.md) before the first dispatch.**
+- `review-plan <file>` → critique the plan against its requirements and tighten it. Use independent review for consequential uncertainty or an explicit acceptance requirement, not merely because the plan was written in this session.
+- `execute <plan>` or an explicit request to apply findings → implement the authorized scope through [Programming](../programming/SKILL.md). Use [closing the loop](references/closing-the-loop.md) for plan status and delegated execution. Delegation and worktrees are optional unless isolation is necessary.
 - `reconcile` → process what happened since last session: verify DONE plans, investigate BLOCKED ones, refresh drifted TODOs, retire dead findings. See [references/closing-the-loop.md](references/closing-the-loop.md).
 - `--issues` (modifier on any planning invocation) → also publish each written plan as a GitHub issue via `gh`, URL recorded in the plan and index. Only with the explicit flag. See [references/closing-the-loop.md](references/closing-the-loop.md).
 

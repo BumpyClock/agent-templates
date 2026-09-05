@@ -50,7 +50,7 @@ adding a rule, improving an existing one, or fixing an example.
    compile harness can verify them. Keep error/log message strings lowercase
    with no trailing punctuation.
 
-4. **Regenerate the index** so `SKILL.md` and the README counts stay in sync —
+4. **Regenerate the index** so `RULES.md` and the README counts stay in sync —
    never hand-edit the generated table or Quick Reference:
 
    ```bash
@@ -64,9 +64,10 @@ adding a rule, improving an existing one, or fixing an example.
 Run the same checks CI runs:
 
 ```bash
-# structure, links, index parity, and that SKILL.md/README are up to date
+# structure, links, index parity, and that RULES.md/README are up to date
 python3 checks/validate.py
 python3 checks/gen_index.py --check
+python3 -m unittest discover -s checks -p 'test_*.py'
 
 # compile-check the examples (Rust >= 1.95)
 cd checks

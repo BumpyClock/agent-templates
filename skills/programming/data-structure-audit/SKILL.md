@@ -39,7 +39,7 @@ Do not use broad catch-all rows as proof of coverage.
 
 ## 2. Run bounded subsystem reviews
 
-Use fresh, read-only agents when available. Assign one distinct subsystem to each worker. State its exact ownership boundary.
+Delegate independent subsystems when separate context or expertise justifies the cost. Otherwise inspect directly. Give each worker an exact ownership boundary.
 
 Limit concurrency to the lanes that you can coordinate. Use one consolidated wait mechanism. Let productive workers finish. Harvest each result before you close its worker.
 
@@ -77,7 +77,7 @@ Require this schema for every returned opportunity:
 
 ## 3. Validate and synthesize
 
-Independently verify each finding against the current repository before acceptance.
+Validate each finding against the current repository before acceptance. Reuse source reads and evidence from the current audit.
 
 Reject, narrow, or demote a finding when it is vague, duplicated, based on incorrect semantics, or only relocates complexity.
 
@@ -87,13 +87,16 @@ Open bounded review batches until every inventory row has a final `recommend` or
 
 ## 4. Audit the audit
 
-Run fresh independent review passes for:
+Use one bounded independent review to assess:
 
 1. repository coverage and missing subsystem boundaries;
 2. duplication and ownership overlap;
 3. materiality and over-abstraction;
 4. schema completeness;
 5. dependency-aware priority order.
+
+Add reviewers only for unresolved disagreement or distinct expertise. Reuse valid evidence rather than repeat completed checks.
+If independent review is unavailable, complete direct validation and report the review limit without a false independent-verification claim.
 
 If the coverage pass finds an omission, add a new subsystem row. Audit that row through the same workflow. Do not broaden a completed boundary to hide the omission.
 

@@ -1,6 +1,6 @@
 ---
 name: unslop
-description: Cut AI tells from any writing. Must always apply.
+description: Edit substantial prose to remove AI-style filler and repetition. Use for explicit style review or prose revision.
 ---
 
 # Unslop

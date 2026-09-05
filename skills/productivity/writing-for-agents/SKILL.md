@@ -7,7 +7,7 @@ Reference for writing any document an agent consumes — a skill, an `AGENTS.md`
 
 When the document you're writing is a skill, read [`SKILL-MECHANICS.md`](SKILL-MECHANICS.md) for frontmatter, invocation choice, and router skills.
 
-read `unslop` and `technical-writing` skills.
+Use the repository's concise voice rules for routine edits. Read `unslop` or `technical-writing` only for substantial prose revision or explicit style review.
 
 ## Context pointers
 

@@ -16,6 +16,7 @@ TARGET="x86_64-unknown-linux-gnu"
 echo "==> structure, links, and index parity"
 python3 "$ROOT/checks/validate.py"
 python3 "$ROOT/checks/gen_index.py" --check
+python3 -m unittest discover -s "$ROOT/checks" -p 'test_*.py'
 
 echo "==> generating example files from rules"
 cd "$ROOT/checks"

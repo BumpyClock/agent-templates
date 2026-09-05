@@ -1,6 +1,6 @@
 ---
 name: ux-designer
-description: "UX/UI design and production frontend: layout specs, interaction flows, style guides, design systems, HTML design mockups, accessibility plans, and production implementation — for apps, SaaS dashboards, enterprise/admin UI, mobile flows, landing pages, portfolios, redesigns, and data-heavy reports, tables, and calculators. Aesthetic directions (editorial minimalism, premium/agency, glass) are selectable presets inside the skill. Auditing or improving existing motion in a codebase goes to improve-animations."
+description: "Design or implement interfaces, layouts, and interactions. Use for UI work, including animation changes. Motion audits and roadmaps use improve-animations."
 context: fork
 ---
 

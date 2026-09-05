@@ -17,8 +17,6 @@ how explainer: claude-fable-5-1-thinking-max, gpt-5.6-sol-medium, glm-5.3-high
 how critics: claude-fable-5-1-thinking-max, gpt-5.6-sol-max, grok-4.6-fast-xhigh, claude-opus-5-thinking-xhigh
 why investigators: grok-4.6-fast-xhigh, glm-5.3-flash, gpt-5.6-terra-high
 why synthesizer: claude-fable-5-1-thinking-max, gpt-5.6-sol-max
-reflect tooling: gpt-5.6-sol-max, claude-fable-5-1-thinking-max
-reflect judgment, divergent, synthesizer: claude-fable-5-1-thinking-max, gpt-5.6-sol-xhigh
 arena runners: claude-fable-5-1-thinking-max, gpt-5.6-sol-max, grok-4.6-fast-xhigh, claude-opus-5-thinking-xhigh, glm-5.3-xhigh
 arena cross-judge pool: claude-fable-5-1-thinking-max, gpt-5.6-sol-max, grok-4.6-fast-xhigh, claude-opus-5-thinking-xhigh
 swarm workers: grok-4.6-fast-xhigh, gpt-5.6-sol-medium, gpt-5.6-terra-high, claude-opus-5-thinking-high

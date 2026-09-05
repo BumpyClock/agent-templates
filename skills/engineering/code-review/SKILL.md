@@ -1,13 +1,13 @@
 ---
 name: code-review
-description: Review a branch, PR, or work-in-progress diff against a fixed point. Use when reviewing since a commit, branch, tag, or merge-base. Runs strict maintainability Standards and Spec reviews in parallel, then reports both axes separately.
+description: Review committed or uncommitted changes against a fixed point. Use for branch, PR, or work-in-progress reviews.
 ---
 
 # Code review
 
-Review only the diff between `HEAD` and a user-supplied fixed point. Make no code edits.
+Review the requested committed or worktree changes against a user-supplied fixed point. Make no code edits.
 
-Run two independent axes in parallel:
+Assess two axes and report them separately:
 
 - **Standards** — does the diff follow repo standards and the strict maintainability baseline?
 - **Spec** — does the diff implement the originating issue or spec?
@@ -34,14 +34,30 @@ Confirm it resolves:
 git rev-parse <fixed-point>
 ```
 
-Capture these commands once:
+Select the endpoints from the requested scope. For a committed branch or PR review, capture:
 
 ```bash
 git diff <fixed-point>...HEAD
 git log <fixed-point>..HEAD --oneline
 ```
 
-Use three-dot diff so comparison starts at merge-base. Stop if the ref is invalid or the diff is empty.
+For a work-in-progress review, resolve the merge base and inspect the current worktree:
+
+```bash
+base=$(git merge-base <fixed-point> HEAD)
+git diff "$base" --
+git diff --cached --
+git ls-files --others --exclude-standard
+```
+
+The first diff includes the resulting staged and unstaged tracked changes since the merge base.
+The cached diff identifies staged changes that the worktree may reverse.
+Read relevant untracked files directly. Do not stage them to create a diff.
+Treat binary and deleted files explicitly in the coverage report.
+
+Use merge-base comparison for branch and worktree scopes. Use a direct commit comparison when the user requests exact endpoints.
+Stop for an invalid ref. Report an empty review only after checking every requested scope, including untracked files for WIP.
+State the base, endpoints, and excluded files in the report.
 
 ### 2. Identify the spec source
 
@@ -66,9 +82,11 @@ Repo standards override a heuristic when they explicitly endorse the questioned 
 
 Keep findings anchored to changed code. Inspect unchanged neighboring code only to verify ownership, helper reuse, conventions, or failure mode.
 
-### 4. Run both axes in parallel
+### 4. Review both axes
 
-Delegate Standards and Spec reviews to separate subagents so one axis does not bias the other.
+Review a small or tightly coupled diff directly. Delegate separate axes when context size, distinct expertise, or risk justifies the cost.
+Use one independent acceptance pass when required. Do not add a fixed reviewer sequence merely because this is a code review.
+Give each reviewer the selected endpoints and untracked-file scope, not only the committed diff command.
 
 #### Standards subagent
 

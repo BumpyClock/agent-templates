@@ -107,8 +107,9 @@ Each rule has:
 
 The design is built for low token cost and easy auditing:
 
-- **[`SKILL.md`](./SKILL.md)** is a lightweight index — every rule listed as a one-line summary, grouped by category, with a link to its file. The agent reads this first.
-- **[`rules/`](./rules)** holds one Markdown file per rule (`<prefix>-<name>.md`). The agent opens only the handful relevant to your code instead of loading all 218 — progressive disclosure keeps context small.
+- **[`SKILL.md`](./SKILL.md)** routes the current task to relevant rule categories.
+- **[`RULES.md`](./RULES.md)** contains the generated category table and full rule catalog for selective lookup.
+- **[`rules/`](./rules)** holds one Markdown file per rule (`<prefix>-<name>.md`). The agent opens only the handful relevant to your code instead of loading the full catalog — progressive disclosure keeps context small.
 - **Prefixes** (`own-`, `err-`, `unsafe-`, `async-`, …) map directly to categories, so an agent reviewing async code can pull just `async-`, `conc-`, and `own-` rules.
 
 `CLAUDE.md` and `AGENTS.md` are symlinks to `SKILL.md`, so the same content works across agent conventions.
@@ -233,7 +234,7 @@ curl -o AGENTS.md https://raw.githubusercontent.com/leonardomso/rust-skills/mast
 
 ## All rules
 
-See [SKILL.md](./SKILL.md) for the full list with links to each rule file.
+See [RULES.md](./RULES.md) for the full list with links to each rule file.
 
 ## Sources & attribution
 
@@ -269,7 +270,7 @@ PRs welcome. To add or change a rule:
 1. Create `rules/<prefix>-<name>.md` using a `kebab-case` id with an existing category prefix (`own-`, `err-`, `mem-`, …).
 2. Follow the format of existing rules: a `>` one-line summary, then `## Why It Matters`, `## Bad`, `## Good`, and `## See Also` (with links that resolve).
 3. Make sure code examples compile on current stable Rust.
-4. Add the rule to the index in `SKILL.md` (Quick Reference list + the category count) so it stays in sync.
+4. Regenerate `RULES.md` and the README counts with `python3 checks/gen_index.py`.
 
 ````markdown
 # prefix-rule-name

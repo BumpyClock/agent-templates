@@ -12,7 +12,7 @@ read_when: Update coding workflow skills or their shared references.
 - `skills/programming/references/verification-before-completion.md` owns completion evidence and its reuse.
 
 The `diagnosing-bugs` and `tdd` skills route to these references.
-Poteto's proof and sequence references use the same verification owner.
+Current workflows use the same verification owner.
 Keep shared rules in their owner instead of duplicate workflow checklists.
 Platform guides retain runner APIs and domain-specific examples, with links to the shared test policy.
 Git and PR skills use the same verification owner. They retain authorization and operation safety without extra test gates, independent completion reviews, or automatic review loops.
@@ -58,9 +58,25 @@ A prototype-only request stops at its decision and evidence.
 Live diagnostics require explicit authority for code injection or shared-state mutation.
 An evaluation compares artifacts under equivalent conditions rather than reward principle citations.
 
-Preserve `skills/pstack/poteto-mode/` as reference material.
-Apply adaptations in the shared owners above, not in the preserved Poteto files.
-The adapted workflows do not inherit the original mode's orchestration requirements.
+Poteto mode is preserved unchanged under `skills_archive/poteto-mode/`.
+Its companion agent definition is archived under `agents-archive/poteto-agent.md`.
+Active workflows use the shared owners above instead of loading the archived mode.
+Cross-function changes do not require design panels, delegated implementation, or repeated review by themselves.
+
+## Review and diagnosis cost
+
+Use direct evidence and focused checks for an understood task.
+Add independent review for consequential acceptance claims, unresolved disagreement, or distinct expertise.
+Reuse valid evidence across review, commit, and PR steps.
+Preserve explicit repository acceptance requirements and authorization boundaries.
+
+Audit skills remain read-only for audit requests.
+An explicit request to apply findings changes the task to implementation without a required command or extra confirmation.
+Reserve the animation advisor for audits and roadmaps, not ordinary animation changes.
+
+The Rust entrypoint routes by category instead of loading the complete rule catalog.
+Routine prose uses the global voice rules. The full style catalog applies to substantial revision or explicit style review.
+SSH diagnosis remains read-only. Service changes require authorized repair and checks for active sessions.
 
 ## Existing test cleanup
 
@@ -75,3 +91,22 @@ Treat historical incidents as evidence for investigation rather than permanent m
 
 Archived skills reside under `skills_archive/` and do not belong in the active discovery tree.
 Preserve archive contents and replace active invocation routes when a skill moves there.
+
+## Archived workflow aliases and process skills
+
+These eight skills retain their original contents under `skills_archive/`.
+Their replacements avoid duplicate aliases and mandatory review or publication steps.
+
+| Archived skill | Replacement |
+| --- | --- |
+| `implement` | Request implementation directly with `programming`. |
+| `grill-me` | Use `grilling`. |
+| `grill-with-docs` | Request `grilling` plus `domain-modeling`. |
+| `wait-what` | Request a clearer explanation with the necessary context. |
+| `weekly-review` | Use `what-did-i-get-done` with a seven-day window. |
+| `automate-me` | Use `skill-creator` with scoped preference evidence. |
+| `skill-review` | Use `skill-creator` to assess and revise the requested skill. |
+| `reflect` | Request a bounded session review and proposed edits. |
+
+After archive moves, run `bun scripts/link-agent-templates/link-agent-templates.ts --setup all` to refresh linked configurations.
+The flat skill linker removes stale repository skill symlinks and preserves real directories.

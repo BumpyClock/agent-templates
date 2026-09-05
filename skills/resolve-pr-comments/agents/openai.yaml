@@ -1,4 +1,4 @@
 interface:
   display_name: "Resolve PR Comments"
   short_description: "Triage PR feedback as fix, dismiss, or ask"
-  default_prompt: "Use $resolve-pr-comments to assess human and automated PR feedback against current code. Classify each claim as fix, dismiss, or ask. Apply approved fixes, reply with evidence before thread resolution, and leave unresolved decisions open."
+  default_prompt: "Use $resolve-pr-comments to assess this PR's review comments and address them within the authorized scope."

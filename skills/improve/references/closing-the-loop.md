@@ -1,97 +1,41 @@
-# Closing the Loop — execute, reconcile, issues
+# Apply findings and maintain plans
 
-The advisor's job doesn't end at the plan. This file covers the three follow-through flows: dispatching an executor and reviewing its work (`execute`), keeping the plan backlog alive (`reconcile`), and publishing plans where work gets picked up (`--issues`).
+Use this reference for requested implementation, plan reconciliation, or issue publication.
 
-The founding rule survives unchanged: **the advisor never edits source code.** In `execute`, a *separate executor subagent* edits code in an isolated git worktree; the advisor dispatches, reviews, and renders a verdict — like a tech lead who doesn't push commits to your branch.
+## Apply findings or execute a plan
 
----
+An explicit request to apply findings authorizes their implementation scope.
+Use [Programming](../../programming/SKILL.md) for implementation.
+A plan file or special command is not required when the conversation already defines the work.
 
-## `execute <plan>` — dispatch and review
+Check whether the cited source and assumptions still apply.
+Preserve user edits and unrelated repository state.
+Handle focused work directly.
+Delegate independent work when separate context or expertise justifies the cost.
+Use a worktree when isolation is necessary or the user requests one.
 
-### Preconditions (check all before dispatching)
+Give a delegate the selected scope, constraints, source paths, and acceptance criteria.
+Inspect the resulting artifact and reuse valid validation evidence.
+Run additional checks when artifact changes or unresolved risk require them.
+Use one independent acceptance review for consequential claims when required.
+Add reviewers only for unresolved disagreement or distinct expertise.
 
-- The repo is a git repository (worktree isolation requires it). If not: stop and say so.
-- The plan file exists and its dependencies show DONE in `plans/README.md`. If not: stop, name the missing dependency.
-- Run the plan's drift check yourself. If in-scope files changed since `Planned at`, reconcile the plan first (see below) — don't hand a stale plan to an executor.
+Report completed changes, validation, and residual risks.
+Stop at a concrete blocker that requires new authority or unavailable evidence.
+Do not commit, push, merge, or publish unless the user requests that action.
 
-### Dispatch
+## Reconcile plans
 
-Spawn **one** `general-purpose` subagent with `isolation: "worktree"`. Executor model: default `sonnet`; use what the user named if they named one (`execute 003 haiku`).
+Compare plan status with current source and available evidence.
+Mark a plan complete only when its acceptance criteria hold.
+Refresh stale source references without assuming a moved line means a fixed defect.
+Report blockers and retire findings that no longer apply.
+Reuse existing plan IDs and numbers.
 
-The subagent prompt must contain:
+## Publish issues
 
-1. **The full plan file text, inlined.** The worktree contains only committed files — if `plans/` is uncommitted, the executor can't read it. Never assume; always inline.
-2. The executor preamble:
-
-> You are the executor for the implementation plan below. Follow it step by
-> step. Run every verification command and confirm the expected result before
-> moving on. Touch only the files listed as in scope. If any STOP condition
-> occurs, stop immediately and report. Do not improvise around obstacles.
-> Commit your work in the worktree following the plan's git workflow section.
-> One override: SKIP the plan's instruction to update `plans/README.md` —
-> your reviewer maintains the index. Before reporting, audit every claim in
-> your report against an actual tool result from this session — only report
-> what you can point to evidence for; if a verification failed or was
-> skipped, say so plainly. When finished, reply with exactly the report
-> format below.
-
-3. The report format:
-
-```
-STATUS: COMPLETE | STOPPED
-STEPS: per step — done/skipped + verification command result
-STOPPED BECAUSE: (only if STOPPED) which STOP condition, what was observed
-FILES CHANGED: list
-NOTES: anything the reviewer should know (deviations, surprises, judgment calls)
-```
-
-### Review (the advisor's real job here)
-
-Note on fresh worktrees: they share git history but not `node_modules` or build artifacts — the executor must install dependencies first, and check tooling that resolves from `dist/` may need one build even though the plan's command table (recon'd in the main tree) didn't mention it. Expect this; it isn't a deviation.
-
-Review like a tech lead reviewing a PR against the spec — never fix anything yourself:
-
-1. **Re-run every done criterion** in the worktree. Don't trust the executor's report — verify.
-2. **Scope compliance**: `git -C <worktree> diff --stat` against the plan's in-scope list. Any file outside scope fails review, full stop.
-3. **Read the full diff.** Judge it against "Why this matters" (does it solve the actual problem?) and the repo conventions named in the plan (does it look like the rest of the codebase?).
-4. **Audit the new tests.** Executors game criteria — a test that asserts nothing meaningful passes `pnpm test` and proves nothing. Read what the tests assert.
-
-### Verdict
-
-**Documented deviations are judged on merit, not reflex-blocked.** "Do not improvise" exists to stop silent drift; an executor that hits a real obstacle (e.g. the plan's approach breaks existing test mocks), adapts minimally, and explains it in NOTES has done the right thing. Approve it if the adaptation serves the plan's intent and stays in scope; treat *undocumented* deviations as review failures.
-
-| Verdict | When | Action |
-|---|---|---|
-| **APPROVE** | Criteria pass, scope clean, quality holds | Update index status to DONE. Present to the user: diff summary, worktree path and branch, anything from NOTES. **Merging is the user's decision — never merge, push, or commit to their branch.** |
-| **REVISE** | Fixable gaps | SendMessage to the same executor with specific, actionable feedback ("criterion 3 fails: X; the error handling in `api.ts:90` swallows the error — use the Result pattern per the plan"). **Max 2 revision rounds**, then BLOCK. |
-| **BLOCK** | STOP condition hit, scope violated unrecoverably, or revisions exhausted | Mark BLOCKED in the index with the reason. Refine or rewrite the plan with what was learned. Tell the user what happened and what changed in the plan. |
-
-Running verification commands inside the executor's worktree is fine — it's isolated and disposable. The no-mutating-commands rule protects the user's working tree, not the worktree.
-
----
-
-## `reconcile` — keep `plans/` alive
-
-Process what happened since the last session. Read `plans/README.md` and every plan file, then per status:
-
-- **DONE** — spot-check that the done criteria still hold on the current HEAD (cheap ones only). Mark verified in the index. Don't delete plan files — they're the record.
-- **BLOCKED** — read the reason. Investigate the underlying obstacle in the codebase. Either rewrite the plan around it (new number if the approach changed fundamentally, in-place refresh otherwise) or mark REJECTED with one line of rationale.
-- **IN PROGRESS** (stale) — flag it to the user; an executor probably died mid-run. Check the worktree if one exists.
-- **TODO** — run the drift check. If drifted: re-verify the finding still exists (it may have been fixed in passing), then refresh the "Current state" excerpts and `Planned at` SHA. If the finding is gone, mark REJECTED ("fixed independently"). **A missing cited line is not proof of fixed** — code moves; confirm the *behavior* changed, not just that the line number no longer matches.
-
-Also re-snapshot the baseline metrics row in `plans/README.md` (same columns as the existing rows) — the scoreboard only proves improvement if it's kept current.
-
-Finish with a short report: what's verified done, what was refreshed, what's rejected, what's executable right now, and how the baseline metrics moved since last snapshot.
-
----
-
-## `--issues` — publish plans as GitHub issues
-
-Modifier on any planning invocation (`/improve --issues`, `/improve security --issues`). The flag is the user's authorization to create issues — never create them without it.
-
-1. Preflight: `gh auth status` succeeds and the repo has a GitHub remote. If either fails, write the plan files as normal and say why issues were skipped.
-2. Show the list of titles about to become issues; confirm once if interactive.
-3. Per plan: `gh issue create --title "<plan title>" --body-file <plan file>`. Labels: `improve` plus the category — apply only if the labels exist or can be created without erroring; skip labels rather than fail.
-4. Record each issue URL in the plan's Status block (`- **Issue**: <url>`) and the index.
-
-The plan file remains the source of truth; the issue is distribution. The self-containment rule pays off here — the issue body needs no edits to make sense to whoever (or whatever) picks it up.
+Publish issues only when the request or an explicit `--issues` flag authorizes them.
+Confirm the repository and account before the external write.
+Use the existing issue workflow and available labels.
+Record each created issue URL in the corresponding plan.
+Report failed publication separately from completed local plans.

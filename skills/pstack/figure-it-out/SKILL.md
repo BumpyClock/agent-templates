@@ -12,7 +12,8 @@ Don't reinvent a playbook you already have. A focused single-unit task that matc
 
 ## Start
 
-Open a todolist whose first item is to read the Principles section of the **poteto-mode** skill. Then add the phases below as todos.
+Use [Programming](../../programming/SKILL.md) for conditional principles and evidence policy. Select only the references relevant to the current decision.
+Define the requested outcome and useful phases without loading the archived Poteto mode.
 
 ## Phase A: Frame
 
@@ -29,7 +30,7 @@ Present the framing and tradeoffs before committing to a long run. Reversible wo
 Decompose into atomic, independently-landable units. Sequence riskiest-unknown-first so option value stays high. Use [architecture guidance](../../programming/references/architecture/architecture-planning.md) for prerequisite and contract decisions.
 
 - Build the verification harness before the work, with the baseline captured from the pre-change state, so the check reads as "old value vs new value".
-- For one-way-door design decisions, run the **architect** skill (it runs **arena**) with diverse, isolated, opinionated candidates and a read-only judge on a different model family. Skip it for mechanical work whose shape is already concrete. A second arena over a settled design is over-engineering (see [clean refactoring](../../programming/references/refactoring/clean-refactoring.md)).
+- Use the **architect** skill for unresolved, consequential design choices or an explicit comparison request. A settled mechanical change needs no design panel.
 - Decide what fans out. Parallelize only across genuine seams, and give each worker its own worktree or branch (see [Separate Before Serializing Shared State](../../programming/references/principles/principle-separate-before-serializing-shared-state.md)). Don't over-fan.
 - Write the designed phase list down. That list is what the human reviews.
 

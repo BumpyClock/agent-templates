@@ -3,6 +3,6 @@ references/write-tests.md coverage-theater and mock/test-only-method content der
 systematic-debugging/guide.md feedback-loop, minimise, ranked-falsifiable-hypotheses, tagged-instrumentation, and cleanup structure adapted from: https://github.com/mattpocock/skills/blob/main/skills/engineering/diagnosing-bugs/SKILL.md (MIT, Matt Pocock)
 references/write-tests.md mutation-check idea adapted from superpowers writing-good-tests.md (above); tautological/horizontal-slicing framing cross-checked against: https://github.com/mattpocock/skills/blob/main/skills/engineering/tdd/SKILL.md (MIT, Matt Pocock)
 systematic-debugging/guide.md stale-persistent-state heuristic adapted from: https://github.com/cursor/plugins (pstack/principle-fix-root-causes) (MIT)
-references/principles/ adapted from the Poteto mode references under skills/pstack/poteto-mode/references/ in this repository.
+references/principles/ adapted from the Poteto mode references preserved under skills_archive/poteto-mode/references/ in this repository.
 references/execution/, references/workflows/feature.md, references/performance/, and evals/README.md adapt the selected Poteto principles and playbooks from this repository.
 Concepts summarized, no text copied: David Agans "Debugging: The 9 Indispensable Rules" (check the plug, fresh view); Google Testing Blog "Change-Detector Tests Considered Harmful" (term).

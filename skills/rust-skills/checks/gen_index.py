@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Generate SKILL.md's priority table + Quick Reference from rules/ and README counts.
+"""Generate RULES.md's priority table + Quick Reference from rules/ and README counts.
 
 Single source of truth: each rule file's `# id` header, its `> summary` line, and
 the ordered CATEGORIES config below (prefix -> title + impact). Rule order within a
-category is preserved from the current SKILL.md and any new rules are appended.
+category is preserved from the current RULES.md and any new rules are appended.
 
-  python3 checks/gen_index.py            rewrite SKILL.md + README counts
+  python3 checks/gen_index.py            rewrite RULES.md + README counts
   python3 checks/gen_index.py --check    exit 1 if they are out of date (CI)
 """
 import re, sys, pathlib
@@ -13,7 +13,7 @@ import re, sys, pathlib
 HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parent
 RULES = ROOT / "rules"
-SKILL = ROOT / "SKILL.md"
+INDEX = ROOT / "RULES.md"
 README = ROOT / "README.md"
 
 # (prefix, title, impact) in display order
@@ -69,7 +69,7 @@ def build():
     # preserve existing Quick Reference order; append new rules (sorted)
     existing = []
     seen = set()
-    for m in re.finditer(r'rules/([a-z0-9-]+)\.md', SKILL.read_text(encoding="utf-8")):
+    for m in re.finditer(r'rules/([a-z0-9-]+)\.md', INDEX.read_text(encoding="utf-8")):
         if m.group(1) not in seen:
             seen.add(m.group(1)); existing.append(m.group(1))
 
@@ -91,7 +91,7 @@ def build():
     quickref = "\n\n".join(qr_sections)
     return table, quickref, total, len(CATEGORIES)
 
-def render_skill(text, table, quickref, total, ncat):
+def render_index(text, table, quickref, total, ncat):
     text = re.sub(r"(## Rule Categories by Priority\n\n).*?(\n\n---\n\n## Quick Reference)",
                   lambda m: m.group(1) + table + m.group(2), text, flags=re.S)
     text = re.sub(r"(## Quick Reference\n\n).*?(\n\n---\n\n## Recommended Cargo\.toml Settings)",
@@ -108,12 +108,12 @@ def render_readme(text, total, ncat):
 
 def main():
     table, quickref, total, ncat = build()
-    skill_new = render_skill(SKILL.read_text(encoding="utf-8"), table, quickref, total, ncat)
+    index_new = render_index(INDEX.read_text(encoding="utf-8"), table, quickref, total, ncat)
     readme_new = render_readme(README.read_text(encoding="utf-8"), total, ncat)
 
     if "--check" in sys.argv:
         stale = []
-        if skill_new != SKILL.read_text(encoding="utf-8"): stale.append("SKILL.md")
+        if index_new != INDEX.read_text(encoding="utf-8"): stale.append("RULES.md")
         if readme_new != README.read_text(encoding="utf-8"): stale.append("README.md")
         if stale:
             print(f"OUT OF DATE: {', '.join(stale)} — run `python3 checks/gen_index.py`")
@@ -121,7 +121,7 @@ def main():
         print(f"OK: index up to date ({total} rules, {ncat} categories)")
         return
 
-    SKILL.write_text(skill_new, encoding="utf-8")
+    INDEX.write_text(index_new, encoding="utf-8")
     README.write_text(readme_new, encoding="utf-8")
     print(f"wrote index: {total} rules across {ncat} categories")
 

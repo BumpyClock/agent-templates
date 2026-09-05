@@ -1,9 +1,9 @@
 ---
 name: git
-description: spin up a git subagent to perform git related tasks like creating branches, committing code, creating pull requests, and managing merges.
+description: Perform the requested Git or pull request operation.
 arguments:
   - name: ARGUMENT
     type: string
 ---
-create a  @git-workflow-subagent subagent (preferably in the background so you can reuse this for other tasks) to perform $ARGUMENT. DO NOT perform any git operations directly yourself. hand off all git related tasks to the subagent.
-
+Perform $ARGUMENT within the user's authorized scope.
+Follow repository conventions and the PR conventions in the active global instructions.

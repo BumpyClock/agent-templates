@@ -1,141 +1,46 @@
 ---
 name: ssh-doctor
-description: "SSH triage: Remote Login, launchd sshd, pre-auth closes, stale sessions."
+description: Diagnose macOS SSH failures, Remote Login, pre-auth closes, and stale sessions.
 disable-model-invocation: true
 ---
 
-# SSH Doctor
+# SSH diagnosis
 
-Use when SSH connects then closes before auth, Remote Login advertised but unusable, or Mac SSH diagnosis needed.
+Keep diagnosis read-only unless the user requests repair.
+Do not change Remote Login, restart sshd, terminate sessions, or transfer credentials during diagnosis.
+Keep secrets, full environments, and unrelated configuration out of output.
 
-## Rules
+## Select evidence
 
-- Don't print secrets, tokens, full env, or broad secret grep output.
-- Validate locally first: loopback fail → sshd/launchd/config; loopback ok + remote fail → network/firewall/filter/listen.
-- Report suspicious config lines before changing `/etc/ssh/sshd_config`.
-- Prefer non-interactive SSH:
+Compare loopback and remote behavior to locate the failure.
+A loopback failure suggests sshd, launchd, or local configuration.
+A remote-only failure suggests the listener, network, or firewall.
+Treat these as hypotheses until evidence supports the cause.
 
-```bash
-ssh -o RequestTTY=no -o RemoteCommand=none HOST 'hostname; id -un'
-```
+Use only the checks needed for the current symptom:
 
-## Baseline
+- Remote Login status: `sudo systemsetup -getremotelogin`.
+- Service status: `sudo launchctl print system/com.openssh.sshd`.
+- Port listener: `sudo lsof -nP -iTCP:22 -sTCP:LISTEN`.
+- Loopback reachability: `nc -vz 127.0.0.1 22`.
+- Effective configuration: `sudo sshd -T`, restricted to relevant access and listener fields.
+- Recent errors: targeted `log show` queries for sshd and launchd.
+- Session ownership: `ps` and `lsof` for the suspected process IDs.
 
-```bash
-hostname; id -un; sw_vers
-ipconfig getifaddr en0
-ipconfig getifaddr en1 2>/dev/null || true
-ipconfig getifaddr en7 2>/dev/null || true
-sudo systemsetup -getremotelogin
-sudo systemsetup -setremotelogin on
-sudo launchctl print system/com.openssh.sshd 2>&1 | head -80
-sudo launchctl kickstart -k system/com.openssh.sshd
-sudo lsof -nP -iTCP:22 -sTCP:LISTEN
-nc -vz 127.0.0.1 22
-ssh -4 -F /dev/null -o RequestTTY=no -o RemoteCommand=none USER@127.0.0.1 'hostname; id -un'
-```
+For a connection probe, use `RequestTTY=no` and `RemoteCommand=none`.
+Use `BatchMode=yes` when an unattended password prompt could block.
+Respect the user's authentication method for interactive diagnosis.
 
-Use `BatchMode=yes` only when password fallback would hang.
+A pre-auth close with launchd error `67: Too many processes` can indicate exhausted service instances.
+Check service counts and session ownership before attributing the failure to stale sessions.
+Do not assume that a process owned by PID 1 is inactive.
 
-## Config
+For remote-only failures, inspect the relevant interface and firewall state.
+Do not change firewall policy as a diagnostic probe.
 
-```bash
-sudo sshd -T 2>&1 | egrep -i '^(allowusers|denyusers|allowgroups|denygroups|listenaddress|maxstartups|logingracetime|usepam|passwordauthentication|pubkeyauthentication|authenticationmethods)'
-sudo egrep -n '^[[:space:]]*(AllowUsers|DenyUsers|AllowGroups|DenyGroups|Match|MaxStartups|LoginGraceTime|ListenAddress|AuthenticationMethods|UsePAM|PasswordAuthentication|PubkeyAuthentication)\b' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/* 2>/dev/null || true
-```
+## Repair and completion
 
-Suspicious:
-
-- `DenyUsers` matching target user
-- Restrictive `AllowUsers` / `AllowGroups`
-- `Match` block accidentally applying
-- Tiny `MaxStartups` / `LoginGraceTime`
-- `ListenAddress` missing target interface
-
-## Logs
-
-```bash
-sudo log show --last 30m --predicate 'process == "sshd" OR process == "launchd"' --style compact | tail -160
-```
-
-Key Mac symptom:
-
-- Client: `kex_exchange_identification: Connection closed by remote host`
-- Server: `Could not create new instance of inetd service: 67: Too many processes`
-- `launchctl print system/com.openssh.sshd`: high `copy count`
-- Many `sshd-session: USER` processes parented by PID 1
-
-→ launchd accepted TCP, refused to spawn more sshd inetd copies.
-
-## Stale sshd-session Fix
-
-Inspect:
-
-```bash
-sudo launchctl print system/com.openssh.sshd 2>&1 | egrep 'active count|copy count|state =|last exit code|runs ='
-ps -axo pid,ppid,uid,user,state,lstart,etime,comm,args | awk '/sshd-session:/ && !/awk/ {print}'
-sudo lsof -nP -c sshd-session -iTCP 2>/dev/null | head -120
-```
-
-Terminate stranded sessions blocking new SSH:
-
-```bash
-ps -axo pid=,args= | awk '/sshd-session: / && !/awk/ {print $1}' | xargs sudo kill -TERM
-sleep 2
-ps -axo pid=,args= | awk '/sshd-session: / && !/awk/ {print}'
-```
-
-If `TERM` leaves blockers, verify ownership/active shells before `KILL`.
-
-## Firewall
-
-Only after loopback ok but remote fails:
-
-```bash
-sudo /usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate
-sudo /usr/libexec/ApplicationFirewall/socketfilterfw --listapps | grep -i ssh -A2 -B2 || true
-sudo pfctl -sr 2>/dev/null | head -80
-sudo pfctl -si 2>/dev/null | head -80
-```
-
-Listen address + interface:
-
-```bash
-ifconfig | awk '/^[a-z0-9]+:/{iface=$1; sub(":","",iface)} iface ~ /^en[0-9]+$/ && /inet / {print iface, $2}'
-sudo lsof -nP -iTCP:22 -sTCP:LISTEN
-```
-
-## OP Profile Block
-
-Ensure `~/.profile` has Codex-managed `OP_SERVICE_ACCOUNT_TOKEN` copied from another host:
-
-- Verify exact variable/markers without printing value
-- Copy only matching line/block
-- Redirect through `chmod 600` temp file
-- Never echo the token
-
-Presence check:
-
-```bash
-awk 'BEGIN{b=0;e=0;x=0} /BEGIN Codex-managed OP_SERVICE_ACCOUNT_TOKEN/ {b=1} /END Codex-managed OP_SERVICE_ACCOUNT_TOKEN/ {e=1} /^[[:space:]]*(export[[:space:]]+)?OP_SERVICE_ACCOUNT_TOKEN=/ {x=1} END{print "marker_begin", b; print "marker_end", e; print "exact_var", x}' ~/.profile
-```
-
-Append from remote:
-
-```bash
-tmpfile=$(mktemp /tmp/codex-op-token.XXXXXX)
-chmod 600 "$tmpfile"
-ssh -o RequestTTY=no -o RemoteCommand=none HOST 'awk '\''/^[[:space:]]*(export[[:space:]]+)?OP_SERVICE_ACCOUNT_TOKEN=/ {print; exit}'\'' ~/.profile' > "$tmpfile"
-if [ -s "$tmpfile" ]; then
-  {
-    printf '\n# BEGIN Codex-managed OP_SERVICE_ACCOUNT_TOKEN\n'
-    sed -n '1p' "$tmpfile"
-    printf '# END Codex-managed OP_SERVICE_ACCOUNT_TOKEN\n'
-  } >> ~/.profile
-fi
-rm -f "$tmpfile"
-```
-
-## Closeout
-
-Report: root cause, exact commands changed, validation output (redacted), whether remote should retry.
+For authorized service repair, read [repair safeguards](references/repair.md).
+Report the supported cause, observed evidence, and remaining uncertainty.
+Reuse valid probes rather than repeat the baseline after unrelated steps.
+Stop when the cause is explained or the next check requires unavailable access or new authority.

@@ -4,7 +4,7 @@ Use this after AI-assisted edits or when the user asks to remove slop. The goal 
 
 ## Focus Areas
 
-- Remove comments that restate code, narrate obvious steps, or do not match local style. Do not add comments to compensate for unclear code when a small simplification would solve the problem.
+- Assess comments against the [shared comment policy](../../../../defaults/AGENTS.md#code-clarity-and-comments).
 - Remove abnormal defensive checks, broad `try`/`catch`, or fallback paths added only to avoid understanding a trusted path.
 - Replace `any`, force casts, or type assertions used only to bypass the type system.
 - Simplify deep nesting with guard clauses when it improves readability.

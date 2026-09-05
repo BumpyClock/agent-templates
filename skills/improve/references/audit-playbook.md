@@ -98,7 +98,7 @@ Use [test quality](../../programming/references/write-tests.md) to assess gaps a
 
 LLM-generated code that landed without cleanup. Studies find 52–78% of generated code carries at least one smell, skewed toward long methods and globally-complex control flow (models optimize local token plausibility; individually-reasonable segments compound into complex functions). Each pattern is usually widespread once present — report the **pattern class** with 2–5 exemplar locations plus an estimated site count, not one finding per site.
 
-- Comment slop: comments narrating the next line (`// increment counter`), changelog comments (`// updated to fix bug`), docstrings restating the signature, section-banner comments in short files.
+- Comment quality: assess against the [shared comment policy](../../../defaults/AGENTS.md#code-clarity-and-comments).
 - Defensive slop: try/catch around code that can't throw, null checks on values the types guarantee, validation of internally-produced data, redundant type guards after narrowing.
 - Abstraction slop: single-use helpers and pass-through wrappers, shadow modules (thin layers that forward to another path without hiding real complexity), interfaces/base classes with exactly one implementation, config options nothing reads, "manager"/"handler"/"utils" layers with one caller.
 - Naming slop: `enhanced`, `improved`, `V2`, `Final`, `comprehensive`, `Advanced` in identifiers; near-duplicate parallel functions from separate generation sessions that never got merged.
