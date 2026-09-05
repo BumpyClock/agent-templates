@@ -7,6 +7,8 @@ description: Use when managing Git commits, branches, pull requests, conflicts, 
 
 Follow repository conventions for branches, commit messages, PR templates, and merge methods. Without a convention, choose a concise format appropriate to the change.
 
+For verification, use [Programming](../programming/references/verification-before-completion.md). This skill owns Git operations, not additional verification gates.
+
 ## Global rules
 
 - Perform routine local Git operations within the authorized task without separate approval for each command.
@@ -30,7 +32,7 @@ Read only the guide relevant to the task.
 
 Create coherent commits that contain only intended changes. Inspect the complete proposed commit, including any existing staged changes. Select explicit paths or hunks to exclude unrelated work.
 
-Complete the repository's required checks before the commit. Report actual results and any unavailable checks. If a hook fails, correct its cause and inspect the index before another attempt.
+If a hook fails, address its cause within the authorized scope. Preserve the index when the failure requires user action.
 
 Explain the change and its reason in the commit message. Add detail when the subject alone does not explain a material decision or consequence.
 
@@ -44,4 +46,4 @@ Choose branch names and update methods from repository policy and branch ownersh
 
 Identify the actual base branch and exact deletion targets. Check for unique commits and active worktrees before branch deletion. Delete only branches within the authorized cleanup scope.
 
-Report what changed, validation results, and any unresolved risk. Distinguish local completion from push, merge, and CI status.
+Report the operation result and any unresolved blocker. Distinguish local completion from push, merge, and CI status.

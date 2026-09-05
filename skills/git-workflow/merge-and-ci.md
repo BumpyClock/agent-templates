@@ -8,13 +8,13 @@ Establish merge readiness from current PR evidence and repository requirements f
 
 Choose the merge method from repository policy and the value of individual commits. For a squash merge, check the final commit message against repository conventions.
 
-Confirm the merge result before you report completion. Treat branch deletion as a separate action under `SKILL.md`, section `Cleanup`.
+Treat branch deletion as a separate action under `SKILL.md`, section `Cleanup`.
 
 ## Conflicts
 
 Resolve conflicts from the intended behavior of both changes and the current repository context. Ask only when the evidence cannot determine a material choice.
 
-Regenerate lockfiles and generated files with the repository's own tools where appropriate. Inspect the complete resolution for lost changes and conflict markers. Validate the affected behavior with repository checks.
+Regenerate lockfiles and generated files with the repository's own tools where appropriate. Preserve both sides' intended changes in the resolution.
 
 ## CI failures
 
@@ -28,6 +28,7 @@ python3 <skill-dir>/scripts/inspect_pr_checks.py --repo . --pr <number-or-url> -
 
 The helper collects failed checks and available GitHub Actions log excerpts. For direct inspection, use `gh pr checks` and `gh run view`. If run logs are unavailable, job logs may be accessible through `gh api repos/<owner>/<repo>/actions/jobs/<job_id>/logs`.
 
-Validate corrections locally where possible. Retry when a correction, environment change, or evidence of a transient failure justifies another attempt. Continue until relevant CI checks pass or a concrete blocker prevents progress.
+Keep repairs within the authorized scope. Report credential, infrastructure, or unrelated failures that need user action.
+Watch CI continuously only when the user requests it.
 
 Report observed CI status for the current revision, with links and unresolved causes. Distinguish local test results from CI results. Identify checks whose logs or results remain unavailable.

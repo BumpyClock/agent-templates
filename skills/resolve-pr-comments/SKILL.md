@@ -7,7 +7,9 @@ description: Use when creating or updating GitHub pull requests, improving PR re
 
 Produce reviewable PRs and evidence-based replies. A review comment does not automatically require a code change.
 
-For a review-resolution request, fetch, triage, apply authorized fixes, reply, and confirm thread state.
+For a review-resolution request, fetch, triage, apply authorized fixes, reply, and resolve the addressed threads.
+
+For verification, use [Programming](../programming/references/verification-before-completion.md). This skill owns PR operations and review disposition, not additional verification gates.
 
 ## Create/update PR
 
@@ -31,7 +33,7 @@ For tidy-PR / reduce-noise asks:
 1. Inspect commits, diff size, paths, generated files, PR body.
 2. Flag noise: stale body, unrelated changes, mixed mechanical+logic, missing tests, unclear entry points.
 3. Prefer safe edits (body, review notes, grouping, test/risk notes) over history rewrite.
-4. Rewrite/rebase/squash/force-push needs plan + user approval. Snapshot `git rev-parse origin/<head>^{tree}` before; verify final diff still matches intended code after. Don't push if tree changed unintentionally.
+4. Rewrite, rebase, squash, or force-push only with user approval. Preserve the intended changes and collaborators' work.
 5. Too large → recommend split; don't polish wrong PR shape.
 
 ## Resolve target PR first
@@ -61,7 +63,7 @@ Include human and automated feedback, even when resolved status is absent or amb
 
 Auth fails → SKILL.md globals. `gh` hangs → network, not auth: run slow calls separately with a timeout; skip non-essential data (labels) rather than block the task.
 
-## Validate and triage
+## Triage
 
 Read `references/review-triage.md` before any review decision. It owns the `fix` / `dismiss` / `ask` rubric and pattern boundaries.
 
@@ -73,7 +75,7 @@ Read `references/review-triage.md` before any review decision. It owns the `fix`
 
 ## Fix
 
-Group `fix` decisions by area and severity. Apply authorized fixes on the branch that owns the code. Add regression tests for behavior changes. Keep `ask` decisions open for user input. Repeated comments alone do not justify code or architecture changes.
+Group `fix` decisions by area and severity. Apply authorized fixes on the branch that owns the code. Use [Programming](../programming/SKILL.md) for implementation and test decisions. Keep `ask` decisions open for user input. Repeated comments alone do not justify code or architecture changes.
 
 ## Reply + resolve
 
@@ -90,24 +92,22 @@ REST alternate: `gh api -X POST repos/{o}/{r}/pulls/{pr}/comments/{databaseId}/r
 
 Write 2-4 sentences with the decision and evidence. For `fix`, cite the change and commit on the PR head. For local-only fixes, report the pending push and leave the thread open. For `dismiss`, cite the disproof, existing fix, or approved deferral task. For `ask`, state the unresolved question and leave the thread open.
 
-Confirm cited paths and commits exist before any reply. Resolve only when every claim has a completed `fix` or supported `dismiss` decision. Report comments without thread IDs separately. For a follow-up PR for a closed issue, use `Refs #n` instead of `Closes`.
+Cite current paths and commits. Resolve only when every claim has a completed `fix` or supported `dismiss` decision. Report comments without thread IDs separately. For a follow-up PR for a closed issue, use `Refs #n` instead of `Closes`.
 
 Mutation fails → record failure + draft text, continue with remaining threads, report failures explicitly. Optional summary comment: list fixes AND deliberate rejections.
 
-## Verify, loop, merge
+## Publish and await review
 
-1. Fetch threads again after replies. Confirm each reply and resolution independently. List open `ask` decisions, failed mutations, and other unresolved claims. Claim completion only when no actionable feedback remains.
-2. Delegate died or stalled mid-post → re-fetch what actually landed before re-posting anything. Double-post guard.
-3. New-comment loop: record `createdAt` baseline; bot reviewer pending → poll `gh pr checks <pr> --json name,bucket,state` filtered to the gates that matter (`gh pr checks` exits 1 on any failure, including unrelated infra); re-fetch filtered `createdAt > baseline`; repeat until nothing actionable.
-4. Bot reviewer down (billing/limits) → substitute local adversarial review; tell user.
-5. Merge only on user authorization: `gh pr merge <pr> --merge --match-head-commit <sha>` guards the race.
-6. Push only when user asks.
+Report the addressed feedback, open decisions, and failed mutations within the requested scope.
+After an interrupted or ambiguous post, fetch the affected thread before another post to prevent duplicate replies.
+
+Watch for new reviews only when the user requests it. Use `gh pr checks <pr> --json name,bucket,state` for the requested reviewer and revision.
+Stop when that review completes or encounters a blocker. Report unavailable reviewers without an automatic replacement review.
+
+Merge only on user authorization: `gh pr merge <pr> --merge --match-head-commit <sha>` guards the race.
+Push only when the user asks.
 
 Conflicting reviewers: summarize both, tag reviewers, propose middle path only if clear.
-
-## Second opinions
-
-Optional — architecture smells, deeper causes, or user-requested adversarial passes: `codex review`, `coderabbit review --agent`, `agy --model ...`, `pi --model ...` — whichever are installed; parallel independent takes.
 
 ## Re-request review
 

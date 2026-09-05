@@ -2,6 +2,8 @@
 
 Apply this rubric to human reviews, automated reviews, summary comments, and check annotations. The reviewer identity does not determine correctness.
 
+Use [Programming](../../programming/references/verification-before-completion.md) to select or reuse evidence. This rubric classifies claims without a separate verification workflow.
+
 ## Decision rubric
 
 Assess each claim against the current PR head before any code change or reply.
@@ -36,7 +38,7 @@ Use `ask` by default for high-severity claims and these categories:
 
 A verified correction can use `fix` when the user has already authorized that high-risk correction.
 A stale claim can use `dismiss` only when direct evidence proves that the exact concern no longer applies.
-Use the stale-review checks below for authorization or validation claims.
+Use the stale-review criteria below for authorization or validation claims.
 Otherwise, keep the decision open for the user.
 
 Treat novel concerns and ambiguous product intent as `ask` until evidence establishes a supported disposition.
@@ -94,12 +96,11 @@ A deferred issue remains valid. Report it as deferred, not as a false positive.
 - Exclusions: An unsupported false-positive assertion, especially for a high-risk issue.
 - Signal: A file-name rule comment that acknowledges the file already complies.
 
-## Claims that need direct checks
+## Claim-specific considerations
 
 ### Manual replacements for native browser behavior
 
 Inspect manual event forwarding, hit testing, masks, and observer or UI state order when code replaces native browser behavior.
-Reproduce the reported behavior.
 Use `fix` for verified defects within authorization, not a visual-intent dismissal.
 
 Typical risks include wheel `deltaMode`, touch gestures, scroll boundaries, masks that leave hit targets active, and observer callbacks before UI updates.
@@ -107,13 +108,9 @@ This is an investigation priority, not proof that every claim is correct.
 
 ### Contract-test drift
 
-Run the named contract test at the current PR head before classification.
-Confirm that a failure matches the cited assertion rather than an unrelated environment error.
-A pass supports dismissal only when the test actually covers the disputed contract.
-Inspect that coverage when the claim concerns a missing assertion.
-If the test cannot run, record the blocker and preserve the unresolved decision.
-
-Earlier fixes can change prose or snapshots that a contract test pins. Prior clean passes do not establish the current result.
+Distinguish a changed contract from a stale assertion or environment failure.
+A test result supports the claim only when its coverage and checked revision apply.
+Use the shared verification guidance when fresh execution is necessary.
 
 ### Stale authorization or validation review
 

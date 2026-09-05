@@ -15,6 +15,7 @@ The `diagnosing-bugs` and `tdd` skills route to these references.
 Poteto's proof and sequence references use the same verification owner.
 Keep shared rules in their owner instead of duplicate workflow checklists.
 Platform guides retain runner APIs and domain-specific examples, with links to the shared test policy.
+Git and PR skills use the same verification owner. They retain authorization and operation safety without extra test gates, independent completion reviews, or automatic review loops.
 
 ## Design principles
 

@@ -2,6 +2,8 @@
 
 Use when completion evidence is ambiguous or consequential.
 
+This reference owns verification policy for implementation and delivery tasks. Git and PR skills own their operations and authorization rules.
+
 ## Choose evidence for the claim
 
 1. Identify the behavior, artifact, or property that the claim concerns.
@@ -19,6 +21,7 @@ Associate results with the checked revision or file state, environment, inputs, 
 Reuse prior results when those conditions remain applicable.
 Repeat checks after changes that could invalidate their results, or when an explicit policy requires another run.
 A conversation turn does not invalidate evidence.
+A commit, push, or PR reply does not itself require a new verification pass.
 
 ## Match the check to the work
 
