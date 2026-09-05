@@ -1,199 +1,48 @@
-## Overview
+# Global state
 
-Global state in GPUI provides app-wide shared data accessible from any context.
+Use `Global` for state whose ownership belongs to the application.
+Use entities for state with an independent owner or lifetime.
+Frequency of change alone does not determine the choice.
 
-**Key Trait**: `Global` - Implement on types to make them globally accessible
+Initialize required globals before access through `global::<T>()`.
+Use optional access when absence is a valid state.
 
-## Quick Start
+## Mutation and observation
 
-### Define Global State
+Use GPUI global mutation APIs for GPUI-owned state.
+Check `observe_global` and the mutation API's notification behavior in the resolved version.
+Do not assume all global changes are silent.
+
+Interior mutation through an `Arc`, lock, or atomic can bypass GPUI notification paths.
+Use those types when cross-thread ownership requires them, not as a default for mutable globals.
+Notify dependent views through the application's established path.
+
+## Application setting example
+
+This fragment uses the GPUI 0.2.2 `Global`, `set_global`, and `global_mut` APIs.
+It is not a standalone compiled example.
 
 ```rust
-use gpui::Global;
-
-#[derive(Clone)]
-struct AppSettings {
-    theme: Theme,
-    language: String,
+struct Preferences {
+    compact: bool,
 }
+impl Global for Preferences {}
 
-impl Global for AppSettings {}
+cx.set_global(Preferences { compact: false });
+cx.global_mut::<Preferences>().compact = true;
 ```
 
-### Set and Access Globals
+A dependent entity can retain an observation subscription:
 
 ```rust
-fn main() {
-    let app = Application::new();
-    app.run(|cx: &mut App| {
-        // Set global
-        cx.set_global(AppSettings {
-            theme: Theme::Dark,
-            language: "en".to_string(),
-        });
-
-        // Access global (read-only)
-        let settings = cx.global::<AppSettings>();
-        println!("Theme: {:?}", settings.theme);
-    });
-}
-```
-
-### Update Globals
-
-```rust
-impl MyComponent {
-    fn change_theme(&mut self, new_theme: Theme, cx: &mut Context<Self>) {
-        cx.update_global::<AppSettings, _>(|settings, cx| {
-            settings.theme = new_theme;
-            // Global updates don't trigger automatic notifications
-            // Manually notify components that care
-        });
-
-        cx.notify(); // Re-render this component
-    }
-}
-```
-
-## Common Use Cases
-
-### 1. App Configuration
-
-```rust
-#[derive(Clone)]
-struct AppConfig {
-    api_endpoint: String,
-    max_retries: u32,
-    timeout: Duration,
-}
-
-impl Global for AppConfig {}
-
-// Set once at startup
-cx.set_global(AppConfig {
-    api_endpoint: "https://api.example.com".to_string(),
-    max_retries: 3,
-    timeout: Duration::from_secs(30),
+let subscription = cx.observe_global::<Preferences>(|_, cx| {
+    cx.notify();
 });
-
-// Access anywhere
-let config = cx.global::<AppConfig>();
 ```
 
-### 2. Feature Flags
+The returned handle belongs in that entity's state.
+In this API, `global_mut` marks the global for observer notification.
+Mutation of a nested atomic through an immutable global reference does not use that same path.
+For a theme or preference cache, preserve the existing notification contract rather than adding a second event bus.
 
-```rust
-#[derive(Clone)]
-struct FeatureFlags {
-    enable_beta_features: bool,
-    enable_analytics: bool,
-}
-
-impl Global for FeatureFlags {}
-
-impl MyComponent {
-    fn render_beta_feature(&self, cx: &App) -> Option<impl IntoElement> {
-        let flags = cx.global::<FeatureFlags>();
-
-        if flags.enable_beta_features {
-            Some(div().child("Beta feature"))
-        } else {
-            None
-        }
-    }
-}
-```
-
-### 3. Shared Services
-
-```rust
-#[derive(Clone)]
-struct ServiceRegistry {
-    http_client: Arc<HttpClient>,
-    logger: Arc<Logger>,
-}
-
-impl Global for ServiceRegistry {}
-
-impl MyComponent {
-    fn fetch_data(&mut self, cx: &mut Context<Self>) {
-        let registry = cx.global::<ServiceRegistry>();
-        let client = registry.http_client.clone();
-
-        cx.spawn(async move |cx| {
-            let data = client.get("api/data").await?;
-            // Process data...
-            Ok::<_, anyhow::Error>(())
-        }).detach();
-    }
-}
-```
-
-## Best Practices
-
-### ✅ Use Arc for Shared Resources
-
-```rust
-#[derive(Clone)]
-struct GlobalState {
-    database: Arc<Database>,  // Cheap to clone
-    cache: Arc<RwLock<Cache>>,
-}
-
-impl Global for GlobalState {}
-```
-
-### ✅ Immutable by Default
-
-Globals are read-only by default. Use interior mutability when needed:
-
-```rust
-#[derive(Clone)]
-struct Counter {
-    count: Arc<AtomicUsize>,
-}
-
-impl Global for Counter {}
-
-impl Counter {
-    fn increment(&self) {
-        self.count.fetch_add(1, Ordering::SeqCst);
-    }
-
-    fn get(&self) -> usize {
-        self.count.load(Ordering::SeqCst)
-    }
-}
-```
-
-### ❌ Don't: Overuse Globals
-
-```rust
-// ❌ Bad: Too many globals
-cx.set_global(UserState { ... });
-cx.set_global(CartState { ... });
-cx.set_global(CheckoutState { ... });
-
-// ✅ Good: Use entities for component state
-let user_entity = cx.new(|_| UserState { ... });
-```
-
-## When to Use
-
-**Use Globals for:**
-- App-wide configuration
-- Feature flags
-- Shared services (HTTP client, logger)
-- Read-only reference data
-
-**Use Entities for:**
-- Component-specific state
-- State that changes frequently
-- State that needs notifications
-
-## Reference Documentation
-
-- **API Reference**: See [api-reference.md](references/api-reference.md)
-  - Global trait, set_global, update_global
-  - Interior mutability patterns
-  - Best practices and anti-patterns
+Source: [App global APIs](https://docs.rs/gpui/latest/gpui/struct.App.html).

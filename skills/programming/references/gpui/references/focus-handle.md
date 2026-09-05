@@ -1,227 +1,62 @@
-## Overview
+# Focus and keyboard navigation
 
-GPUI's focus system enables keyboard navigation and focus management.
+Retain a `FocusHandle` for each persistent focus target.
+Associate that handle with the element through `track_focus`.
+Recreation of a handle on every render loses focus identity.
 
-**Key Concepts:**
-- **FocusHandle**: Reference to focusable element
-- **Focus tracking**: Current focused element
-- **Keyboard navigation**: Tab/Shift-Tab between elements
-- **Focus events**: on_focus, on_blur
+Use the relevant `Window` for focus changes and focus queries.
+Match signatures to the resolved revision.
 
-## Quick Start
+## Navigation contract
 
-### Creating Focus Handles
+Do not assume `track_focus` alone provides Tab navigation.
+Check the application's key bindings, tab-stop support, and component-library focus helpers.
+Use the existing focus system rather than a second traversal mechanism.
+
+For a modal, preserve the intended focus scope and restore focus when the modal closes.
+Check keyboard activation, reverse traversal, and a visible focus indicator when those behaviors change.
+Use focus-within semantics when a container must remain active while a descendant has focus.
+
+For action dispatch, use [actions](actions.md).
+For window-dependent checks, use [tests](test.md).
+
+## Persistent focus target example
+
+This fragment uses GPUI 0.2.2 signatures and is not compiled here.
+The view constructor creates `focus_handle` once with `cx.focus_handle()`.
 
 ```rust
-struct FocusableComponent {
-    focus_handle: FocusHandle,
+impl Focusable for SearchView {
+    fn focus_handle(&self, _: &App) -> FocusHandle {
+        self.focus_handle.clone()
+    }
 }
 
-impl FocusableComponent {
-    fn new(cx: &mut Context<Self>) -> Self {
-        Self {
-            focus_handle: cx.focus_handle(),
-        }
+impl SearchView {
+    fn activate(&mut self, window: &mut Window) {
+        self.focus_handle.focus(window);
     }
 }
 ```
 
-### Making Elements Focusable
-
-```rust
-impl Render for FocusableComponent {
-    fn render(&mut self, _: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
-        div()
-            .track_focus(&self.focus_handle)
-            .on_action(cx.listener(Self::on_enter))
-            .child("Focusable content")
-    }
-
-    fn on_enter(&mut self, _: &Enter, cx: &mut Context<Self>) {
-        // Handle Enter key when focused
-        cx.notify();
-    }
-}
-```
-
-### Focus Management
-
-```rust
-impl MyComponent {
-    fn focus(&mut self, cx: &mut Context<Self>) {
-        self.focus_handle.focus(cx);
-    }
-
-    fn is_focused(&self, cx: &App) -> bool {
-        self.focus_handle.is_focused(cx)
-    }
-
-    fn blur(&mut self, cx: &mut Context<Self>) {
-        cx.blur();
-    }
-}
-```
-
-## Focus Events
-
-### Handling Focus Changes
-
-```rust
-impl Render for MyInput {
-    fn render(&mut self, _: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
-        let is_focused = self.focus_handle.is_focused(cx);
-
-        div()
-            .track_focus(&self.focus_handle)
-            .on_focus(cx.listener(|this, _event, cx| {
-                this.on_focus(cx);
-            }))
-            .on_blur(cx.listener(|this, _event, cx| {
-                this.on_blur(cx);
-            }))
-            .when(is_focused, |el| {
-                el.bg(cx.theme().focused_background)
-            })
-            .child(self.render_content())
-    }
-}
-
-impl MyInput {
-    fn on_focus(&mut self, cx: &mut Context<Self>) {
-        // Handle focus gained
-        cx.notify();
-    }
-
-    fn on_blur(&mut self, cx: &mut Context<Self>) {
-        // Handle focus lost
-        cx.notify();
-    }
-}
-```
-
-## Keyboard Navigation
-
-### Tab Order
-
-Elements with `track_focus()` automatically participate in Tab navigation.
+The render tree associates the same handle with the dispatch target:
 
 ```rust
 div()
-    .child(
-        input1.track_focus(&focus1)  // Tab order: 1
-    )
-    .child(
-        input2.track_focus(&focus2)  // Tab order: 2
-    )
-    .child(
-        input3.track_focus(&focus3)  // Tab order: 3
-    )
-```
-
-### Focus Within Containers
-
-```rust
-impl Container {
-    fn focus_first(&mut self, cx: &mut Context<Self>) {
-        if let Some(first) = self.children.first() {
-            first.update(cx, |child, cx| {
-                child.focus_handle.focus(cx);
-            });
-        }
-    }
-
-    fn focus_next(&mut self, cx: &mut Context<Self>) {
-        // Custom focus navigation logic
-    }
-}
-```
-
-## Common Patterns
-
-### 1. Auto-focus on Mount
-
-```rust
-impl MyDialog {
-    fn new(cx: &mut Context<Self>) -> Self {
-        let focus_handle = cx.focus_handle();
-
-        // Focus when created
-        focus_handle.focus(cx);
-
-        Self { focus_handle }
-    }
-}
-```
-
-### 2. Focus Trap (Modal)
-
-```rust
-impl Modal {
-    fn render(&mut self, _: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
-        div()
-            .track_focus(&self.focus_handle)
-            .on_key_down(cx.listener(|this, event: &KeyDownEvent, cx| {
-                if event.key == Key::Tab {
-                    // Keep focus within modal
-                    this.focus_next_in_modal(cx);
-                    cx.stop_propagation();
-                }
-            }))
-            .child(self.render_content())
-    }
-}
-```
-
-### 3. Conditional Focus
-
-```rust
-impl Searchable {
-    fn render(&mut self, _: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
-        div()
-            .track_focus(&self.focus_handle)
-            .when(self.search_active, |el| {
-                el.on_mount(cx.listener(|this, _, cx| {
-                    this.focus_handle.focus(cx);
-                }))
-            })
-            .child(self.search_input())
-    }
-}
-```
-
-## Best Practices
-
-### ✅ Track Focus on Interactive Elements
-
-```rust
-// ✅ Good: Track focus for keyboard interaction
-input()
+    .key_context("SearchView")
     .track_focus(&self.focus_handle)
-    .on_action(cx.listener(Self::on_enter))
+    .on_action(cx.listener(Self::confirm))
 ```
 
-### ✅ Provide Visual Focus Indicators
+`confirm` has parameters `&mut self`, `&Confirm`, `&mut Window`, and `&mut Context<Self>`.
+The action and its key binding must exist separately.
+`is_focused(window)` checks the exact target.
+`contains_focused(window, cx)` also accepts a focused descendant.
 
-```rust
-let is_focused = self.focus_handle.is_focused(cx);
+For modal restoration, retain the previous target only for the intended modal lifetime.
+Restore it only if it remains valid for the current window and product state.
+A replaced or closed parent view must not receive stale focus restoration.
 
-div()
-    .when(is_focused, |el| {
-        el.border_color(cx.theme().focused_border)
-    })
-```
+Source: [GPUI 0.2.2 FocusHandle](https://docs.rs/gpui/0.2.2/gpui/struct.FocusHandle.html).
 
-### ❌ Don't: Forget to Track Focus
-
-```rust
-// ❌ Bad: No track_focus, keyboard navigation won't work
-div()
-    .on_action(cx.listener(Self::on_enter))
-```
-
-## Reference Documentation
-
-- **API Reference**: See [api-reference.md](references/api-reference.md)
-  - FocusHandle API, focus management
-  - Events, keyboard navigation
-  - Best practices
+Source: [GPUI window and focus implementation](https://github.com/zed-industries/zed/blob/main/crates/gpui/src/window.rs).

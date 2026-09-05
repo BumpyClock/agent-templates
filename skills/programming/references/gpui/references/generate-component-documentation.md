@@ -1,15 +1,14 @@
-## Instructions
+# Component documentation
 
-When generating documentation for a new component:
+Use the repository's documentation location and format.
+Describe the component's purpose, state ownership, and public API changes.
 
-1. **Follow existing patterns**: Use the documentation styles found in the `docs` folder (examples: `button.md`, `accordion.md`, etc.)
-2. **Reference implementations**: Base the documentation on the same-named story implementation in `crates/story/src/stories`
-3. **API references**: Use markdown `code` blocks with links to docs.rs for component API references when applicable
+Base code examples on the installed version and actual implementation.
+Use a matching story as evidence when one exists.
+Do not require a story before a documentation-only task.
 
-## Examples
+Link the specific component API rather than a full documentation bundle.
+Identify crate versions or Git revisions when an example depends on them.
+For incompatible API changes, show the necessary migration without unrelated rewrites.
 
-The generated documentation should include:
-- Component description and purpose
-- Props/API documentation
-- Usage examples
-- Visual examples (if applicable)
+Source: [GPUI Component documentation](https://longbridge.github.io/gpui-component/).

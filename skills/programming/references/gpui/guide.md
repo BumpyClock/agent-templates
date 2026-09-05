@@ -1,39 +1,41 @@
 # GPUI
 
-Use this guide for GPUI tasks. Read only the references needed for the affected behavior.
-Repository conventions take precedence over the component examples below.
+Use this guide for GPUI implementation and diagnosis.
+Read only the topic that affects the task.
 
-## Summary
+## Version and library boundary
 
-- Build GPUI components following existing `crates/ui` patterns + style guide. Keep APIs consistent, builder-style.
-- Stateless vs stateful: deliberate choice. Use `Entity<T>` for stateful patterns, notify on updates.
-- Styling: `StyleRefinement`, `Styled`, fluent builders, theme tokens.
-- Actions/focus: wire explicitly with `key_context`, `actions!`, `FocusHandle`.
-- Stories/docs: mirror `crates/story` and `docs` patterns.
-- Tests: `TestAppContext` for non-visual logic, `VisualTestContext` for window/rendering.
+Use the GPUI revision resolved by `Cargo.lock` and any workspace patches.
+The published crate, Zed Git revisions, and GPUI forks can have different APIs.
+Check the resolved source when a signature, platform requirement, or example does not match.
 
-## Component Build Steps
+GPUI and Longbridge `gpui-component` are separate layers.
+Do not assume `crates/ui`, `crates/story`, `cx.theme()`, or component-library traits exist in every GPUI project.
+Preserve the application's chosen component library and architecture.
 
-1. **Decide type**: stateless element for pure presentation; stateful element + `Entity<State>` when UI state persists.
-2. **Struct layout**: `id: ElementId`, `base: Div`, `style: StyleRefinement`. Field order: identity → config → content/children → callbacks. Callbacks as `Option<Rc<dyn Fn(...)>>`.
-3. **Builder API**: return `Self` from setters (`label`, `on_click`, `disabled`). Keep naming consistent with existing components.
-4. **Traits**: `InteractiveElement`, `StatefulInteractiveElement` (when stateful), `Styled`, `RenderOnce`. Add `Sizable`/`Selectable`/`Disableable` when appropriate.
-5. **Render**: `cx.theme()` for colors/tokens. Compose with fluent builders (`flex`, `gap`, `items_center`, `rounded`). `RenderOnce` focused, no side effects.
-6. **State/async**: `WeakEntity` in closures to avoid retain cycles. `cx.spawn` foreground, `cx.background_spawn` heavy work. Sequence entity updates, don't nest.
-7. **Actions/focus/events**: `actions!` or `#[derive(Action)]`. `cx.bind_keys()`, `key_context()` on root. `FocusHandle` + `track_focus()`. `cx.emit`/`cx.subscribe`/`cx.observe`.
-8. **Stories/docs/tests**: stories follow `crates/story/src/stories` with `section!`. Docs follow `docs/*.md`. Tests: `TestAppContext` logic, `VisualTestContext` window/rendering.
+## Topics
 
-## Task Routing
+- For component structure, use [new components](references/new-component.md).
+- For component API conventions, use [style guide](references/style-guide.md).
+- For layout and theme behavior, use [layout](references/layout-and-style.md).
+- For custom layout or paint phases, use [elements](references/element.md).
+- For context selection, use [contexts](references/context.md).
+- For persistent state and ownership, use [entities](references/entity.md).
+- For task lifetimes and background work, use [async](references/async.md).
+- For event delivery and subscriptions, use [events](references/event.md).
+- For keyboard commands, use [actions](references/actions.md).
+- For focus and keyboard navigation, use [focus](references/focus-handle.md).
+- For application-wide state, use [globals](references/global.md).
+- For GPUI-specific test support, use [tests](references/test.md).
+- For requested component examples, use [stories](references/generate-component-story.md).
+- For component documentation, use [documentation](references/generate-component-documentation.md).
+- For requested PR text, use [PR descriptions](references/github-pull-request-description.md).
 
-- New components/refactors → `references/style-guide.md` + `references/new-component.md` (+ `references/layout-and-style.md` as needed)
-- Component stories → `references/generate-component-story.md`
-- Component docs → `references/generate-component-documentation.md`
-- Actions/key bindings → `references/actions.md`
-- Async/background work → `references/async.md`
-- Context/window/entity → `references/context.md`
-- Entity state → `references/entity.md`
-- Events/subscriptions/observers → `references/event.md`
-- Focus/keyboard nav → `references/focus-handle.md`
-- Global state → `references/global.md`
-- Tests → `references/test.md`, `references/test-reference.md`, `references/test-examples.md`, `references/component-test-rules.md`
-- PR descriptions → `references/github-pull-request-description.md`
+## Sources
+
+- [GPUI source and examples](https://github.com/zed-industries/zed/tree/main/crates/gpui) describe upstream APIs.
+- [Published GPUI API](https://docs.rs/gpui/latest/gpui/) describes the published crate, not every Git revision.
+- [GPUI Component documentation](https://longbridge.github.io/gpui-component/) applies only to that library.
+
+Use the affected contract to define completion.
+Report any platform or runtime checks that remain unavailable.

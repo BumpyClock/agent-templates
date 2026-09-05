@@ -1,124 +1,61 @@
 ---
 name: winui-packaging
-description: "MSIX packaging, code signing, and distribution for WinUI 3 apps — build for release, certificate generation (winapp cert generate), certificate trust, code signing (winapp sign), self-contained deployment, CI/CD with GitHub Actions, and Microsoft Store submission. Use when preparing for release, creating MSIX installers, managing certificates, setting up CI/CD packaging, or publishing to the Microsoft Store."
+description: Prepare WinUI MSIX packages, certificates, CI artifacts, or Store submissions.
 ---
 
-### Quick Reference
+# WinUI Distribution
 
-| Task | Command |
-|------|---------|
-| Build for release | `.\BuildAndRun.ps1 . -c Release --arch x64 --no-launch` |
-| Package + sign | `winapp package <dir> --cert devcert.pfx` |
-| Generate + sign + package | `winapp package <dir> --generate-cert --install-cert` |
-| Generate dev certificate | `winapp cert generate` |
-| Trust certificate (admin) | `winapp cert install ./devcert.pfx` |
-| Sign existing file | `winapp sign ./app.msix ./devcert.pfx` |
-| Self-contained deployment | `winapp package <dir> --cert devcert.pfx --self-contained` |
+Separate artifact creation, certificate trust, installation, and publication.
+A package request does not itself authorize machine trust changes or Store submission.
+Preserve package identity, target architecture, and the intended distribution channel.
 
-### End-to-End Workflow
+## Build and package
 
-#### Step 1: Build for Release
-Build the project in Release configuration without launching it. Use the `BuildAndRun.ps1` wrapper from `references/winui-dev-workflow/guide.md` — plain `dotnet build` does **not** load the bundled `Microsoft.WindowsAppSDK.Analyzers`, so release builds would ship without the analyzer gate that development builds get:
+Use the repository release build.
+For required analyzer coverage, configure the analyzer in the project or CI rather than assume the development wrapper is present.
+
+The sibling [BuildAndRun.ps1](../winui-dev-workflow/BuildAndRun.ps1) supports `--no-launch`, but project-mode execution can still register a development package.
+Use a build-only command when registration is outside scope.
+
+Use the actual output layout and installed CLI help to select package options:
 
 ```powershell
-.\BuildAndRun.ps1 . -c Release --arch x64 --no-launch
+winapp --help
+winapp sign --help
 ```
 
-`--no-launch` builds and registers a development package without starting the app. Run `winapp unregister` before installing the signed `.msix` in Step 5, so the development registration does not conflict with the packaged identity.
+For NativeAOT or source generator changes, consult [source generator patterns](references/sourcegen-patterns.md).
+For command examples, CI artifact boundaries, or package failures, consult [package examples](references/package-examples.md).
+A self-contained package includes runtime components, but still requires the target OS and architecture.
 
-#### Step 2: Generate Certificate (one-time)
-```powershell
-winapp cert generate --manifest .
-```
-Creates `devcert.pfx` (default password: `password`). The `--manifest` flag auto-matches the `Publisher` field in `Package.appxmanifest`.
+## Certificates and installation
 
-#### Step 3: Trust Certificate (one-time, requires admin)
-```powershell
-winapp cert install ./devcert.pfx
-```
-Adds cert to machine Trusted Root store. Persists across reboots.
+Match the certificate subject to manifest `Identity.Publisher`.
+Use a development certificate only for local test distribution.
+Protect private keys and passwords through the repository secret mechanism.
 
-#### Step 4: Package and Sign
-```powershell
-winapp package <build-output-dir> --cert ./devcert.pfx
-```
-This locates `appxmanifest.xml`, stages the layout, generates `resources.pri`, creates `.msix`, and signs it.
+Certificate installation changes machine trust and can require elevation.
+Ask before that operation unless the user has explicitly authorized it.
+Do not combine certificate generation and trust installation for convenience.
+Do not overwrite certificates or remove installed packages as a generic repair.
+Identify the certificate, package, data impact, and requested operation first.
 
-#### Step 5: Install or Distribute
-```powershell
-# Local install
-Add-AppxPackage ./MyApp.msix
+For production signatures, use the approved certificate and timestamp service.
+Validate the signature and identity of the resulting artifact before distribution.
 
-# Or double-click the .msix file
-```
+## CI and Store
 
-### Key Rules
+Preserve existing release controls and the approved CI dependency policy.
+Keep build, artifact upload, and Store publication as separate decisions.
 
-- **Publisher must match** between certificate and manifest `Identity.Publisher` — use `winapp cert generate --manifest` to auto-match
-- **Prefer `winapp package --cert`** over separate `winapp sign` — one step instead of two
-- **`cert install` requires admin** — run terminal as Administrator
-- **Default PFX password** is `password` — override with `--password`
-- **`--timestamp`** is critical for production — without it, signatures expire with the cert:
-  ```powershell
-  winapp package <dir> --cert prod.pfx --timestamp http://timestamp.digicert.com
-  ```
-- **`--self-contained`** bundles Windows App SDK runtime — larger but no runtime dependency
+Store submission is available through Partner Center and the first-party Microsoft Store Developer CLI.
+Use current [MSIX command documentation](https://learn.microsoft.com/en-us/windows/apps/publish/msstore-dev-cli/commands) for account and submission operations.
+Check current channel requirements for metadata and images instead of reusing a fixed screenshot-size rule.
 
-### CI/CD with GitHub Actions
+Submit only when the user requests publication for the identified app and artifact.
+Report whether an artifact was built, signed, installed, uploaded, or submitted. These outcomes are not equivalent.
 
-```yaml
-name: Build and Package
-on: [push]
-jobs:
-  build:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: microsoft/setup-WinAppCli@v0.1
+## Sources
 
-      - name: Build
-        run: dotnet build -c Release -p:Platform=x64
-
-      - name: Package
-        run: |
-          winapp cert generate --if-exists skip --quiet
-          winapp package ./bin/x64/Release/ --cert ./devcert.pfx --quiet
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: msix-package
-          path: "*.msix"
-```
-
-**CI/CD tips:**
-- Use plain `dotnet build` on the runner, not `BuildAndRun.ps1` — the wrapper registers a development package and needs the plugin's local analyzer payload, neither of which belongs in CI. Enforce analyzer coverage on the dev machine instead.
-- Use `--quiet` for clean output
-- Use `--if-exists skip` with `cert generate` to avoid failures on re-runs
-- Store production PFX as a repository secret
-
-### Store Submission
-
-1. **Partner Center account** — register at [partner.microsoft.com](https://partner.microsoft.com)
-2. **Age ratings** — complete the questionnaire in Partner Center
-3. **Screenshots** — capture at 1366x768 minimum resolution
-4. **Privacy policy** — required for apps that access internet or user data
-5. **Submit:** upload the signed `.msix` / `.msixbundle` produced by `winapp package` via [Microsoft Partner Center](https://partner.microsoft.com/dashboard) — Apps and games → your app → Packages. Microsoft Store submission is browser-based; there is no first-party CLI submit command yet.
-
-### Troubleshooting
-
-| Error | Solution |
-|-------|----------|
-| "Publisher mismatch" | Run `winapp cert generate --manifest` to re-generate |
-| "Certificate not trusted" | Run `winapp cert install ./devcert.pfx` as admin |
-| "Access denied" | `cert install` needs admin elevation |
-| "Certificate file already exists" | Use `--if-exists overwrite` or `--if-exists skip` |
-| "appxmanifest.xml not found" | Run `winapp init` or pass `--manifest <path>` |
-| "Package installation failed" | Trust cert first; remove stale: `Get-AppxPackage <name> \| Remove-AppxPackage` |
-| Signature invalid after time | Re-sign with `--timestamp` |
-
-### References
-
-| File | Read when... |
-|------|-------------|
-| `references/sourcegen-patterns.md` | Setting up AOT/trimming, JSON source generators, NativeAOT readiness, CsWin32 |
+- [WinApp CLI commands](https://github.com/microsoft/WinAppCli/blob/main/docs/usage.md)
+- [MSIX package signing](https://learn.microsoft.com/en-us/windows/msix/package/signing-package-overview)

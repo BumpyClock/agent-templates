@@ -1,13 +1,13 @@
 ---
 name: winui-design
-description: "Use when designing, reviewing, or fixing WinUI 3: sample and control discovery with winapp find-ui, layout planning, control choice, Fluent Design alignment, Light/Dark/High Contrast theming, typography, spacing, brushes, accessibility, and XAML data-binding design. Load before authoring new XAML, reviewing UI PRs, migrating desktop UI to WinUI, or choosing between WinUI controls/patterns. Also use when asked to search WinUI samples, find a WinUI Gallery or Community Toolkit example, or find a control that does something."
+description: Select WinUI controls or change XAML layout, data bindings, themes, and accessibility.
 ---
 
 
 
-## Search samples before writing XAML
+## Control discovery
 
-WinApp CLI 0.6+ provides grounded control and sample discovery through `winapp find-ui`. **Front-load lookups, then code**:
+For unfamiliar controls or API uncertainty, use `winapp find-ui` when available:
 
 ```powershell
 winapp find-ui "<focused feature>"                    # compact matches + scenario IDs
@@ -21,7 +21,7 @@ Default search covers the WinUI Gallery, Windows Community Toolkit, and curated 
 
 ## App-shape anchors
 
-Pick the closest shipping app silhouette before laying out a page:
+Use these examples when the task requires a new app structure. Preserve an existing structure that fits the requirements.
 
 | App type | Anchor controls | Reference apps |
 |----------|-----------------|----------------|
@@ -34,27 +34,23 @@ Pick the closest shipping app silhouette before laying out a page:
 
 ## Reach-for-this control map
 
-Before writing XAML, map the requirement to a platform control. These mappings exist to short-circuit cross-framework instincts (WPF `DataGrid`, web `<select>`, HTML `<input type=date>`):
+Use these control choices as examples, not fixed rules:
 
 - **Navigation:** 2–7 sections → `NavigationView`; document/session tabs → `TabView`; breadcrumb trail → `BreadcrumbBar`; 2–3 modes → `SelectorBar`.
-- **Data display:** Vertical list → `ListView`; tiles/grid → `GridView` or `ItemsRepeater` + `UniformGridLayout`; hierarchy → `TreeView`; **tabular → `ListView` with a `Grid`-based `ItemTemplate` and a header `Grid` above** (WinUI has no `DataGrid`; don't default to `CommunityToolkit.WinUI.Controls.DataGrid` — its columns can't use `x:Bind`); master-detail → `ListView` + detail `Grid`.
+- **Data display:** Use `ListView` for lists, `GridView` for tiles, and `TreeView` for hierarchies. For tables, compare grid dependencies against edit, sort, selection, and accessibility requirements. A list with column headers is sufficient only when those requirements fit.
 - **Input:** Text → `TextBox`; number → `NumberBox`; search → `AutoSuggestBox`; date → `CalendarDatePicker`; boolean → `ToggleSwitch`; pick one from 2–3 → `RadioButtons`; pick one from 4+ → `ComboBox`.
 - **Feedback:** Blocking decision → `ContentDialog`; contextual action → `Flyout` / `MenuFlyout`; onboarding / hint → `TeachingTip`; inline status / async progress → `InfoBar`; system notification → `AppNotification`.
 
-If the mapping above doesn't fit, run `winapp find-ui "<intent>"` before improvising.
+For unresolved control choices, consult samples or the installed SDK documentation.
 
 ## Window sizing (WinUI 3 specifics)
 
-> **WinUI 3 has no `SizeToContent`.** Without an explicit size, Windows defaults the main window to ~1024×768 — oversized for most utilities. Size it in `MainWindow`'s constructor.
+WinUI 3 does not expose WPF `SizeToContent`. Choose initial dimensions from the content, display work area, and saved window state.
 
-**Rubric.** Width = widest row + 48 padding, rounded up to nearest 20. Height = 32 (titlebar) + Σ(row heights) + Σ(spacing) + 48 padding, rounded up to 20. Round up — clipped content is a worse failure than a slightly-wide window. Sanity ranges (derive yours from the rubric):
+Avoid fixed size formulas that assume a title bar height, font scale, or content density.
 
-- Single-purpose utility → ~440–560 wide
-- Form / single-page tool → ~600–800 wide, ~640–800 tall
-- Multi-pane (nav + content) → ~1100–1300 wide, ~720–840 tall
-- Document / canvas / media editor → 1280+ wide
-
-`AppWindow.Resize` takes **physical pixels**, not DIPs — multiply by the monitor's DPI scale. `XamlRoot.RasterizationScale` is null in the constructor and stale after `AppWindow.Move`, so `[DllImport] GetDpiForWindow` is the cleanest path:
+`AppWindow.Resize` uses physical pixels. Convert from DIPs with the applicable window DPI when necessary.
+Do not assume `XamlRoot` exists before attachment to the visual tree. For an HWND-based conversion:
 
 ```csharp
 using Microsoft.UI;
@@ -72,7 +68,7 @@ public sealed partial class MainWindow : Window
         InitializeComponent();
         var hwnd  = Win32Interop.GetWindowFromWindowId(AppWindow.Id);
         var scale = GetDpiForWindow(hwnd) / 96.0;
-        // widthDip / heightDip come from the rubric above — derive, don't copy.
+        // Use the requested initial dimensions in DIPs.
         AppWindow.Resize(new SizeInt32((int)(widthDip * scale), (int)(heightDip * scale)));
     }
 }
@@ -91,7 +87,9 @@ Don't size the window by setting `Width`/`Height` on the root `Grid` — that cl
 <TextBlock Text="{x:Bind Vm.Status, Mode=OneWay}" />
 ```
 
-### `TextBox` two-way needs `UpdateSourceTrigger=PropertyChanged`
+### TextBox update timing
+
+Use `PropertyChanged` when the model must receive each edit. Preserve `LostFocus` when focus loss is the intended commit boundary.
 
 ```xml
 <TextBox Text="{x:Bind Vm.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -120,7 +118,9 @@ ToolTipService.SetToolTip(btn, "Save the current document");
 
 `{x:Bind}` requires `Converter` to be a `{StaticResource}` lookup. `Converter={x:Null}` compiles but the generated code calls `LookupConverter("")`, which returns null, then dereferences it — you get `Resource Dictionary Key can only be String-typed` / `NullReferenceException` on first activation of the binding. If you don't want a converter, omit the property entirely.
 
-### Prefer `x:Bind` static functions over `IValueConverter`
+### Optional function bindings
+
+Use a function binding for a suitable local transformation. Preserve a reusable converter when it fits the project.
 
 ```csharp
 // MainPage.xaml.cs
@@ -141,7 +141,7 @@ public static bool Not(bool v) => !v;
 ## Theming rules (short version)
 
 - `{ThemeResource ...}` at usage sites (updates on theme switch). `{StaticResource}` inside `ThemeDictionaries` for theme-local definitions; `SystemAccentColor` / `SystemColor*` are the exceptions and stay `{ThemeResource}`.
-- Custom theme dictionaries cover `Light`, `Dark`, **and** `HighContrast` explicitly — never `Default`.
+- Define required custom keys for supported themes, including `HighContrast`. Prefer explicit `Light` and `Dark` dictionaries for theme-specific values.
 - Name resources by purpose (`CardBackgroundBrush`, `DangerTextBrush`), not hue.
 - Light/Dark working ≠ High Contrast working. Test in a Contrast theme separately.
 - Never set `HighContrastAdjustment="None"` unless your app already supplies system-aware brushes throughout.
@@ -164,7 +164,8 @@ public static bool Not(bool v) => !v;
 | Destructive action (Delete / Discard / Reset) fired without confirmation | `ContentDialog` with verb-labelled primary action and `Cancel` secondary; surface item identity (name, count) in the body |
 | Custom list control when `ListView` / `GridView` fits | Use the platform collection + virtualisation |
 
-Build custom UI **only when all are true**: no platform/Gallery/Toolkit control fits; you'll implement keyboard, focus, UI Automation, theme resources, High Contrast, and responsive behaviour; you have specs for default/hover/pressed/disabled/selected/focused/error states; you've tested with keyboard and a contrast theme.
+Prefer platform controls when their behavior fits.
+For custom controls, preserve keyboard access, focus, UI Automation, contrast, and relevant interaction states.
 
 ## References (load on demand)
 

@@ -13,7 +13,7 @@ Load this when authoring **custom** theme dictionaries, brushes, styles, templat
     <SolidColorBrush x:Key="AppSurfaceBrush" Color="#FF1F1F1F" />
   </ResourceDictionary>
   <ResourceDictionary x:Key="HighContrast">
-    <!-- empty if platform defaults already work in Contrast themes -->
+    <SolidColorBrush x:Key="AppSurfaceBrush" Color="{ThemeResource SystemColorWindowColor}" />
   </ResourceDictionary>
 </ResourceDictionary.ThemeDictionaries>
 ```
@@ -34,9 +34,9 @@ Cheaper than allocating a `SolidColorBrush` per theme and stays correct if the p
 
 ## High Contrast rules
 
-- **Only `SystemColor*Brush` resources** are allowed inside an HC dictionary. Never set `Opacity` on them. Hard-coded fills/strokes in icons disappear in Contrast themes — use `Foreground`-driven `PathIcon` / `BitmapIcon`.
+- Use system contrast colors or suitable platform resources for foreground and background pairs. Avoid opacity changes that reduce contrast.
 - See the HC pairing table in `brushes-and-icons.md` for which background pairs with which foreground.
-- If the platform brushes already work in Contrast themes (they usually do), keep the dictionary empty: `<ResourceDictionary x:Key="HighContrast" />`.
+- Define each custom key needed in High Contrast, or provide a valid contrast-aware fallback. An empty dictionary does not define custom keys.
 - Never set `HighContrastAdjustment="None"` to "fix" a contrast issue — it silences the system's auto-adjustment, so unless you've supplied correct system-aware brushes everywhere it makes things worse.
 
 ## Runtime theme switching
@@ -55,3 +55,5 @@ if (App.MainWindow.Content is FrameworkElement root)
 - `BasedOn="{StaticResource DefaultButtonStyle}"` (or the platform default) so platform updates flow through.
 - Don't re-declare properties the base style already sets unless you're overriding the value.
 - Don't author a full `ControlTemplate` for a standard control just to tweak chrome — override the brush/spacing theme resources at the local scope instead.
+
+Source: [Microsoft XAML theme resources](https://learn.microsoft.com/en-us/windows/apps/develop/platform/xaml/xaml-theme-resources).

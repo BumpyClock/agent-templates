@@ -1,95 +1,46 @@
 ---
 name: winui-wpf-migration
-description: "Migrate WPF applications to WinUI 3 — namespace replacement (System.Windows → Microsoft.UI.Xaml), control mapping (DataGrid→ListView, WrapPanel→ItemsRepeater, TabControl→TabView), threading (Dispatcher→DispatcherQueue), imaging (System.Drawing→BitmapImage), MVVM conversion to CommunityToolkit.Mvvm, and DynamicResource→ThemeResource. Use when converting WPF code, replacing WPF namespaces, or fixing migration build errors."
+description: Port WPF behavior to WinUI 3 while preserving the application contract.
 ---
 
-### Migration Process
+# WPF to WinUI 3
 
-#### Step 1: Audit the WPF Source
-Before writing code, inventory WPF-specific APIs:
-```powershell
-# Find all WPF namespace usage
-Select-String -Path (Get-ChildItem -Recurse -Filter "*.cs" | Where-Object { $_.FullName -notlike "*\obj\*" }) -Pattern "System\.Windows\." | Select-Object -Property Filename, LineNumber, Line
-```
-List: WPF controls used, custom MVVM framework, imaging APIs, threading patterns, Win32 interop.
+Choose a migration boundary from the requested scope.
+Preserve reusable domain code, valid MVVM abstractions, and supported distribution requirements.
+A WinUI port does not inherently require a new MVVM library or conversion of every binding.
 
-#### Step 2: Create WinUI 3 Project and Align Namespaces
-```powershell
-winapp new --name <AppName> --template winui-mvvm --template-version latest --use-defaults
-```
-Immediately set `<RootNamespace>` in `.csproj` to match the WPF namespace. Update `x:Class` in `App.xaml`, `MainWindow.xaml` and their code-behind files. Build to verify before porting any code.
+## Platform differences
 
-#### Step 3: Replace Namespaces
+For source probes, API mappings, and binding examples, use [migration examples](references/migration-examples.md).
 
-| WPF | WinUI 3 |
-|-----|---------|
-| `System.Windows` | `Microsoft.UI.Xaml` |
-| `System.Windows.Controls` | `Microsoft.UI.Xaml.Controls` |
-| `System.Windows.Media` | `Microsoft.UI.Xaml.Media` |
-| `System.Windows.Input` | `Microsoft.UI.Xaml.Input` |
-| `System.Windows.Data` | `Microsoft.UI.Xaml.Data` |
-| `System.Windows.Threading.Dispatcher` | `Microsoft.UI.Dispatching.DispatcherQueue` |
-| `PresentationCore` / `PresentationFramework` | Remove entirely |
+| WPF feature | WinUI consideration |
+| --- | --- |
+| `System.Windows.Controls` | Use `Microsoft.UI.Xaml.Controls` equivalents where their behavior fits |
+| `Dispatcher.Invoke` | `DispatcherQueue.TryEnqueue` queues work asynchronously and can fail |
+| `DataGrid` | Choose a compatible grid or list from required edit, sort, selection, and accessibility behavior |
+| `WrapPanel` | Consider `ItemsRepeater` with an appropriate layout |
+| `TabControl` | Consider `TabView` and preserve document lifetime behavior |
+| `DynamicResource` | Use `ThemeResource` where theme-dependent lookup is required |
+| WPF image types | Use WinUI image sources or `Windows.Graphics.Imaging` at the UI boundary |
 
-#### Step 4: Replace Controls
+Capture the UI dispatcher on the owning thread.
+Handle a failed enqueue when completion matters.
+Do not treat an asynchronous enqueue as equivalent to synchronous `Invoke`.
 
-| WPF Control | WinUI 3 Equivalent |
-|------------|-------------------|
-| `DataGrid` | `ListView` with Grid column headers |
-| `WrapPanel` | `ItemsRepeater` + `UniformGridLayout` |
-| `TabControl` | `TabView` |
-| `StatusBar` | `Grid` row at bottom with `TextBlock` elements |
-| `Menu` / `MenuItem` | `MenuBar` / `MenuBarItem` / `MenuFlyoutItem` |
-| `ToolBar` | `CommandBar` |
-| `Expander` (custom) | `Expander` (built-in) |
+Keep WPF framework references out of the WinUI XAML project.
+Do not enable `UseWPF` as a WinUI compiler workaround.
+Separate retained WPF code into a deliberate interop boundary when the migration requires it.
 
-#### Step 5: Replace Threading
-```csharp
-// WPF
-Application.Current.Dispatcher.Invoke(() => { /* UI work */ });
+## State and resources
 
-// WinUI 3
-dispatcherQueue.TryEnqueue(() => { /* UI work */ });
-```
-Get via `DispatcherQueue.GetForCurrentThread()`. No `Application.Current.Dispatcher` in WinUI 3.
+Preserve `Binding` where runtime `DataContext` behavior remains appropriate.
+For compiled bindings, account for `x:Bind` source resolution and its `OneTime` default.
+Port resource keys and property targets deliberately. A file extension change alone does not migrate localization behavior.
 
-#### Step 6: Replace Imaging
-**Critical:** `PresentationCore.dll` and `System.Windows.Media.Imaging` crash the WinUI XAML compiler. This is an architectural incompatibility — no workaround exists.
-- Remove ALL `System.Windows.Media.Imaging` references at migration start
-- Replace with `Windows.Graphics.Imaging` (WinRT) or `Microsoft.UI.Xaml.Media.Imaging.BitmapImage`
-- Do NOT add `<UseWPF>true</UseWPF>` — it silently corrupts the build
-- If heavy imaging code exists, migrate it early (step 2, not step 7)
+## Completion
 
-#### Step 7: Replace MVVM Framework
-Delete custom `ObservableObject`/`RelayCommand`/`DelegateCommand`. Use CommunityToolkit.Mvvm:
-- `INotifyPropertyChanged` base → `ObservableObject` with `[ObservableProperty]` partial properties
-- Custom `RelayCommand` → `[RelayCommand]` attribute
-- `{Binding}` → `{x:Bind Mode=OneWay}`
-- `DynamicResource` → `{ThemeResource}`
+Validate the migrated behavior, target architecture, and intended activation path.
+Preserve package identity and app data unless the requested migration changes them.
+Use [development guidance](../winui-dev-workflow/guide.md) for launch failures and [design guidance](../winui-design/guide.md) for control behavior.
 
-#### Step 8: Replace Resources
-- `.resx` → `.resw` (copy + rename to `Strings\en-us\`)
-- `{x:Static}` → `x:Uid` for localized strings
-- `Properties.Resources.Key` → `ResourceLoader.GetString("Key")`
-
-### Critical Rules
-
-- ❌ NEVER reference `PresentationCore`, `PresentationFramework`, or `System.Windows.Controls` assemblies
-- ❌ NEVER add `<UseWPF>true</UseWPF>` or `<WindowsPackageType>None</WindowsPackageType>`
-- ❌ NEVER delete `Package.appxmanifest`
-- ❌ NEVER overwrite `App.xaml` / `App.xaml.cs` — merge WPF code into the WinUI 3 boilerplate
-- ✅ Always use `winapp run` to launch — never run the .exe directly
-- ✅ Break migration into file-level tasks — not one massive rewrite
-
-### Post-Migration Validation
-
-```powershell
-# Check for remaining WPF references (should return nothing)
-Select-String -Path (Get-ChildItem -Recurse -Filter "*.cs" | Where-Object { $_.FullName -notlike "*\obj\*" }) -Pattern "System\.Windows\."
-
-# Verify packaging preserved
-Test-Path "Package.appxmanifest"  # should be True
-
-# Build and run with the bundled analyzer
-.\BuildAndRun.ps1
-```
+Consult [Microsoft migration guidance](https://learn.microsoft.com/en-us/windows/apps/windows-app-sdk/migrate-to-windows-app-sdk/) for API differences.

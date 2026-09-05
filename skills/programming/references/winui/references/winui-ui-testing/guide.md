@@ -1,6 +1,6 @@
 ---
 name: winui-ui-testing
-description: "Automated UI testing for Windows desktop apps — generate a batch test script with the `winapp ui` UI Automation harness, run all tests in one pass, read results. Covers element assertions, interactions, value checking (TextBox, ComboBox, ToggleSwitch), keyboard shortcuts and typing (send-keys), hover, drag-and-drop, touch and pen input, file pickers, flyouts, dialogs, persistence, accessibility audits, and screenshot/video capture. Works on any Windows app (Win32, WPF, WinForms, WinUI 3, packaged or unpackaged)."
+description: Inspect Windows UI Automation state or automate requested UI behavior checks with winapp ui.
 ---
 
 ### Scope — any Windows app
@@ -38,9 +38,8 @@ If the app is already running, use its PID. **Do NOT relaunch** — use the PID 
 
 ### Step 2: Write the Test Script
 
-**If you wrote the code:** Skip inspect — you already know all the AutomationIds and control structure from the XAML and code-behind. Write tests directly from that knowledge. Inspect misses popups, flyouts, dialogs, and lazy-loaded content anyway.
-
-**If you're verifying code you didn't write:** Run inspect first to discover the UI:
+Inspect the runtime tree when selectors or state are uncertain. Source code alone does not establish runtime UI Automation exposure.
+Open transient surfaces before inspection:
 ```powershell
 winapp ui inspect -a <PID> --interactive
 ```
@@ -170,11 +169,12 @@ AutomationId presence checks selector stability. Accessibility also requires app
 
 ### Step 3.5: Look at the Screenshots
 
-UIA assertions don't see clipping, overlap, wrong theming, or controls bleeding past their container — UIA returns `PASS` while the app is visually broken. **Capture screenshots with `winapp ui screenshot` and view each PNG.**
+UIA assertions do not establish visual correctness.
+For layout, theme, or visual-state changes, capture and inspect the affected states.
 
 Capture the initial state and any state after a major interaction (the State Screenshots block in the script template above handles this).
 
-**Visual checklist — fail the run if any item is `no`:**
+Use these questions for the affected visual contract:
 - [ ] No unintended scrollbars
 - [ ] No text ending in `…` that shouldn't be
 - [ ] Hero elements fully visible (not sliced)
@@ -185,17 +185,13 @@ Capture the initial state and any state after a major interaction (the State Scr
 - [ ] Theming matches the user's ask (Light/Dark/HighContrast if relevant)
 - [ ] Focus/hover/error states render if tested
 
-If the checklist fails, it's a bug — fix before declaring done. Window too small → grow per `references/winui-design/guide.md` (Window sizing).
+Resolve visual defects within the requested scope before completion. Diagnose layout constraints before a window size change.
 
 ### Step 4: Fix and Rerun (if the user asked for it)
 
-If tests fail:
-1. Read the failure details from `test-results.json`
-2. Batch-fix all issues in one pass
-3. Rebuild with `.\BuildAndRun.ps1` (blocking mode — shows crash info if the fix broke something)
-4. Rerun `.\ui-tests.ps1 -AppPid <PID>` (parse PID from the `launched (PID: XXXXX)` output)
-
-**Maximum 2 fix-and-rerun cycles.** If the same tests keep failing after 2 cycles, report them as known issues and move on — do not keep iterating.
+For an implementation request, diagnose and correct failures caused by the change, then rerun affected checks.
+For a read-only test request, report failures without edits.
+Continue while relevant, authorized corrections remain. Stop for a blocker that requires user input or an action outside scope.
 
 ### Assertion Reference
 

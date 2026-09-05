@@ -1,15 +1,15 @@
-## Instructions
+# Component stories
 
-When creating component stories:
+Use this reference when the task includes a story or interactive component example.
 
-1. **Follow existing patterns**: Base stories on the styles found in `crates/story/src/stories` (examples: `tabs_story.rs`, `group_box_story.rs`, etc.)
-2. **Use sections**: Organize the story with `section!` calls for each major part
-3. **Comprehensive coverage**: Include all options, variants, and usage examples of the component
+Use the existing story host, registration mechanism, and asset setup.
+Treat `crates/story` and `section!` as possible repository conventions, not GPUI APIs.
 
-## Examples
+Demonstrate the behavior or API that the task adds or changes.
+Include the states necessary to understand that behavior.
+Do not require an exhaustive variant matrix for a narrow change.
 
-A typical story structure includes:
-- Basic usage examples
-- Different variants and states
-- Interactive examples
-- Edge cases and error states
+Keep the example's state and callbacks functional.
+A static visual example does not establish keyboard or event behavior.
+
+For current library examples, use [GPUI Component source](https://github.com/longbridge/gpui-component).

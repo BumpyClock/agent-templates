@@ -1,39 +1,11 @@
-## Description
+# GPUI pull request text
 
-We less than 150 words description for a PR changes, including new features, bug fixes, and improvements. And if there have APIs break changes (Only `crates/ui` changes) we should have a section called `## Breaking Changes` to list them clearly.
+Use this reference only when the user requests PR text.
+Follow the repository's PR template.
 
-## Breaking changes description
+Explain the affected behavior, reason for the change, and validation result.
+Describe incompatible public API changes regardless of the crate directory.
+Include a short old-to-new example when consumers must change code.
 
-When a pull request introduces breaking changes to a codebase, it's important to clearly communicate these changes to users and developers who rely on the code. A well-written breaking changes description helps ensure that everyone understands what has changed, why it has changed, and how to adapt to the new version.
-
-We can get the changes from the PR diff and summarize them in a clear and concise manner. Aim to provide a clear APIs changes for users to follow.
-
-### Format
-
-We pefer the following format for breaking changes descriptions:
-
-1. Use bullet list for each breaking change item.
-2. Each item should have title and a code block showing the old and new usage by use `diff`.
-3. Use `## Breaking Changes` as the section title.
-4. Use english language.
-
-**For example:**
-
-````md
-## Breaking Changes
-
-- Added `id` parameter to `Sidebar::new`.
-
-```diff
-- Sidebar::new()
-+ Sidebar::new("sidebar")
-```
-
-- Removed the `left` and `right` methods; use `side` instead.
-  > Default is left.
-
-```diff
-- Sidebar::right()
-+ Sidebar::new("sidebar").side(Side::Right)
-```
-````
+Do not impose a fixed word limit or a GPUI-specific section structure.
+Do not create or update a remote PR without authorization.

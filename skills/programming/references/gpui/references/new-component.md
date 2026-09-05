@@ -1,17 +1,15 @@
-## Instructions
+# New components
 
-When creating new GPUI components:
+Reuse an existing component when its public API satisfies the requested behavior.
+For a new component, preserve the repository's component API and state ownership conventions.
 
-1. **Follow existing patterns**: Base implementation on components in `crates/ui/src` (examples: `Button`, `Select`)
-2. **Style consistency**: Follow existing component styles and Shadcn UI patterns
-3. **Component type decision**:
-   - Use stateless elements for simple components (like `Button`)
-   - Use stateful elements for complex components with data (like `Select` and `SelectState`)
-4. **API consistency**: Maintain the same API style as other elements
-5. **Documentation**: Create component documentation
-6. **Stories**: Write component stories in the story folder
+Use a transient element for presentation without independent persistent state.
+Use an entity when the component needs persistent state, observation, or a distinct lifetime.
+Do not add every interactivity trait or a state entity merely to match a template.
 
-## Component Types
+Update public documentation when the new API requires it.
+Add a story when requested or required by the repository.
+Do not create a story framework as an incidental implementation step.
 
-- **Stateless**: Pure presentation components without internal state
-- **Stateful**: Components that manage their own state and data
+For API decisions, use [style guide](style-guide.md).
+For relevant checks, use [component contracts](component-test-rules.md).

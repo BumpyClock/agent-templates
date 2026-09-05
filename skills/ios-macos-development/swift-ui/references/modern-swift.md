@@ -1,165 +1,81 @@
-# Modern Swift Development
+# SwiftUI State and Dependencies
 
-Write idiomatic SwiftUI code following Apple's latest architectural recommendations and best practices.
+Use ownership and lifecycle requirements to select the data model.
+SwiftUI does not require one architecture for every app.
 
-## Core Philosophy
+## State
 
-- SwiftUI is the default UI paradigm for Apple platforms - embrace its declarative nature
-- Avoid legacy UIKit patterns and unnecessary abstractions
-- Focus on simplicity, clarity, and native data flow
-- Let SwiftUI handle the complexity - don't fight the framework
+Use `@State` for view-owned values or supported Observation models.
+Use `@Binding` for access to parent-owned value state.
+Use `@Bindable` when a control needs bindings to an injected `@Observable` model.
 
-## Architecture Guidelines
+`@Observable` is a macro, not a property wrapper.
+`ObservableObject` is a protocol, not `@ObservableObject`.
+Use `@StateObject` for an owned `ObservableObject` and `@ObservedObject` for an injected instance.
+Keep these patterns in existing code unless migration is part of the task.
 
-### 1. Embrace Native State Management
+## Dependencies and work
 
-Use SwiftUI's built-in property wrappers appropriately:
-- `@State` - Local, ephemeral view state
-- `@Binding` - Two-way data flow between views
-- `@Observable` - Shared state (iOS 17+)
-- `@ObservableObject` - Legacy shared state (pre-iOS 17)
-- `@Environment` - Dependency injection for app-wide concerns
+Pass feature-local dependencies through initializers when that makes ownership clear.
+Use the environment for dependencies shared across a view hierarchy.
+Preserve useful Combine pipelines and UIKit or AppKit integration.
 
-### 2. State Ownership Principles
+Use `.task` for work tied to view lifetime.
+Use `.task(id:)` when input changes should cancel and restart work.
+Handle cancellation without presenting it as a user-visible failure.
+Neither `async` nor `Task { }` alone guarantees execution outside the main actor.
 
-- Views own their local state unless sharing is required
-- State flows down, actions flow up
-- Keep state as close to where it's used as possible
-- Extract shared state only when multiple views need it
+## Example: owned Observation model and an editor
 
-### 3. Modern Async Patterns
+This example requires iOS 17 or macOS 14.
+The parent owns the model lifetime.
+The child derives a binding without a second state container.
 
-- Use `async/await` as the default for asynchronous operations
-- Leverage `.task` modifier for lifecycle-aware async work
-- Avoid Combine unless absolutely necessary
-- Handle errors gracefully with try/catch
-
-### 4. View Composition
-
-- Build UI with small, focused views
-- Extract reusable components naturally
-- Use view modifiers to encapsulate common styling
-- Prefer composition over inheritance
-
-### 5. Code Organization
-
-- Organize by feature, not by type (avoid Views/, Models/, ViewModels/ folders)
-- Keep related code together in the same file when appropriate
-- Use extensions to organize large files
-- Follow Swift naming conventions consistently
-
-## Implementation Patterns
-
-### Simple State Example
 ```swift
-struct CounterView: View {
-    @State private var count = 0
-    
-    var body: some View {
-        VStack {
-            Text("Count: \(count)")
-            Button("Increment") { 
-                count += 1 
-            }
-        }
-    }
-}
-```
+import SwiftUI
+import Observation
 
-### Shared State with @Observable
-```swift
+@MainActor
 @Observable
-class UserSession {
-    var isAuthenticated = false
-    var currentUser: User?
-    
-    func signIn(user: User) {
-        currentUser = user
-        isAuthenticated = true
-    }
+final class ProfileDraft {
+    var name = ""
 }
 
-struct MyApp: App {
-    @State private var session = UserSession()
-    
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-                .environment(session)
-        }
-    }
-}
-```
+@MainActor
+struct ProfileScreen: View {
+    @State private var draft = ProfileDraft()
 
-### Async Data Loading
-```swift
-struct ProfileView: View {
-    @State private var profile: Profile?
-    @State private var isLoading = false
-    @State private var error: Error?
-    
     var body: some View {
-        Group {
-            if isLoading {
-                ProgressView()
-            } else if let profile {
-                ProfileContent(profile: profile)
-            } else if let error {
-                ErrorView(error: error)
-            }
-        }
-        .task {
-            await loadProfile()
-        }
+        ProfileEditor(draft: draft)
     }
-    
-    private func loadProfile() async {
-        isLoading = true
-        defer { isLoading = false }
-        
-        do {
-            profile = try await ProfileService.fetch()
-        } catch {
-            self.error = error
-        }
+}
+
+@MainActor
+struct ProfileEditor: View {
+    @Bindable var draft: ProfileDraft
+
+    var body: some View {
+        TextField("Name", text: $draft.name)
     }
 }
 ```
 
-## Best Practices
+For a hierarchy-wide model, the owner can supply `.environment(draft)` instead.
+A descendant can retrieve `@Environment(ProfileDraft.self)` and create a local `@Bindable` value when controls need bindings.
+Provide the same environment dependency in previews.
+A required type-based environment lookup fails if no ancestor supplies that type.
 
-### DO:
-- Write self-contained views when possible
-- Use property wrappers as intended by Apple
-- Test logic in isolation, preview UI visually
-- Handle loading and error states explicitly
-- Keep views focused on presentation
-- Use Swift's type system for safety
+## State lifetime during a refactor
 
-### DON'T:
-- Create ViewModels for every view
-- Move state out of views unnecessarily
-- Add abstraction layers without clear benefit
-- Use Combine for simple async operations
-- Fight SwiftUI's update mechanism
-- Overcomplicate simple features
+An initializer-provided `@State` value seeds storage for a view identity.
+It does not replace retained state whenever the parent supplies a different initializer argument.
+Use an injected model when the parent must replace the reference.
+Use an explicit model update when the existing editor must retain unsaved state.
+Use `.id(recordID)` only when a record change must reset the subtree, including focus, tasks, and local state.
 
-## Testing Strategy
+## References
 
-- Unit test business logic and data transformations
-- Use SwiftUI Previews for visual testing
-- Test @Observable classes independently
-- Keep tests simple and focused
-- Don't sacrifice code clarity for testability
-
-## Modern Swift Features
-
-- Use Swift Concurrency (async/await, actors)
-- Leverage Swift 6 data race safety when available
-- Utilize property wrappers effectively
-- Embrace value types where appropriate
-- Use protocols for abstraction, not just for testing
-
-## Summary
-
-Write SwiftUI code that looks and feels like SwiftUI. The framework has matured significantly - trust its patterns and tools. Focus on solving user problems rather than implementing architectural patterns from other platforms.
+- [Model data](https://developer.apple.com/documentation/swiftui/managing-model-data-in-your-app)
+- [Observation migration](https://developer.apple.com/documentation/swiftui/migrating-from-the-observable-object-protocol-to-the-observable-macro)
+- [Async state examples](../../swiftui-ui-patterns/references/async-state.md)
+- [Concurrency settings](../../swift-concurrency-expert/guide.md)

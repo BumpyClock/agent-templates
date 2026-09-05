@@ -4,14 +4,14 @@ Load this when reviewing responsive behaviour, breakpoints, or state coverage on
 
 ## Page planning template
 
-Fill these in before writing XAML or reviewing a page:
+Use these questions when the task requires a new layout or a responsive design decision:
 
 - Primary user task:
 - Secondary tasks:
 - Content type / density:
 - Navigation structure: flat / hierarchical / hybrid:
 - App silhouette: shell (left/top nav) / document / canvas-hero / dense-grid / list-detail / single-task:
-- Breakpoint behaviour at small (`<640`), medium (`641–1007`), large (`≥1008`) epx:
+- Breakpoints derived from content and supported window dimensions:
 - Input modes covered: keyboard, mouse, touch, pen:
 
 ## Responsive techniques (least to most disruptive)
@@ -30,7 +30,7 @@ Breakpoints are **app-window effective pixels**, not physical screen pixels. The
 
 ## State coverage for any data-driven page
 
-Every collection, fetch, or async-bound surface should explicitly handle:
+For reachable states, check that the interface communicates status and provides the necessary recovery:
 
 - **Loading** — progress text or skeleton; not just a spinner with no context
 - **Empty** — what happened and what the user can do (call-to-action, not just "no items")
@@ -38,4 +38,4 @@ Every collection, fetch, or async-bound surface should explicitly handle:
 - **Offline / permission denied** — separate from generic error if the recovery path differs
 - **Selection** — including keyboard arrow-key behaviour and multi-select where relevant
 
-If any of these aren't represented in the view model, the page isn't done.
+Preserve the required state behavior. Do not add unreachable states or require a particular view-model structure.

@@ -1,6 +1,6 @@
 ---
 name: swiftui-liquid-glass
-description: Implement, review, or improve SwiftUI features using the iOS 26+ Liquid Glass API. Use when asked to adopt Liquid Glass in new SwiftUI UI, refactor an existing feature to Liquid Glass, or review Liquid Glass usage for correctness, performance, and design alignment.
+description: Adopt or review Liquid Glass in SwiftUI interfaces.
 ---
 
 # SwiftUI Liquid Glass
@@ -16,10 +16,10 @@ Choose the path that matches the request:
 ### 1) Review an existing feature
 - Inspect where Liquid Glass should be used and where it should not.
 - Verify correct modifier order, shape usage, and container placement.
-- Check for iOS 26+ availability handling and sensible fallbacks.
+- Check each platform's API availability against the deployment target.
 
 ### 2) Improve a feature using Liquid Glass
-- Identify target components for glass treatment (surfaces, chips, buttons, cards).
+- Reserve glass for controls and navigation surfaces rather than the general content layer.
 - Refactor to use `GlassEffectContainer` where multiple glass elements appear.
 - Introduce interactive glass only for tappable or focusable elements.
 
@@ -34,10 +34,10 @@ Choose the path that matches the request:
 - Apply `.glassEffect(...)` after layout and visual modifiers.
 - Use `.interactive()` for elements that respond to touch/pointer.
 - Keep shapes consistent across related elements for a cohesive look.
-- Gate with `#available(iOS 26, *)` and provide a non-glass fallback.
+- Add availability guards and fallbacks only when supported deployment targets require them.
 
 ## Review Checklist
-- **Availability**: `#available(iOS 26, *)` present with fallback UI.
+- **Availability**: API support covers each deployment target, with guards only where required.
 - **Composition**: Multiple glass views wrapped in `GlassEffectContainer`.
 - **Modifier order**: `glassEffect` applied after layout/appearance modifiers.
 - **Interactivity**: `interactive()` only where user interaction exists.
@@ -50,7 +50,7 @@ Choose the path that matches the request:
 - Use `.glassEffect(.regular.tint(...).interactive(), in: .rect(cornerRadius: ...))` as needed.
 - Use `.buttonStyle(.glass)` / `.buttonStyle(.glassProminent)` for actions.
 - Add morphing transitions with `glassEffectID` when hierarchy changes.
-- Provide fallback materials and visuals for earlier iOS versions.
+- Preserve contrast and usability with Reduce Transparency and Reduce Motion enabled.
 
 ## Quick Snippets
 Use these patterns directly and tailor shapes/tints/spacing.
@@ -88,5 +88,8 @@ Button("Confirm") { }
 ```
 
 ## Resources
+- [Materials and content-layer boundaries](https://developer.apple.com/design/human-interface-guidelines/materials)
+- [Apple adoption guidance](https://developer.apple.com/documentation/technologyoverviews/adopting-liquid-glass)
+- [Custom glass views](https://developer.apple.com/documentation/SwiftUI/Applying-Liquid-Glass-to-custom-views)
 - Reference guide: `references/liquid-glass.md`
 - Prefer Apple docs for up-to-date API details, and use `web_search` / `web_fetch` to consult current Apple Developer documentation in addition to the references above.

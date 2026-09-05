@@ -19,6 +19,7 @@ var body: some View {
 Prefer cached formatters in a model or dedicated helper:
 
 ```swift
+@MainActor
 final class DistanceFormatter {
     static let shared = DistanceFormatter()
     let number = NumberFormatter()
@@ -70,7 +71,8 @@ ForEach(items, id: \.self) { item in
 }
 ```
 
-Avoid `id: \.self` for non-stable values or collections that reorder. Use a stable domain identifier.
+Use a stable domain identifier when values can change or duplicates can occur.
+Reorder alone does not invalidate unique, stable `id: \.self` values.
 
 ### Top-level conditional view swapping
 
@@ -84,7 +86,9 @@ var content: some View {
 }
 ```
 
-Prefer one stable base view and localize conditions to sections or modifiers. This reduces root identity churn and makes diffing cheaper.
+Use separate branches when the views represent distinct states with intentionally separate lifetimes.
+For one conceptual editor, preserve its structural position when a mode change must retain draft or focus state.
+Do not claim a performance improvement from branch removal without relevant measurements.
 
 ### Image decoding on the main thread
 
@@ -110,7 +114,7 @@ var body: some View {
 
 If many views read the same broad collection or root model, small changes can fan out into wide invalidation. Prefer narrower derived inputs, smaller observable surfaces, or per-item state closer to the leaf views.
 
-### Broad `ObservableObject` reads on iOS 16 and earlier
+### Broad `ObservableObject` reads
 
 ```swift
 final class Model: ObservableObject {
@@ -140,11 +144,19 @@ Use `equatable()` only when:
 
 Do not apply `equatable()` as a blanket fix for all redraws.
 
-## Triage order
+## Evidence-to-cause map
 
-When multiple smells appear together, prioritize in this order:
-1. Broad invalidation and observation fan-out
-2. Unstable identity and list churn
-3. Main-thread work during render
-4. Image decode or resize cost
-5. Layout and animation complexity
+Use the symptom and trace interval to select a hypothesis, rather than a fixed priority order.
+
+| Evidence | Next diagnostic |
+| --- | --- |
+| Many short view updates after one edit | Inspect observable properties read by those views and their shared dependencies. |
+| Lost row state or repeated row appearance | Compare domain IDs before and after the data update. |
+| Long body-update interval | Inspect formatting, sorting, and synchronous service work in that interval's call tree. |
+| Main thread busy outside body updates | Inspect event handlers, task inheritance, and image decode stacks. |
+| Layout work dominates | Inspect geometry/preference feedback and constraints at the affected subtree. |
+| Memory grows after repeated navigation | Inspect retained models, subscriptions, tasks, and image buffers with allocation or memory-graph evidence. |
+
+For a change comparison, retain the same interaction, data volume, device, and build configuration.
+Record the relevant metric, such as update duration, main-thread CPU time, frame hitches, or peak memory.
+Use [Trace intake](profiling-intake.md) when the available evidence cannot distinguish the hypotheses.

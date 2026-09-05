@@ -1,6 +1,6 @@
 ---
 name: winui-dev-workflow
-description: "Build and run workflow for WinUI 3 apps with WinApp CLI 0.6+ — project creation with winapp new, project-mode winapp run, BuildAndRun.ps1 analyzer integration, crash diagnosis, and prerequisites. Use when creating, building, running, or fixing build errors in a WinUI 3 project."
+description: Create, build, launch, or diagnose WinUI 3 apps with WinApp CLI.
 ---
 
 ### Create or Open a Project
@@ -22,7 +22,8 @@ Run `winapp new --list` to discover the currently installed template short names
 ```powershell
 dotnet add package <Name>
 ```
-Never specify `--version` — omitting it gets the latest stable and avoids outdated API mismatches.
+Preserve repository version pins and compatibility requirements.
+Select an explicit compatible version when needed. A newer package is not inherently compatible with the project.
 
 ### Build & Run
 
@@ -33,13 +34,16 @@ winapp run . --debug-output
 winapp run .\MyApp.csproj -c Release --arch arm64
 ```
 
-For normal development, prefer the included `BuildAndRun.ps1` wrapper. It invokes project-mode `winapp run`, injects the bundled `Microsoft.WindowsAppSDK.Analyzers`, and turns on `--debug-output` by default:
+Use the repository command when available.
+The included `BuildAndRun.ps1` invokes project-mode `winapp run`, injects the bundled analyzer, and enables `--debug-output` by default:
 
 ```powershell
 .\BuildAndRun.ps1
 ```
 
-**Invoke attached runs with `mode: "async"`.** The command stays attached while the app is open, so a synchronous call blocks for the app's lifetime. The output contains the running app's PID.
+Use the current harness process-session mechanism for attached runs.
+The command stays attached while the app is open. Capture the app PID for later inspection.
+Project-mode launch can register a development package. Use a build-only command when launch or registration is outside the task.
 
 The wrapper only adds repository-specific analyzer and debug defaults. WinApp CLI handles:
 1. Project restore and build
@@ -62,9 +66,10 @@ The wrapper only adds repository-specific analyzer and debug defaults. WinApp CL
 
 The wrapper accepts the same `.csproj`, `.sln`/`.slnx`, directory, and `--project` inputs as `winapp run`.
 
-**If build fails:** Read all errors, batch-fix them in one pass, then rerun the same command.
+For build failures, identify the cause before changes or retries.
+For an implementation task, correct failures caused by the change and rerun affected checks.
 
-**If the app crashes on launch:** `read_powershell` the shell — first-chance exceptions appear in the output. See the crash-diagnosis section below for WinUI stowed-exception triage.
+For launch crashes, inspect captured process output and the stowed-exception diagnostics below.
 
 ### Diagnosing Crashes with `winapp run`
 
@@ -74,37 +79,31 @@ For WinUI apps, `--debug-output` (the wrapper default) runs a **stowed-exception
 
 | Error | Fix |
 |-------|-----|
-| Developer Mode not enabled | Settings → System → For developers → On |
+| Developer Mode not enabled | Check whether the requested activation path requires it. Obtain approval before the machine-wide change |
 | CS0234/CS0246 missing type | Add `using` or `dotnet add package` |
 | NETSDK1136 platform required | Target a Windows TFM (for example `net10.0-windows10.0.26100.0`); use `-f <windows-tfm>` when the project already multi-targets |
 | XLS0414 XAML type not found | Add `xmlns` declaration |
 | XDG0062 binding path missing | Check `x:Bind` property exists on ViewModel |
-| Blank window after launch | `x:Bind` defaults to `OneTime` — add `Mode=OneWay` |
-| App silently exits | Use `winapp run`, never run the .exe directly |
+| Blank window after launch | Inspect activation errors and binding sources. Use `OneWay` only when the source must update the target |
+| App silently exits | Capture launch diagnostics and check the intended packaged or unpackaged activation path |
 | App crashes with opaque `0x8000FFFF` / `E_FAIL` | Run under `--debug-output` (BuildAndRun.ps1 default) — WinUI stowed-exception triage surfaces the real XAML error + symbolicated native stack. `--symbols` is optional |
 | XAML compiler crashes silently | Remove any `PresentationCore.dll` / `System.Windows` references |
-| MSB3073 / `XamlCompiler.exe ... exited with code 1`, no `.xaml` named | Old WindowsAppSDK XAML-compiler bug — update `Microsoft.WindowsAppSDK` NuGet to latest (≥ 2.1.3, or ≥ 1.8 on the 1.x line) |
+| MSB3073 / `XamlCompiler.exe ... exited with code 1`, no `.xaml` named | Inspect the build log and resolved SDK version. Confirm a matching SDK defect before an upgrade |
 | 0x80073CF6 package install failed | Check the manifest publisher and Developer Mode; apps from `winapp new` need no separate `winapp init` |
-| 0x80073CF9 / "Failed to reach state Staged" on a deeply nested project | For a packaged app, rerun with `--output-appx-directory "$env:LOCALAPPDATA\winapp-layout\<app>-<config>-<arch>"`, or move the repo closer to the drive root. Keep the directory unique per configuration and architecture — a registered development package holds a live reference to it, so Debug and Release must not share one — and empty it before reuse so payload files dropped since the last build do not linger |
+| 0x80073CF9 / "Failed to reach state Staged" on a deeply nested project | Check path length and package layout. For a confirmed path issue, use a shorter dedicated `--output-appx-directory`. Keep layouts separate by configuration and architecture. Remove stale payloads only from confirmed disposable build output. If ownership or live registration is uncertain, use a fresh layout directory |
 | 0x8007000B bad image format | Wrong platform target — use x64 or ARM64, not AnyCPU |
 
 ### Prerequisites
 
-| Requirement | Minimum | Recommended (fresh installs) | Install command |
-|-------------|---------|------------------------------|-----------------|
-| Windows 10 v1903+ | — | — | — |
-| Developer Mode | enabled | enabled | Settings → Advanced → Developer Mode → On |
-| .NET SDK | 8.0.100 | 10.0 | `winget install Microsoft.DotNet.SDK.10` |
-| WinApp CLI | 0.6.0 | latest | `references/winui-setup/guide.md` |
-
-If `winapp`/`dotnet` is missing or too old, or Developer Mode is off, **do not install it ad hoc or work around it**. Ask the user to use `references/winui-setup/guide.md`, then retry. `winapp new` manages the WinUI template pack itself.
+For missing tools or incompatible versions, consult [setup](../winui-setup/guide.md).
+Read-only checks do not require a separate setup request.
+Install tools only within authorized setup scope. Ask before elevation or a machine-wide Developer Mode change.
 
 ### Critical Rules
 
-- ❌ NEVER run the packaged .exe directly — always use project-mode `winapp run` or `BuildAndRun.ps1`
-- ❌ NEVER add `<WindowsPackageType>None` to work around launch issues
-- ❌ NEVER delete `Package.appxmanifest`
-- ❌ NEVER use `AnyCPU` — always x64 or ARM64
+- Preserve the intended activation model. Use package activation for packaged apps and the supported executable path for unpackaged apps.
+- Do not remove the manifest or change `WindowsPackageType` merely to bypass a launch failure.
+- Match platform and runtime architecture to project dependencies. Do not assume an `AnyCPU` configuration supplies compatible native binaries.
 
 ### References
 

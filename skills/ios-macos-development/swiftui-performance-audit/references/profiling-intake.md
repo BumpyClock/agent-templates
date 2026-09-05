@@ -2,7 +2,9 @@
 
 ## Intent
 
-Use this checklist when code review alone cannot explain the SwiftUI performance issue and you need runtime evidence from the user.
+Use this reference when a performance hypothesis needs runtime evidence or an existing trace needs more context.
+Capture evidence directly when available tools and task permissions permit it.
+Ask the user for a capture only when the required access is absent.
 
 ## Ask for first
 
@@ -13,14 +15,19 @@ Use this checklist when code review alone cannot explain the SwiftUI performance
 - Build configuration: Debug or Release.
 - Whether the user already has a baseline or before/after comparison.
 
-## Default profiling request
+## Focused capture
 
-Ask the user to:
-- Run the app in a Release build when possible.
-- Use the SwiftUI Instruments template.
-- Reproduce the exact problematic interaction only long enough to capture the issue.
-- Capture the SwiftUI timeline and Time Profiler together.
-- Export the trace or provide screenshots of the key SwiftUI lanes and the Time Profiler call tree.
+Use these steps for an available capture tool or a user-assisted capture.
+
+1. Select a representative build and record its configuration.
+2. Select the installed SwiftUI Instruments template for view-update symptoms, or Time Profiler for CPU and responsiveness symptoms.
+3. Capture the specific problematic interaction.
+4. Select the affected timeline interval and inspect the corresponding call tree or update causes.
+5. Preserve the trace and reproduction context for comparison.
+
+Use a Release build for representative performance unless the defect requires another configuration.
+Use Allocations or a memory graph when object retention or memory growth is the reported problem.
+Installed Instruments versions differ, so use available tracks rather than require a specific template layout.
 
 ## Ask for these artifacts
 

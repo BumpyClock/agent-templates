@@ -8,7 +8,7 @@ Consolidated detailed rules from performance, security, accessibility, globaliza
 
 ### x:Bind vs {Binding}
 
-Always prefer `x:Bind` (compiled bindings) over `{Binding}` (runtime reflection). `x:Bind` resolves at compile time, generates strongly typed code, and avoids the reflection overhead of `{Binding}`.
+Use `x:Bind` for compiled paths when its source and lifetime semantics fit. Use `Binding` for runtime sources and `DataContext` behavior.
 
 | Feature | `x:Bind` | `{Binding}` |
 |---|---|---|
@@ -17,7 +17,7 @@ Always prefer `x:Bind` (compiled bindings) over `{Binding}` (runtime reflection)
 | Default mode | OneTime | OneWay |
 | Performance | Faster | Slower |
 
-Reserve `{Binding}` only where `x:Bind` cannot be used (e.g., `Style` setters).
+Select the binding mechanism from the required semantics, not a universal conversion rule.
 
 ### Deferred Loading with x:Load
 
@@ -45,7 +45,7 @@ Use `x:Phase` inside `DataTemplate` to prioritize which parts of each list item 
 
 ### Collection Virtualization
 
-Use `ListView`, `GridView`, or `ItemsRepeater` for any list that may exceed ~20 items. These controls create UI elements only for visible items and recycle them on scroll.
+Use a virtualized collection for data volumes that can make element creation expensive. Preserve a constrained viewport and a virtualization-capable layout.
 
 ```xml
 <ScrollViewer>
@@ -200,7 +200,7 @@ async Task InitializeWebView()
 
 ### AutomationProperties
 
-- **Every interactive control** must have an `AutomationProperties.Name` or `AutomationProperties.LabeledBy`.
+- Ensure each interactive control exposes an accessible name. Add `AutomationProperties.Name` or `AutomationProperties.LabeledBy` when the control does not derive one.
 - Add a stable, unique `AutomationProperties.AutomationId` for controls targeted by UI automation tests.
 - Use semantic XAML controls — prefer `Button`, `HyperlinkButton`, `ListView` over styled `Border`/`Grid` with click handlers.
 - Images must have `AutomationProperties.Name` describing the image purpose (or `AutomationProperties.AccessibilityView="Raw"` for decorative images).
@@ -391,7 +391,7 @@ string price = $"${cost:F2}";
 </Grid>
 ```
 
-Use `Start`/`End` alignment, not `Left`/`Right`. Avoid hard-coding `Margin` or `Padding` that assumes LTR layout.
+Use `FlowDirection` and supported WinUI alignment values. Check asymmetric margins, padding, and icons in RTL layouts.
 
 ### Pluralization Handling
 

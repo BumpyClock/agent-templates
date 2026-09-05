@@ -1,94 +1,39 @@
 ---
 name: winui-code-review
-description: "Assess WinUI-specific defects in a requested code review or a concrete quality concern."
+description: Assess WinUI-specific defects in a requested review or concrete quality concern.
 ---
 
-### When to Use
+# WinUI Code Review
 
-Use this guide for WinUI-specific concerns within the review scope.
+Inspect affected XAML, C#, and dependencies needed to establish a defect.
 A successful build or an intended commit does not require a separate review.
-
-### How to Review
-
-Inspect affected XAML and C# code and the dependencies needed to establish the concern.
-Use relevant sections below as prompts, not mandatory acceptance criteria.
 Honor repository conventions where several valid designs exist.
 Require a concrete consequence before treating a pattern preference as a defect.
 
-The `Microsoft.WindowsAppSDK.Analyzers` Roslyn analyzer ships with `references/winui-dev-workflow/guide.md` and is injected when `BuildAndRun.ps1` calls project-mode `winapp run`. The wrapper supplies a temporary file through the environment-backed MSBuild `CustomAfterDirectoryBuildProps` hook, preserving SDK composition and each project's normal `Directory.Build.props` discovery (including referenced projects), then restores the environment and removes the temporary file. Plain `winapp run`, `dotnet build`, and Visual Studio do **not** load the analyzer automatically; to enable it outside the wrapper, add the `<Analyzer Include="..." />` and `<Import Project="..." />` entries to the project's own `Directory.Build.props` (or wait for the planned NuGet package).
+## WinUI-specific concerns
 
-The analyzer catches a curated set of WinUI 3 / Windows App SDK issues with categorized 4-digit IDs:
+- Check binding source, update mode, notifications, and nullable paths against the intended behavior.
+- Use `{x:Bind}` for compiled paths and `{Binding}` where runtime sources or `DataContext` semantics fit.
+- Check UI-thread access, task lifetime, event subscriptions, and disposal of owned resources.
+- Check virtualization and layout constraints when collection size can affect responsiveness.
+- Check accessible names, keyboard access, focus order, and contrast for affected controls.
+- Use stable `AutomationId` values where tests require selectors. IDs alone do not establish accessibility.
+- Check resource lookup across supported themes and cultures when those resources change.
 
-* **WUI0xxx** — UWP → WinUI 3 API compatibility (`UwpXamlNamespace`, `Window.Current`, `CoreDispatcher`, `GetForCurrentView`)
-* **WUI1xxx** — Migration-table data-driven hints (UWP API has WinAppSDK equivalent, no equivalent, feature-area hint)
-* **WUI2xxx** — Runtime / layout / XAML pitfalls (raw `TabView` content, nested `x:Bind` without fallback, `x:Bind` without `Mode`, null `Converter`, missing `AutomationId`, attached-property syntax)
-* **WUI3xxx** — MVVM patterns (old `[ObservableProperty]` field syntax)
-* **WUI4xxx** — Interop (`WebView2` not initialized, removed ONNX Runtime GenAI APIs `WUI4101`-`WUI4103`)
+MVVM libraries, partial properties, command generators, and fixed spacing grids are project choices, not universal correctness requirements.
+Collection replacement is valid when notifications and selection semantics remain correct.
+An `async` method does not itself move CPU work off the UI thread.
 
-Every diagnostic ships at `Warning` severity (no rule is `Error`) and includes a `helpLinkUri`. Suppress noise with `#pragma warning disable WUIxxxx` or `<NoWarn>` as usual — the analyzer's `SuppressionTests` verify that pragma suppression round-trips correctly.
+## Analyzer integration
 
-### MVVM Compliance
+The sibling [development wrapper](../winui-dev-workflow/BuildAndRun.ps1) injects the bundled analyzer through `CustomAfterDirectoryBuildProps`.
+Plain `dotnet build`, Visual Studio, and `winapp run` do not automatically load that payload.
+Treat diagnostics as evidence to investigate, not proof that every suggested pattern is required.
+Use explicit project analyzer configuration when the repository requires coverage outside the wrapper.
 
-- [ ] ViewModels extend `ObservableObject`, use `[ObservableProperty]` partial properties (not fields)
-- [ ] Commands use `[RelayCommand]` attribute, not manual `ICommand` implementations
-- [ ] No UI types in ViewModels (`SolidColorBrush`, `Visibility`, `BitmapImage`) — these belong in converters or XAML
-- [ ] No business logic in code-behind — only navigation, dialog coordination, and event wiring
-- [ ] `async Task` for async methods, `async void` only for event handlers
-- [ ] Never replace `ObservableCollection<T>` — use `.Clear()` + re-add
+## References
 
-### x:Bind and Data Binding
+- For a concrete performance, security, or localization concern, consult the relevant section of [quality rules](references/quality-rules.md).
+- For binding semantics, consult [Microsoft data binding documentation](https://learn.microsoft.com/en-us/windows/apps/develop/data-binding/data-binding-in-depth).
 
-- [ ] All bindings use `{x:Bind}`, not `{Binding}`
-- [ ] `Mode=OneWay` or `TwoWay` set explicitly — `OneTime` default causes blank UI for dynamic data
-- [ ] `x:DataType` set on every `DataTemplate` — required for compiled x:Bind
-- [ ] No nested nullable paths (e.g., `ViewModel.Selected.Name`) without `FallbackValue`
-- [ ] Command bindings can use OneTime (commands don't change) — don't add `Mode=OneWay` to `Command="{x:Bind}"`
-
-### Accessibility
-
-- [ ] `AutomationProperties.AutomationId` on every interactive control (Button, TextBox, ComboBox, ToggleSwitch, ListView, NavigationViewItem)
-- [ ] `AutomationProperties.Name` on icon-only buttons and controls without visible text
-- [ ] Semantic controls (`Button`, `HyperlinkButton`) — not clickable `Border`/`TextBlock`
-- [ ] No information conveyed by color alone
-
-### Theming
-
-- [ ] All colors use `{ThemeResource}` brushes — no hardcoded `#FF0000` or `Color="Blue"`
-- [ ] Typography uses built-in styles (`TitleTextBlockStyle`, `SubtitleTextBlockStyle`, `BodyTextBlockStyle`, `CaptionTextBlockStyle`) — no raw `FontSize`
-- [ ] Spacing uses 4px grid multiples (4, 8, 12, 16, 24, 32, 48)
-- [ ] Corner radius uses `ControlCornerRadius` / `OverlayCornerRadius` — not hardcoded values
-- [ ] Styles referenced with `{StaticResource}` not `{ThemeResource}` (except for brush usage sites)
-
-### Security
-
-- [ ] No secrets, API keys, or tokens in source code
-- [ ] No `Process.Start` with unsanitized user input
-- [ ] External input validated and sanitized before use
-- [ ] File paths from user input not used directly in `File.Delete` / `File.WriteAllText` without validation
-
-### Performance
-
-- [ ] Long or dynamic lists use `ListView`/`GridView` (virtualized), not `StackPanel` with `foreach`
-- [ ] `x:Load` for content that's not always visible (e.g., dialogs, secondary panels)
-- [ ] Heavy work off UI thread via `Task.Run` or `async/await` — never block UI
-- [ ] No `.Result` / `.Wait()` / `.GetAwaiter().GetResult()` — these deadlock the UI thread
-- [ ] `using` statements on all disposable objects (`Model`, `Tokenizer`, `InferenceSession`, `Generator`)
-
-### Globalization
-
-- [ ] User-facing strings use `x:Uid` in XAML and `ResourceLoader` in C# — not hardcoded
-- [ ] String resources in `Strings/en-us/Resources.resw` (not `.resx`)
-- [ ] Date/number formatting uses `CultureInfo.CurrentCulture` — not hardcoded formats
-- [ ] Layout supports RTL (`FlowDirection` inherited from root, no absolute positioning that breaks in RTL)
-- [ ] No string concatenation for user-facing messages — use `string.Format` or interpolation with resource strings
-
-### Review Report
-
-After reviewing, summarize:
-1. **Issues found:** List each with file, line, and what's wrong
-2. **Severity:** Error (must fix), Warning (should fix), or Note (could improve)
-3. **Suggested fixes:** Specific code changes for each issue
-
-### References
-
-For detailed rules with code examples, see `references/quality-rules.md` — covers performance deep dives (x:Phase, layout optimization), security (PasswordVault, DPAPI, WebView2 hardening), accessibility (keyboard nav, screen readers), code quality (.editorconfig, naming), and globalization (x:Uid patterns, RTL, pluralization).
+Report actionable defects with location, consequence, and supporting evidence.

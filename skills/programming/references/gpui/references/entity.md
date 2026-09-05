@@ -1,163 +1,63 @@
-## Overview
+# Entities
 
-An `Entity<T>` is a handle to state of type `T`, providing safe access and updates.
+An `Entity<T>` retains GPUI-owned state.
+A `WeakEntity<T>` permits access without that ownership.
 
-**Key Methods:**
-- `entity.read(cx)` → `&T` - Read-only access
-- `entity.read_with(cx, |state, cx| ...)` → `R` - Read with closure
-- `entity.update(cx, |state, cx| ...)` → `R` - Mutable update
-- `entity.downgrade()` → `WeakEntity<T>` - Create weak reference
-- `entity.entity_id()` → `EntityId` - Unique identifier
+Use a strong handle when the caller must keep the state alive.
+Use a weak handle for callbacks or tasks that must not retain the owner.
+A closure does not require a weak handle merely because it is a closure.
 
-**Entity Types:**
-- **`Entity<T>`**: Strong reference (increases ref count)
-- **`WeakEntity<T>`**: Weak reference (doesn't prevent cleanup, returns `Result`)
+## Updates
 
-## Quick Start
+Use the context passed into `entity.update` for operations within that update.
+Do not access the same entity again while its mutable update is active.
+An update to a different entity is not inherently invalid.
+Check callback paths for indirect reentry into the first entity.
 
-### Creating and Using Entities
+Call `cx.notify()` when dependent views or observers need notice of a state change.
+A field assignment alone does not express that dependency.
+
+Handle a failed weak update according to the task lifetime.
+Entity release can be an expected cancellation condition.
+Do not suppress unrelated operation errors with an indiscriminate `.ok()`.
+
+For task lifetime rules, use [async](async.md).
+For observation, use [events](event.md).
+
+## Shared state example
+
+This fragment uses the GPUI 0.2.2 API shape, without a component library.
+It is not a standalone compiled example.
 
 ```rust
-// Create entity
-let counter = cx.new(|cx| Counter { count: 0 });
+struct Counter {
+    count: usize,
+}
 
-// Read state
-let count = counter.read(cx).count;
-
-// Update state
-counter.update(cx, |state, cx| {
-    state.count += 1;
-    cx.notify(); // Trigger re-render
-});
-
-// Weak reference (for closures/callbacks)
-let weak = counter.downgrade();
-let _ = weak.update(cx, |state, cx| {
-    state.count += 1;
+let counter = cx.new(|_| Counter { count: 0 });
+let shared = counter.clone();
+counter.update(cx, |counter, cx| {
+    counter.count += 1;
     cx.notify();
 });
+assert_eq!(shared.read(cx).count, 1);
 ```
 
-### In Components
+The clone refers to the same state, not a snapshot.
+A parent can retain a child entity while the child holds a weak parent handle.
+Strong handles in both directions can prevent release.
+Independent entities can share a strong model handle when that lifetime is intentional.
 
-```rust
-struct MyComponent {
-    shared_state: Entity<SharedData>,
-}
+For derived view state, retain an `observe` subscription and notify the dependent view after its derived state changes.
+Observation does not replace ownership of the source model.
 
-impl MyComponent {
-    fn new(cx: &mut App) -> Entity<Self> {
-        let shared = cx.new(|_| SharedData::default());
+| Need | API shape |
+| --- | --- |
+| Borrow state within synchronous application access | `entity.read(cx)` |
+| Return a value from context-mediated access | `entity.read_with(cx, |state, cx| value)` |
+| Mutate state through its entity context | `entity.update(cx, |state, cx| result)` |
+| Refer without retention | `entity.downgrade()` |
+| Compare entity identity rather than contents | `entity.entity_id()` |
 
-        cx.new(|cx| Self {
-            shared_state: shared,
-        })
-    }
-
-    fn update_shared(&mut self, cx: &mut Context<Self>) {
-        self.shared_state.update(cx, |state, cx| {
-            state.value = 42;
-            cx.notify();
-        });
-    }
-}
-```
-
-### Async Operations
-
-```rust
-impl MyComponent {
-    fn fetch_data(&mut self, cx: &mut Context<Self>) {
-        let weak_self = cx.entity().downgrade();
-
-        cx.spawn(async move |cx| {
-            let data = fetch_from_api().await;
-
-            // Update entity safely
-            let _ = weak_self.update(cx, |state, cx| {
-                state.data = Some(data);
-                cx.notify();
-            });
-        }).detach();
-    }
-}
-```
-
-## Core Principles
-
-### Always Use Weak References in Closures
-
-```rust
-// ✅ Good: Weak reference prevents retain cycles
-let weak = cx.entity().downgrade();
-callback(move || {
-    let _ = weak.update(cx, |state, cx| cx.notify());
-});
-
-// ❌ Bad: Strong reference may cause memory leak
-let strong = cx.entity();
-callback(move || {
-    strong.update(cx, |state, cx| cx.notify());
-});
-```
-
-### Use Inner Context
-
-```rust
-// ✅ Good: Use inner cx from closure
-entity.update(cx, |state, inner_cx| {
-    inner_cx.notify(); // Correct
-});
-
-// ❌ Bad: Use outer cx (multiple borrow error)
-entity.update(cx, |state, inner_cx| {
-    cx.notify(); // Wrong!
-});
-```
-
-### Avoid Nested Updates
-
-```rust
-// ✅ Good: Sequential updates
-entity1.update(cx, |state, cx| { /* ... */ });
-entity2.update(cx, |state, cx| { /* ... */ });
-
-// ❌ Bad: Nested updates (may panic)
-entity1.update(cx, |_, cx| {
-    entity2.update(cx, |_, cx| { /* ... */ });
-});
-```
-
-## Common Use Cases
-
-1. **Component State**: Internal state that needs reactivity
-2. **Shared State**: State shared between multiple components
-3. **Parent-Child**: Coordinating between related components (use weak refs)
-4. **Async State**: Managing state that changes from async operations
-5. **Observations**: Reacting to changes in other entities
-
-## Reference Documentation
-
-### Complete API Documentation
-- **Entity API**: See [api-reference.md](references/api-reference.md)
-  - Entity types, methods, lifecycle
-  - Context methods, async operations
-  - Error handling, type conversions
-
-### Implementation Guides
-- **Patterns**: See [patterns.md](references/patterns.md)
-  - Model-view separation, state management
-  - Cross-entity communication, async operations
-  - Observer pattern, event subscription
-  - Pattern selection guide
-
-- **Best Practices**: See [best-practices.md](references/best-practices.md)
-  - Avoiding common pitfalls, memory leaks
-  - Performance optimization, batching updates
-  - Lifecycle management, cleanup
-  - Async best practices, testing
-
-- **Advanced Patterns**: See [advanced.md](references/advanced.md)
-  - Entity collections, registry pattern
-  - Debounced/throttled updates, state machines
-  - Entity snapshots, transactions, pools
+Sources: [ownership and data flow](https://docs.rs/gpui/latest/gpui/_ownership_and_data_flow/index.html),
+[Entity API](https://docs.rs/gpui/latest/gpui/struct.Entity.html).

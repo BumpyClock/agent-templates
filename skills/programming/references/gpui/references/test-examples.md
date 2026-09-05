@@ -1,172 +1,24 @@
-## Testing Best Practices
+# Test execution
 
-### Test Organization
-
-Group related tests in modules:
-
-```rust
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    mod entity_tests {
-        use super::*;
-
-        #[gpui::test]
-        fn test_creation() { /* ... */ }
-
-        #[gpui::test]
-        fn test_updates() { /* ... */ }
-    }
-
-    mod async_tests {
-        use super::*;
-
-        #[gpui::test]
-        async fn test_async_ops() { /* ... */ }
-    }
-
-    mod distributed_tests {
-        use super::*;
-
-        #[gpui::test]
-        fn test_multi_app() { /* ... */ }
-    }
-}
-```
-
-### Setup and Teardown
-
-Use helper functions for common setup:
-
-```rust
-fn create_test_counter(cx: &mut TestAppContext) -> Entity<Counter> {
-    cx.new(|cx| Counter::new(cx))
-}
-
-#[gpui::test]
-fn test_counter_operations(cx: &mut TestAppContext) {
-    let counter = create_test_counter(cx);
-
-    // Test operations
-}
-```
-
-### Assertions
-
-Use descriptive assertions:
-
-```rust
-#[gpui::test]
-fn test_counter_bounds(cx: &mut TestAppContext) {
-    let counter = create_test_counter(cx);
-
-    // Test upper bound
-    for _ in 0..100 {
-        counter.update(cx, |counter, cx| {
-            counter.increment(cx);
-        });
-    }
-
-    let count = counter.read_with(cx, |counter, _| counter.count);
-    assert!(count <= 100, "Counter should not exceed maximum");
-
-    // Test lower bound
-    for _ in 0..200 {
-        counter.update(cx, |counter, cx| {
-            counter.decrement(cx);
-        });
-    }
-
-    let count = counter.read_with(cx, |counter, _| counter.count);
-    assert!(count >= 0, "Counter should not go below minimum");
-}
-```
-
-### Performance Testing
-
-Test performance characteristics:
-
-```rust
-#[gpui::test]
-fn test_operation_performance(cx: &mut TestAppContext) {
-    let component = cx.new(|cx| MyComponent::new(cx));
-
-    let start = std::time::Instant::now();
-
-    // Perform many operations
-    for i in 0..1000 {
-        component.update(cx, |comp, cx| {
-            comp.perform_operation(i, cx);
-        });
-    }
-
-    let elapsed = start.elapsed();
-    assert!(elapsed < Duration::from_millis(100), "Operations should complete quickly");
-}
-```
-
-## Running Tests
-
-### Basic Test Execution
+Use the repository's test command and supported platform.
+When no wrapper applies, select the affected package and test:
 
 ```bash
-# Run all tests
-cargo test
-
-# Run specific test
-cargo test test_counter_operations
-
-# Run tests in a specific module
-cargo test entity_tests::
-
-# Run with output
-cargo test -- --nocapture
+cargo test -p <package> <test-filter>
 ```
 
-### Test Configuration
-
-Enable test-support feature for GPUI tests:
-
-```toml
-[features]
-test-support = ["gpui/test-support"]
-```
+When the package exposes a `test-support` feature, enable it if the selected test requires it:
 
 ```bash
-cargo test --features test-support
+cargo test -p <package> --features test-support <test-filter>
 ```
 
-### Advanced Test Execution
+Replace placeholders with names from the workspace.
+Do not add a feature or CI workflow merely because this example mentions one.
+`--test-threads=1` controls Rust test concurrency, not GPUI randomized test iterations.
 
-```bash
-# Run tests with iterations for property testing
-cargo test -- --test-threads=1
+For a performance claim, use the project's benchmark or a representative runtime measurement.
+An arbitrary elapsed-time assertion in a unit test is not a portable performance threshold.
 
-# Run tests matching a pattern
-cargo test test_async
-
-# Run tests with backtrace on failure
-RUST_BACKTRACE=1 cargo test
-```
-
-### CI/CD Integration
-
-For continuous integration:
-
-```yaml
-# .github/workflows/test.yml
-name: Tests
-on: [push, pull_request]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: dtolnay/rust-toolchain@stable
-      - name: Run tests
-        run: cargo test --features test-support
-```
-
-GPUI's testing framework provides deterministic, fast, and comprehensive testing capabilities that mirror real application behavior while providing the control needed for thorough testing of complex UI and async scenarios.
+For runnable test examples, inspect the matching revision's
+[test context source](https://github.com/zed-industries/zed/blob/main/crates/gpui/src/app/test_context.rs).

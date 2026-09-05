@@ -22,7 +22,7 @@ struct DetailView: View {
 
   var body: some View {
     content
-      .task {
+      .task(id: id) {
         await load()
       }
   }
@@ -42,10 +42,13 @@ struct DetailView: View {
   private func load() async {
     state = .loading
     do {
-      state = .loaded(try await client.fetch(id: id))
+      let item = try await client.fetch(id: id)
+      try Task.checkCancellation()
+      state = .loaded(item)
     } catch is CancellationError {
       return
     } catch {
+      guard !Task.isCancelled else { return }
       state = .failed(error)
     }
   }
@@ -66,16 +69,20 @@ struct SearchView: View {
     }
     .searchable(text: $query)
     .task(id: query) {
-      try? await Task.sleep(for: .milliseconds(250))
-      guard !Task.isCancelled, !query.isEmpty else {
+      let requestedQuery = query
+      guard !requestedQuery.isEmpty else {
         results = []
         return
       }
       do {
-        results = try await client.search(query)
+        try await Task.sleep(for: .milliseconds(250))
+        let matches = try await client.search(requestedQuery)
+        try Task.checkCancellation()
+        results = matches
       } catch is CancellationError {
         return
       } catch {
+        guard !Task.isCancelled else { return }
         results = []
       }
     }
@@ -84,6 +91,15 @@ struct SearchView: View {
 ```
 
 ## When to move work out of the view
+
+These fragments assume project-defined client, result, and presentation types.
+Cancellation is cooperative, so a client can return a result after its task receives cancellation.
+Check cancellation after each request and before state publication.
+A canceled debounce task must not clear results that belong to its replacement.
+The debounce interval is illustrative, not a required delay.
+
+If requests start outside this single `.task(id:)` owner, use a request identity or generation check before publication.
+
 
 - If the async flow spans multiple screens or must survive view dismissal, move it into a service or model.
 - If the view is mostly coordinating app-level lifecycle or account changes, wire it at the app shell in `app-wiring.md`.

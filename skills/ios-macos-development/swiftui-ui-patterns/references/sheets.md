@@ -2,9 +2,9 @@
 
 ## Intent
 
-Use a centralized sheet routing pattern so any view can present modals without prop-drilling. This keeps sheet state in one place and scales as the app grows.
+Keep sheet state with the feature that owns presentation. Use a shared router when multiple features need coordinated modal presentation.
 
-## Core architecture
+## Shared-router option
 
 - Define a `SheetDestination` enum that describes every modal and is `Identifiable`.
 - Store the current sheet in a router object (`presentedSheet: SheetDestination?`).
@@ -34,13 +34,14 @@ enum SheetDestination: Identifiable, Hashable {
 
   var id: String {
     switch self {
-    case .composer, .editProfile:
-      // Use the same id to ensure only one editor-like sheet is active at a time.
-      return "editor"
+    case .composer:
+      return "composer"
+    case .editProfile:
+      return "editProfile"
     case .settings:
       return "settings"
-    case .report:
-      return "report"
+    case .report(let itemID):
+      return "report-\(itemID)"
     }
   }
 }
@@ -141,13 +142,15 @@ struct EditItemSheet: View {
 
 ## Design choices to keep
 
-- Centralize sheet routing so features can present modals without wiring bindings through many layers.
+- Centralize sheet state only when presentation requires coordination across features.
 - Use `sheet(item:)` to guarantee a single sheet is active and to drive presentation from the enum.
-- Group related sheets under the same `id` when they are mutually exclusive (e.g., editor flows).
+- Give distinct destinations distinct stable IDs. One optional destination already represents mutually exclusive presentation.
 - Keep sheet views lightweight and composed from smaller views; avoid large monoliths.
-- Let sheets own their actions and call `dismiss()` internally instead of forwarding `onCancel` or `onConfirm` closures through many layers.
+- Use internal dismissal for modal-owned actions. Use callbacks when the parent owns the result.
 
 ## Pitfalls
+
+See Apple's [item-driven sheet API](https://developer.apple.com/documentation/swiftui/view/sheet(item:ondismiss:content:)) for presentation semantics.
 
 - Avoid mixing `sheet(isPresented:)` and `sheet(item:)` for the same concern; prefer a single enum.
 - Avoid `if let` inside a sheet body when the presentation state already carries the selected model; prefer `sheet(item:)`.
