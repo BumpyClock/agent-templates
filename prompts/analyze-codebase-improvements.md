@@ -1,19 +1,18 @@
 ---
-description: "Analyze the codebase for high-value improvements using the code-review skill (audit mode)"
-argument-hint: "[scope] [focus-areas] [nuclear]"
+description: "Analyze the codebase for high-value improvements using the improve skill"
+argument-hint: "[scope] [focus-areas]"
 ---
 
 # Codebase Improvement Analysis
 
-Invoke the `code-review` skill and follow it exactly. Analysis only; do not change code.
+Use the `improve` skill's audit route. Keep the analysis read-only.
 
-**Scope / Focus / Mode (optional):** "$ARGUMENTS"
+**Scope / Focus (optional):** "$ARGUMENTS"
 
-- Parse arguments into scope (paths/globs/dirs), focus areas, and mode per the skill's Inputs section.
-- Default: whole repo, focus `all`, mode `audit`.
-- If arguments include `nuclear` (or `strict`/`thermo`), run the skill's nuclear mode.
-- Use subagents for independent analysis passes when useful; shard by subsystem or concern per the skill's workflow.
-- Report findings in the skill's output format for the chosen mode.
+- Use supplied paths and focus areas to bound the audit.
+- If no scope is supplied, assess the repository for high-value improvements.
+- Treat legacy `nuclear`, `strict`, or `thermo` arguments as a request for deeper maintainability analysis within that scope.
+- Report concrete evidence, impact, and tradeoffs without a fixed finding count.
 
 ## Usage Examples
 
@@ -23,5 +22,5 @@ Invoke the `code-review` skill and follow it exactly. Analysis only; do not chan
 /analyze-codebase-improvements src time-complexity
 /analyze-codebase-improvements prompts docs comments
 /analyze-codebase-improvements tests deps
-/analyze-codebase-improvements src nuclear
+/analyze-codebase-improvements src maintainability
 ```

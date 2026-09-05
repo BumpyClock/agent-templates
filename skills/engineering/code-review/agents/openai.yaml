@@ -1,4 +1,4 @@
 interface:
   display_name: "Code Review"
-  short_description: "Review fixed-point diffs against strict standards and spec"
-  default_prompt: "Use $code-review to review this fixed-point diff while applying the nuclear maintainability baseline, reporting an explicit Standards disposition, and keeping Standards and Spec findings separate."
+  short_description: "Review changes for actionable defects and regressions"
+  default_prompt: "Use $code-review to assess these changes and report actionable findings with source locations and evidence."

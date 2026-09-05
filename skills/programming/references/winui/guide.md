@@ -11,7 +11,7 @@ Open the guide that matches the task before acting:
 | Install or verify prerequisites: .NET SDK 8.0.100+, WinApp CLI 0.6+, Developer Mode | `references/winui-setup/guide.md` |
 | Create, build, run, debug, or fix WinUI app errors | `references/winui-dev-workflow/guide.md` |
 | Design or review WinUI UI/XAML, Fluent styling, theme resources, accessibility, layout | `references/winui-design/guide.md` |
-| Review code quality before commit: MVVM, x:Bind, security, perf, globalization | `references/winui-code-review/guide.md` |
+| Review requested WinUI changes or investigate a concrete WinUI quality concern | `references/winui-code-review/guide.md` |
 | Automate UI tests with `winapp ui`, inspect controls, assert state, capture screenshots | `references/winui-ui-testing/guide.md` |
 | Package, sign, install, release, MSIX, certs, GitHub Actions, Microsoft Store | `references/winui-packaging/guide.md` |
 | Migrate WPF to WinUI 3: namespaces, controls, DispatcherQueue, resources | `references/winui-wpf-migration/guide.md` |

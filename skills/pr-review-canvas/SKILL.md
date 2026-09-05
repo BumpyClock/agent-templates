@@ -1,6 +1,6 @@
 ---
 name: pr-review-canvas
-description: "Interactive local HTML PR walkthrough — grouped diffs + annotations, reads like a peer explaining what matters."
+description: "Create a local HTML walkthrough of a PR when the user requests an interactive review artifact."
 ---
 
 # PR Review Canvas
