@@ -51,6 +51,15 @@ Select the workflow that matches the requested deliverable:
 - A design or behavior question needs a throwaway probe: [Prototype](../engineering/prototype/SKILL.md).
 - Agent-guidance comparison: [Eval](evals/README.md).
 
+## Platform Context
+
+Read platform context only when the task concerns that platform.
+Select the relevant nested guide rather than load its complete reference set.
+
+- GPUI components, entities, actions, focus, or tests: [GPUI](references/gpui/guide.md).
+- WinUI 3 or Windows App SDK setup, XAML, builds, tests, packaging, or WPF migration: [WinUI](references/winui/guide.md).
+- TypeScript domain types or external input contracts: [TypeScript patterns](references/languages/typescript-patterns.md).
+
 ## References
 
 - New, changed, or suspicious tests: [Test quality](references/write-tests.md).

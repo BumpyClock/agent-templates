@@ -1,7 +1,7 @@
 # GPUI component tests
 
-Use [Write tests](../../programming/references/write-tests.md) for test selection, assertions, and regression value.
-When the user or repository requires TDD, use [TDD rules](../../programming/references/tdd-rules.md).
+Use [Write tests](../../write-tests.md) for test selection, assertions, and regression value.
+When the user or repository requires TDD, use [TDD rules](../../tdd-rules.md).
 
 ## Component contracts
 

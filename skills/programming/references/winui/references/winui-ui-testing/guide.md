@@ -9,8 +9,8 @@ description: "Automated UI testing for Windows desktop apps — generate a batch
 
 ### Test policy
 
-Use [Write tests](../../../programming/references/write-tests.md) to select checks and assertions.
-When the user or repository requires TDD, use [TDD rules](../../../programming/references/tdd-rules.md).
+Use [Write tests](../../../write-tests.md) to select checks and assertions.
+When the user or repository requires TDD, use [TDD rules](../../../tdd-rules.md).
 The examples below describe UIA mechanics, not a required test inventory.
 
 ### Approach
