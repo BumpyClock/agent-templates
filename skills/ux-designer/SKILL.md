@@ -70,7 +70,10 @@ Protect in this order — never sacrifice a higher item for a lower one:
 Two modes — pick by what the user asked for:
 
 - **Design (default)**: implementation-ready UX documentation (per `references/design-doc-template.md`) plus self-contained HTML mockup(s) for layout-level work. Mockups are throwaway design artifacts, not production code.
-- **Build**: when asked to implement for real, write production frontend code following `references/production-implementation.md` — after the direction, craft, and anti-slop passes. A heavyweight design doc is optional in build mode; the design read, dial values, and key decisions still get stated.
+- **Build**: write production code for the requested interface change.
+  Use `references/production-implementation.md` when implementation guidance is needed.
+  Apply direction, craft, and anti-slop passes to full design work.
+  For small edits, use the scope rule without design statements or a separate document.
 
 ## Full Design Workflow
 
