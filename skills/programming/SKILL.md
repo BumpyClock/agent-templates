@@ -57,6 +57,7 @@ Select the relevant nested guide rather than load its complete reference set.
 
 - GPUI components, entities, actions, focus, or tests: [GPUI](references/gpui/guide.md).
 - WinUI 3 or Windows App SDK setup, XAML, builds, tests, packaging, or WPF migration: [WinUI](references/winui/guide.md).
+- Swift, SwiftUI, UIKit, App Intents, or Xcode tasks: [Apple platform references](references/apple/guide.md).
 - TypeScript domain types or external input contracts: [TypeScript patterns](references/languages/typescript-patterns.md).
 
 ## References

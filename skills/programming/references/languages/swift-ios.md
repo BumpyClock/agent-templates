@@ -2,6 +2,11 @@
 
 **Load when:** repo contains Swift/Apple-platform code. Match the Swift tools version and deployment target in the project/`Package.swift`; check before using newer language modes (strict concurrency, typed throws).
 
+## Apple platform references
+
+Read the relevant [Xcode reference](../apple/guide.md) for SwiftUI, UIKit, App Intents, tests, security settings, or device interaction.
+Use [iOS and macOS Development](../../../ios-macos-development/SKILL.md) for build, concurrency, performance, simulator, or distribution workflows.
+
 ## Testing
 
 - Swift Testing for unit/integration tests; XCTest retained for XCUITest (UI flows) and XCTMetric (performance); snapshot tests when the change warrants.

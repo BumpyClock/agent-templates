@@ -15,6 +15,9 @@ A local build request does not authorize distribution, submission, or account ch
 Read the guide that resolves the current task.
 Do not load a stack of guides for an ordinary edit.
 
+For Apple API guidance, read the relevant [Xcode reference](../programming/references/apple/guide.md) first.
+The guides below provide supplementary examples and local tool workflows.
+
 | Task | Guide |
 | --- | --- |
 | SwiftUI API or state design | [SwiftUI](swift-ui/guide.md) |
