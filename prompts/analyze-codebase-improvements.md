@@ -1,11 +1,11 @@
 ---
-description: "Analyze the codebase for high-value improvements using the improve skill"
+description: "Analyze the codebase for high-value improvements"
 argument-hint: "[scope] [focus-areas]"
 ---
 
 # Codebase Improvement Analysis
 
-Use the `improve` skill's audit route. Keep the analysis read-only.
+Audit the codebase for high-value improvements. Keep the analysis read-only.
 
 **Scope / Focus (optional):** "$ARGUMENTS"
 

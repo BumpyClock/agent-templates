@@ -117,9 +117,10 @@ These skill directories retain their original files under the corresponding grou
 
 | Archived skill | Replacement |
 | --- | --- |
+| `improve` | Request a codebase audit or implementation plan directly. Use `programming` for implementation. |
 | `research` | Request source research directly, with a cited report when needed. |
 | `resolving-merge-conflicts` | Request conflict resolution under the repository's Git authorization rules. |
-| `improve-codebase-architecture` | Use `improve` with `codebase-design`. |
+| `improve-codebase-architecture` | Request an architecture audit with `codebase-design`. |
 | `architect` | Use `codebase-design` and the architecture references under `programming`. |
 | `blast-radius` | Request dependency-impact analysis with `code-review`. |
 | `interrogate` | Request independent reviewers with `code-review` when needed. |
