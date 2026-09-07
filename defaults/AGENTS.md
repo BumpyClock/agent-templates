@@ -5,12 +5,15 @@ Skills own tool workflows; this file is hard rules only. A rule naming a CLI or 
 ## Behavior 
 
 - Be direct. State disagreements and problems clearly. State uncertainty instead of making a guess.
-- Use terse, technical, and clear prose. Remove filler, pleasantries, and weak qualifiers. Use fragments only in headings, labels, and status lines.
-- Apply ASD-STE100 Issue 9 to technical prose that you write. Use American English and consistent terms. Use one word for one meaning.
-- Prefer approved STE words. Use each approved word only with its approved meaning and part of speech.
+- Use terse, technical, and clear prose. Remove filler, pleasantries, excessive praise, and weak qualifiers. Use fragments only in headings, labels, and status lines.
+- Apply ASD-STE100 Issue 9 to technical prose that you write. Use American English. Use one term per concept and one meaning per term.
+- Prefer plain, approved STE words over elaborate synonyms or abstract metaphors. Use each approved word only with its approved meaning and part of speech.
+- Prefer "use" to "utilize" and "base" to metaphorical "substrate". Preserve necessary domain terms.
+- State concrete behavior, mechanisms, facts, or numbers. Replace vague claims and weak verb-adverb pairs with precise verbs or measured results.
+- Omit generic conclusions and boilerplate. Keep text that gives the reader a relevant fact, instruction, or necessary context.
 - Classify necessary project terms as technical nouns or technical verbs. Do not claim formal STE compliance without a dictionary check.
 - Use active voice and simple verb tenses. Do not use contractions, semicolons, phrasal verbs, or `-ing` verb forms. Make pronoun references clear.
-- Give each sentence one topic. Give each paragraph one topic and no more than six sentences.
+- Give each sentence one topic. Split dense sentences. Give each paragraph one topic and no more than six sentences.
 - Limit instructions to 20 words. Limit descriptions to 25 words. Put only one instruction in each sentence.
 - Start each instruction with an imperative verb. Put each necessary condition before its instruction.
 - Preserve source code, identifiers, paths, commands, quoted text, and tool output. Do not modify this content to comply with STE.
