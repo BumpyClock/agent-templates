@@ -1,12 +1,11 @@
 # Design Direction
 
-Read when: you need to choose or revise the overall aesthetic direction for a product or feature.
-
 ## Context Questions
 - What does the product do?
 - Who uses it?
 - What is the emotional job (trust, efficiency, delight, focus)?
 - What would make it memorable?
+- What information does it need to convey?
 
 ## Personality Options
 - Precision and density: tight spacing, monochrome, information-forward. Good for power users. Examples: Linear, Raycast, terminal aesthetics.
@@ -16,18 +15,15 @@ Read when: you need to choose or revise the overall aesthetic direction for a pr
 - Utility and function: muted palette, functional density, clear hierarchy. Good for developer tools. Example: GitHub.
 - Data and analysis: chart-optimized, technical but accessible, numbers as first-class citizens.
 
-Pick one or blend two, but commit to a direction that fits the product.
+Pick one or blend two or more, but commit to a direction that fits the product.
 
-For marketing/landing surfaces, also state a one-line design read and set the three dials — see `marketing-and-landing.md`.
-
-## Named Aesthetic Recipes
-Fuller starting points when the direction calls for them (vibe archetypes for marketing pages live in `marketing-and-landing.md`):
 
 **Editorial minimalism** (workspace/document tools, calm SaaS — Notion-adjacent):
 - Canvas: white or warm bone (`#F7F6F3` / `#FBFBFA`); surfaces white/near-white (`#F9F9F8`); structural borders ultra-light (`#EAEAEA` / `rgba(0,0,0,0.06)`).
 - Text: off-black (`#111` or `#2F3437`), secondary muted gray (`#787774`); body line-height 1.6.
-- Type: characterful sans for UI/body; an editorial serif (chosen per `anti-slop-tells.md` — not Fraunces/Instrument Serif) reserved for hero headings and quotes with tight tracking (-0.02em to -0.04em) and line-height ~1.1; monospace for code, keys, metadata.
-- Accents: washed-out pastels only, for tags/inline-code/icon chips — pale red `#FDEBEC`/`#9F2F2D`, blue `#E1F3FE`/`#1F6C9F`, green `#EDF3EC`/`#346538`, yellow `#FBF3DB`/`#956400`.
+- Type: characterful sans for UI/body, editorial serif for hero headings and quotes, monospace for code, keys, and metadata.
+- Use tight tracking (-0.02em to -0.04em) and line-height ~1.1 for the editorial serif.
+- Tag and chip colors: washed-out pastels only — pale red `#FDEBEC`/`#9F2F2D`, blue `#E1F3FE`/`#1F6C9F`, green `#EDF3EC`/`#346538`, yellow `#FBF3DB`/`#956400`.
 - Components: flat 1px-bordered cards, crisp 8-12px radius, generous internal padding; solid near-black CTAs with 4-6px radius and no shadow; pill tags in pastels; accordions as border-bottom rows with `+`/`−` toggles; `<kbd>`-style keystroke chips.
 - No gradients, no heavy shadows (< 0.05 opacity if any), no pill-shaped large containers. Depth comes from subtle low-opacity ambient imagery or faint radial warmth, not elevation.
 
@@ -41,11 +37,11 @@ Fuller starting points when the direction calls for them (vibe archetypes for ma
 
 **Light or dark?** Dark modes aren't just light modes inverted. Dark feels technical, focused, premium. Light feels open, approachable, clean. Choose based on context.
 
-**Accent color** — Pick ONE that means something. Blue for trust. Green for growth. Orange for energy. Violet for creativity. Don't just reach for the same accent every time.
+**Primary brand accent** — Choose one that fits the product identity. Define semantic and categorical color roles separately.
 
 ### Choose a Layout Approach
 
-The content should drive the layout (topology-level composition — focal relationship, rejecting the category default, pacing — lives in `page-composition.md`):
+Use [Layout](layout.md) as the structural baseline. For detailed hierarchy or alternative compositions, read [Page Composition](page-composition.md).
 
 - **Dense grids** for information-heavy interfaces where users scan and compare
 - **Generous spacing** for focused tasks where users need to concentrate
@@ -64,7 +60,7 @@ Typography sets tone. Don't always default:
 - **Geometric sans** (Geist, Inter) — modern, clean, technical
 - **Humanist sans** (SF Pro, Satoshi) — warmer, more approachable
 - **Characterful display sans** (Cabinet Grotesk, Clash Display, PP Neue Montreal, GT Walsheim, Söhne) — brand-forward marketing and premium consumer surfaces
-- **Editorial serif** (Tiempos, Canela, GT Sectra, Domaine, Reckless) — only when genuinely editorial/luxury/publication and you can say why this serif fits this brand; not the reflex for "creative/premium" (see `anti-slop-tells.md`)
+- **Editorial serif** (Tiempos, Canela, GT Sectra, Domaine, Reckless) — editorial, luxury, publication, or heritage contexts with a clear brand fit.
 - **Monospace influence** — technical, developer-focused, data-heavy
 
 Pairings that work: Geist + Geist Mono, Satoshi + JetBrains Mono, Cabinet Grotesk + Inter Tight. Emphasize within a headline using italic/bold of the same family, never a second family.

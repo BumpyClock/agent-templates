@@ -1,9 +1,11 @@
 # Data and Evidence
 
-Read when: designing tables, stat/KPI displays, comparisons, charts-in-layout, calculators, or any data-heavy or report-like surface. Where a dedicated dataviz skill is available it owns chart internals (chart types, palettes, axes); this file covers how evidence sits in the layout and stays honest.
-
 ## Never Invent Data
-Placeholder-content rules live in `anti-slop-tells.md`. For supplied data: preserve facts, units, periods, formulas, and qualifiers exactly. Distinguish observation, derivation, projection, and recommendation. Omit the unknown or label it honestly — never fabricate certainty, urgency, sources, or precision.
+Preserve supplied facts, units, periods, formulas, and qualifiers exactly. Distinguish observation, derivation, projection, and recommendation. Omit unknown values or label them as unknown. Never fabricate certainty, urgency, sources, or precision.
+
+## Mock Data
+
+Label all invented data and fictional claims as mock content, regardless of how realistic the values appear. Place the label where users can see which content it covers. Never present mock metrics, testimonials, customer endorsements, or scarcity claims as production evidence.
 
 ## Choose Geometry Before Components
 Map the data's meaning to a visual variable before reaching for a component:
@@ -30,7 +32,7 @@ Tables for precise lookup; prose for a single conclusion; charts only when the r
 - Consistent units and precision across peers; no fake precision.
 - Reorder columns around the lookup task before shrinking, wrapping, or truncating anything.
 - Compact density only for genuinely dense lookup. Highlight a row only when the data supports the emphasis.
-- Tabular numerals for aligned numeric columns (`components-typography-icons.md`).
+- Follow [Numeric Text](typeset.md#numeric-text) for aligned numeric columns.
 
 ## Stat and KPI Displays
 - One evidence home per claim — don't repeat the same number as hero stat, chart annotation, and summary card at equal weight.

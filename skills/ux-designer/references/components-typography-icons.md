@@ -1,36 +1,15 @@
 # Components, Type, and Icons
 
-Read when: you need guidance for controls, typography scales, data presentation, or icon usage.
+Read for control treatment, icons, or editorial-minimal components.
 
 ## Isolated Controls
 - Treat pickers, filters, and dropdowns as crafted objects, not plain text.
-- Prefer custom triggers and popovers over native form controls (select, date input) when visual consistency matters and the implementation can match native accessibility and keyboard behavior. Native controls remain the right call for simple forms, mobile web, and low-budget accessibility work.
+- Follow [Control Selection](accessibility.md#control-selection) for project components, native elements, and custom controls.
 - For custom select triggers, use inline-flex and no-wrap text to keep label and chevron on one line.
 
-## Typography Hierarchy
-Good starting values — adjust to product and platform:
-- Headlines: 600 weight, tight tracking (-0.02em).
-- Body: 400 to 500 weight, normal tracking.
-- Labels: 500 weight, slight positive tracking for uppercase.
-- Scale: 11, 12, 13, 14 (base), 16, 18, 24, 32 px.
-- Body measure ~60-75 characters per line. Rewrite or reflow before shrinking type to make content fit; never use tiny gray copy to solve density.
-- Equivalent peers (stats, card titles, table cells) share role, size, weight, and numeric treatment — never resize one because its string is longer.
+## Typography
 
-## Text Wrapping
-- Use balanced wrapping for headings, titles, and short blocks where even line length matters.
-- Use pretty wrapping for short-to-medium paragraphs, descriptions, captions, list items, and card text.
-- Skip special wrapping for long copy, code blocks, and preformatted text.
-- Call out wrapping intent in specs so implementation avoids orphaned heading/body lines.
-
-## Font Rendering
-- Specify app-wide antialiasing/font smoothing when crisp text is part of the visual direction.
-- Apply it at the root/system level for consistency, not per component.
-
-## Monospace for Data
-- Use monospace for numbers, IDs, codes, and timestamps.
-- Use tabular-nums for column alignment.
-- Use tabular numbers for dynamic counters, timers, changing prices, scores, dashboards, and numeric table columns.
-- Avoid tabular numbers for phone numbers, zip codes, version strings, and decorative numerals unless alignment is the task.
+Follow [Typeset](typeset.md) for the typography baseline, role consistency, text wrap, numeric text, and font behavior.
 
 ## Iconography
 - Use the project's existing icon set if one exists; otherwise pick one coherent family (Phosphor is a good default; Lucide, platform sets also fine) and stick to it.
@@ -51,4 +30,5 @@ These belong to the Editorial minimalism direction (see `design-direction.md`), 
 - Tags / status badges: pill radius, ~11-12px type, uppercase with wide tracking (~0.05em), background from the Editorial minimalism pastel pairs in `design-direction.md`.
 - Keystroke chips: render shortcuts in `<kbd>` — `1px solid #EAEAEA`, `4px` radius, `#F7F6F3` background, monospace font.
 - Accordions as border rows: strip the container box; separate items with `border-bottom: 1px solid #EAEAEA` only; `+`/`−` toggle glyph.
-- Faux-OS window chrome: frame a mockup in a minimal container with a white top bar holding three small light-gray circles (macOS controls). Frame only — contents must be a real screenshot, generated image, or real mini-component, never div-built fake UI (see fake-artifact tells in `anti-slop-tells.md`).
+- Faux-OS window chrome: a minimal frame with a white top bar and three small light-gray circles for macOS controls.
+- Distinguish illustrative mockups from actual product screenshots.

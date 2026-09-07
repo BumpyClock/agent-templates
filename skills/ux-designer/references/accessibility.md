@@ -2,10 +2,13 @@
 
 Read when: building or speccing any custom interactive component — dialog/modal, dropdown menu, accordion, custom select/combobox, disclosure/toggle, tabs — or any focus, motion, form-validation, or contrast behavior. This is the a11y contract for the custom UI this skill prescribes.
 
-## Native first, ARIA second
-The first accessibility decision is whether to build the component at all. A native element ships focus, keyboard, and semantics for free; a custom one makes you reimplement all three and get them right.
-- Use `<button>`, `<a href>`, `<input>`, `<select>`, `<textarea>`, `<dialog>`, `<details>/<summary>` whenever they fit. Style them; don't replace them.
-- Build an ARIA pattern only when native can't do it: a menu of actions, a rich option list with custom rendering, a multi-panel accordion, an anchored popover you must position yourself.
+## Control Selection
+
+- Reuse established project components that meet the required behavior and accessibility needs.
+- When no suitable project component exists, prefer native elements.
+- Use `<button>`, `<a href>`, `<input>`, `<select>`, `<textarea>`, `<dialog>`, or `<details>/<summary>` when they meet the required behavior.
+- Build custom controls only when required behavior exceeds native capabilities, not solely for visual consistency.
+- Verify keyboard interaction, focus behavior, and semantics for custom controls.
 - First rule of ARIA: don't use ARIA if a native element does the job. Second: don't change native semantics. A `<div role="button">` needs `tabindex="0"`, Enter/Space handlers, and `:focus-visible` — all things `<button>` already has.
 - No ARIA is better than bad ARIA. A wrong role actively misleads assistive tech; absent role degrades to plain text.
 
@@ -36,17 +39,29 @@ Terse contract per pattern — roles, states, keys. Full detail: w3.org/WAI/ARIA
 - Errors: reference the message with `aria-describedby`, set `aria-invalid="true"`, and announce via a container that is `role="alert"` or `aria-live="assertive"` (polite for non-blocking). Don't signal error by color alone — add text and an icon.
 - Group related fields with `<fieldset>/<legend>`. Mark required fields in text, not just an asterisk color.
 
-## Motion — a hard gate
-`prefers-reduced-motion: reduce` is not optional polish; honor it or the interface can trigger vestibular illness.
-- **Disable outright**: parallax, scroll-jacking/scroll-driven reveals, autoplaying carousels, looping background motion, large-scale zoom/spin, physics/magnetic hover.
-- **Reduce to instant/near-instant**: page and element transitions, accordion/menu open-close, hover and press feedback — swap movement for a fast opacity change or cut motion entirely; state must still change visibly.
-- Provide the reduced variant explicitly; don't leave it implied. Opacity-only cross-fades are generally safe.
+## Reduced Motion
+
+This section owns reduced-motion requirements across all motion baselines and recipes.
+
+- For web interfaces, provide an explicit `prefers-reduced-motion: reduce` path.
+- For native interfaces, honor the platform reduced-motion preference.
+- Under reduced motion, disable nonessential spatial effects, parallax, scroll-driven reveals, automatic carousel advances, background loops, zoom/spin, and physics/magnetic hover.
+- Preserve visible state changes and action feedback without a requirement for animation.
+- Use instant updates or optional brief, non-spatial opacity or color transitions when these clarify state.
+- Preserve all content and controls when motion is absent.
+- Retain essential motion only when no alternative can preserve the required information or functionality.
+- Verify the reduced-motion path in the affected output. Do not assume opacity-only effects are safe in every context.
+
+This skill requires respect for reduced-motion preferences independently of its WCAG AA target.
+For web guidance, see [WCAG 2.3.3, Level AAA](https://www.w3.org/WAI/WCAG22/Understanding/animation-from-interactions.html) and [CSS technique C39](https://www.w3.org/WAI/WCAG22/Techniques/css/C39).
 
 ## Color and contrast
 - Never encode meaning in color alone — pair with text, icon, shape, or pattern (WCAG 1.4.1). Error red also says "Error" and carries an icon.
 - Text contrast (WCAG 1.4.3 AA): ≥4.5:1 normal, ≥3:1 for large text (≥24px, or ≥18.7px bold).
-- Non-text contrast (1.4.11 AA): ≥3:1 for UI component boundaries, focus rings, icons, chart strokes, and state indicators against adjacent colors. A 1px hairline border under 3:1 fails.
-- Verify both light and dark themes independently — a token that passes on white can fail on the dark surface.
+- Non-text contrast (1.4.11 AA): require ≥3:1 against adjacent colors for necessary control, state, and graphical information.
+- Apply this requirement to boundaries, focus indicators, icons, and chart marks when users need them to identify or understand that information.
+- Exclude decorative borders when other visuals identify the control. See [WCAG boundary requirements](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html#boundaries).
+- Verify contrast in affected states of each supported theme. A token that passes on white can fail on a dark surface.
 
 ## Touch targets
 - Minimum 24×24 CSS px (WCAG 2.5.8 AA); undersized targets need enough spacing that a 24px circle centered on each doesn't overlap a neighbor.
