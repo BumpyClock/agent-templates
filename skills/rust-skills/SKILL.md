@@ -43,10 +43,3 @@ Use [the full catalog](RULES.md) only when you need summaries to select a rule.
 | Project layout or lints | `proj-`, `lint-` |
 | Tests | `test-` |
 | Suspected anti-pattern | `anti-` |
-
-## Validation
-
-Select tests through [test quality](../programming/references/write-tests.md).
-Use [TDD](../programming/references/tdd-rules.md) only when the user or repository requires it.
-Read `test-` rules for Rust-specific mechanics after test selection.
-Reuse applicable evidence through [verification](../programming/references/verification-before-completion.md).
