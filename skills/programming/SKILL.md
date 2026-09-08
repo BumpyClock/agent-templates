@@ -63,8 +63,7 @@ Select the relevant nested guide rather than load its complete reference set.
 
 ## References
 
-- Explicit TDD request or repository requirement: [TDD workflow](references/tdd-rules.md).
-- Ambiguous or consequential completion evidence: [Verification](references/verification-before-completion.md).
+
 - Module boundaries, contracts, or prerequisite decisions: [Architecture](references/architecture/architecture-planning.md).
 - Type or schema review: [Type design](references/design/type-design.md).
 - Language or UI uncertainty: the relevant file under `references/languages/` or [Web development](references/web-development.md).

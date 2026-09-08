@@ -20,7 +20,6 @@ Agent tool:
 - prompt: "Using the device-interaction skill, verify that the login feature works correctly on session <session-identifier>. Launch the app, capture screenshot and UI hierarchy, check that the login button is visible and tappable, and report if the implementation is working correctly."
 ```
 
-**After implementing a UI-affecting feature, invoke this skill to verify the implementation works on a device.**
 
 ## Session Lifecycle
 
