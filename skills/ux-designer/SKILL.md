@@ -48,13 +48,12 @@ Protect in this order — never sacrifice a higher item for a lower one:
 - New product, page, or feature: full workflow below.
 - Small change: edit the affected component or state within the existing design system.
 - Preserve relevant accessibility and interaction behavior.
-- Check the rendered result when layout, appearance, or interaction can change.
 - A small edit needs no design document, mockup, direction statement, or micro-polish note.
 - Use only references needed for the affected behavior.
 
 ## Deliverable
 
-Deliver the output the user requests. For implementation tasks, modify production code and verify the affected behavior. Create separate design documents or mockups only when requested or needed to resolve a design choice.
+Deliver the output the user requests. For implementation tasks, modify production code. Create separate design documents or mockups only when requested or needed to resolve a design choice.
 
 ## Reference Index
 Read these when necessary:

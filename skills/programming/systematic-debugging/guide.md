@@ -37,11 +37,9 @@ When the cause is external or inaccessible, a bounded mitigation can still be us
 
 For performance work, use a baseline measurement, profile, or query plan before a correction. Compare results under relevant conditions. Use bisection when known good and bad states permit a meaningful comparison.
 
-## Validation and report
+## Report
 
-Select regression tests for the affected behavior. A partial reproduction can justify a focused test without proof that the full incident is resolved.
-
-When the original scenario is available, check it after the correction. Otherwise, report the checks completed and the evidence still required. Remove temporary probes or retain useful diagnostics deliberately within the agreed scope.
+Remove temporary probes or retain useful diagnostics deliberately within the agreed scope.
 
 Report the supported cause, correction or mitigation, observed results, and residual uncertainty. If progress requires unavailable evidence or access, name the smallest concrete next step. For report-only work, present supported hypotheses and discriminating checks without a speculative correction.
 
