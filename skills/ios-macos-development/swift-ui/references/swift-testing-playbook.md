@@ -13,7 +13,6 @@ A hands-on, comprehensive guide for migrating from XCTest to Swift Testing and m
 
 ## Scope and test policy
 
-Use [Write tests](../../../programming/references/write-tests.md) for test selection, assertions, doubles, and regression value.
 When the user or repository requires TDD, use [TDD rules](../../../programming/references/tdd-rules.md).
 Use the migration sections only when framework migration is part of the task. Preserve the repository's existing framework otherwise.
 

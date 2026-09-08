@@ -16,7 +16,7 @@ Choose an enforcement mechanism that observes the actual invariant.
 
 Remove redundant instructions after the mechanism enforces the same requirement.
 Keep the rationale and exceptions that a machine cannot express.
-Use [test quality](../write-tests.md) for regression coverage rather than a test for every correction.
+Add regression coverage for the invariant rather than a test for every correction.
 
 ## Limit
 

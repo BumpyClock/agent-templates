@@ -26,7 +26,7 @@ Use available evidence directly when it already answers the question.
 4. Expose relevant state, inputs, and results. Provide a simple command or file that reproduces the observation.
 5. Report the answer, tradeoffs, artifact location, and uncertainty. Preserve agreed artifacts and remove temporary instrumentation that no longer serves the task.
 
-Use [test quality](../../programming/references/write-tests.md) when tests help answer the question.
+Use tests when they help answer the question.
 Keep security and error behavior appropriate to the probe's actual access and side effects.
 
 ## Completion boundary

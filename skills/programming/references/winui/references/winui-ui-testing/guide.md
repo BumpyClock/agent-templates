@@ -9,7 +9,6 @@ description: Inspect Windows UI Automation state or automate requested UI behavi
 
 ### Test policy
 
-Use [Write tests](../../../write-tests.md) to select checks and assertions.
 When the user or repository requires TDD, use [TDD rules](../../../tdd-rules.md).
 The examples below describe UIA mechanics, not a required test inventory.
 
@@ -134,7 +133,7 @@ if ($fail -gt 0) { exit 1 } else { exit 0 }
 
 ### What to Test
 
-Select checks for the affected requirements using the shared test policy. Use this table for UIA mechanics:
+Select checks for the affected requirements. Use this table for UIA mechanics:
 
 | Requirement type | Test approach |
 |---|---|

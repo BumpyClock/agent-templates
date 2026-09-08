@@ -6,7 +6,6 @@ disable-model-invocation: true
 
 # Test cleanup
 
-Read [test quality](../../programming/references/write-tests.md) for the assessment criteria.
 Use [verification](../../programming/references/verification-before-completion.md) for check scope and evidence limits.
 This skill owns the cleanup workflow, not a separate test standard.
 
@@ -59,7 +58,7 @@ If execution is unavailable, disclose that limit and restrict edits to changes s
 
 - Keep production behavior and supported APIs unchanged during test cleanup.
 - Remove test fixtures or helpers only when the cleanup makes them unused within the inspected dependencies.
-- Select rewrite scope and test level under the shared test-quality reference.
+- Select rewrite scope and test level for the affected contract.
 - Run checks that exercise retained and revised coverage after each coherent batch.
 - Inspect the final diff for weakened assertions, suppressed failures, and lost inputs or environments.
 

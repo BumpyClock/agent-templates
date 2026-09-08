@@ -4,7 +4,6 @@
 
 ## Why It Matters
 
-Use [Write tests](../../programming/references/write-tests.md) to choose real dependencies or test doubles.
 Mockall generates trait implementations for controlled responses and fault injection when a double fits the contract.
 The examples below illustrate Mockall APIs. Assertions on the mock itself demonstrate configuration, not production behavior.
 

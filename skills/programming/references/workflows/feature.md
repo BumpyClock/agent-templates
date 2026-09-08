@@ -8,7 +8,7 @@ For a small, clear change, use the same contract and evidence without a separate
 1. Define the requested behavior, authorized scope, affected consumers, and compatibility requirements. Identify what observation will establish completion.
 2. Inspect the current owners and integration points. Resolve material design uncertainty before dependent edits.
 3. Implement a coherent unit through its consumers. Preserve existing behavior outside the contract.
-4. Assess the implemented behavior under [test quality](../write-tests.md) and [verification](../verification-before-completion.md). Correct material gaps before completion.
+4. Assess the implemented behavior under [verification](../verification-before-completion.md). Correct material gaps before completion.
 5. Report the behavior delivered, consequential decisions, and unresolved limits. Separate completed work from proposed work.
 
 ## Design decisions

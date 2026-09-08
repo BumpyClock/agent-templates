@@ -21,7 +21,7 @@ Examples include independent protocol constants, public APIs without local calle
 1. Name the question and the hypothesis about task outcomes.
    Define the outcome rubric and the decision criterion before trials.
    Include executable artifact checks where the task permits them.
-   Use [test quality](../references/write-tests.md) for checks that distinguish correct behavior from plausible failures.
+   Select checks that distinguish correct behavior from plausible failures.
    This step ends with a question, variants, cases, rubric, and trial budget.
 2. Prepare isolated sessions and repository states for each trial.
    Keep task prompts, dependencies, tools, permissions, resource budgets, and relevant environment conditions equivalent.

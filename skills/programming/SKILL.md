@@ -62,7 +62,6 @@ Select the relevant nested guide rather than load its complete reference set.
 
 ## References
 
-- New, changed, or suspicious tests: [Test quality](references/write-tests.md).
 - Explicit TDD request or repository requirement: [TDD workflow](references/tdd-rules.md).
 - Ambiguous or consequential completion evidence: [Verification](references/verification-before-completion.md).
 - Module boundaries, contracts, or prerequisite decisions: [Architecture](references/architecture/architecture-planning.md).

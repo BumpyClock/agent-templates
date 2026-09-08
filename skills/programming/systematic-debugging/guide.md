@@ -39,7 +39,7 @@ For performance work, use a baseline measurement, profile, or query plan before 
 
 ## Validation and report
 
-Select regression tests under [Programming](../SKILL.md) and [Write tests](../references/write-tests.md). A partial reproduction can justify a focused test without proving the full incident resolved.
+Select regression tests for the affected behavior. A partial reproduction can justify a focused test without proof that the full incident is resolved.
 
 When the original scenario is available, check it after the correction. Otherwise, report the checks completed and the evidence still required. Remove temporary probes or retain useful diagnostics deliberately within the agreed scope.
 

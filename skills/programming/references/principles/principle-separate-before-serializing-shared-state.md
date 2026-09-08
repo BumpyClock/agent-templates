@@ -24,4 +24,3 @@ Keep related state together when atomic consistency is part of the contract.
 
 Do not fragment a coherent source file or test suite merely to give each agent a file.
 Assign one owner or serialize edits when the artifact should remain coherent.
-Use [test quality](../write-tests.md) for suite ownership and coverage decisions.

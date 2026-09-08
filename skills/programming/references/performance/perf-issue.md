@@ -21,7 +21,7 @@ For diagnosis without a fix, use [runtime forensics](runtime-forensics.md) or [t
    This step ends with a supported mechanism and a prediction that a focused change can test.
 4. Apply the smallest authorized change that addresses the supported mechanism.
    Check semantic correctness independently of the speed measurement.
-   Use [test quality](../write-tests.md) to select coverage for the affected contract.
+   Select coverage for the affected contract.
    Preserve output, error behavior, and required side effects unless the task explicitly changes those contracts.
    This step ends with correctness evidence for the changed behavior.
 5. Measure the changed revision under the baseline conditions.

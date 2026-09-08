@@ -36,7 +36,7 @@ An absent local caller does not prove that an externally supported API is unused
 - Reuse owned values in consumers and consistency checks. Preserve independent expectations for computational and external contracts in tests.
 - When divergence was the bug class, make ownership visible in tests, debug output, logs, or stats.
 - Use real or asymmetric fixtures/assets for orientation, geometry, layout, ordering, and framing bugs. Symmetric placeholders can hide flipped coordinate frames or swapped axes.
-- Assess existing coverage before a refactor under [test quality](../write-tests.md). Add tests only for material gaps.
+- Assess existing coverage before a refactor. Add tests only for material gaps.
 - Update docs/specs with the new invariant and owner, not a mechanical file list.
 - If scope widens into unrelated behavior, slice it: land the shared contract first, then port consumers in reviewable passes.
 

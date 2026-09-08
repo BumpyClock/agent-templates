@@ -6,7 +6,6 @@ read_when: Update coding workflow skills or their shared references.
 
 `skills/programming/SKILL.md` contains cross-cutting defaults and routes to task-specific references.
 
-- `skills/programming/references/write-tests.md` owns test quality and coverage decisions.
 - `skills/programming/references/tdd-rules.md` owns the explicit TDD workflow.
 - `skills/programming/systematic-debugging/guide.md` owns diagnosis.
 - `skills/programming/references/verification-before-completion.md` owns completion evidence and its reuse.
@@ -14,7 +13,7 @@ read_when: Update coding workflow skills or their shared references.
 The `diagnosing-bugs` and `tdd` skills route to these references.
 Current workflows use the same verification owner.
 Keep shared rules in their owner instead of duplicate workflow checklists.
-Platform guides retain runner APIs and domain-specific examples, with links to the shared test policy.
+Platform guides retain runner APIs and domain-specific examples.
 Git and PR skills use the same verification owner. They retain authorization and operation safety without extra test gates, independent completion reviews, or automatic review loops.
 
 ## Design principles

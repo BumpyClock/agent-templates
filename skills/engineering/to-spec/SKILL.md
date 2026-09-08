@@ -12,7 +12,7 @@ The issue tracker and triage label vocabulary should have been provided to you. 
 
 1. Explore the repo to understand the current state of the codebase, if you haven't already. Use the project's domain glossary vocabulary throughout the spec, and respect any ADRs in the area you're touching.
 
-2. Identify the contracts and test interfaces under [test quality](../../programming/references/write-tests.md).
+2. Identify the contracts and test interfaces.
 
 Check with the user that these seams match their expectations.
 

@@ -4,7 +4,6 @@
 
 ## Why It Matters
 
-Use [Write tests](../../programming/references/write-tests.md) to choose the test boundary and dependency strategy.
 A trait can permit controlled errors or external responses when real dependencies are impractical.
 Keep concrete dependencies when they provide practical contract checks without an extra abstraction.
 

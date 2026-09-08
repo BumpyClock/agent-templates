@@ -31,5 +31,4 @@ Third-party services (Stripe, Twilio, etc.) you don't control. The deepened modu
 
 ## Test strategy
 
-Use [test quality](../../programming/references/write-tests.md) for coverage, test levels, doubles, and deletion decisions.
 Map existing tests to the contracts that survive the module change.
