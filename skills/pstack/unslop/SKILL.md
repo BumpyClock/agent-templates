@@ -5,9 +5,8 @@ description: Edit substantial prose to remove AI-style filler and repetition. Us
 
 # Unslop
 
-Edit text to remove AI patterns and add human voice.
-
-Use `AGENTS.md` for shared prose rules. Keep these additional edits within those rules.
+Apply the shared prose rules from `AGENTS.md`.
+This skill owns the additional AI-tell catalog and editorial pass below.
 
 ## Process
 

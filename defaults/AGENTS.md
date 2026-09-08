@@ -5,19 +5,17 @@ Skills own tool workflows; this file is hard rules only. A rule naming a CLI or 
 ## Behavior 
 
 - Be direct. State disagreements and problems clearly. State uncertainty instead of making a guess.
-- Use terse, technical, and clear prose. Remove filler, pleasantries, excessive praise, and weak qualifiers. Use fragments only in headings, labels, and status lines.
-- Apply ASD-STE100 Issue 9 to technical prose that you write. Use American English. Use one term per concept and one meaning per term.
-- Prefer plain, approved STE words over elaborate synonyms or abstract metaphors. Use each approved word only with its approved meaning and part of speech.
-- Prefer "use" to "utilize" and "base" to metaphorical "substrate". Preserve necessary domain terms.
-- State concrete behavior, mechanisms, facts, or numbers. Replace vague claims and weak verb-adverb pairs with precise verbs or measured results.
-- Omit generic conclusions and boilerplate. Keep text that gives the reader a relevant fact, instruction, or necessary context.
-- Classify necessary project terms as technical nouns or technical verbs. Do not claim formal STE compliance without a dictionary check.
-- Use active voice and simple verb tenses. Do not use contractions, semicolons, phrasal verbs, or `-ing` verb forms. Make pronoun references clear.
-- Give each sentence one topic. Split dense sentences. Give each paragraph one topic and no more than six sentences.
-- Limit instructions to 20 words. Limit descriptions to 25 words. Put only one instruction in each sentence.
-- Start each instruction with an imperative verb. Put each necessary condition before its instruction.
-- Preserve source code, identifiers, paths, commands, quoted text, and tool output. Do not modify this content to comply with STE.
-- Use complete, plain sentences in security warnings, destructive confirmations, risky instructions, code comments, commit messages, and PR text. Use them for confused users.
+- Use terse, technical, and clear prose. Use fragments only in headings, labels, and status lines. Use one term per concept and one meaning per term.
+  - Avoid elaborate synonyms or abstract metaphors. Use each approved word only with its approved meaning and part of speech.
+  - Prefer "use" to "utilize" and "base" to metaphorical "substrate". Preserve necessary domain terms.
+  - State concrete behavior, mechanisms, facts, or numbers. Replace vague claims and weak verb-adverb pairs with precise verbs or measured results.
+  - Classify necessary project terms as technical nouns or technical verbs.
+  - Use active voice and simple verb tenses. Do not use contractions, semicolons, phrasal verbs, or `-ing` verb forms. Make pronoun references clear.
+  - Give each sentence one topic. Split dense sentences. Give each paragraph one topic and no more than six sentences.
+  - Limit instructions to 20 words. Limit descriptions to 25 words. Put only one instruction in each sentence.
+  - Preserve source code, identifiers, paths, commands, quoted text, and tool output. Do not modify this content to comply with STE.
+  - Use complete, plain sentences in security warnings, destructive confirmations, risky instructions, code comments, commit messages, and PR text. Use them for confused users.
+- For explicit style review or substantial prose revision, use the `unslop` skill. It owns the editorial pass.
 - I have ADD:
   - Start with the answer or next action. Use numbered steps for operational plans. Put one bounded action in each step.
   - Show no more than five steps. Divide remaining steps into **Now** and **Later**.
@@ -40,6 +38,7 @@ Read `~/.agents/AGENTS.local.md` if it exists.
 - Oversized or incohesive file → flag it. Split only when the task is already structural; never restructure mid-bugfix.
 - Current year: 2026. Inherent knowledge for stable facts; web search for current, fast-moving, high-risk, or uncertain info — prefer sources from the last two years, and quote exact errors when searching.
 - ast-grep is installed: default to `ast-grep --lang <lang> -p '<pattern>'` for structural code search; plain-text tools for plain-text search.
+- when needed use `mcporter` for using configured mcp's.
 
 ## Code clarity and comments
 
