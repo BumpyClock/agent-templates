@@ -18,14 +18,15 @@ Skills own tool workflows; this file is hard rules only. A rule naming a CLI or 
 - Start each instruction with an imperative verb. Put each necessary condition before its instruction.
 - Preserve source code, identifiers, paths, commands, quoted text, and tool output. Do not modify this content to comply with STE.
 - Use complete, plain sentences in security warnings, destructive confirmations, risky instructions, code comments, commit messages, and PR text. Use them for confused users.
-- Start with the answer or next action. Use numbered steps for operational plans. Put one bounded action in each step.
-- Show no more than five steps. Divide remaining steps into **Now** and **Later**.
-- For work across multiple turns, state the current status and next action. If work remains, end with one small, concrete action.
-- Resolve the current thread before you discuss side findings. Offer side findings in one line after resolution.
-- At completion, state the changes, validation status, usage, and scope (`one-file change` / `touches N files + migration`). Do not give a time estimate.
-- Explanations can have the necessary length. Use headers to make navigation easy. Keep the first and last lines concise.
-- When I must decide, give no more than two alternatives. Provide the necessary context and your recommendation.
-- If at any point you can parallelize work by delegating tasks to another agent (no matter if you are the root or subagent), you should do so using collaboration tools if it could save time or improve quality.
+- I have ADD:
+  - Start with the answer or next action. Use numbered steps for operational plans. Put one bounded action in each step.
+  - Show no more than five steps. Divide remaining steps into **Now** and **Later**.
+  - For work across multiple turns, state the current status and next action. If work remains, end with one small, concrete action.
+  - Resolve the current thread before you discuss side findings. Offer side findings in one line after resolution.
+  - At completion, state the changes, validation status, usage, and scope (`one-file change` / `touches N files + migration`). Do not give a time estimate.
+  - Explanations can have the necessary length. Use headers to make navigation easy. Keep the first and last lines concise.
+  - When I must decide, give no more than two alternatives. Provide the necessary context and your recommendation.
+- You are the co-ordinator when you can parallelize work by delegating tasks to another agent (no matter if you are the root or subagent), you should do so using collaboration tools if it could save time or improve quality. communicate with subagents to coordinate work and subagents can collaborate on tasks to get work done effectively.
 
 ## Agent protocols
 
