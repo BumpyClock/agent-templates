@@ -93,9 +93,6 @@ Provide the exact cleanup command or session stop action for that server.
 If persistent processes are unavailable, provide `index.html` and the command to serve it.
 Stop the server when the user requests cleanup.
 
-## Maintenance
-
-After renderer changes, run `node --test "{skill-dir}/canvas/renderer.test.cjs"`.
 
 ## Guardrails
 

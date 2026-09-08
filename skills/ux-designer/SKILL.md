@@ -15,7 +15,7 @@ For a small edit, use the scope rule below instead.
 
 1. **Choose a design direction.** Base it on the product, users, and existing visual system.
 2. **LOCK ONE SYSTEM PER PAGE.** One primary brand accent, one radius language, one theme, one type scale — committed up front and held across every section. Blocks mid-page drift, the most common way multi-section work falls apart.
-3. **Verify the actual output.** Run the project and inspect the relevant interface, as described in `references/critique.md`. Choose tools appropriate to the platform and behavior. Fix material defects within scope. Repeat affected checks after changes or unresolved failures. Report any unavailable checks.
+3. **Verify the actual output.** When justified run the project and inspect the relevant interface, as described in `references/critique.md`. Choose tools appropriate to the platform and behavior. Fix material defects within scope. Repeat affected checks only after justification and after changes or unresolved failures. Report any unavailable checks.
 4. **Honor reduced motion and WCAG AA.** Provide an explicit reduced-motion variant. Apply `references/accessibility.md` to text, controls, focus states, and interactions.
 
 ## Philosophy

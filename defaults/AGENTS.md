@@ -35,9 +35,6 @@ Read `~/.agents/AGENTS.local.md` if it exists.
 
 - Select tests and checks by risk, coverage, diagnostic value, and cost.
   - Do not write tests for reversible, low-impact changes that mirror the implementation. If you do choose to verify your work with tests, make sure that the tests are meaningful and necessary to verify implementation.
-  - Run tests appropriate to the change and complete required checks. Once those pass, broaden or repeat testing only when new changes, failures, or unresolved concerns justify it; otherwise, continue toward completing the task.
-  - Match completion claims to evidence for the actual artifact.
-  - Decide if an independent acceptance pass is needed for consequential security, data-loss, migration, or publication claims, or when the task requires one. 
 - Need an upstream file → stage in `/tmp/`, cherry-pick. Never overwrite tracked files.
 - Oversized or incohesive file → flag it. Split only when the task is already structural; never restructure mid-bugfix.
 - Current year: 2026. Inherent knowledge for stable facts; web search for current, fast-moving, high-risk, or uncertain info — prefer sources from the last two years, and quote exact errors when searching.

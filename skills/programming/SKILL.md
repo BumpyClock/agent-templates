@@ -9,9 +9,10 @@ Repository instructions and the user's contract override these defaults.
 
 - Implement the complete requested behavior with the least unnecessary complexity.
 - Prefer existing conventions, platform features, and dependencies when their semantics fit the task.
+- Preserve security, accessibility, boundary validation, and protections against data loss as part of the contract.
+- Do not write tests for reversible, low-impact changes that mirror the implementation. If you do choose to verify your work with tests, make sure that the tests are meaningful and necessary to verify implementation.
 
-
-Preserve security, accessibility, boundary validation, and protections against data loss as part of the contract.
+- Run tests appropriate to the change ; repeat only with justification. Once those pass, broaden or repeat testing only when new changes, failures, or unresolved concerns justify it; otherwise, continue toward completing the task.
 
 ## Principles
 
