@@ -1,0 +1,6 @@
+interface:
+  display_name: "Brutal"
+  short_description: "Direct feedback and strategic advice with concrete next steps"
+  default_prompt: "Use $brutal to assess my situation honestly, identify weak assumptions, and recommend concrete priorities and next steps."
+policy:
+  allow_implicit_invocation: true
