@@ -30,7 +30,7 @@ For a supplied capture without live access, use [trace forensics](trace-forensic
 5. Report the symptom, observed signal, supported mechanism, and unresolved alternatives.
    Cite the capture interval, relevant events or stacks, artifact locations, and matching source evidence.
    State the capture limits and any intervention that changed the process.
-   Apply [verification before completion](../verification-before-completion.md) to the diagnosis claim.
+   Distinguish a confirmed mechanism from a hypothesis that the capture cannot resolve.
    This step ends with an evidence-bounded report and no unrequested fix.
 
 ## Protect the live environment

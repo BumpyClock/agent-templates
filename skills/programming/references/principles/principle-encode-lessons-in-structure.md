@@ -14,9 +14,11 @@ Choose an enforcement mechanism that observes the actual invariant.
 - Use a shared implementation when independent copies of one rule diverge.
 - Use an existing lint, schema, or test mechanism when it can detect the defect without excessive false positives.
 
+Prefer prevention over detection when both mechanisms fit the invariant, operational constraints, and risk.
 Remove redundant instructions after the mechanism enforces the same requirement.
 Keep the rationale and exceptions that a machine cannot express.
-Add regression coverage for the invariant rather than a test for every correction.
+When enforcement needs judgment, keep a focused instruction with a concrete failure example.
+If regression coverage is necessary, protect the invariant rather than mirror each correction.
 
 ## Limit
 

@@ -45,7 +45,7 @@ Examples include independent protocol constants, public APIs without local calle
    This step ends with per-trial judgments tied to artifact evidence.
 5. Report measured outcomes separately from unrun proposals.
    Include the evaluated cases, skill revisions, model configurations, run counts, outcome variation, failures, and limitations.
-   Apply [verification before completion](../references/verification-before-completion.md) to claims about observed behavior.
+   Tie claims about observed behavior to the retained trial artifacts.
    This step ends with a bounded recommendation to retain, revise, reject, or defer the proposed change.
 
 ### Interpret process evidence

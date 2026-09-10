@@ -40,5 +40,7 @@ For STE-controlled documents, use the required edition and dictionary before a c
 
 For review requests, return material findings with source locations and proposed corrections.
 For edit requests, deliver the revised text and report unresolved factual questions.
+For PR bodies, summarize reviewer-relevant changes and risks.
+Link detailed decision logs, commit lists, and measurement tables unless the requested format needs them inline.
 Check affected links, identifiers, and examples against their sources.
 Run executable examples only when their accuracy needs a check and execution is within scope.

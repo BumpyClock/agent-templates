@@ -2,7 +2,25 @@ systematic-debugging/ originally derived from: https://github.com/obra/superpowe
 references/write-tests.md coverage-theater and mock/test-only-method content derived from: https://github.com/obra/superpowers (testing-anti-patterns, later skills/test-driven-development/writing-good-tests.md) (MIT, Jesse Vincent)
 systematic-debugging/guide.md feedback-loop, minimise, ranked-falsifiable-hypotheses, tagged-instrumentation, and cleanup structure adapted from: https://github.com/mattpocock/skills/blob/main/skills/engineering/diagnosing-bugs/SKILL.md (MIT, Matt Pocock)
 references/write-tests.md mutation-check idea adapted from superpowers writing-good-tests.md (above); tautological/horizontal-slicing framing cross-checked against: https://github.com/mattpocock/skills/blob/main/skills/engineering/tdd/SKILL.md (MIT, Matt Pocock)
-systematic-debugging/guide.md stale-persistent-state heuristic adapted from: https://github.com/cursor/plugins (pstack/principle-fix-root-causes) (MIT)
 references/principles/ adapted from the Poteto mode references preserved under skills_archive/poteto-mode/references/ in this repository.
 references/execution/, references/workflows/feature.md, references/performance/, and evals/README.md adapt the selected Poteto principles and playbooks from this repository.
 Concepts summarized, no text copied: David Agans "Debugging: The 9 Indispensable Rules" (check the plug, fresh view); Google Testing Blog "Change-Detector Tests Considered Harmful" (term).
+
+pstack refresh source: https://github.com/cursor/plugins/tree/c5db7fef1f1b1ebb2d4b7ae0308bf4beb10cb4c1/pstack/skills
+Reviewed against upstream main on 2026-09-10, including the September 7-9 updates.
+License: MIT, Copyright (c) 2026 Lauren Tan. Full notice: ../pstack/LICENSE.txt.
+
+Upstream import map, relative to pstack/skills:
+- references/principles/principle-*.md adapt the corresponding principle-*/SKILL.md.
+- references/execution/principle-guard-the-context-window.md adapts principle-guard-the-context-window/SKILL.md.
+- references/workflows/feature.md adapts poteto-mode/playbooks/feature.md.
+- references/refactoring/clean-refactoring.md adapts poteto-mode/playbooks/refactoring.md and principle-migrate-callers-then-delete-legacy-apis/SKILL.md.
+- references/performance/{perf-issue,runtime-forensics,trace-forensics}.md adapt the corresponding poteto-mode/playbooks/*.md.
+- evals/README.md adapts poteto-mode/playbooks/eval.md.
+- systematic-debugging/guide.md includes the failure-pattern and stale-persistent-state heuristics from principle-fix-root-causes/SKILL.md.
+- references/languages/typescript-patterns.md adapts typescript-best-practices/SKILL.md and its references/patterns.md.
+
+These are local adaptations, not verbatim mirrors. Trigger/Decision/Limit sections retain conditional advice and counterexamples.
+Existing performance and evaluation workflows already cover upstream mechanisms. Stale links to the deleted verification guide were removed.
+Keep authorization, public compatibility, mutation checks, and evidence limits. Do not restore mandatory delegation, model choices, Cursor-only tools, automatic commits/PRs, or compulsory test additions.
+Upstream names the new premise principle "attack-the-premise", not "attach-the-premise".

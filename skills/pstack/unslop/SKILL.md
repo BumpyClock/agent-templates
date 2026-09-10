@@ -27,6 +27,9 @@ Removing patterns is half the job. Sterile, voiceless writing is just as obvious
 
 ## Patterns to detect and fix
 
+Rule numbers are stable local IDs.
+Leave a gap after a rule removal.
+
 ### Content
 
 1. **Puffery.** "pivotal moment", "testament to", "evolving landscape", "setting the stage for", "indelible mark", "deeply rooted". Cut puffery, state what happened.
@@ -51,3 +54,8 @@ Removing patterns is half the job. Sterile, voiceless writing is just as obvious
 14. **Title case headings.** Use sentence case.
 15. **Decorative emojis.** Remove from headings and bullets.
 16. **Curly quotes.** Replace with straight quotes.
+
+### Plain speech
+
+17. **Mannered prose.** Prefer literal phrases over rhetorical fragments, personified code, figurative verbs, and stock framing phrases. Replace "A dial worth turning" with "a parameter worth varying". Replace an aphorism such as "wire it or delete it" with the concrete requirement.
+18. **Over-compression.** Restore articles and verbs when terse fragments force the reader to decode prose. "Parser rejects bad date → exit 2, no write" becomes "The parser rejects a bad date, exits with code 2, and writes nothing." Preserve literal code, CLI syntax, diagrams, and status labels.

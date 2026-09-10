@@ -35,6 +35,25 @@ type DiffState =
 This example assumes the project supplies `GitDiff`.
 Preserve its established discriminant name.
 
+Use an exhaustive branch when a new variant must expose incomplete consumers.
+
+```ts
+function statusLabel(state: DiffState): string {
+  switch (state.kind) {
+    case "loading":
+      return "Loading";
+    case "ready":
+      return "Ready";
+    case "error":
+      return state.error;
+    default: {
+      const exhaustive: never = state;
+      return exhaustive;
+    }
+  }
+}
+```
+
 ## Empty inputs
 
 Keep ordinary arrays when empty input has a valid result.
@@ -71,7 +90,24 @@ function parseUser(input: unknown): User {
 ```
 
 Use the project's existing equivalent rather than add a dependency for this example.
+Use the schema's non-throwing result when invalid input is an expected branch.
+Derive consumer views from generated protocol types with `Pick`, `Omit`, or indexed access instead of duplicate interfaces.
 Treat `satisfies` as a compile-time compatibility check, not runtime validation.
 Use assertions only where the claimed invariant has evidence that the compiler cannot express.
+
+## Boundary types
+
+Accept untrusted payloads as `unknown` and parse them into a named domain type.
+Keep `Record<string, unknown>` inside the parser rather than pass it to domain consumers.
+Aliases and inline index signatures do not change that boundary.
+Use a dictionary in domain logic only when arbitrary keys are part of the actual contract.
+
+Prefer discriminant checks, `in`, and `typeof` or `instanceof` when those checks establish the required type.
+A custom type guard must verify every guarantee in its predicate.
+An assertion or guard signature alone does not establish those guarantees.
+
+Preserve a protocol's unknown-field policy rather than reject or ignore extra fields indiscriminately.
+For persisted JSON, define version handling and report parse failures through the existing error path.
+Do not convert corrupt state into a silent success-shaped default.
 
 Use [Boundary Discipline](../principles/principle-boundary-discipline.md) for input and mutation guarantees.

@@ -30,7 +30,7 @@ The deliverable is a cited diagnosis within the capture's limits.
 5. Report the artifact, relevant observations, source evidence, and strongest supported explanation.
    Separate measured facts, causal hypotheses, and unresolved alternatives.
    State whether a matched comparison exists and what that comparison establishes.
-   Use [verification before completion](../verification-before-completion.md) to bound the claim.
+   Limit each claim to evidence the capture supports.
    This step ends with a cited report, not a fix.
 
 ## Interpret the metric

@@ -21,6 +21,10 @@ For an obvious cause, these steps can collapse into a source check, correction, 
 
 Check branch, build, service instance, versions, and persistent state when those could explain the symptom. Use a test, request replay, CLI fixture, browser check, or captured trace when it offers a useful feedback loop.
 
+For failures after restart, inspect saved configuration, caches, locks, and serialized state before assuming a code regression.
+Preserve suspect state before any authorized reset so diagnosis does not destroy the evidence.
+If a reset restores behavior, investigate state validation or migration rather than prescribe repeated deletion.
+
 When a reproduction costs more than it resolves, continue with source and available operational evidence. State which parts of the original failure remain unobserved. Simplify a reproduction only while that effort helps isolate the mechanism or creates a useful regression test.
 
 For uncertain causes, state predictions that available evidence can support or reject. Use the number of hypotheses the evidence warrants. Prefer a debugger, targeted log, or reversible probe that answers a specific question. Control unrelated variables when the comparison depends on them.
@@ -32,6 +36,9 @@ Keep credentials out of commands and captured output. Use bounded probes that re
 ## Fix Root Causes
 
 Trace bad values or transitions to the component that owns their invariant. Correct that mechanism within the task scope. Validate data where trust changes, then preserve validated invariants through internal contracts.
+
+Search for other instances of the supported failure pattern within the affected scope.
+Fix the shared owner when possible instead of adding guards that only conceal invalid state.
 
 When the cause is external or inaccessible, a bounded mitigation can still be useful. Identify it as a mitigation and state what cause remains unresolved. If a correction fails, reassess the evidence before another edit and remove changes that no longer have a basis.
 
@@ -49,4 +56,3 @@ Report the supported cause, correction or mitigation, observed results, and resi
 - [Find polluter](find-polluter.sh): inspect and adapt for tests that create unwanted files or state.
   Run from the test root with an initially absent target. The helper passes each matched file to `npm test`.
   Exit 0 means no target observed after successful runs, 1 means target observed, and 2 means inconclusive.
-- [Verification before completion](../references/verification-before-completion.md): use when completion evidence is ambiguous or high-risk.

@@ -28,7 +28,7 @@ For diagnosis without a fix, use [runtime forensics](runtime-forensics.md) or [t
    Keep unrelated revisions, workload changes, and environment changes outside the comparison.
    When drift or noise affects the comparison, repeat matched trials or alternate baseline and changed runs.
    Report both measurements, the absolute delta, dispersion, run counts, and artifact locations.
-   Apply [verification before completion](../verification-before-completion.md) to the completion claim.
+   Limit the completion claim to the measured workload and decision criterion.
    This step ends with an improvement, no demonstrated improvement, or an inconclusive result against the decision criterion.
 
 ## Select a strategy from the signal

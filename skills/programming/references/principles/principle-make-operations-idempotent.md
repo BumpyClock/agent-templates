@@ -15,7 +15,14 @@ Distinguish a retry of that operation from a new intentional request.
 - Use transactions or atomic state changes when the available storage can preserve the required invariant.
 - Observe remote completion when a timeout leaves the outcome unknown.
 
-Select checks for duplicate delivery and relevant interrupted states under [verification](../verification-before-completion.md).
+At startup, adopt compatible live state.
+Remove stale artifacts only after an ownership check.
+Base cleanup on the artifact's role and relevant content, not creation order alone.
+A PID alone does not establish lock ownership across process reuse or hosts.
+Refresh inputs for each new scheduler cycle.
+Preserve a retried operation's identity and payload.
+
+Select checks for duplicate delivery and relevant interrupted states under [programming guidance](../../SKILL.md).
 A restart that appears clean can still hide a duplicated external effect.
 
 ## Limit

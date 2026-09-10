@@ -14,6 +14,7 @@ Use [architecture guidance](../architecture/architecture-planning.md) for owners
 For example, agree the event shape and its owner before separate producers and consumers implement different versions.
 A thin end-to-end slice can expose an incorrect foundation sooner than a complete infrastructure layer.
 Order units so each resolves a dependency or produces relevant evidence for the next.
+Establish or deepen one coherent contract per increment rather than distribute special-case coordination across callers.
 
 ## Limit
 

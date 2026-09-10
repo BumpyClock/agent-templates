@@ -1,0 +1,76 @@
+pstack skill adaptations
+
+Source: https://github.com/cursor/plugins/tree/c5db7fef1f1b1ebb2d4b7ae0308bf4beb10cb4c1/pstack/skills
+Revision: c5db7fef1f1b1ebb2d4b7ae0308bf4beb10cb4c1
+License: MIT, Copyright (c) 2026 Lauren Tan
+License text: LICENSE.txt, from upstream pstack/LICENSE at this revision
+
+This directory contains selective adaptations, not exact upstream mirrors.
+Paths below are relative to this directory unless an upstream prefix appears.
+The review covered all five existing skills and their references and scripts.
+
+Import map
+
+- pstack/skills/create-verification-skill/SKILL.md
+  -> create-verification-skill/SKILL.md
+- pstack/skills/create-verification-skill/references/feature-map-example/{README,create-note,search}.md
+  -> create-verification-skill/references/feature-map-example/{README,create-note,search}.md
+- pstack/skills/how/SKILL.md
+  -> how/SKILL.md
+- pstack/skills/how/references/{explorer-prompt,explainer-prompt}.md
+  -> how/references/{explorer-prompt,explainer-prompt}.md
+- pstack/skills/show-me-your-work/SKILL.md
+  -> show-me-your-work/SKILL.md
+- pstack/skills/show-me-your-work/references/decision-log-template.tsv
+  -> show-me-your-work/references/decision-log-template.tsv
+- pstack/skills/show-me-your-work/scripts/log.sh
+  -> show-me-your-work/scripts/log.sh
+- pstack/skills/technical-writing/SKILL.md
+  -> technical-writing/SKILL.md and selected guidance in
+     technical-writing/references/document-types.md
+- pstack/skills/unslop/SKILL.md
+  -> unslop/SKILL.md
+
+Retained local material
+
+- Every agents/openai.yaml file is local harness metadata.
+- how/references/complex-investigation.md is a local conditional workflow.
+- how/references/{critic-prompt,critique-rubric}.md remain from an earlier import.
+  The pinned upstream how skill no longer ships those critique references.
+- technical-writing/references/document-types.md keeps the local conditional
+  Diataxis guide instead of the upstream mandatory document partition.
+
+Refresh choices
+
+- create-verification-skill and its three examples already matched the pin.
+  The refresh replaces Cursor-specific output paths with the active harness's
+  project-local skill path and removes the archived maintenance command.
+  Startup repairs require authorization. Disposable fixtures cannot bypass
+  the behavior under verification. Example data stays in the project.
+  The real user path, observable side effects, read-only doctor, dry-run
+  boundary checks, owned-process cleanup, and retained proof remain intact.
+- how keeps direct, read-only answers and optional complex investigation.
+  The explorer and explainer briefs adopt upstream prose simplifications
+  without fixed tool names. No prescribed model, agent count, handoff,
+  explanation artifact, prototype, commit, or pull request is required.
+  Local critique guidance remains available behind its existing conditions.
+- show-me-your-work retains the TSV format, evidence checks, and executable
+  log helper. The template and helper already match the pinned upstream.
+  Local safeguards retain formula neutralization, append-only corrections,
+  authorized commits, supplied transcript paths, and conditional review.
+  Upstream cross-model review mandates and Cursor transcript assumptions
+  remain excluded. Editorial deletions do not remove local safety rationale.
+- technical-writing adds concise PR summaries with links to detailed evidence.
+  Requested formats may retain inline tables. Repository prose rules,
+  accurate uncertainty, existing code format, and conditional document
+  structure still govern. No forced document split, tab indentation, or
+  unsolicited edits to another skill return.
+- unslop adds upstream mannered-prose and over-compression diagnostics with
+  examples. Local rules 17 and 18 correspond to upstream rules 32 and 33.
+  Rule IDs remain stable locally rather than renumber to match upstream.
+  Existing invocation metadata, voice guidance, and shared AGENTS.md ownership
+  remain intact. Previously centralized rules are not duplicated here.
+  Literal code, CLI syntax, diagrams, and status labels remain unchanged.
+
+No archived skill is restored by this refresh.
+Local adaptation history includes 2bdf7d4, 02cc19e, c4a8945, 20f52f8, and 69c5a5c.

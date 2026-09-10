@@ -8,6 +8,7 @@ Repetitive edits, error-prone transformations, or costly manual evidence collect
 
 Compare the cost of direct work with a repeatable operation and its maintenance cost.
 Prefer an existing refactor tool, query, generator, or test runner when it expresses the required operation.
+Prefer one deterministic operation over distributed manual edits when the same transformation applies to every eligible input.
 
 For a new transformation, inspect a representative unit before automation.
 Define the eligible inputs and the files or values that must remain unchanged.
@@ -23,4 +24,4 @@ Retain a custom tool when future use or review justifies its maintenance.
 Nontrivial work does not automatically require a new file or tool.
 Use direct edits when the change is local and automation would cost more than it saves.
 Do not convert a one-off script into a framework without a concrete consumer.
-Use [verification guidance](../verification-before-completion.md) to select evidence for the actual contract.
+Use [programming guidance](../../SKILL.md) to select evidence for the actual contract.

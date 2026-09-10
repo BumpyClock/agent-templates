@@ -18,7 +18,8 @@ Other explorers are investigating different slices of the same subsystem in para
 
 ## Exploration Instructions
 
-Start by finding the relevant code. Use Glob to find directories and files, Grep to find key symbols, Read to understand the actual implementation. Don't guess from names. Read the code.
+Locate the relevant files and symbols with the available source-search tools.
+Read the implementation rather than infer behavior from names.
 
 Follow this pattern:
 1. **Find the entry point.** What triggers this behavior? A user action, an API call, a scheduled job? Find where it starts.
@@ -46,7 +47,7 @@ Every file you read during exploration, so the explainer can reference them.
 Where this subsystem connects to other parts of the codebase. The inputs and outputs.
 
 ### Non-Obvious Things
-Anything surprising, historically motivated, or easy to get wrong. Things that look like they should work one way but actually work another.
+Anything surprising, historically motivated, or easy to get wrong. Things that look like they should work one way but work another.
 
 ### Open Questions
 Anything you couldn't fully trace or understand. Be honest about gaps.

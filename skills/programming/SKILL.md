@@ -19,6 +19,7 @@ Repository instructions and the user's contract override these defaults.
 Read the relevant reference before the decision it informs. Apply its limits as well as its advice.
 These are conditional references, not a checklist. Explain consequential choices rather than list principle names in every reply.
 
+- A requested mechanism may not serve the goal: [Attack the Premise](references/principles/principle-attack-the-premise.md).
 - Stateful logic or repeated shape assumptions: [Model the Domain](references/principles/principle-model-the-domain.md).
 - Invalid field combinations or ambiguous primitive types: [Type System Discipline](references/principles/principle-type-system-discipline.md).
 - External input or framework adapters: [Boundary Discipline](references/principles/principle-boundary-discipline.md).
@@ -32,6 +33,7 @@ These are conditional references, not a checklist. Explain consequential choices
 - A requirement creates repeated design exceptions: [Redesign from First Principles](references/principles/principle-redesign-from-first-principles.md).
 - Several changes depend on one prerequisite: [Foundational Thinking](references/principles/principle-foundational-thinking.md).
 - Product or API tradeoffs affect consumers: [Experience First](references/principles/principle-experience-first.md).
+- Test assertions depend on internal structure rather than behavior: [Test Behavior Not Implementation](references/principles/principle-test-behavior-not-implementation.md).
 
 ## Execution
 

@@ -10,6 +10,8 @@ Select the information needed for the next decision before retrieval.
 Use file ranges, targeted queries, bounded logs, and artifact metadata instead of complete payloads when those observations suffice.
 Keep exact errors, source locations, unresolved questions, and links to the original evidence in concise summaries.
 Reuse relevant context rather than repeat a read without a changed question or artifact.
+Keep short templates used on every invocation in the root guide when separate files only add retrieval cost.
+Keep optional procedures behind references with explicit activation conditions.
 
 For independent work that needs substantial separate context, delegate a bounded question with an acceptance condition.
 Retain ownership of the result and inspect evidence that supports consequential claims.

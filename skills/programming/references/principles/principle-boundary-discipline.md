@@ -10,6 +10,7 @@ Validate data where trust changes. Convert raw input into a domain value before 
 
 - Validate CLI arguments, configuration, network payloads, and stored data against the relevant contract.
 - Keep transport and framework representations inside their adapters unless the public contract deliberately exposes them.
+- Keep reusable mechanisms inside their owner and caller-specific policy at the boundary that chooses it.
 - Keep domain transformations independent of framework state where this reduces dependencies.
 - Propagate errors to the owner that can recover or report them.
 - Remove repeated validation only when an upstream guarantee still holds at the use site.
