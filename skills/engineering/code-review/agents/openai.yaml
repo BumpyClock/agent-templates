@@ -2,3 +2,5 @@ interface:
   display_name: "Code Review"
   short_description: "Review changes for actionable defects and regressions"
   default_prompt: "Use $code-review to assess these changes and report actionable findings with source locations and evidence."
+policy:
+  allow_implicit_invocation: false

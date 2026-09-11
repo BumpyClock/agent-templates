@@ -39,6 +39,15 @@ These are conditional references, not a checklist. Explain consequential choices
 
 For large outputs or context pressure, use [Guard the Context Window](references/execution/principle-guard-the-context-window.md).
 
+### Oracle
+
+For hard bugs, architecture reviews, or plan cross-checks, use Oracle when `oracle` is on PATH.
+Oracle combines a prompt with selected files for an external review.
+Respect repository data-sharing restrictions when selecting context.
+Run `oracle --help` once per session before first use.
+Use only the browser engine (`--engine browser`), never an API key.
+If the browser engine fails, report the failure and continue without Oracle.
+
 ## Workflows
 
 Select the workflow that matches the requested deliverable:

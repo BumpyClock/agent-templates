@@ -1,6 +1,7 @@
 ---
 name: code-review
 description: Review a PR, branch, commit, or local diff for actionable defects and regressions.
+disable-model-invocation: true
 ---
 
 # Code review
