@@ -1,0 +1,6 @@
+interface:
+  display_name: "simplify"
+  short_description: "Review the current changes and simplify the code where possible"
+  default_prompt: "Use $simplify to review the current changes and simplify the code where possible."
+policy:
+  allow_implicit_invocation: false
