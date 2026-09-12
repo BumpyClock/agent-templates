@@ -1,6 +1,6 @@
 ---
 name: create-verification-skill
-description: "Generate a project-local verification skill that drives your app the way a user does — any language, framework, or platform. Use for /create-verification-skill, \"make a control skill for this repo\", or when a project has no scripted way to prove UI/CLI/service behavior."
+description: "Create and prove a project-local skill for driving real app behavior."
 disable-model-invocation: true
 ---
 
@@ -22,8 +22,9 @@ Answer these from the codebase and only ask the user what you cannot observe:
 - **Observe:** what evidence can be captured? Screenshots, terminal transcripts, response bodies, logs, exit codes, DB state.
 - **Isolate:** can two instances run side by side (ports, data dirs, profiles)? If not, say so in the generated skill: refusing to double-drive a shared instance beats corrupting the user's session.
 
-If the checkout does not build or start, report the exact blocker before generation.
-Fix startup only when the task authorizes product changes.
+Repairs to generated helpers, selectors, and safe local verification setup are within the generation task. Correct those issues and retry the affected step without another approval.
+Product changes require their own authorization. A failed startup or proof does not authorize changing shared services, account settings, or credentials.
+If startup remains blocked, preserve the supported instructions as a draft and identify the exact step and unmet precondition. Do not invent commands or claim the app was verified.
 Use disposable fixtures only when they do not bypass behavior under verification.
 Document each fixture and its cleanup.
 
@@ -32,12 +33,13 @@ Document each fixture and its cleanup.
 Write `<project-skills-dir>/verify-<app>/SKILL.md` with YAML frontmatter.
 Use `name: verify-<app>` and a description that names the app, its user interface, and the activation condition.
 Resolve all placeholders against the repo.
+State the authorized instance, data, accounts, and side effects in the generated skill. Prefer an isolated local or test environment. Sending real messages, publishing data, changing access, or making other external mutations requires explicit authorization for those effects. Generating a verification skill does not grant it.
 Include these sections:
 
-- **Launch:** the exact command that starts the app for verification, and how to tell it's ready (a log line, a port answering, a prompt). Include teardown. For a short-lived CLI or TUI there is no server to keep alive: launch means build the binary (or install deps) once, then start each drive in its own isolated PTY or tmux session.
-- **Doctor:** one read-only check that answers "is this instance worth driving?" — process up, right version/build, port owned by us, auth valid. An agent runs this first whenever anything looks off.
+- **Launch:** the exact command that starts the app for verification and the readiness signal. Include teardown. For a short-lived CLI or TUI, build once when needed, then start each drive in its own isolated PTY or tmux session. Reuse a valid build until changes or failures require rebuilding.
+- **Doctor:** a read-only readiness check for the instance, build, ownership, and authentication relevant to the proof. Reuse valid evidence; repeat the check when state changes or a failure calls it into question.
 - **Drive:** the harness recipe with real selectors/commands from this repo, not examples. Prefer stable handles (ARIA labels, data attributes, prompt strings, route paths) over coordinates and tab order.
-- **Evidence:** what to capture for a proof and where it goes. State the proof standards: exercise the real user path, not internal setters or test-only endpoints; capture the action and the resulting state, not just the final screen; verify side effects (files written, rows inserted, messages sent) alongside what's visible; mocks only where a production boundary already isolates the external system. When the safe path is a dry-run or test mode, verify what it actually skips by observing (files, network, git refs) rather than trusting its name: some dry-runs still touch the network or open a browser.
+- **Evidence:** what to capture for a proof and where it goes. Exercise the real user path, not internal setters or test-only endpoints. Capture the action and resulting state, including authorized side effects. Use mocks only where a production boundary already isolates the external system. Establish the effects of a dry-run or test mode before executing it, then observe permitted file, network, or git-ref effects rather than trusting the mode's name. Report skipped behavior as unverified.
 - **Cleanup:** how to tear down instances the run created. Never kill by process name; kill what you started. Cleanup removes instances and scratch state, never the evidence: proof artifacts survive the teardown, in a location the skill names.
 - **Helpers:** any script the skill ships is executable and its invocation is shown in the skill body. A helper the reader has to reverse-engineer is not a helper.
 
@@ -49,10 +51,14 @@ Follow the shape in [`references/feature-map-example/`](references/feature-map-e
 
 ## 4. Prove the generated skill before handing it over
 
-Run its own instructions end to end once: launch, doctor, drive ONE mapped feature (one is enough; the map exists so later runs can cover the rest), capture evidence, clean up. After cleanup, confirm the evidence still exists at the named location — a cleanup that eats the proof fails this step. Fix what fails, and run the generated cleanup after every failed iteration too, so broken attempts don't strand processes and ports. A generated skill that was never executed is a draft, not a deliverable.
+Run the generated instructions end to end for one authorized, isolated mapped feature. Launch, check readiness, drive the feature, capture evidence, and clean up. One feature is enough for this initial proof; do not imply the rest of the map was verified.
+
+After a failure, run the generated cleanup for instances and scratch state created by that attempt. Preserve its evidence. Repair generated helpers, selectors, or safe local setup and rerun the affected proof. Do not repeat unrelated baselines, make unapproved product changes, or bypass behavior just to obtain a passing result.
+
+After successful cleanup, confirm the evidence still exists at the named location. Stop when that proof passes or no safe in-scope correction can advance the blocked step. If proof requires unavailable access or new authority, preserve the generated draft and report the exact unverified step, attempted command, and unmet precondition. An unexecuted or failed proof is not a verified deliverable.
 
 ## 5. Explain maintenance
 
-Report the generated skill path and the feature that the proof exercised.
+Report the generated skill path, proof status, feature exercised, and any remaining verification limits.
 When app behavior changes, update the affected feature recipes and repeat their proof.
 Suggest a maintenance cadence only if the user asks.

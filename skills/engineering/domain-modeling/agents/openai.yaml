@@ -1,4 +1,4 @@
 interface:
   display_name: "Domain Modeling"
   short_description: "Build and sharpen a domain model"
-  default_prompt: "Use $domain-modeling to sharpen project terminology, update CONTEXT.md, and record durable decisions in ADRs."
+  default_prompt: "Use $domain-modeling to sharpen project terminology in the requested mode: propose wording during discussion, or persist authorized glossary and ADR edits."

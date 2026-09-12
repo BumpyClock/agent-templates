@@ -57,24 +57,29 @@ The `harness_portability` lint surfaces `CLAUDE_TOOL_REFS` and `CLAUDE_TOOL_PROS
 with concrete fix suggestions. The adapter does a conservative rewrite at generation time
 but explicit phrasing produces cleaner output.
 
-### Respect the Codex 8 KB skill body cap
+### Disclose detail by task
 
-Codex hard-truncates `SKILL.md` bodies at 8 KB and warns. Push detail into
-`skills/<name>/references/` files — agents load them on demand. The `SKILL_OVER_CODEX_CAP`
-lint fires for any skill above 8 KB that has no `references/` directory.
+Keep the skill's purpose, activation boundary, essential constraints, and task routes
+in the root. Put substantial material needed by only some tasks behind conditional
+reference links. Preserve useful examples and scripts. A short, single-purpose skill
+does not need a reference directory.
+
+Codex's initial catalog budget is not an 8 KB skill-body cap. See
+[Codex skill context](harnesses.md#codex-skill-context) for the documented loading
+behavior. A size heuristic alone does not justify splitting or deleting material.
 
 ```
 skills/my-skill/
-├── SKILL.md           # navigation + quick-start, ≤ 8 KB
+├── SKILL.md           # purpose, boundaries, and task routes
 └── references/
     ├── details.md     # deep implementation notes
     ├── api-reference.md
     └── examples/
 ```
 
-Link from `SKILL.md` like ``See `references/details.md` for the full algorithm.`` — keep the
-link target as backticked path text so the gardener's dead-link checker doesn't false-positive
-on illustrative examples.
+Link each reference from the task that needs it, with an explicit activation
+condition. Validate real link destinations after moves; keep illustrative paths
+inside code examples rather than presenting them as working links.
 
 ### Use globally unique agent names
 

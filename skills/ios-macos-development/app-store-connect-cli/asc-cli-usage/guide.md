@@ -15,7 +15,7 @@ Use this skill when you need to run or design `asc` commands for App Store Conne
 
 ## Flag conventions
 - Use explicit long flags (e.g., `--app`, `--output`).
-- No interactive prompts; destructive operations require `--confirm`.
+- Some mutations require `--confirm` because the CLI is noninteractive. The flag is not user authorization; apply the [authorization boundary](../guide.md#authorization) before running them.
 - Use `--paginate` when the user wants all pages.
 
 ## Output formats

@@ -41,7 +41,9 @@ For large outputs or context pressure, use [Guard the Context Window](references
 
 ### Oracle
 
-For hard bugs, architecture reviews, or plan cross-checks, use Oracle when `oracle` is on PATH.
+Consider Oracle only for consequential unresolved uncertainty when independent review has enough expected value to justify its cost and sharing the selected context is authorized.
+Continue locally when existing evidence resolves the question.
+Confirm `oracle` is on PATH before use.
 Oracle combines a prompt with selected files for an external review.
 Respect repository data-sharing restrictions when selecting context.
 Run `oracle --help` once per session before first use.

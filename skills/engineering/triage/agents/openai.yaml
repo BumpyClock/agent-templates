@@ -1,6 +1,6 @@
 interface:
   display_name: "Triage"
   short_description: "Move issues through triage roles"
-  default_prompt: "Use $triage to categorize, verify, and advance this issue or external pull request through the configured triage state machine."
+  default_prompt: "Use $triage to assess this issue or external pull request, reuse prior answers, and apply only the requested or approved triage outcome."
 policy:
   allow_implicit_invocation: false

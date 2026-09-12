@@ -21,9 +21,11 @@ sag "Hello world"
 macOS `say` compatibility shortcuts (subcommand optional):
 ```bash
 sag -v Roger -r 200 "Faster speech"
-sag -o out.mp3 "Save to file"
+sag --no-play -o out.mp3 "Save to file"
 sag -v ?      # list voices
 ```
+
+For file-only requests, pair the output path with `--no-play`. File generation still sends the text to ElevenLabs; it does not authorize later playback or forwarding.
 
 More examples:
 ```bash

@@ -128,8 +128,9 @@ checked for matches.
 - Markdown file format in `.out-of-scope/` — each file should have a
   `# Concept Name` heading, a `**Decision:**` line, a `**Reason:**` line,
   and a `**Prior requests:**` list with issue links
-- The triage workflow should read all `.out-of-scope/*.md` files early
-  and match incoming issues against them by concept similarity
+- The triage workflow should retrieve relevant `.out-of-scope/*.md`
+  entries by concept similarity and synonyms, broadening retrieval when
+  the initial evidence is inconclusive
 
 **Acceptance criteria:**
 - [ ] Closing a feature as wontfix creates/updates a file in `.out-of-scope/`

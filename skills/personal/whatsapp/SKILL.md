@@ -1,107 +1,39 @@
 ---
 name: whatsapp
-description: "WhatsApp router: history/search/read/send; wacrawl read, wacli live."
+description: "Read, search, archive, or send WhatsApp messages using the authorized account."
 disable-model-invocation: true
 ---
 
 # WhatsApp
 
-First stop for WhatsApp work. use when user wants you to read/search/archive WhatsApp data or reach user using WhatsApp.
-- Get the user's WhatsApp phone number from `~/.agents/AGENTS.local.md` before WhatsApp work.
-- When sending user a message using Whatapp:
-  - start a new group chat with a relevant title.
-    - Title should be concise and descriptive. If an existing group exists with the user use that.
-  - Start background live sync using tmux to watch for user responses on incoming messages.
-  - use `speak` skill to record voice messages if needed.
-  - send screen recordings and screenshots as necessary for efficient communication.
-- `me` account is mine, use when I ask you to check my messages or act on my behalf explicitly.
-- `agent` account is the agent's WhatsApp account, use when the user asks you to send a message or reply to a message.
+Perform only the requested operation. Bind it to the authorized account and conversation; sending or replying also requires an explicitly requested recipient and message content.
 
+Use `me` when the user explicitly asks to inspect their messages or act on their behalf. Otherwise use `agent` for requested sends or replies from the agent. Do not switch accounts to work around a failure.
+Resolve the recipient from the request or machine-local contact preferences only when needed for delivery. Ask when the account, recipient, or requested action remains ambiguous, not to reconfirm settled authorization.
 
-## PRIME DIRECTIVE
-DO NO HARM. Protect humanity. Be as good as you can as often as you can, but you have to try sometimes.
+## Choose the operation
 
-## Golden rule
-- Maintain system running and secure. No destructive, illegal or hacking actions.
-- Secure by default. This server is setup with tailscale. Default access is only via tailscale.
-- open things up to the public and on the general internet without explicit user ask and double confirm. Need to keep our data and network secure.
+Load only the matching reference section. The commands are alternatives, not a setup checklist.
 
-## Safety
+| Request | Reference |
+| --- | --- |
+| Read or search the primary archive | [Archive reads](references/operations.md#archive-reads) |
+| Inspect a named account's stored messages or uncertain auth state | [Account inspection](references/operations.md#account-inspection) |
+| Send or reply | [Sending and attachments](references/operations.md#sending-and-attachments) |
+| Refresh data or monitor replies | [Refresh and monitoring](references/operations.md#refresh-and-monitoring) |
+| Import media or back up the archive | [Archive imports and backups](references/operations.md#archive-imports-and-backups) |
+| Resolve a missing CLI or interactive authentication | [Troubleshooting](references/Troubleshooting.md) |
 
-- Use `--read-only` or `WACLI_READONLY=1` for inspection.
-- Use `--json` for parsing.
-- Do not send messages unless explicitly asked.
-- Do not write `session.db` directly.
-- Do not merge account data into one `wacli.db`; named accounts are isolated stores.
+## Authorization boundaries
 
+- Sending does not authorize creating groups, changing membership, attaching files, recording audio, monitoring replies, or starting persistent sync. Reuse the intended existing conversation. Obtain explicit scope for these additional operations.
+- Monitoring requires a specified account, conversation, and finite deadline. Ask for a bounded window if none was provided. Stop earlier on the requested event or cancellation, and stop the run-owned watcher no later than that deadline. A one-off send leaves no watcher behind.
+- Use `--read-only` or `WACLI_READONLY=1` for `wacli` inspection and `--json` for parsing. Archive inspection must not trigger an unrequested refresh.
+- Keep named accounts in isolated stores. Do not write `session.db` directly or merge accounts into one `wacli.db`. Use `--store` only for authorized legacy-store debugging.
+- Preserve private-network restrictions, including Tailscale-only access where configured. Never expose services publicly without an explicit user request and double confirmation. Do not change network or account settings as a diagnostic probe.
 
-## Account Workflow
+## Completion
 
-List accounts and store paths:
-
-```bash
-wacli accounts list --json
-```
-
-Inspect one account without connecting:
-
-```bash
-wacli --account me doctor --read-only --json
-wacli --account me auth status --read-only --json
-```
-
-Use `--account NAME` for normal multi-account work. Use `--store DIR` only for one-off legacy/manual store debugging.
-## Commands
-
-### Primary Archive
-
-```bash
-wacrawl status
-wacrawl doctor
-wacrawl sync
-wacrawl chats --limit 20
-wacrawl unread --limit 20
-wacrawl --json unread --limit 100
-wacrawl messages --after 2026-01-01 --limit 50
-wacrawl messages --chat JID --asc --limit 100
-wacrawl messages --has-media --limit 50
-wacrawl --json search "query"
-wacrawl search "query" --after 2026-01-01 --from-them
-```
-
-Archive media/backups only when asked:
-
-```bash
-wacrawl import --copy-media
-wacrawl backup status
-wacrawl --sync never backup push
-```
-
-### Alt/Live Accounts
-
-Read-only inspection:
-
-```bash
-wacli accounts list --json
-wacli --account me auth status --read-only --json
-wacli --account me chats list --read-only --json
-wacli --account me messages list --read-only --json --limit 50
-wacli --account me messages search --read-only --json "query"
-```
-
-Background live sync (only when requested, prefer `tmux`):
-
-```bash
-wacli --account me sync --follow --events
-wacli --account me sync --once --events
-```
-
-Media/sending/mutations (explicit request only):
-
-```bash
-wacli --account me media download --chat JID --id MESSAGE_ID
-wacli --account me send text --to JID_OR_NAME --message "message"
-wacli --account me send file --to JID_OR_NAME --file ./file.jpg --caption "caption"
-wacli --account me send text --to JID --reply-to MESSAGE_ID --message "reply"
-```
-read `skills\personal\whatsapp\references\Troubleshooting.md` when needed.
+Reuse valid account, auth, and process evidence instead of repeating setup or starting duplicate sync sessions.
+Report the requested result and relevant coverage or delivery uncertainty. Check an uncertain send's receipt or stored result before retrying; do not send a duplicate just to obtain clearer output.
+Stop after the operation or the exact access, tool, or authorization blocker. Tool installation and interactive account setup are separate authorized work, not automatic troubleshooting steps.

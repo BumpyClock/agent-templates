@@ -7,10 +7,13 @@ description: Set territory-specific pricing for subscriptions and in-app purchas
 
 Use this skill to set different prices for different countries based on purchasing power parity or custom pricing strategies.
 
+Follow the [authorization boundary](../guide.md#authorization). Pricing analysis is read-only. Apply schedules or remove prices only for the products, territories, values, and effective dates included in the approved pricing decision.
+The territories and prices below illustrate command usage; they are not a default business policy.
+
 ## Preconditions
 - Ensure credentials are set (`asc auth login` or `ASC_*` env vars).
 - Use `ASC_APP_ID` or pass `--app` explicitly.
-- Know your base territory (usually USA) and base price tier.
+- Know the owner-approved base territory and price tier.
 
 ## Workflow: Set PPP-Based Subscription Pricing
 
@@ -85,7 +88,10 @@ asc iap price-schedule automatic-prices --schedule-id "SCHEDULE_ID"
 
 ## Updating Existing Prices
 
-To change a territory's price:
+Confirm the replacement price point and effective date before removing an existing price. Preview the affected schedule and retain enough information to recover from a partial failure.
+
+For an authorized territory price change:
+
 1. List current prices to get the price ID:
    ```bash
    asc subscriptions prices list --id "SUB_ID"

@@ -7,6 +7,8 @@ description: Orchestrate TestFlight distribution, groups, testers, and What to T
 
 Use this skill when managing TestFlight testers, groups, and build distribution.
 
+Follow the [authorization boundary](../guide.md#authorization). Use list and pull commands for inspection. Invitations, group changes, notes, and build distribution require authority for the specific recipients and builds; a status request does not include them.
+
 ## Export current config
 - `asc testflight sync pull --app "APP_ID" --output "./testflight.yaml"`
 - Include builds/testers:

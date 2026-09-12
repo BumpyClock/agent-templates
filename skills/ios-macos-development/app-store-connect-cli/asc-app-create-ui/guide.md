@@ -9,7 +9,7 @@ Use this skill to create a new App Store Connect app by driving the web UI.
 This is opt-in, local-only automation that requires the user to be signed in.
 
 ## Preconditions
-- A browser automation tool is available (Playwright, Cursor browser MCP, or equivalent).
+- Existing-session Chrome automation is available under [Browser Use](../../../browser-use/SKILL.md). Preserve its profile, consent, and recovery restrictions; do not silently switch browsers.
 - User is signed in to App Store Connect (or can complete login + 2FA).
 - The **bundle ID must already be registered** in the Apple Developer portal.
 - Required inputs are known:
@@ -21,6 +21,7 @@ This is opt-in, local-only automation that requires the user to be signed in.
   - user access (Full Access or Limited Access)
 
 ## Safety Guardrails
+- Follow the [authorization boundary](../guide.md#authorization). App creation does not imply approval to register a bundle ID, change capabilities, or configure storefront availability.
 - Never export or store cookies.
 - Use a visible browser session only.
 - Pause for a final confirmation before clicking "Create" (for standalone scripts).
@@ -28,14 +29,17 @@ This is opt-in, local-only automation that requires the user to be signed in.
 
 ## Workflow
 
-### 1. Preflight: register bundle ID and verify no existing app
-```bash
-# Register the bundle ID via public API (if not already registered)
-asc bundle-ids create --identifier "com.example.app" --name "My App" --platform IOS
+### 1. Read-only preflight
 
+```bash
 # Confirm no app record exists yet
 asc apps list --bundle-id "com.example.app" --output json
+
+# Check registered bundle IDs
+asc bundle-ids list --paginate
 ```
+
+If the intended bundle ID is missing, report the prerequisite. Use [Signing setup](../asc-signing-setup/guide.md) only when that account change is authorized.
 
 ### 2. Open App Store Connect
 Navigate to `https://appstoreconnect.apple.com/apps` and ensure the user is signed in.
@@ -90,11 +94,18 @@ asc apps get --id "APP_ID" --output json --pretty
 asc apps list --bundle-id "com.example.app" --output json
 ```
 
-### 7. Hand off to post-create setup
+### 7. Optional authorized post-create setup
+
+Stop after verification for an app-creation-only request. If further configuration is authorized, use the owner's actual locale, category, territories, and availability decision rather than sample storefront defaults.
+
 ```bash
-asc app-setup info set --app "APP_ID" --primary-locale "en-US"
-asc app-setup categories set --app "APP_ID" --primary GAMES
-asc app-setup availability set --app "APP_ID" --territory "USA,GBR" --available true
+asc app-setup info set --app "APP_ID" \
+  --primary-locale "${PRIMARY_LOCALE:?Set the approved primary locale}"
+asc app-setup categories set --app "APP_ID" \
+  --primary "${PRIMARY_CATEGORY:?Set the approved primary category}"
+asc app-setup availability set --app "APP_ID" \
+  --territory "${TERRITORIES:?Set the approved territories}" \
+  --available "${AVAILABLE:?Set the approved true or false value}"
 ```
 
 ## Known UI Automation Issues
@@ -124,4 +135,4 @@ Apple's Ember.js forms use custom change handlers. `browser_fill` (atomic set) m
 ## Notes
 - This skill is a workaround for a missing public API. Apple's docs explicitly state: "Don't use this API to create new apps; instead, create new apps on the App Store Connect website."
 - UI selectors can change without notice. Prefer role/label/text selectors over CSS.
-- The only manual step should be signing in. Everything else is agent-drivable.
+- Perform authorized form interaction without unnecessary handoffs. Keep login, consent, and final-confirmation boundaries intact.

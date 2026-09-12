@@ -6,12 +6,13 @@ read_when: Update coding workflow skills or their shared references.
 
 `skills/programming/SKILL.md` contains cross-cutting defaults and routes to task-specific references.
 
-- `skills/programming/references/tdd-rules.md` owns the explicit TDD workflow.
+- `skills/engineering/tdd/SKILL.md` owns the explicit TDD workflow. `skills/programming/references/tdd-rules.md` is a compatibility pointer to that owner.
 - `skills/programming/systematic-debugging/guide.md` owns diagnosis.
-- `skills/programming/references/verification-before-completion.md` owns completion evidence and its reuse.
+- `skills/programming/SKILL.md` owns risk-proportional check selection and evidence reuse. Task workflows define the observation that establishes completion.
+- `skills/engineering/data-structure-audit/SKILL.md` owns requested complete data-structure audits. It is a standalone skill in a discoverable group, not nested inside another skill.
 
-The `diagnosing-bugs` and `tdd` skills route to these references.
-Current workflows use the same verification owner.
+The `diagnosing-bugs` skill routes to the diagnosis reference; `tdd` contains its own workflow.
+Current workflows use the shared check-selection guidance.
 Keep shared rules in their owner instead of duplicate workflow checklists.
 Platform guides retain runner APIs and domain-specific examples.
 Git and PR skills use the same verification owner. They retain authorization and operation safety without extra test gates, independent completion reviews, or automatic review loops.
@@ -32,7 +33,7 @@ Fix Root Causes is a named rule in `systematic-debugging/guide.md`.
 These names use the existing procedures rather than duplicate them in separate principle files.
 Guard the Context Window lives in `references/execution/`, separate from design principles.
 Laziness Protocol uses the shared refactor contract.
-Outcome-Oriented Execution uses `references/verification-before-completion.md` and the refactor contract.
+Outcome-Oriented Execution uses the shared completion guidance and the refactor contract.
 Keep the adapted rules in their shared owners rather than duplicate active workflow checklists.
 
 ## Shared workflows
@@ -50,6 +51,7 @@ Shared workflows do not require Poteto mode, mandatory delegation, fixed agent p
 | Prototype | [Prototype skill](../skills/engineering/prototype/SKILL.md) |
 | Refactoring | [Clean refactoring](../skills/programming/references/refactoring/clean-refactoring.md) |
 | Runtime forensics | [Live diagnosis](../skills/programming/references/performance/runtime-forensics.md) |
+| Explicit TDD | [TDD skill](../skills/engineering/tdd/SKILL.md) |
 | Trace forensics | [Capture analysis](../skills/programming/references/performance/trace-forensics.md) |
 
 The prototype skill separates interactive state demonstrations, UI alternatives, and bounded behavioral probes.

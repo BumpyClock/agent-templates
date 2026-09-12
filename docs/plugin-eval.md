@@ -266,7 +266,7 @@ The static analyzer detects these anti-patterns, each with a severity that contr
 | `BLOATED_SKILL`        | 10%      | > 800 lines without a references/ directory                         |
 | `ORPHAN_REFERENCE`     | 5%       | Dead link to a file in references/                                  |
 | `DEAD_CROSS_REF`       | 5%       | Cross-reference to a non-existent skill/agent                       |
-| `SKILL_OVER_CODEX_CAP` | 15%      | Skill body > 8 KB without references/ (Codex hard-truncates)        |
+| `SKILL_OVER_CODEX_CAP` | 15%      | Legacy heuristic: body > 8 KB without references/, not a current Codex body limit |
 | `CLAUDE_TOOL_REFS`     | 2–10%    | Backticked CamelCase tool names (`` `Read` ``, `` `Bash` ``)        |
 | `CLAUDE_TOOL_PROSE`    | 5%       | Prose like "use the Read tool" (Codex prefers action verbs)         |
 | `AGENT_NAME_COLLISION` | 10%      | Agent named `default`/`worker`/`explorer` (Codex built-ins)         |
@@ -274,6 +274,12 @@ The static analyzer detects these anti-patterns, each with a severity that contr
 
 Each `harness_portability` finding carries a `remediation` string surfaced via the
 AntiPattern description, so the fix is in-context when the lint fires.
+
+The `SKILL_OVER_CODEX_CAP` entry describes a legacy size heuristic, not a verified
+host requirement. See [Codex skill context](harnesses.md#codex-skill-context) for
+the distinction between catalog budgeting and reading a selected skill. Evaluate
+reference disclosure and task outcomes rather than remove useful material solely
+to satisfy this flag.
 
 **Penalty formula:** `penalty = max(0.5, 1.0 − 0.05 × count)` — each anti-pattern reduces the score by 5%, flooring at 50%.
 

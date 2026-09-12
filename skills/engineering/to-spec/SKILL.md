@@ -1,22 +1,22 @@
 ---
 name: to-spec
-description: Turn the current conversation into a spec and publish it to the project issue tracker — no interview, just synthesis of what you've already discussed.
+description: Synthesize a conversation into a scoped specification, with publication when requested.
 disable-model-invocation: true
 ---
 
-This skill takes the current conversation context and codebase understanding and produces a spec. Do NOT interview the user — just synthesize what you already know.
+Synthesize the current conversation and relevant codebase understanding into a spec. Reuse settled requirements, contracts, and decisions without another interview.
 
-The issue tracker and triage label vocabulary should have been provided to you. If not, tell the user to run `/setup-matt-pocock-skills`.
+When fetching tracker context or preparing publication, read [Tracker integration](../triage/TRACKER.md) for destination, role mapping, and authorization rules. Missing tracker setup does not block a draft.
 
 ## Process
 
-1. Explore the repo to understand the current state of the codebase, if you haven't already. Use the project's domain glossary vocabulary throughout the spec, and respect any ADRs in the area you're touching.
+1. Reuse existing context. Inspect relevant code only where it could change the spec's behavior or contracts. Use the project's domain glossary vocabulary and respect ADRs in the affected area.
 
-2. Identify the contracts and test interfaces.
+2. Identify the agreed contracts and test interfaces. Ask only about unresolved choices that materially affect scope or those contracts. Do not reopen settled seams or invent decisions to fill gaps.
 
-Check with the user that these seams match their expectations.
+3. Write the requested spec using the applicable template sections below. Keep the problem, behavior, and scope explicit; scale the detail to the change. Return the draft, or publish it to the authorized destination when requested. Apply the configured `ready-for-agent` role only when the scope and contracts are settled enough for agent work.
 
-3. Write the spec using the template below, then publish it to the project issue tracker. Apply the `ready-for-agent` triage label - no need for additional triage.
+Finish with the draft or published issue reference. If publication is blocked, return the completed draft and the specific remaining decision or access requirement.
 
 <spec-template>
 
@@ -30,7 +30,7 @@ The solution to the problem, from the user's perspective.
 
 ## User Stories
 
-A LONG, numbered list of user stories. Each user story should be in the format of:
+Number the distinct in-scope user behaviors. Use this format where it clarifies the actor and benefit:
 
 1. As an <actor>, I want a <feature>, so that <benefit>
 
@@ -38,7 +38,7 @@ A LONG, numbered list of user stories. Each user story should be in the format o
 1. As a mobile bank customer, I want to see balance on my accounts, so that I can make better informed decisions about my spending
 </user-story-example>
 
-This list of user stories should be extremely extensive and cover all aspects of the feature.
+Cover the requested behavior and meaningful edge cases without padding the list or expanding the feature.
 
 ## Implementation Decisions
 

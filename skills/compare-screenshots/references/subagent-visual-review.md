@@ -1,41 +1,52 @@
-# Subagent Visual Review
+# Independent visual review
 
 Use this when history or prior conclusions could bias the main agent's visual
-judgment.
+judgment and a second opinion is worth the cost.
 
-## Spawn Config
+## Reviewer context
 
-- `agent_type`: `default`
-- `fork_context`: `false`
-- Attach the two screenshots as `local_image` items.
-- Label images neutrally: `Image A`, `Image B`, or `Reference`, `Candidate`.
-- Do not tell the subagent which image is candidate, reference, expected,
-  accepted, failed, better, worse, new, or old.
+- Use the available agent interface and image-attachment method. Isolate the
+  reviewer from prior discussion when supported; disclose any blinding limits.
+- Attach the two screenshots labeled `Image A` and `Image B`. Keep the mapping
+  to candidate and baseline outside the reviewer's context.
+- Supply the established visual target and relevant platform, viewport, UI
+  state, content, camera, and accessibility constraints.
+- Withhold chronology and previous verdicts, not the requirements or evidence
+  needed to assess them.
 
 ## Prompt
 
 ```text
-You are doing an unbiased visual review of two screenshots for the same visual target. You have no prior context.
+Review Image A and Image B independently against the supplied visual target.
 
-Compare Image A and Image B. Report:
+Visual target: <the user's requirements and relevant design intent>
+Platform and capture constraints: <relevant viewport, camera, state, and content>
+Other constraints: <requirements that affect judgment but cannot be inferred from pixels>
 
-1. Whether they appear to show the same viewport/state/content.
+Report:
+
+1. Whether the images are comparable under the supplied capture constraints.
 2. Major visible differences in camera/view, layout, content, missing details,
    labels/text, icons, color, lighting, depth/layering, clipping, artifacts,
    readability, or style.
-3. Which image is more complete/readable for the apparent task and why.
-4. A concise verdict on whether the images preserve the intended visual
-   relationship or need another pass.
+3. Which image better satisfies the supplied target and why. Either, both,
+   or neither may satisfy it.
+4. A concise verdict and any requirements that cannot be verified from these
+   captures. Do not infer interaction or motion correctness from static pixels.
 
-Do not assume either image is the desired target; judge only from visible pixels.
+Do not assume either image is preferred because of its label. Separate visible
+observations from judgments against the requirements. State uncertainty if
+the supplied target is insufficient; do not invent product intent.
 ```
 
-## How To Use The Result
+## Use the result
 
 - Treat the subagent result as independent evidence about which image is less
-  wrong, not a replacement for metrics or your own inspection — and not a vote
-  for whichever image is the baseline.
+  wrong, not a replacement for your own inspection or relevant metrics. It is
+  not a vote for whichever image is the baseline.
 - If the subagent flags wrong camera, mismatched state, missing content, or
-  visible artifacts, fix capture/rendering quality before judging the rest.
-- Quote the subagent verdict in the working notes when it changes or confirms
-  the next implementation target.
+  visible artifacts, establish whether those are capture problems or actual
+  product defects. Correct them only within authorized scope; otherwise report
+  the finding or comparison limit.
+- Use the evidence behind the verdict when deciding the next action. A second
+  opinion does not authorize implementation or baseline updates.

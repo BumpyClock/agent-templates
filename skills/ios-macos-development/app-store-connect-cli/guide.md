@@ -7,6 +7,14 @@ description: Umbrella index for App Store Connect automation skills. Use this en
 
 Use this guide as the router when a task involves App Store Connect, TestFlight, App Store submission, signing, metadata, screenshots, pricing, or `asc` commands.
 
+## Authorization
+
+Preflight, status checks, and review requests are read-only. A local build, archive, export, or screenshot request does not authorize uploads, distribution, submission, account changes, or publishing metadata.
+
+Run mutations only for the verified app, version, build, groups, territories, and operation covered by the user's request or established release policy. Credentials and CLI flags such as `--confirm` establish neither that scope nor approval. Honor already-authorized work without repeated approval; stop for missing consequential facts or authority.
+
+Command examples are not product or account defaults. Resolve placeholders and use accurate, owner-confirmed encryption, content-rights, copyright, pricing, and release declarations. Never change a declaration merely to pass a check.
+
 ## Skill routing (`read_when` hints)
 - `asc-cli-usage/guide.md` - `read_when`: You need `asc` command discovery, flags, auth, output formats, or pagination behavior.
 - `asc-id-resolver/guide.md` - `read_when`: You have names but need concrete App Store Connect IDs (apps, builds, versions, groups, testers).
@@ -30,4 +38,4 @@ Use this guide as the router when a task involves App Store Connect, TestFlight,
 ## Composition guidance
 - Start with one domain guide; add `asc-cli-usage` if command syntax/flags are unclear.
 - Add `asc-id-resolver` whenever downstream commands require IDs.
-- For release tasks, common stack is: `asc-xcode-build` -> `asc-release-flow` -> `asc-submission-health`.
+- For local artifacts, use `asc-xcode-build`. For an authorized release, use `asc-release-flow` and the relevant preflight checks from `asc-submission-health`; stop at the requested stage.

@@ -7,15 +7,20 @@ description: End-to-end release workflows for TestFlight and App Store using asc
 
 Use this skill when you need to get a new build into TestFlight or submit to the App Store.
 
+Follow the [authorization boundary](../guide.md#authorization). Select only the requested stages: local preparation, upload, TestFlight distribution, or App Store submission. An upload request does not authorize later distribution or submission.
+Confirm the intended release behavior from existing approved instructions and version settings before submission; automatic release after review must be within the authorized scope.
+
 ## Preconditions
 - Ensure credentials are set (`asc auth login` or `ASC_*` env vars).
 - Use a new build number for each upload.
 - Prefer `ASC_APP_ID` or pass `--app` explicitly.
-- Build must have encryption compliance resolved (see `../asc-submission-health/guide.md`).
+- Build must have accurate, owner-confirmed encryption and content-rights declarations, with any required compliance approval resolved. Use [read-only preflight](../asc-submission-health/guide.md#read-only-preflight).
 
 ## iOS Release
 
 ### Preferred end-to-end commands
+Use an end-to-end command only when its full effect is authorized. Notifications, submission, and tester distribution are not implied by upload permission.
+
 - TestFlight:
   - `asc publish testflight --app <APP_ID> --ipa <PATH> --group <GROUP_ID>[,<GROUP_ID>]`
   - Optional: `--wait`, `--notify`, `--platform`, `--poll-interval`, `--timeout`
@@ -33,9 +38,10 @@ Use this skill when you need to get a new build into TestFlight or submit to the
 4. App Store attach + submit:
    - `asc versions attach-build --version-id <VERSION_ID> --build <BUILD_ID>`
    - `asc submit create --app <APP_ID> --version <VERSION> --build <BUILD_ID> --confirm`
-5. Check or cancel submission:
+5. Check submission:
    - `asc submit status --id <SUBMISSION_ID>` or `--version-id <VERSION_ID>`
-   - `asc submit cancel --id <SUBMISSION_ID> --confirm`
+
+For an authorized cancellation, use `asc submit cancel --id <SUBMISSION_ID> --confirm`. Do not cancel as part of a status check.
 
 ## macOS Release
 
@@ -98,9 +104,9 @@ When releasing the same version across platforms:
 ## Pre-submission Checklist
 Before submitting, verify:
 - [ ] Build status is `VALID` (not processing)
-- [ ] Encryption compliance resolved
-- [ ] Content rights declaration set
-- [ ] Copyright field populated
+- [ ] Encryption declaration is accurate and required compliance approval is resolved
+- [ ] Content rights declaration agrees with owner-confirmed facts
+- [ ] Copyright and release behavior agree with the owner's declarations
 - [ ] All localizations complete
 - [ ] Screenshots present
 
@@ -109,4 +115,4 @@ See `../asc-submission-health/guide.md` for detailed preflight checks.
 ## Notes
 - Always use `--help` to verify flags for the exact command.
 - Use `--output table` / `--output markdown` for human-readable output; default is JSON.
-- macOS builds require `ITSAppUsesNonExemptEncryption` in Info.plist to avoid encryption issues.
+- For macOS as for iOS, encryption declarations must reflect actual app behavior. Do not set `ITSAppUsesNonExemptEncryption` merely to avoid a submission check.

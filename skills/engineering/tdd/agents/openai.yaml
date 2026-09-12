@@ -1,4 +1,4 @@
 interface:
   display_name: "TDD"
-  short_description: "Test-driven red-green-refactor"
-  default_prompt: "Use $tdd to develop this feature or bug fix through behavior-focused red-green-refactor cycles."
+  short_description: "Test-first development at contract seams"
+  default_prompt: "Use $tdd for requested test-first work. Reuse approved contract seams, resolve consequential uncertainty with coverage trade-offs, and deliver meaningful red-to-green slices with scoped cleanup while tests stay green."

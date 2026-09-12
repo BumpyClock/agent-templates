@@ -1,6 +1,6 @@
 interface:
   display_name: "To Spec"
   short_description: "Turn a conversation into a spec"
-  default_prompt: "Use $to-spec to synthesize the current conversation into a project-ready specification without another interview."
+  default_prompt: "Use $to-spec to synthesize settled context into a scoped specification without another interview, publishing to the configured destination only when requested."
 policy:
   allow_implicit_invocation: false

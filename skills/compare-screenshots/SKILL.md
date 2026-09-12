@@ -38,12 +38,16 @@ never decide who is right.
    shift, clipped edge, unexpected blur, style mismatch — and decide which side
    is closer to correct. The answer can be the candidate, the baseline, both
    wrong, or a genuine toss-up.
-5. **Get a neutral second opinion** for disputed or high-stakes calls: a fresh
-   subagent given only the two images and neutral labels, per
+5. **Get a neutral second opinion** when a disputed or high-stakes call warrants
+   independent review. Give the reviewer the target, relevant platform and
+   state constraints, and both images labeled A/B. Hide chronology and previous
+   verdicts, not the requirements. Use
    `references/subagent-visual-review.md`.
-6. **Conclude with one verdict:** candidate is less wrong (accept, and re-bless
-   the baseline if one exists), baseline is less wrong (reject), both wrong
+6. **Conclude with one verdict:** candidate is less wrong (recommend acceptance),
+   baseline is less wrong (recommend rejection), both wrong
    (another pass needed — say what's still off), or unclear (ask the user).
+   Keep comparison-only requests read-only. Update or re-bless a baseline only
+   when the user has authorized that change.
    Never accept on a lower score alone or reject on a higher one. Never hide
    content, blur detail, crop away differences, or make the capture less
    truthful to move a number.

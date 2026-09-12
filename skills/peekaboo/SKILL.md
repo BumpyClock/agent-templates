@@ -48,4 +48,7 @@ PB="${PEEKABOO_BIN:-$HOME/bin/peekaboo}"
 6. Discovery: `tools --json`, `learn` for full agent guide.
 7. Verify output: `sips -g pixelWidth -g pixelHeight <path>` or view image.
 
-Docs: `~/Projects/Peekaboo/docs/commands/`.
+## Documentation
+
+Use the resolved binary's `tools --json`, `learn`, or `<command> --help` for installed capabilities and syntax.
+Local checkout documentation is optional. Use its `docs/commands/` directory only after locating and verifying that checkout; do not assume a machine-specific repository path.

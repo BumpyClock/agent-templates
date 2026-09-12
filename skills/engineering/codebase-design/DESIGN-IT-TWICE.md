@@ -1,6 +1,6 @@
 # Design It Twice
 
-When the user wants to explore alternative interfaces for a chosen deepening candidate, use this parallel sub-agent pattern. Based on "Design It Twice" (Ousterhout) — your first idea is unlikely to be the best.
+When the user wants to explore alternative interfaces for a chosen deepening candidate, compare viable designs against the task's constraints. Based on "Design It Twice" (Ousterhout): the first idea need not be the best.
 
 Uses the vocabulary in [SKILL.md](SKILL.md) — **module**, **interface**, **seam**, **adapter**, **leverage**.
 
@@ -8,28 +8,29 @@ Uses the vocabulary in [SKILL.md](SKILL.md) — **module**, **interface**, **sea
 
 ### 1. Frame the problem space
 
-Before spawning sub-agents, write a user-facing explanation of the problem space for the chosen candidate:
+Establish the problem space for the chosen candidate:
 
 - The constraints any new interface would need to satisfy
 - The dependencies it would rely on, and which category they fall into (see [DEEPENING.md](DEEPENING.md))
-- A rough illustrative code sketch to ground the constraints — not a proposal, just a way to make the constraints concrete
+- The criteria that would distinguish a better interface
 
-Show this to the user, then immediately proceed to Step 2. The user reads and thinks while the sub-agents work in parallel.
+Use a sketch when it makes a material constraint easier to assess.
 
-### 2. Spawn sub-agents
+### 2. Develop useful alternatives
 
-Spawn 3+ sub-agents in parallel. Each must produce a **radically different** interface for the deepened module.
+Develop alternatives directly when the evidence fits one context. Delegate independent, substantial design questions only when separate context or expertise is expected to outweigh coordination cost.
+Choose the number of alternatives from useful trade-offs, not an agent or variant quota.
 
-Prompt each sub-agent with a separate technical brief (file paths, coupling details, dependency category from [DEEPENING.md](DEEPENING.md), what sits behind the seam). The brief is independent of the user-facing problem-space explanation in Step 1. Give each agent a different design constraint:
+Consider distinct constraints only when they serve the task:
 
-- Agent 1: "Minimize the interface — aim for 1–3 entry points max. Maximise leverage per entry point."
-- Agent 2: "Maximise flexibility — support many use cases and extension."
-- Agent 3: "Optimise for the most common caller — make the default case trivial."
-- Agent 4 (if applicable): "Design around ports & adapters for cross-seam dependencies."
+- Minimize what callers need to know while preserving the required behavior.
+- Support demonstrated variation without exposing internal details.
+- Make the most common caller's use case straightforward.
+- Place ports and adapters where cross-seam contracts justify them.
 
-Include both [SKILL.md](SKILL.md) vocabulary and CONTEXT.md vocabulary in the brief so each sub-agent names things consistently with the architecture language and the project's domain language.
+For delegated work, provide a bounded technical brief with owned paths, coupling details, constraints, and a completion condition. Reuse relevant project vocabulary and the terms in [SKILL.md](SKILL.md).
 
-Each sub-agent outputs:
+Each design states:
 
 1. Interface (types, methods, params — plus invariants, ordering, error modes)
 2. Usage example showing how callers use it
@@ -39,6 +40,7 @@ Each sub-agent outputs:
 
 ### 3. Present and compare
 
-Present designs sequentially so the user can absorb each one, then compare them in prose. Contrast by **depth** (leverage at the interface), **locality** (where change concentrates), and **seam placement**.
+Compare the designs by **depth** (leverage at the interface), **locality** (where change concentrates), and **seam placement**.
 
-After comparing, give your own recommendation: which design you think is strongest and why. If elements from different designs would combine well, propose a hybrid. Be opinionated — the user wants a strong read, not a menu.
+Recommend the strongest design and explain why; combine elements only when the hybrid satisfies the same constraints.
+Stop exploring when the evidence supports a choice or identifies a product preference that requires the user.

@@ -5,7 +5,8 @@ description: Orchestrate iOS screenshot automation with xcodebuild/simctl for bu
 
 # asc screenshots pipeline (xcodebuild -> AXe -> frame -> asc)
 
-Use this skill for agent-driven screenshot workflows where the app is built and launched with Xcode CLI tools, UI is driven with AXe, and screenshots are uploaded with `asc`.
+Use this skill for local capture and framing, or an explicitly requested screenshot upload.
+Follow the [authorization boundary](../guide.md#authorization). Capture and review requests stop at local artifacts; publishing screenshots requires authority for the target app version and locales.
 
 ## Current scope
 - Implemented now: build/run, AXe plan capture, frame composition, and upload.
@@ -144,17 +145,23 @@ Supported `--device` values:
 - `iphone-16e`
 - `iphone-17`
 
-## 5) Upload screenshots with asc
+## 5) Optional authorized upload
 
-Generate and review artifacts before upload:
+Skip this section for capture-only work. Generate the review artifacts:
 
 ```bash
 asc screenshots review-generate --framed-dir "./screenshots/framed" --output-dir "./screenshots/review"
 asc screenshots review-open --output-dir "./screenshots/review"
+```
+
+Inspect the actual screenshots against the approved content and capture requirements. Record approval only after review, not automatically after generation:
+
+```bash
 asc screenshots review-approve --all-ready --output-dir "./screenshots/review"
 ```
 
-Upload from the configured source directory (default `./screenshots/framed` when framing is enabled):
+`--all-ready` applies only when every included artifact has been reviewed. Review approval and `upload_enabled` are workflow state, not substitutes for publishing authority.
+For an authorized upload, use the verified locale mapping and configured source directory:
 
 ```bash
 asc screenshots upload \
@@ -297,7 +304,9 @@ printf "%s\n" \
   '
 ```
 
-## 8) Full multi-locale pipeline example
+## 8) Local multi-locale pipeline example
+
+This example captures, frames, and generates review artifacts. It does not publish them.
 
 ```bash
 #!/bin/bash
@@ -356,12 +365,6 @@ asc screenshots review-generate \
   --framed-dir "$FRAMED_DIR" \
   --output-dir "./screenshots/review"
 
-# Step 4: Upload (run per locale if needed)
-for LOCALE in "${!LOCALE_UDID[@]}"; do
-  asc screenshots upload \
-    --version-localization "LOC_ID_FOR_$LOCALE" \
-    --path "$FRAMED_DIR/$LOCALE" \
-    --device-type "IPHONE_65" \
-    --output json
-done
 ```
+
+After inspecting the generated artifacts, use the upload section separately only when publishing is authorized. Resolve each locale's actual version-localization ID; do not infer it from the locale name.

@@ -7,6 +7,8 @@ description: Archive, export, and notarize macOS apps using xcodebuild and asc. 
 
 Use this skill when you need to notarize a macOS app for distribution outside the App Store.
 
+Follow the [authorization boundary](../guide.md#authorization). Preflight and signature inspection are read-only. Certificate creation, trust-setting changes, re-signing, and notarization uploads require authority for those specific effects.
+
 ## Preconditions
 - Xcode installed and command line tools configured.
 - Auth is configured (`asc auth login` or `ASC_*` env vars).
@@ -21,30 +23,44 @@ Before archiving, confirm a valid Developer ID Application identity exists:
 security find-identity -v -p codesigning | grep "Developer ID Application"
 ```
 
-If no identity is found, create one at https://developer.apple.com/account/resources/certificates/add (the App Store Connect API does not support creating Developer ID certificates).
+If no identity is found, report the missing signing prerequisite. When certificate creation is authorized, use https://developer.apple.com/account/resources/certificates/add. The App Store Connect API does not support creating Developer ID certificates.
 
-### Fix Broken Trust Settings
+### Inspect trust settings
 
 If `codesign` or `xcodebuild` fails with "Invalid trust settings" or "errSecInternalComponent", the certificate may have custom trust overrides that break the chain:
 
 ```bash
 # Check for custom trust settings
 security dump-trust-settings 2>&1 | grep -A1 "Developer ID"
-
-# If overrides exist, export the cert and remove them
-security find-certificate -c "Developer ID Application" -p ~/Library/Keychains/login.keychain-db > /tmp/devid-cert.pem
-security remove-trusted-cert /tmp/devid-cert.pem
 ```
+
+An override's presence is not permission to remove it. Confirm that it causes the failure and identify the exact certificate before proposing a repair.
 
 ### Verify Certificate Chain
 
-After fixing trust settings, verify the chain is intact:
+Inspect and verify the intended existing app without re-signing it:
 
 ```bash
-codesign --deep --force --options runtime --sign "Developer ID Application: YOUR NAME (TEAM_ID)" /path/to/any.app 2>&1
+codesign -dvvv "${APP_PATH:?Set the intended app bundle path}" 2>&1
+codesign --verify --strict --verbose=2 "$APP_PATH"
 ```
 
-The signing must show the chain: Developer ID Application → Developer ID Certification Authority → Apple Root CA.
+Check the displayed authorities and verification result. Do not use `codesign --force --sign` as a diagnostic check; it replaces the app's signature.
+
+## Authorized trust repair
+
+If removing a specific trust override is explicitly authorized, export the selected certificate using its exact identity and verify the exported certificate:
+
+```bash
+security find-certificate -c "${CERTIFICATE_NAME:?Set the verified certificate identity}" \
+  -p ~/Library/Keychains/login.keychain-db > ./devid-cert.pem
+```
+
+Then remove only the authorized override:
+
+```bash
+security remove-trusted-cert ./devid-cert.pem
+```
 
 ## Step 1: Archive
 
@@ -103,6 +119,8 @@ ditto -c -k --keepParent "/tmp/YourAppExport/YourApp.app" "/tmp/YourAppExport/Yo
 ```
 
 ## Step 4: Submit for Notarization
+
+This uploads the artifact to Apple. Stop before this step for a local archive, export, or preflight-only request.
 
 ### Fire-and-forget
 ```bash
@@ -167,7 +185,7 @@ xcrun stapler staple "/tmp/YourApp.dmg"
 
 ## PKG Notarization
 
-To notarize `.pkg` files, you need a **Developer ID Installer** certificate (separate from Developer ID Application). This certificate type is not available through the App Store Connect API — create it at https://developer.apple.com/account/resources/certificates/add.
+To notarize `.pkg` files, you need a **Developer ID Installer** certificate, separate from Developer ID Application. If it is missing, report the prerequisite. Creating it at https://developer.apple.com/account/resources/certificates/add requires the corresponding account authority.
 
 Sign the package:
 ```bash
@@ -182,7 +200,7 @@ asc notarization submit --file signed.pkg --wait
 ## Troubleshooting
 
 ### "Invalid trust settings" during export
-The Developer ID certificate has custom trust overrides. See the Preflight section above to remove them.
+Inspect the certificate and trust settings using the preflight section. If an override is the cause, follow [Authorized trust repair](#authorized-trust-repair) rather than removing trust settings automatically.
 
 ### "The binary is not signed with a valid Developer ID certificate"
 The app was signed with a Development or App Store certificate. Re-export with `method: developer-id` in ExportOptions.plist.

@@ -2,7 +2,7 @@
 
 ADRs live in `docs/adr/` and use sequential numbering: `0001-slug.md`, `0002-slug.md`, etc.
 
-Create the `docs/adr/` directory lazily — only when the first ADR is needed.
+During authorized ADR editing, create the `docs/adr/` directory only when the first ADR is needed.
 
 ## Template
 

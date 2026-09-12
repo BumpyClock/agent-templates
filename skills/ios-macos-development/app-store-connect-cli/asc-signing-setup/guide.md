@@ -7,6 +7,8 @@ description: Set up bundle IDs, capabilities, signing certificates, and provisio
 
 Use this skill when you need to create or renew signing assets for iOS/macOS apps.
 
+Follow the [authorization boundary](../guide.md#authorization). Inspect existing assets first and change only the identified bundle IDs, capabilities, certificates, or profiles covered by the task. A signing error is not permission to change account resources.
+
 ## Preconditions
 - Auth is configured (`asc auth login` or `ASC_*` env vars).
 - You know the bundle identifier and target platform.
@@ -16,8 +18,9 @@ Use this skill when you need to create or renew signing assets for iOS/macOS app
 1. Create or find the bundle ID:
    - `asc bundle-ids list --paginate`
    - `asc bundle-ids create --identifier "com.example.app" --name "Example" --platform IOS`
-2. Configure bundle ID capabilities:
+2. Configure only the capabilities required by the app and authorized for this bundle ID:
    - `asc bundle-ids capabilities list --bundle "BUNDLE_ID"`
+   - For an authorized iCloud capability, for example:
    - `asc bundle-ids capabilities add --bundle "BUNDLE_ID" --capability ICLOUD`
    - Add capability settings when required:
      - `--settings '[{"key":"ICLOUD_VERSION","options":[{"key":"XCODE_13","enabled":true}]}]'`
@@ -32,6 +35,9 @@ Use this skill when you need to create or renew signing assets for iOS/macOS app
    - `asc profiles download --id "PROFILE_ID" --output "./profiles/AppStore.mobileprovision"`
 
 ## Rotation and cleanup
+
+A successful renewal does not authorize revoking old assets. Check their use by other apps, machines, and CI, and revoke or delete only the specific assets included in the authorized cleanup.
+
 - Revoke old certificates:
   - `asc certificates revoke --id "CERT_ID" --confirm`
 - Delete old profiles:

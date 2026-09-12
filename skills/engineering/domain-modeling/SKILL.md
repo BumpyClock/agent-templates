@@ -1,11 +1,17 @@
 ---
 name: domain-modeling
-description: Build and sharpen a project's domain model. Use when discussing codebase terminology, writing or editing a CONTEXT.md, or recording or editing an ADR.
+description: Sharpen project domain terms or author glossary and ADR content. Use for terminology decisions, not merely reading existing definitions.
 ---
 
 # Domain Modeling
 
-Actively build and sharpen the project's domain model as you design. This is the *active* discipline — challenging terms, inventing edge-case scenarios, and writing the glossary and decisions down the moment they crystallise. (Merely *reading* `CONTEXT.md` for vocabulary is not this skill — that's a one-line habit any skill can do. This skill is for when you're changing the model, not just consuming it.)
+Build and sharpen the project's domain model by challenging terms and testing them against concrete scenarios. This skill changes or proposes changes to the model, rather than merely reading `CONTEXT.md` for vocabulary.
+
+## Requested mode
+
+In discussion or review, return proposed glossary wording and decisions without changing files. Agreement on a term is not by itself permission to edit the repository.
+
+When glossary or ADR edits are authorized, persist resolved terms and qualifying decisions within that scope as they settle. Do not ask again for each entry. Finish with the requested proposals or edits, identifying any material decision still unresolved.
 
 ## File structure
 
@@ -37,7 +43,7 @@ If a `CONTEXT-MAP.md` exists at the root, the repo has multiple contexts. The ma
 │       └── docs/adr/
 ```
 
-Create files lazily — only when you have something to write. If no `CONTEXT.md` exists, create one when the first term is resolved. If no `docs/adr/` exists, create it when the first ADR is needed.
+During authorized editing, create files lazily. Create `CONTEXT.md` when the first term is resolved, and `docs/adr/` when the first ADR is needed.
 
 ## During the session
 
@@ -57,9 +63,9 @@ When domain relationships are being discussed, stress-test them with specific sc
 
 When the user states how something works, check whether the code agrees. If you find a contradiction, surface it: "Your code cancels entire Orders, but you just said partial cancellation is possible — which is right?"
 
-### Update CONTEXT.md inline
+### Capture resolved terms
 
-When a term is resolved, update `CONTEXT.md` right there. Don't batch these up — capture them as they happen. Use the format in [CONTEXT-FORMAT.md](./CONTEXT-FORMAT.md).
+Record each resolved term in the requested proposal or authorized `CONTEXT.md` edit as it settles. Use the format in [CONTEXT-FORMAT.md](./CONTEXT-FORMAT.md).
 
 `CONTEXT.md` should be totally devoid of implementation details. Do not treat `CONTEXT.md` as a spec, a scratch pad, or a repository for implementation decisions. It is a glossary and nothing else.
 

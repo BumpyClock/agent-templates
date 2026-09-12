@@ -7,6 +7,9 @@ description: Sync and validate App Store metadata and localizations with asc, in
 
 Use this skill to keep local metadata in sync with App Store Connect.
 
+Follow the [authorization boundary](../guide.md#authorization). Listing, downloading, and validating metadata do not authorize uploading edits or changing release behavior.
+Resolve publication text, URLs, copyright, and policy from the user's approved content and actual app facts. Sample values are not defaults to publish.
+
 ## Two Types of Localizations
 
 ### 1. Version Localizations (per-release)
@@ -79,11 +82,18 @@ asc app-info set --app "APP_ID" --locale "en-US" --support-url "https://support.
 ### Version metadata
 ```bash
 # Copyright
-asc versions update --version-id "VERSION_ID" --copyright "2026 Your Company"
-
-# Release type
-asc versions update --version-id "VERSION_ID" --release-type AFTER_APPROVAL
+asc versions update --version-id "VERSION_ID" \
+  --copyright "${COPYRIGHT_DECLARATION:?Set the owner-confirmed copyright}"
 ```
+
+A release-policy change is separate from a metadata text update. Use it only when the requested scope includes that policy:
+
+```bash
+asc versions update --version-id "VERSION_ID" \
+  --release-type "${RELEASE_TYPE:?Set the owner-approved release type}"
+```
+
+`AFTER_APPROVAL` can cause automatic release after review. Do not choose it as a metadata-sync default.
 
 ### TestFlight notes
 ```bash

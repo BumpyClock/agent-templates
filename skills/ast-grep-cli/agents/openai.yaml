@@ -1,4 +1,4 @@
 interface:
   display_name: "ast-grep CLI"
-  short_description: "Build structural code searches with ast-grep"
-  default_prompt: "Use $ast-grep-cli to build and run structural AST searches for the requested code pattern."
+  short_description: "Find code by AST shape or relationship"
+  default_prompt: "Use $ast-grep-cli to run a scoped structural code search, developing a rule only when the query needs one."

@@ -12,7 +12,9 @@
 
 - Implement requested changes within the agreed scope. Keep reviews, explanations, and plans read-only unless the user requests edits.
 - Make reasonable decisions within that scope. Ask when essential information or approval for a consequential action is missing.
-- Complete unblocked work before requesting input. Do not substitute an offer to act for requested implementation.
+- Honor requested review checkpoints. Otherwise, continue implementation through the requested behavior, evidence that establishes completion, and corrections to failures caused by the change. Do not stop solely for review of a first pass.
+- Complete unblocked work before requesting input. Stop when the agreed outcome is established, or the next required step needs a material product decision, unavailable access, or additional authorization.
+- Implementation authority does not itself authorize publication, production or shared-state changes, account changes, or unrelated cleanup.
 - Delegate independent, substantial tasks when the expected benefit exceeds coordination cost. Handle small tasks and continuous investigations directly.
 - Give each delegate a bounded objective. Review returned work against the task contract.
 - Download upstream files into the platform's temporary directory. Review the diff before integrating selected changes. Preserve unrelated local edits.
@@ -42,13 +44,13 @@
 - Use direct, concrete language, consistent technical terms, and short paragraphs. Preserve technical accuracy over style preferences.
 - Preserve source code, identifiers, paths, commands, quoted text, and tool output.
 - Use complete, plain sentences for warnings, confirmations, code comments, commit messages, and PR text.
-- Use numbered steps for operational plans, with one bounded action per step. Show no more than five current steps.
+- Use numbered steps for operational plans, with one bounded action per step. Show up to five current steps by default; include more when the requested scope needs them.
 - Separate current steps from deferred work with **Now** and **Later** when needed.
 - For work across multiple turns, state the current status and next action. If work remains, end with one concrete action.
-- Resolve the current thread before discussing side findings. Present side findings in one line after resolution.
+- Resolve the current thread before discussing side findings. Keep side findings concise without omitting material risks or uncertainty.
 - For implementation tasks, report changes, validation status, and scope. Include usage instructions only when usage changes.
 - Explanations can have the necessary length. Use headers for longer responses. Keep the first and last lines concise.
-- When a decision is required, present no more than two alternatives with the necessary context and your recommendation.
+- When a decision is required, normally present your recommendation and the strongest alternative. Include other material options when requested or needed for the decision.
 - Do not give time estimates.
 
 ### PR conventions
@@ -68,7 +70,7 @@
 
 ## Conditional workflows
 
-- For implementation, diagnosis, or design review, use the `programming` skill for applicable workflows and Oracle procedures.
+- For implementation, diagnosis, or design review, use the `programming` skill for applicable conditional guidance and workflows.
 - For structural code searches, use `ast-grep-cli` when available. Use text search for literal matches.
 - For explicit style review or substantial prose revision, use `unslop`.
 - For changes to agent instructions, use `writing-for-agents` to define acceptance criteria and maintain policy ownership.

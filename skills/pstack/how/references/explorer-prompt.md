@@ -4,9 +4,9 @@ Build each explorer subagent's prompt from this template. Fill in the placeholde
 
 ---
 
-You are exploring a codebase to understand how something works. Gather facts: trace code paths, read implementations, map components. A separate agent will write the human-facing explanation from your findings, so favor thoroughness and accuracy over prose.
+You are investigating an assigned codebase question for a source-backed explanation. Gather the implementation evidence needed to explain the relevant behavior and its consequences.
 
-Other explorers are investigating different slices of the same subsystem in parallel. Don't try to cover everything. Focus on your assigned angle and go deep.
+Stay within your assigned angle. Follow related paths when their behavior could change the answer or resolve a material gap.
 
 ## Question
 
@@ -19,35 +19,36 @@ Other explorers are investigating different slices of the same subsystem in para
 ## Exploration Instructions
 
 Locate the relevant files and symbols with the available source-search tools.
-Read the implementation rather than infer behavior from names.
+Read the implementation and relevant contracts rather than infer behavior from names.
 
-Follow this pattern:
-1. **Find the entry point.** What triggers this behavior? A user action, an API call, a scheduled job? Find where it starts.
-2. **Trace the flow.** Follow the call chain from the entry point. Read each function. Understand what data flows through and how it transforms.
-3. **Map the key abstractions.** What types, interfaces, services, or classes are central? Read their definitions. Understand what they represent and why they exist.
-4. **Find the boundaries.** Where does this subsystem interface with others? What goes in, what comes out?
-5. **Look for the non-obvious.** Anything surprising? Anything that looks like a historical artifact? Anything a newcomer would misunderstand?
+Identify the entry point and trace the data, state changes, and decisions needed to answer the assigned question.
+Follow a callee, dependency, or historical change only when it could affect a material conclusion.
+At a boundary whose contract is sufficient to explain the behavior, state that contract instead of tracing unrelated internals.
+Cite source evidence for the causal links you report.
+Distinguish observed behavior, documented intent, and inferred rationale.
 
-Keep exploring until you can describe the full picture without hand-waving. If you hit a part you can't trace, say so explicitly. "I couldn't determine how X connects to Y" is better than making something up.
+Finish when the assigned question is answered with evidence, or the remaining material gaps cannot be resolved within the available scope and access.
+Resolve material contradictions or identify them as unresolved.
+Name missing connections and explain how they limit the answer instead of filling them with assumptions.
 
 ## Output
 
-Return your findings in this structure. Be factual and specific. Reference exact file paths, function names, type names, and line numbers where relevant.
+Use the sections relevant to the assigned question. Be factual and specific. Reference exact file paths, function names, type names, and line numbers where relevant.
 
 ### Components Found
-The key types, services, classes, and abstractions. For each: name, file path, and a one-sentence description of what it does.
+The types, services, classes, and abstractions needed for the answer. Give each one's name, source location, and role.
 
 ### Flow
-The execution flow step by step. For each step: what function/method runs, what file it's in, what it does, what it calls next. Include the data that flows between steps.
+Describe the causal sequence that answers the question, citing the responsible functions and relevant data or state transitions.
 
-### Files Read
-Every file you read during exploration, so the explainer can reference them.
+### Evidence
+Source locations supporting the answer or documenting material gaps. Omit an inventory of unrelated reads.
 
 ### Boundaries
-Where this subsystem connects to other parts of the codebase. The inputs and outputs.
+The contracts relied on at subsystem boundaries and any limits of their verification.
 
 ### Non-Obvious Things
-Anything surprising, historically motivated, or easy to get wrong. Things that look like they should work one way but work another.
+Behavior or constraints that materially affect the answer and are easy to misunderstand.
 
 ### Open Questions
-Anything you couldn't fully trace or understand. Be honest about gaps.
+Unresolved connections, conflicting evidence, or limits imposed by available scope and access. Explain what remains uncertain.

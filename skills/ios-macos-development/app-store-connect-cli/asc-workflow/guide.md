@@ -12,6 +12,9 @@ Use this skill when you need to create or run `.asc/workflow.json` workflows via
 
 Workflows are a lane-style "lanes" replacement: named, multi-step automation sequences that compose existing `asc` commands and normal shell commands.
 
+Follow the [authorization boundary](../guide.md#authorization). Inspect steps, hooks, nested workflows, and resolved parameters before running a workflow. Validation or a dry-run does not authorize its mutations.
+Check the installed CLI's dry-run behavior, including hooks, before relying on it for a read-only request.
+
 ## Command discovery
 
 - Always use `--help` to confirm flags and subcommands:
@@ -24,9 +27,9 @@ Workflows are a lane-style "lanes" replacement: named, multi-step automation seq
 
 1. Validate the workflow file (CI gate):
    - `asc workflow validate`
-2. Dry-run a workflow (no side effects):
+2. Preview a workflow using its supported dry-run mode:
    - `asc workflow run --dry-run beta`
-3. Run the workflow with runtime parameters:
+3. Run an authorized workflow with verified runtime parameters:
    - `asc workflow run beta BUILD_ID:123456789 GROUP_ID:abcdef`
 4. List available workflows (for discovery):
    - `asc workflow list`
@@ -42,7 +45,7 @@ Workflows are a lane-style "lanes" replacement: named, multi-step automation seq
 - stdout: JSON-only (structured result)
 - stderr: step/hook command output and dry-run previews
 
-This makes it safe to do:
+For an authorized run, the JSON result can be checked with:
 
 ```bash
 asc workflow run beta BUILD_ID:123 GROUP_ID:xyz | jq -e '.status == "ok"'
@@ -86,7 +89,7 @@ When hook output matters, keep hooks simple and write their logs to stderr.
 - Validate early (`asc workflow validate`) and keep the file in version control.
 - Start with `--dry-run` before enabling real runs in CI.
 - Use existing `asc` commands for the actual work (build upload, TestFlight distribution, submission).
-- Use `--confirm` on destructive operations inside steps; workflows should never add interactive prompts.
+- Put only authorized mutations in executable steps. Use required `--confirm` flags after that scope is established; do not treat them as approval. Resolve missing authority before starting a noninteractive workflow rather than adding prompts inside it.
 
 ## Example `.asc/workflow.json` template
 
@@ -151,4 +154,3 @@ This is a practical starting point for lane migration; adapt step commands to yo
   }
 }
 ```
-

@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Test cleanup
 
-Use [verification](../../programming/references/verification-before-completion.md) for check scope and evidence limits.
+Use [Programming](../../programming/SKILL.md) for risk-proportional check scope.
 This skill owns the cleanup workflow, not a separate test standard.
 
 ## Establish scope and mode

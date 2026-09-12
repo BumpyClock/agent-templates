@@ -7,6 +7,8 @@ description: Bulk-localize subscription and in-app purchase display names across
 
 Use this skill to bulk-create or bulk-update display names (and descriptions) for subscriptions, subscription groups, and in-app purchases across all App Store Connect locales. This eliminates the tedious manual process of clicking through each language in App Store Connect to set the same display name.
 
+Follow the [authorization boundary](../guide.md#authorization). An audit of localization coverage is read-only. Limit writes to requested products and locales, using approved names and descriptions that accurately describe the product. Sample product claims below are not defaults to publish.
+
 ## Preconditions
 - Auth configured (`asc auth login` or `ASC_*` env vars).
 - Know your app ID (`ASC_APP_ID` or `--app`).
@@ -223,7 +225,7 @@ asc subscriptions list --group "GROUP_ID" --paginate
 
 - Always list existing localizations first to avoid duplicate creation errors.
 - Skip locales that already have a localization; only create missing ones.
-- When the user provides a single display name, use it for all locales (same name everywhere).
+- When the user requests the same display name across locales, use it unchanged within that requested locale set. Do not expand the scope merely because more locales are supported.
 - When the user provides translated names per locale, use the locale-specific name for each.
 - If a description is provided, pass `--description` on create. Otherwise omit it.
 - Use `--output table` for verification steps so the user can visually confirm.

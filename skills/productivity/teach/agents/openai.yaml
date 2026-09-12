@@ -1,6 +1,6 @@
 interface:
   display_name: "Teach"
-  short_description: "Learn a concept in a guided workspace"
-  default_prompt: "Use $teach to guide the user through learning this concept while maintaining progress in the workspace teaching files."
+  short_description: "Learn through explanation, practice, or a requested course"
+  default_prompt: "Use $teach to explain or practice this topic. Keep it in the conversation unless I request a persistent course or am continuing an established one."
 policy:
   allow_implicit_invocation: false

@@ -7,12 +7,14 @@ description: Preflight App Store submissions, submit builds, and monitor review 
 
 Use this skill to reduce review submission failures and monitor status.
 
-## Preconditions
-- Auth configured and app/version/build IDs resolved.
-- Build is processed (not in processing state).
-- All required metadata is complete.
+Preflight is read-only. Report missing metadata, unresolved declarations, and processing state without changing them.
+Apply the [authorization boundary](../guide.md#authorization) before correcting declarations, rebuilding, submitting, canceling, or publishing.
 
-## Pre-submission Checklist
+## Preconditions
+- Authenticated access and the intended app/version/build IDs are available.
+- For a mutation, the requested operation and accurate, owner-confirmed values are established. If consequential facts or authority are missing, stop at the finding.
+
+## Read-only preflight
 
 ### 1. Verify Build Status
 ```bash
@@ -20,51 +22,39 @@ asc builds info --build "BUILD_ID"
 ```
 Check:
 - `processingState` is `VALID`
-- `usesNonExemptEncryption` - if `true`, requires encryption declaration
+- `usesNonExemptEncryption` agrees with the app's actual encryption use and the owner-confirmed classification.
+- If the build is still processing, report that state or wait within the requested monitoring scope. Do not submit it.
 
 ### 2. Encryption Compliance
-If `usesNonExemptEncryption: true`:
+Inspect encryption use in the app and bundled dependencies, the build's declaration, and available owner-confirmed compliance information.
+For nonexempt encryption, inspect the required declaration and documentation:
+
 ```bash
-# List existing declarations
 asc encryption declarations list --app "APP_ID"
-
-# Create declaration if needed
-asc encryption declarations create \
-  --app "APP_ID" \
-  --app-description "Uses standard HTTPS/TLS" \
-  --contains-proprietary-cryptography=false \
-  --contains-third-party-cryptography=true \
-  --available-on-french-store=true
-
-# Assign to build
-asc encryption declarations assign-builds \
-  --id "DECLARATION_ID" \
-  --build "BUILD_ID"
 ```
 
-**Better approach:** Add `ITSAppUsesNonExemptEncryption = NO` to Info.plist and rebuild.
+`ITSAppUsesNonExemptEncryption = NO` is appropriate only when the app actually qualifies for that declaration. It is not a workaround for missing approval.
+If classification is uncertain, obtain the owner's compliance decision using current Apple guidance rather than infer exemption from a submission error or a generic HTTPS example.
 
 ### 3. Content Rights Declaration
 Required for all App Store submissions:
 ```bash
 # Check current status
 asc apps get --id "APP_ID" --output json | jq '.data.attributes.contentRightsDeclaration'
-
-# Set if missing
-asc apps update --id "APP_ID" --content-rights "DOES_NOT_USE_THIRD_PARTY_CONTENT"
 ```
 Valid values:
 - `DOES_NOT_USE_THIRD_PARTY_CONTENT`
 - `USES_THIRD_PARTY_CONTENT`
 
+Determine which value is accurate from the app's content and owner-confirmed rights. A missing value is a finding, not permission to choose the first enum.
+
 ### 4. Version Metadata
 ```bash
 # Check version details
 asc versions get --version-id "VERSION_ID" --include-build
-
-# Verify copyright is set
-asc versions update --version-id "VERSION_ID" --copyright "2026 Your Company"
 ```
+
+Check copyright and release behavior against the owner's actual declarations and intended release policy. Do not fill missing metadata with sample text.
 
 ### 5. Localizations Complete
 ```bash
@@ -86,7 +76,48 @@ asc app-infos list --app "APP_ID"
 asc localizations list --app "APP_ID" --type app-info --app-info "APP_INFO_ID"
 ```
 
+## Authorized corrections
+
+Use these commands only when the correction is authorized and all declaration values have been resolved from actual app facts and owner-confirmed decisions. The required variables have no defaults.
+
+### Encryption declaration
+
+```bash
+asc encryption declarations create \
+  --app "APP_ID" \
+  --app-description "${ENCRYPTION_DESCRIPTION:?Set the owner-confirmed encryption description}" \
+  --contains-proprietary-cryptography="${CONTAINS_PROPRIETARY_CRYPTOGRAPHY:?Set the confirmed true or false value}" \
+  --contains-third-party-cryptography="${CONTAINS_THIRD_PARTY_CRYPTOGRAPHY:?Set the confirmed true or false value}" \
+  --available-on-french-store="${AVAILABLE_ON_FRENCH_STORE:?Set the confirmed true or false value}"
+```
+
+Assign the verified declaration to the intended build when authorized:
+
+```bash
+asc encryption declarations assign-builds \
+  --id "DECLARATION_ID" \
+  --build "BUILD_ID"
+```
+
+If the binary's declaration is wrong, correct it and rebuild only within the authorized scope. A genuinely nonexempt app still needs the applicable compliance process.
+
+### Content rights and copyright
+
+```bash
+asc apps update --id "APP_ID" \
+  --content-rights "${CONTENT_RIGHTS_DECLARATION:?Set the owner-confirmed content-rights value}"
+```
+
+```bash
+asc versions update --version-id "VERSION_ID" \
+  --copyright "${COPYRIGHT_DECLARATION:?Set the owner-confirmed copyright}"
+```
+
+Read back changed fields to verify the intended result. Correcting metadata does not itself authorize submission.
+
 ## Submit
+
+Submit only after preflight is satisfied and authorization covers the selected app, version, build, and release behavior. `--confirm` is a CLI safeguard, not a substitute for that authority.
 
 ### Using Review Submissions API (Recommended)
 ```bash
@@ -120,6 +151,9 @@ asc review submissions-list --app "APP_ID" --paginate
 ```
 
 ## Cancel / Retry
+
+Use status commands first. Cancel or retry only within the authorized release scope; an uncertain response is not evidence that a submission failed.
+
 ```bash
 # Cancel submission
 asc submit cancel --id "SUBMISSION_ID" --confirm
@@ -127,7 +161,7 @@ asc submit cancel --id "SUBMISSION_ID" --confirm
 # Or via review API
 asc review submissions-cancel --id "SUBMISSION_ID" --confirm
 ```
-Fix issues, then re-submit.
+After an authorized correction, check existing submission state before retrying to avoid duplicate actions.
 
 ## Common Submission Errors
 
@@ -140,9 +174,10 @@ Check:
 5. Screenshots present for all locales
 
 ### "Export compliance must be approved"
-The build has `usesNonExemptEncryption: true`. Either:
-- Upload export compliance documentation
-- Or rebuild with `ITSAppUsesNonExemptEncryption = NO` in Info.plist
+Inspect the build's encryption classification and required documentation.
+- If the app uses nonexempt encryption, resolve the applicable declaration and approval process within the authorized scope.
+- If the declaration is factually wrong, obtain the owner's confirmed correction before changing it or rebuilding.
+- If facts or approval remain missing, report the blocker. Do not set an exemption just to clear the error.
 
 ### "Multiple app infos found"
 Use `--app-info` flag with the correct app info ID:

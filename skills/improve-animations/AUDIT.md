@@ -1,23 +1,38 @@
-# Animation Audit Playbook
+# Animation audit guidance
 
-The eight audit categories, what to look for in each, and the exact target values to cite in findings and plans. Distilled from Emil Kowalski's design engineering philosophy ([emilkowal.ski](https://emilkowal.ski/)). Never approximate a value that appears here — copy it.
+Read the categories relevant to the requested audit or plan.
+The examples draw on Emil Kowalski's design engineering philosophy ([emilkowal.ski](https://emilkowal.ski/)).
+They are defaults for evaluating motion, not universal target values or a list of required changes.
+
+## Recon within scope
+
+Identify what can explain the affected behavior:
+
+- Framework, motion libraries, and component libraries, such as Motion, React Spring, GSAP, CSS, WAAPI, Radix, or Base UI.
+- Shared easing and duration tokens, Tailwind configuration, keyframes, transition props, and gesture handlers.
+- Existing spring configurations and platform conventions. Extend the existing system rather than create parallel tokens.
+- Product intent and use frequency. Repeated command-palette actions need different timing from occasional onboarding.
+
+Search the named components and relevant dependencies for `transition`, `animation`, `@keyframes`, `motion.`, `animate={`, `useSpring`, `ease-in`, `transition: all`, `scale(0)`, `prefers-reduced-motion`, or `transform-origin` as needed.
+A matching token is a lead, not proof of a defect.
 
 ## 1. Purpose & frequency
 
-Every animation must answer "why does this animate?" — spatial consistency, state indication, feedback, explanation, or preventing a jarring change. "It looks cool" on a frequently-seen element is not a purpose.
+Look for a purpose such as spatial continuity, state indication, feedback, explanation, or an intentional rare celebration.
+Decoration that repeatedly delays a task is a reason to reduce or remove motion.
 
 | Frequency | Decision |
 | --- | --- |
-| 100+ times/day (keyboard shortcuts, command palette toggle) | No animation. Ever. |
-| Tens of times/day (hover effects, list navigation) | Remove or drastically reduce |
-| Occasional (modals, drawers, toasts) | Standard animation |
-| Rare / first-time (onboarding, feedback, celebrations) | Can add delight |
+| Frequent keyboard shortcuts or command-palette actions | Prefer immediate feedback; retain motion only when it helps without delaying the action. |
+| Repeated hover effects or list navigation | Keep feedback brief and avoid repeated entrance choreography. |
+| Occasional modals, drawers, or toasts | Use motion when it explains state or relationships. |
+| Rare onboarding or celebrations | Expressive motion can fit the product, with accessible alternatives. |
 
-Hunt for: animations on keyboard-initiated actions, command palettes with open/close transitions (Raycast has none — correct), decorative motion on list items or hover states hit constantly. The strongest fix is often **delete the animation**.
+Inspect repeated interactions for perceived latency, blocked input, and distracting restarts. Removing motion can be the right fix; instant state changes are not inherently defects.
 
 ## 2. Easing & duration
 
-Decision order for easing:
+Common starting points when project or platform conventions do not already resolve the choice:
 
 - Entering or exiting → **`ease-out`** (starts fast, feels responsive)
 - Moving / morphing on screen → **`ease-in-out`**
@@ -25,7 +40,9 @@ Decision order for easing:
 - Constant motion (marquee, progress) → **`linear`**
 - Default → **`ease-out`**
 
-**`ease-in` on UI is always a finding** — it starts slow, delaying the exact moment the user is watching. Built-in CSS easings are too weak for deliberate motion; plans should introduce strong custom curves (as tokens, matching repo conventions):
+An `ease-in` response can feel delayed because it starts slowly, but intentional acceleration or an exit can justify it.
+Judge the observed response rather than the easing name. Preserve suitable existing tokens.
+When stronger deceleration or movement is needed, these are examples, not required replacements for built-in curves:
 
 ```css
 --ease-out: cubic-bezier(0.23, 1, 0.32, 1);        /* strong ease-out for UI */
@@ -33,7 +50,9 @@ Decision order for easing:
 --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);     /* iOS-like drawer curve */
 ```
 
-Duration budgets — **UI animations stay under 300ms**:
+Choose duration by distance, input method, use frequency, and platform behavior.
+Routine feedback often fits within 100-300ms. Larger overlays can need longer without delaying input.
+Illustrative ranges:
 
 | Element | Duration |
 | --- | --- |
@@ -43,74 +62,104 @@ Duration budgets — **UI animations stay under 300ms**:
 | Modals, drawers | 200–500ms |
 | Marketing / explanatory | Can be longer |
 
-Hunt for: `ease-in` anywhere, bare `ease`/`linear` on entrances, durations > 300ms on UI elements, tooltip delay + animation on every tooltip in a toolbar (after the first, they should be instant).
+Inspect slow initial responses, input blocked until motion ends, and repeated tooltip delays. A duration above 300ms is a prompt to inspect context, not an automatic finding.
 
 ## 3. Physicality & origin
 
-- **Never `scale(0)`** — nothing in the real world appears from nothing. Target: `scale(0.9–0.97)` + `opacity: 0`.
-- **Popovers/dropdowns/tooltips scale from their trigger**, not center:
+- For routine overlays, prefer a subtle scale such as `0.9-0.97` with opacity when a spatial entrance helps. Scaling from zero can make content difficult to track, but may suit an intentional graphic effect.
+- Trigger-anchored popovers, dropdowns, and tooltips usually scale from their trigger:
   ```css
   .popover { transform-origin: var(--radix-popover-content-transform-origin); } /* Radix */
   .popover { transform-origin: var(--transform-origin); }                       /* Base UI */
   ```
-  **Modals are exempt** — they appear centered; `transform-origin: center` is correct there. Do not report it.
-- **Press feedback**: `transform: scale(0.97)` on `:active` with `transition: transform 160ms ease-out`. Keep it subtle (0.95–0.98).
+  A centered modal can correctly use `transform-origin: center`. Judge the intended relationship.
+- If scale fits the control, press feedback might use `transform: scale(0.97)` with `transition: transform 160ms ease-out`. Color or other visible state feedback can be sufficient.
 
-Hunt for: `scale(0)`, pure-fade entrances with no initial transform, `transform-origin: center` (or none) on trigger-anchored elements, pressable elements with no press feedback.
+Inspect misleading origins, unreadable scaling, and missing action feedback. A pure fade or nonanimated response is valid when it serves the task.
 
 ## 4. Interruptibility
 
-CSS **transitions** retarget from the current state mid-animation; **keyframes** restart from zero. Anything triggered rapidly or reversible mid-motion (toasts stacking, toggles, drags, expand/collapse) must use transitions or springs.
+CSS transitions can retarget from the current rendered value. Replacing a keyframe animation can restart it.
+Rapid or reversible interactions should continue without a visible jump. Transitions, springs, WAAPI, or library-managed keyframes can satisfy this when they preserve the required state and velocity.
 
-- Entry without JS: `@starting-style` (legacy fallback: a `data-mounted` attribute set in `useEffect`).
-- Gesture-driven motion should use springs — they carry velocity when interrupted.
-- Spring configs, Apple-style (recommended): `{ type: "spring", duration: 0.5, bounce: 0.2 }`. Keep bounce subtle (0.1–0.3); reserve visible bounce for drag-to-dismiss and playful moments.
-- **Asymmetric timing**: deliberate phases (press, hold, destructive confirm) animate slower; the system's response snaps. Symmetric timing on press-and-release is a finding.
+- For entry without JS, consider `@starting-style` when supported. A mounted-state attribute is a fallback when the target browsers require it.
+- Springs can preserve velocity in gesture-driven motion. Verify the library's interruption behavior.
+- A Motion spring example is `{ type: "spring", duration: 0.5, bounce: 0.2 }`. Tune it to distance, platform, and product intent rather than copying it into every interaction.
+- Deliberate hold or confirmation phases may need slower timing than the system response. Symmetric timing is a problem only when it obscures intent or delays feedback.
 
-Hunt for: `@keyframes` on toasts/toggles/rapidly-triggered UI, gesture handlers that tween with fixed-duration keyframes, drags without velocity-based dismissal (dismiss on `Math.abs(distance)/elapsedMs > ~0.11`, not distance thresholds alone), hard stops at drag boundaries instead of rising friction.
+Exercise rapid toggles, reversals, toast stacking, and drags. Check for restarts, jumps, and abrupt stops.
+Choose gesture dismissal using the platform's distance and velocity contract; do not transplant thresholds between APIs with different units.
 
 ## 5. Performance
 
-- **Animate `transform` and `opacity` only.** `width`/`height`/`margin`/`padding`/`top`/`left` trigger layout + paint + composite.
-- **`transition: all`** animates unintended properties off-GPU — always a finding.
-- **Framer Motion `x`/`y`/`scale` shorthands are not hardware-accelerated** — they run on the main thread and drop frames under load. Target: the full transform string, `animate={{ transform: "translateX(100px)" }}`.
-- **Don't drive child transforms via a CSS variable on the parent** — it recalcs styles for all children. Set `transform` directly on the element.
-- CSS (and WAAPI) beat rAF-based JS under load — use CSS for predetermined motion, JS/springs for dynamic and gesture-driven motion.
-- Keep transition-time `filter: blur()` under 20px — heavy blur is expensive, especially in Safari.
+- Prefer `transform` and `opacity` when they express the intended effect. They often avoid layout work, but compositing and smoothness still depend on the runtime.
+- Layout-driving properties such as `width`, `height`, `margin`, `padding`, `top`, and `left` can cause layout and paint. Consider FLIP, transforms, or grid techniques; retain other properties when their meaning and measured cost justify them.
+- Prefer explicit transition properties. Investigate `transition: all` for unintended motion or unnecessary work rather than assume every use drops frames.
+- Motion shorthand acceleration depends on the library version and animation path. If profiling shows main-thread transform work, compare a supported full-transform path such as `animate={{ transform: "translateX(100px)" }}` before prescribing a rewrite.
+- Inherited CSS variables can broaden style recalculation. Check the affected subtree and consider setting the animated property on the target element when that reduces measured work.
+- CSS and WAAPI can avoid per-frame JavaScript for supported effects. Use the existing runtime when dynamic or gesture-driven motion requires it.
+- Blur, filters, shadows, and large painted regions can be expensive, especially on constrained devices. Bound the region and radius, and measure rather than assume a fixed blur limit is safe.
 
-Hunt for: `transition: all`, animated layout properties, Framer Motion shorthand props on busy pages, `setProperty('--x', …)` driving child transforms, rAF loops doing what CSS could.
+Inspect dropped frames, excessive layout or style work, and main-thread contention under the affected workload.
+Separate code-level performance concerns from measured bottlenecks.
 
 ## 6. Accessibility
 
+Follow the [reduced-motion contract](../ux-designer/references/accessibility.md#reduced-motion).
+Preserve visible state changes and action feedback, not obligatory animation. Instant updates are valid.
+Brief, non-spatial opacity or color transitions are optional when helpful and safe for the affected context.
+
+For a component whose nonessential motion is isolated in `.motion-feedback`:
+
 ```css
-@media (prefers-reduced-motion: reduce) {
-  .element { animation: fade 0.2s ease; } /* keep opacity/color, drop movement */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .motion-feedback:hover { transform: scale(1.03); }
 }
-@media (hover: hover) and (pointer: fine) {
-  .element:hover { transform: scale(1.05); } /* touch fires false hovers on tap */
+@media (prefers-reduced-motion: reduce) {
+  .motion-feedback { animation: none; transition: none; }
 }
 ```
 
-Reduced motion means fewer and gentler animations, **not zero** — keep transitions that aid comprehension, remove position changes. In JS: `useReducedMotion()` and branch transform values.
+Keep the final state and all content accessible when motion is absent. Do not remove transforms needed for layout.
+In JS, use the runtime's reduced-motion preference, such as `useReducedMotion()`, to select the affected behavior. Native apps should honor the platform preference.
 
-Hunt for: movement with no `prefers-reduced-motion` handling, ungated `:hover` motion, reduced-motion implementations that nuke all feedback.
+Inspect reduced-motion output, keyboard interaction, and relevant pointer modes. Flag lost feedback, hidden content, or nonessential movement that ignores the preference, not the absence of animation.
 
 ## 7. Cohesion & tokens
 
 - Motion should match the product's personality — playful can be bouncier, a dashboard stays crisp. Mismatched personality across components is a finding.
-- Curves and durations should live as shared tokens. Five hand-typed cubic-beziers that almost match is a consolidation finding.
-- Everything-at-once group entrances where a **30–80ms stagger** belongs. Stagger is decorative — it must never block interaction.
-- A jarring crossfade that shows two overlapping states can be masked with subtle `filter: blur(2px)` during the transition.
+- Reuse shared motion tokens when the behavior is shared. Similar curves merit consolidation only when their differences are unintended.
+- A short stagger, such as 30-80ms between siblings, can explain a group entrance. Cap the total delay and keep controls usable; no stagger is also valid.
+- A subtle blur, such as `filter: blur(2px)`, can reduce visible overlap in some crossfades. Inspect readability and rendering cost before adopting it.
 
-Hunt for: duplicated near-identical easings/durations, one bouncy component in a crisp app, list/grid entrances with no stagger, crossfades that visibly double-expose.
+Inspect inconsistent responses to equivalent actions and crossfades that visibly obscure state. Do not report a missing decorative effect by itself.
 
 ## 8. Missed opportunities
 
-The additive category — places that don't animate but should:
+Suggest additional motion only when it would improve an observed task or a requested expressive moment:
 
 - State changes that teleport (content swaps, layout jumps) where a brief transition would prevent a jarring change.
-- Spatially-connected UI (a panel that appears from a trigger) with no motion explaining where it came from.
-- Rare, high-emotion moments (first-run, success, celebration) rendered with none of the delight budget they're allowed.
-- `translate` percentages (`translateY(100%)` = element's own height) and `clip-path: inset()` reveals as tools for these — no hardcoded pixel offsets.
+- Spatially connected UI whose relationship is unclear without a transition.
+- A first-run, success, or celebration moment where the requested product direction calls for expression.
+- Percentage translations, such as `translateY(100%)` of the element's own height, or `clip-path: inset()` can express a reveal without fixed pixel offsets. Check runtime support and cost.
 
-Report at most a handful, grounded in actual UX seams you observed — not a wishlist.
+No missed opportunities is a valid result. Keep additive suggestions separate from defects.
+
+## Evidence and reporting
+
+Confirm every reported location against the relevant code or inspected output. Exclude duplicates and documented tradeoffs unless evidence shows a conflict with the requested behavior or an accessibility requirement.
+State when timing, bounce, interruption, or performance needs a runtime check instead of guessing from code.
+
+Order findings by user impact and effort. Severity follows the consequence, not the presence of a particular easing or property:
+
+- HIGH for blocked tasks, harmful motion, inaccessible interactions, or severe responsiveness failures.
+- MEDIUM for material continuity, feedback, or usability defects.
+- LOW for supported polish or consistency improvements.
+
+For a substantial audit, a table can help:
+
+| Severity | Category | Location | Evidence and impact | Fix |
+| --- | --- | --- | --- | --- |
+
+A short audit can use a concise list. Report the assessed scope and verification limits.
+Stop after the requested coverage and material findings; do not pad the report with speculative defects or opportunities.

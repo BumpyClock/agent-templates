@@ -11,11 +11,19 @@ Assets bundled in `<skill-dir>/canvas/`: `styles.css`, `renderer.js`, `template.
 
 Work dir: session scratchpad if the harness provides one, else `<OS temp dir>/pr-review-{number}` (`/tmp` on POSIX, `$env:TEMP` on Windows). Sandboxed sessions often block shell `>` redirection and `cd`-in-compound commands — prefer the Write tool for files you author, keep commands `cd`-free, run from the work dir's parent only via absolute paths.
 
-## 1. Fetch
+## 1. Evidence
 
-Resolve the PR from its URL, number, or current branch with `gh`.
-Fetch metadata and per-file patches.
-Save all file pages as one JSON array:
+Identify the PR and the base/head revisions the walkthrough must explain.
+Reuse supplied or previously retrieved metadata, file lists, patches, and relevant review comments after checking their revision, coverage of the requested files, and patch completeness.
+Do not combine evidence from different revisions without identifying which revision each item describes.
+Do not call reused evidence current unless its freshness is established.
+Label historical evidence as a snapshot at its known revisions.
+If currentness cannot be checked, deliver a labeled snapshot only when consistent with the request and report any unmet current-head requirement.
+
+Fetch only missing, stale, or insufficient inputs needed for the requested walkthrough.
+Use `gh` to resolve the PR from its URL, number, or current branch when the supplied identity is insufficient.
+Normalize the selected file data to `{workdir}/files.json` as an array of page arrays, wrapping a supplied flat file array once.
+When file retrieval is needed, fetch every required page:
 
 ```bash
 mkdir -p "{workdir}"
@@ -24,21 +32,29 @@ gh api "repos/{owner}/{repo}/pulls/{number}/files" --paginate --slurp \
 ```
 
 If redirection fails, save stdout with an available file tool.
-Proceed only after the fetch succeeds.
+A failed fetch does not block output when available evidence is sufficient for the labeled scope.
+Keep files with missing, truncated, or binary-only patches represented.
+Obtain necessary missing patches for the same comparison before claiming complete diff coverage.
+If they remain unavailable, identify the affected files and coverage limits; deliver a partial walkthrough only when consistent with the request.
+Report unknown file coverage rather than silently treating an incomplete file list as complete.
 
-Also fetch review comments for annotation folding: `gh api repos/{owner}/{repo}/pulls/{number}/comments --paginate` (add `issues/{number}/comments` when conversation context matters).
+Reuse relevant review comments with their revision context.
+When necessary comments are missing or stale, fetch them with `gh api repos/{owner}/{repo}/pulls/{number}/comments --paginate`.
+Fetch `issues/{number}/comments` only when conversation context matters and is not already available.
 
 ## 2. Body HTML
 
 Write only `<body>` contents to `{workdir}/body.html`:
 
 - Header (title, PR number, author, stats) → TL;DR → core files expanded with annotations → wiring/integration condensed → mechanical/generated/rename-only collapsed → review checklist (risks, questions, suggested review order).
-- Fold fetched review comments into relevant file annotations; drop the rest.
+- Include the compared SHAs, any snapshot label, and coverage limits in the header.
+- Fold relevant review comments into file annotations with their revision context; drop the rest.
 - Useful: pseudocode summaries, before/after behavior tables, inline SVG flow diagrams, callouts for breaking changes/races/migration order/security/perf/rollback.
 - Use `<div data-diff="src/example.ts"></div>` placeholders for diffs.
 - Use the complete `filename` from `files.json` as each key.
 - Escape filenames for HTML attributes, including quotes and ampersands.
 - Preserve import and whitespace changes in the rendered diff. The renderer adds move annotations without removal of changed lines.
+- Give missing or incomplete patches a visible per-file limitation, not just a blank diff.
 
 ## 3. Assemble
 

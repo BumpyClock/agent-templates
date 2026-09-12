@@ -138,13 +138,15 @@ Both include `stopBy` but not `field`.
 
 **stopBy**: Controls search termination for relational rules.
 
-* `"neighbor"` (default): Stops when immediate surrounding node doesn't match.
+* `"neighbor"` (default): Checks immediate relations rather than traversing farther.
 * `"end"`: Searches to the end of the direction (root for `inside`, leaf for `has`).
 * `Rule object`: Stops when a surrounding node matches the provided rule (inclusive).
 
 **field**: Specifies a sub-node within the target node that should match the relational rule. Only for `inside` and `has`.
 
-**Best Practice**: When unsure, always use `stopBy: end` to ensure the search goes to the end of the direction.
+Choose the traversal that expresses the requested relationship. Use `neighbor` for immediate relations, `end` for unrestricted traversal, or a rule object to stop at a syntax boundary. Unrestricted traversal can find matches inside nested functions or classes that do not belong to the enclosing scope being investigated.
+
+A rule-valued boundary is inclusive. Test a boundary node that could also match the relation, rather than assuming it is excluded.
 
 ## Composite Rules
 
@@ -236,9 +238,11 @@ The ast-grep playground is useful for debugging patterns and visualizing metavar
 
 ### Finding Functions with Specific Content
 
-Find functions that contain await expressions:
+Find function declarations whose subtree contains an await expression, including awaits in nested functions:
 
 ```yaml
+id: subtree-await
+language: javascript
 rule:
   kind: function_declaration
   has:
@@ -246,11 +250,34 @@ rule:
     stopBy: end
 ```
 
-### Finding Code Inside Specific Contexts
+### Finding awaits in the current function
 
-Find console.log calls inside class methods:
+To exclude nested function bodies, stop `has` at JavaScript function-like nodes. This matches the inner declaration with an await, but not an outer declaration whose only await is inside that nested function.
 
 ```yaml
+id: own-await
+language: javascript
+rule:
+  kind: function_declaration
+  has:
+    pattern: await $EXPR
+    stopBy:
+      any:
+        - kind: function_declaration
+        - kind: function_expression
+        - kind: arrow_function
+        - kind: method_definition
+        - kind: generator_function_declaration
+        - kind: generator_function
+```
+
+### Finding Code Inside Specific Contexts
+
+Find `console.log` calls anywhere inside a class method, including nested callbacks. Use a function boundary instead if callbacks must be excluded.
+
+```yaml
+id: console-in-method
+language: javascript
 rule:
   pattern: console.log($$$)
   inside:
@@ -260,9 +287,11 @@ rule:
 
 ### Combining Multiple Conditions
 
-Find async functions that use await but don't have try-catch:
+Find function declarations with an await somewhere in their subtree and no matching try-catch anywhere in that subtree. This is a syntactic filter, not proof that an awaited operation lacks error handling.
 
 ```yaml
+id: subtree-await-without-try
+language: javascript
 rule:
   all:
     - kind: function_declaration
@@ -277,9 +306,11 @@ rule:
 
 ### Matching Multiple Alternatives
 
-Find any type of console method call:
+Find calls to the listed console methods:
 
 ```yaml
+id: console-alternatives
+language: javascript
 rule:
   any:
     - pattern: console.log($$$)
@@ -288,10 +319,77 @@ rule:
     - pattern: console.debug($$$)
 ```
 
-## Troubleshooting Tips
+## CLI commands
 
-1. **Rule doesn't match**: Use `dump_syntax_tree` to see the actual AST structure
-2. **Relational rule issues**: Ensure `stopBy: end` is set for deep searches
-3. **Wrong node kind**: Check the language's Tree-sitter grammar for correct kind names
-4. **Metavariable not working**: Ensure it's the only content in its AST node
-5. **Pattern too complex**: Break it down into simpler sub-rules using `all`
+These are command choices, not a sequence. Replace `src` with the relevant file or directory and `my_rule.yml` with an existing rule file.
+
+### Pattern searches
+
+Use `run` for a single-node shape. Complete patterns need the syntax required by the selected language.
+
+```bash
+ast-grep run --pattern 'console.log($$$ARGS)' --lang javascript src
+ast-grep run --pattern 'class $NAME: $$$BODY' --lang python src
+ast-grep run --pattern 'function $NAME($$$ARGS) { $$$BODY }' --lang javascript --json src
+```
+
+### Rule files and inline rules
+
+Rule documents used by `scan` need `id`, `language`, and `rule`. Earlier syntax fragments illustrate parts of a rule; the common-pattern examples above are complete documents.
+
+```bash
+ast-grep scan --rule my_rule.yml src
+ast-grep scan --rule my_rule.yml --json src
+ast-grep scan --inline-rules 'id: console-calls
+language: javascript
+rule:
+  pattern: console.log($$$ARGS)' src
+```
+
+### Stdin validation
+
+When a rule needs validation, combine a minimal positive and negative example without creating files. This rule should match `positive`, not `negative`.
+
+```bash
+printf '%s\n' \
+  'async function positive() { await work(); }' \
+  'async function negative() { work(); }' |
+  ast-grep scan --inline-rules 'id: await-functions
+language: javascript
+rule:
+  kind: function_declaration
+  has:
+    pattern: await $EXPR
+    stopBy: end' --stdin --json
+```
+
+For the `own-await` rule, also check a negative outer function whose await exists only inside a nested function. A positive-only snippet cannot establish the intended scope boundary.
+
+### Shell quoting
+
+The examples above single-quote patterns and YAML so `$ARG` and `$$$ARGS` reach ast-grep unchanged. In a double-quoted argument, escape each `$`. A complete double-quoted rule looks like this:
+
+```bash
+ast-grep scan --inline-rules "id: console-one-argument
+language: javascript
+rule:
+  pattern: console.log(\$ARG)" src
+```
+
+### Parser diagnostics
+
+Use `--debug-query` when the node kind or pattern interpretation is unclear. This stdin example inspects the pattern without searching the repository.
+
+```bash
+printf '%s\n' 'class Example {}' |
+  ast-grep run --pattern 'class $NAME { $$$BODY }' \
+    --lang javascript --debug-query=cst --stdin
+```
+
+Formats:
+
+- `cst` includes punctuation.
+- `ast` shows named nodes.
+- `pattern` shows ast-grep's pattern interpretation.
+
+For unexpected results, inspect the parsed shape, language-specific `kind`, metavariable detection, and relational direction or boundary as relevant. Simplify a composite rule to isolate the mismatch. Expand traversal only when the requested search scope calls for it.

@@ -69,11 +69,13 @@ The reason should be durable. Avoid referencing temporary circumstances ("we're 
 
 ## When to check `.out-of-scope/`
 
-During triage (Step 1: Gather context), read all files in `.out-of-scope/`. When evaluating a new issue:
+During triage, retrieve relevant records first. Search concept names, filenames, and summaries using the request's domain terms and synonyms, then read matching or related entries in full. Broaden retrieval when the evidence is inconclusive rather than loading every record unconditionally.
 
 - Check if the request matches an existing out-of-scope concept
 - Matching is by concept similarity, not keyword — "night theme" matches `dark-mode.md`
 - If there's a match, surface it to the maintainer: "This is similar to `.out-of-scope/dark-mode.md` — we rejected this before because [reason]. Do you still feel the same way?"
+
+If no supported match is found, report where you looked and any unresolved uncertainty. A missing keyword match is not evidence that no related rejection exists.
 
 The maintainer may:
 

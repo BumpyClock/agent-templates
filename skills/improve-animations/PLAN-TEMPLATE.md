@@ -1,73 +1,67 @@
-# Plan Template
+# Motion plan guidance
 
-Every plan written by `improve-animations` follows this structure. The executor may be a less capable model with zero context and zero taste — the plan must contain everything, exactly. No references to "the audit above" or "the easing we discussed."
+Use this reference only when the user requests a plan or roadmap.
+Match the requested format. A small change can be planned in the response; create files only when requested.
+For saved plans, preserve existing names and index conventions rather than introduce a new numbered directory or mandatory README.
 
-```markdown
-# NNN — <Short imperative title>
+A handoff must include the facts needed to execute it without this conversation. Group related findings by the change that resolves them.
+Use the sections below when they add necessary information; omit empty sections.
 
-- **Status**: TODO
-- **Commit**: <output of `git rev-parse --short HEAD` when this plan was written>
-- **Severity**: HIGH | MEDIUM | LOW
-- **Category**: <audit category>
-- **Estimated scope**: <n files, rough size>
+````markdown
+# <Short imperative title>
 
 ## Problem
 
-What is wrong, where, and why it matters to how the product feels. Cite every
-location as `path/to/file.tsx:123` and include the current code verbatim:
+Describe the affected behavior and evidence. Cite relevant locations and include
+the code needed to understand the change, for example:
 
-​```css
-/* src/components/dropdown.css:14 — current */
+```css
 .dropdown { transition: all 400ms ease-in; }
-​```
+```
 
 ## Target
 
-The exact end state. Every value spelled out — curves, durations, spring
-configs, media queries. Never "use a nicer easing":
+Specify observable behavior and the chosen values or existing tokens. For a
+dropdown whose inspected entrance is delayed and whose origin is incorrect:
 
-​```css
-/* target */
+```css
 .dropdown {
   transition: transform 200ms var(--ease-out), opacity 200ms var(--ease-out);
   transform-origin: var(--radix-dropdown-menu-content-transform-origin);
 }
-​```
+```
 
-## Repo conventions to follow
+## Relevant conventions
 
-How this codebase already does it, with one exemplar the executor should
-imitate (token names, file placement, prop patterns):
-
-- Easing tokens live in `src/styles/tokens.css`; add new curves there, e.g. `--ease-out: cubic-bezier(0.23, 1, 0.32, 1);`
-- <exemplar file:line that already does this correctly>
+Identify the existing token definitions, runtime, or comparable component
+needed to implement the target. Preserve suitable project values.
 
 ## Steps
 
-1. <One concrete edit per step: file, what changes, resulting code.>
-2. …
+List the bounded edits in dependency order, including files and intended changes.
 
 ## Boundaries
 
-- Do NOT touch <files/components out of scope>.
-- Do NOT change markup/structure — motion properties only (unless a step says otherwise).
-- Do NOT add new dependencies.
-- If a step doesn't match the code you find (drift since the commit stamp), STOP and report instead of improvising.
+Name excluded components and behavior that must remain unchanged.
+Reconcile harmless code-location drift. Stop for a decision if the intended
+behavior or required scope differs materially from the authorized plan.
 
 ## Verification
 
-- **Mechanical**: <exact commands — typecheck, lint, build — with expected outcome>.
-- **Feel check**: run the UI, trigger <interaction>, and confirm:
-  - <observable check, e.g. "the dropdown scales from its trigger, not from center">
-  - <e.g. "spamming the toggle never restarts the animation from zero">
-  - In DevTools, set playback to 10% (Animations panel) and confirm <detail>.
-  - Toggle `prefers-reduced-motion` (Rendering panel) and confirm movement is dropped but opacity feedback remains.
-- **Done when**: <machine- or eye-checkable completion criteria>.
-```
+- Select existing mechanical checks that cover the affected risk; give exact
+  commands and expected results when those checks are needed.
+- Run the affected interaction and inspect its relevant states, interruption,
+  and reduced-motion behavior. State concrete observations that establish success.
+- Use slow motion, sequential captures, or a real device when that evidence is
+  needed for the interaction. Do not require every capture method.
+- Reduced-motion feedback must remain understandable; instant updates are valid.
+- Fix material in-scope defects and inspect the changed behavior again.
+- State what remains unverified if runtime access or tools are unavailable.
+````
 
 ## Notes for the plan author
 
-- One plan per finding. If two findings share every file and the same fix pattern (e.g. the same easing token swap across components), they may merge into one plan.
-- Pull every value from [AUDIT.md](AUDIT.md) — never approximate from memory.
-- The feel check is not optional. Motion can be mechanically correct and still feel wrong; give the executor (or the human reviewing the executor's diff) concrete things to watch for in slow motion.
-- After writing plans, create or update `plans/README.md` with: a table of plans (number, title, severity, status), the recommended execution order, and any dependencies between plans.
+- Use [Audit guidance](AUDIT.md) for relevant tradeoffs and examples, not a mandatory source of every target value.
+- For a durable code-specific handoff, a commit stamp from `git rev-parse --short HEAD` can identify the inspected revision. Include it when useful.
+- Keep actual-output inspection in implementation completion criteria. A passing build cannot establish motion quality.
+- Update an existing plan index when the requested saved-plan workflow uses it. Do not create extra tracking artifacts for a response-only plan.

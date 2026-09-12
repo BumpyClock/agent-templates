@@ -17,7 +17,7 @@ A UI prototype is much easier to judge when it's **butting up against the rest o
 
 ### Sub-shape A — adjustment to an existing page (preferred)
 
-The route already exists. Variants are rendered **on the same route**, gated by a `?variant=` URL search param. The existing data fetching, params, and auth all stay — only the rendering swaps. This is the default; pick it unless there's a specific reason not to.
+The route already exists. Enable variants **on the same route** only in an explicitly non-production environment and with a valid `?variant=` selection. Production and requests without a valid preview selection retain the ordinary rendering. Preserve existing data fetching, params, and auth.
 
 If the prototype is for something that doesn't yet have a page but *would naturally live inside one* (a new section of the dashboard, a new card on the settings screen, a new step in an existing flow) — that's still sub-shape A. Mount the variants inside the host page.
 
@@ -25,7 +25,7 @@ If the prototype is for something that doesn't yet have a page but *would natura
 
 Only use this when the thing being prototyped genuinely has no existing page to live inside — e.g. an entirely new top-level surface, or a flow that can't be embedded anywhere sensible.
 
-Create a **throwaway route** following whatever routing convention the project already uses — don't invent a new top-level structure. Name it so it's obviously a prototype (e.g. include the word `prototype` in the path or filename). Same `?variant=` pattern.
+Create a **throwaway route** following whatever routing convention the project already uses — don't invent a new top-level structure. Name it so it's obviously a prototype (e.g. include the word `prototype` in the path or filename). Use the same `?variant=` pattern, and exclude the route from production or use the framework's production route guard.
 
 Before committing to sub-shape B, sanity-check: is there really no existing page this could be embedded in? An empty route hides design problems that a populated one would expose.
 
@@ -55,11 +55,16 @@ Variants must be **structurally different** — different layout, different info
 
 ### 3. Wire them together
 
-Create a single switcher component on the route:
+Gate the entire preview subtree, including its switcher. Use the framework's development-only flag or an equivalent explicit non-production capability; an unknown environment must not enable previews.
+For an existing page:
 
 ```tsx
 // pseudo-code — adapt to the project's framework
-const variant = searchParams.get('variant') ?? 'A';
+const previewEnabled = process.env.NODE_ENV === 'development';
+const variant = searchParams.get('variant');
+if (!previewEnabled || (variant !== 'A' && variant !== 'B' && variant !== 'C')) {
+  return <ExistingPage {...data} />;
+}
 return (
   <>
     {variant === 'A' && <VariantA {...data} />}
@@ -70,9 +75,9 @@ return (
 );
 ```
 
-For sub-shape A (existing page): keep all the existing data fetching above the switcher; only the rendered subtree changes per variant.
+For sub-shape A (existing page): keep the ordinary rendering as the fallback, and swap only the selected preview subtree after the non-production guard.
 
-For sub-shape B (new page): the throwaway route under `/prototype/<name>` mounts the same switcher.
+For sub-shape B (new page): mount the same preview and switcher only behind the non-production guard. Disabled or invalid previews use the project's not-found behavior, not a production fallback to variant A.
 
 ### 4. Build the floating switcher
 
@@ -87,11 +92,13 @@ Behaviour:
 - Clicking an arrow updates the URL search param (use the framework's router — `router.replace` on Next, `navigate` on React Router, etc) so the variant is shareable and reload-stable.
 - Keyboard: `←` and `→` arrow keys also cycle. Don't intercept arrow keys when an `<input>`, `<textarea>`, or `[contenteditable]` is focused.
 - Visually distinct from the page (e.g. high-contrast pill, subtle shadow) so it's obviously not part of the design being evaluated.
-- Hidden in production builds — gate on `process.env.NODE_ENV !== 'production'` or an equivalent check, so a stray prototype merge can't ship the bar to users.
+- Mount only inside the enabled preview subtree. Hiding the bar alone does not isolate prototype behavior from production.
 
 Put the switcher in a single shared component so both sub-shapes can reuse it. Locate it wherever shared UI lives in the project.
 
 ### 5. Hand it over
+
+Run and inspect the requested variants before handover. Check ordinary rendering without a valid selection and confirm that production cannot render previews, even with `?variant=` set. Use relevant existing checks; disclose any unverified environment.
 
 Surface the URL (and the `?variant=` keys). The user will flip through whenever they get to it. The interesting feedback is usually **"I want the header from B with the sidebar from C"** — that's the actual design they want.
 

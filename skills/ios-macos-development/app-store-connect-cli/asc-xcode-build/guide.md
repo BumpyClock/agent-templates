@@ -7,15 +7,17 @@ description: Build, archive, and export iOS/macOS apps with xcodebuild before up
 
 Use this skill when you need to build an app from source and prepare it for upload to App Store Connect.
 
+An archive/export request ends with the local artifact. Upload only when separately included in the authorized task, following [Authorization](../guide.md#authorization).
+
 ## Preconditions
 - Xcode installed and command line tools configured
 - Valid signing identity and provisioning profiles (or automatic signing enabled)
 
 ## iOS Build Flow
 
-### 1. Clean and Archive
+### 1. Archive
 ```bash
-xcodebuild clean archive \
+xcodebuild archive \
   -scheme "YourScheme" \
   -configuration Release \
   -archivePath /tmp/YourApp.xcarchive \
@@ -27,8 +29,7 @@ xcodebuild clean archive \
 xcodebuild -exportArchive \
   -archivePath /tmp/YourApp.xcarchive \
   -exportPath /tmp/YourAppExport \
-  -exportOptionsPlist ExportOptions.plist \
-  -allowProvisioningUpdates
+  -exportOptionsPlist ExportOptions.plist
 ```
 
 A minimal `ExportOptions.plist` for App Store distribution:
@@ -45,7 +46,10 @@ A minimal `ExportOptions.plist` for App Store distribution:
 </plist>
 ```
 
-### 3. Upload with asc
+### Optional authorized upload with asc
+
+Skip this step for a local build or export request.
+
 ```bash
 asc builds upload --app "APP_ID" --ipa "/tmp/YourAppExport/YourApp.ipa"
 ```
@@ -66,11 +70,13 @@ xcodebuild archive \
 xcodebuild -exportArchive \
   -archivePath /tmp/YourMacApp.xcarchive \
   -exportPath /tmp/YourMacAppExport \
-  -exportOptionsPlist ExportOptions.plist \
-  -allowProvisioningUpdates
+  -exportOptionsPlist ExportOptions.plist
 ```
 
-### 3. Upload PKG with asc
+### Optional authorized PKG upload with asc
+
+Skip this step for a local build or export request.
+
 macOS apps export as `.pkg` files. Upload with `asc`:
 ```bash
 asc builds upload \
@@ -101,8 +107,9 @@ asc builds list --app "APP_ID" --platform IOS --limit 5
 ## Troubleshooting
 
 ### "No profiles for bundle ID" during export
-- Add `-allowProvisioningUpdates` flag
-- Verify your Apple ID is logged into Xcode
+- Inspect the selected team, signing settings, and available profiles.
+- `-allowProvisioningUpdates` permits Xcode to update provisioning resources. Add it only when that account change is authorized, not as a default local-build workaround.
+- Do not change the bundle ID, signing identity, or account just to make export succeed.
 
 ### Build rejected for missing icon (macOS)
 macOS requires ICNS format icons with all sizes:
@@ -112,6 +119,6 @@ macOS requires ICNS format icons with all sizes:
 The build number must be higher than any previously uploaded build. Increment `CURRENT_PROJECT_VERSION` and rebuild.
 
 ## Notes
-- Always clean before archive for release builds
+- Follow the project's release build procedure; clean only when that procedure or a diagnosed stale-build problem requires it.
 - Use `xcodebuild -showBuildSettings` to verify configuration
 - For submission issues (encryption, content rights), see `../asc-submission-health/guide.md`

@@ -4,21 +4,40 @@ Use this reference for skill frontmatter, invocation choices, and routers.
 Use the [root checklist](SKILL.md) for routine edits.
 Use [Instruction design](references/instruction-design.md) for pointer design, disclosure, and sequence boundaries.
 
-## Invocation
+## Invocation controls
 
-Two choices, trading the two loads:
+Separate implicit selection from explicit invocation. A host may select a skill from a matching request, or a user may invoke it by name. The controls and entry points are host-specific.
 
-- A **model-invoked** skill keeps a `description`, so the agent can fire it autonomously — and other skills can reach it. You can still type its name: model-invocation always _includes_ user reach; a description only ever adds agent discovery, never removes the human's. The description is the skill's top-level context pointer, forced to stay loaded at all times — permanent context load in exchange for discoverability. A model-invoked skill whose content is all reference is also one home for shared reference: another skill can invoke it, so reference needed by several skills lives in one place. Mechanics: omit `disable-model-invocation`, and write a model-facing description carrying the trigger branches (see pointer design in [Instruction design](references/instruction-design.md)).
-- A **user-invoked** skill strips the description from the agent's reach: only the human typing its name can invoke it, and no other skill can. Zero context load, but it spends cognitive load — you are the index that must remember it exists. Mechanics: set `disable-model-invocation: true`; the `description` becomes human-facing — a one-line summary, trigger lists stripped.
+| Host | Explicit-only control | Explicit invocation |
+| --- | --- | --- |
+| Codex | Set `policy.allow_implicit_invocation: false` in `agents/openai.yaml` | Explicit `$skill-name` invocation still works |
+| Claude Code | Set `disable-model-invocation: true` in `SKILL.md` frontmatter | The user can invoke `/skill-name` |
+| Other hosts | Support for these controls is not established here | Check the host's documentation and available invocation tools |
 
-Pick model-invocation only when the agent must reach the skill on its own, or another skill must. If it only ever fires by hand, make it user-invoked and pay no context load.
+Sources: [Codex skills](https://developers.openai.com/codex/skills/) and [Claude Code invocation controls](https://code.claude.com/docs/en/skills#control-who-invokes-a-skill).
 
-Shared reference that two user-invoked skills both need can live in neither — with no descriptions, neither can fire the other. Push it to a plain file outside the skill system: external reference any skill can point at.
+A shared skill can carry both supported controls. Neither setting substitutes for the other host's setting. Do not infer support in Copilot, OpenCode, Pi, or another host from its ability to read `SKILL.md`.
 
-## Splitting by invocation
+Choose explicit-only activation when the workflow needs a deliberate user request, such as a particular critique persona. Otherwise, describe the specific task that warrants implicit selection. Invocation is not authorization for every action the skill describes.
 
-The invocation cut of splitting (see sequence boundaries in [Instruction design](references/instruction-design.md)): split off a model-invoked skill when you have a distinct leading word that should trigger it on its own — a trigger word you actually use in your prompts — or another skill must reach it. You pay context load for the new always-loaded description, so that independent reach has to be worth it.
+## Descriptions and metadata exposure
 
-## Router skills
+Keep the description short and front-load the actual workflow. Avoid a catalog of related requests that should not activate the skill. An explicit-only skill still needs an accurate summary for the places its host exposes it.
 
-When user-invoked skills multiply past what you can remember, that piled-up cognitive load is cured by a **router skill**: one user-invoked skill that names the others and when to reach for each, so the human has one skill to remember instead of many. It can only hint, never fire them: user-invoked skills have no description, so nothing but the human can reach them.
+Metadata exposure and invocation policy are separate questions. Codex documents an initial skill list containing names, descriptions, and paths; it may shorten descriptions or omit entries under list-budget pressure. Claude Code documents its own frontmatter-dependent visibility. Do not promise zero context cost, universal invisibility, or an always-present full description.
+
+Keep `agents/openai.yaml` UI text and `default_prompt` consistent with the root's scope. A default prompt is not an invocation-policy setting.
+
+## Linked files and shared references
+
+Reading a linked file is different from invoking a skill through a host's skill mechanism. Invocation flags are not filesystem access controls. Within the task's authorization and available tools, an agent may read a reference located inside another skill directory.
+
+Keep shared technical knowledge in a maintained reference and link it from the tasks that need it. Its directory does not need to become an implicitly invoked skill merely to make that file readable. Reading the file does not authorize executing its workflow or bypassing an explicit-request boundary.
+
+## Routers and splitting
+
+Use a small router when one skill supports distinct workflows with different inputs, outputs, or reference needs. Keep common constraints in the root and link the selected route's material. A short, single-purpose skill does not need a router.
+
+Create a separate skill when a workflow needs independent discovery or invocation, not just because it has a memorable trigger word. A router can direct the agent to ordinary linked references. Whether it can invoke another skill through a tool depends on the host's supported mechanism and the applicable activation policy.
+
+After changing activation or structure, check the relevant host settings, description, default prompt, and local links. Distinguish a static metadata check from observed host behavior.
