@@ -1,6 +1,6 @@
 ---
 name: programming
-description: "Risk-proportional code and design guidance. Use for implementation, diagnosis, refactors, tests, or agent-guidance comparisons. Includes conditional principles and workflows."
+description: "Risk-proportional code and design guidance. Use for implementation, diagnosis, refactors, or tests. Includes conditional principles and workflows."
 ---
 
 # Programming
@@ -62,7 +62,6 @@ Select the workflow that matches the requested deliverable:
 - Live-process diagnosis: [Runtime forensics](references/performance/runtime-forensics.md).
 - Provided capture analysis: [Trace forensics](references/performance/trace-forensics.md).
 - A design or behavior question needs a throwaway probe: [Prototype](../engineering/prototype/SKILL.md).
-- Agent-guidance comparison: [Eval](evals/README.md).
 
 ## Platform Context
 

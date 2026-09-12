@@ -27,7 +27,6 @@ Preserve useful examples and scripts when their replacement would require repeat
 
 For behavior changes to shared execution defaults, select applicable cases below to define acceptance criteria.
 Assess task outcomes, unnecessary work, authorization, and response usefulness rather than prompt recitation or mechanical compliance.
-Use [Outcome evaluations](../../programming/evals/README.md) for controlled comparisons of current and revised instructions.
 These cases define expected outcomes, not measured results.
 
 | Task | Expected outcome |
@@ -42,7 +41,6 @@ These cases define expected outcomes, not measured results.
 
 - For skill frontmatter and invocation choices, read [Skill mechanics](SKILL-MECHANICS.md).
 - For a difficult choice about disclosure, pointers, or document structure, read [Instruction design](references/instruction-design.md).
-- For a claim about model performance, use the outcome evaluation workflow above.
 
 Validate links and metadata after structural edits.
 Distinguish editorial judgment from measured model behavior.

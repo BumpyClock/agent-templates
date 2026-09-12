@@ -83,6 +83,6 @@ State required actions and prohibitions directly. Add a positive alternative whe
 
 ## Evidence
 
-Distinguish source review, static checks, and measured task behavior. For performance claims or a consequential uncertain prompt change, use the [outcome evaluation guidance](../../../programming/evals/README.md). Compare task correctness, scope, unnecessary work, and retained knowledge rather than prompt recitation or adjective strength.
+Distinguish source review, static checks, and measured task behavior. Assess task correctness, scope, unnecessary work, and retained knowledge rather than prompt recitation or adjective strength.
 
 An editorial improvement or a successful link check does not demonstrate better model performance. Preserve guidance that remains useful across supported models; do not generalize a model-specific result without evidence.

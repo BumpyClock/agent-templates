@@ -44,7 +44,6 @@ Shared workflows do not require Poteto mode, mandatory delegation, fixed agent p
 | Workflow | Owner |
 | --- | --- |
 | Bug fix | [Systematic diagnosis](../skills/programming/systematic-debugging/guide.md) |
-| Eval | [Agent-guidance evaluation](../skills/programming/evals/README.md) |
 | Feature | [Feature workflow](../skills/programming/references/workflows/feature.md) |
 | Investigation | [How](../skills/pstack/how/SKILL.md) |
 | Perf issue | [Performance workflow](../skills/programming/references/performance/perf-issue.md) |
@@ -57,7 +56,6 @@ Shared workflows do not require Poteto mode, mandatory delegation, fixed agent p
 The prototype skill separates interactive state demonstrations, UI alternatives, and bounded behavioral probes.
 A prototype-only request stops at its decision and evidence.
 Live diagnostics require explicit authority for code injection or shared-state mutation.
-An evaluation compares artifacts under equivalent conditions rather than reward principle citations.
 
 Poteto mode is preserved unchanged under `skills_archive/poteto-mode/`.
 Its companion agent definition is archived under `agents-archive/poteto-agent.md`.
@@ -87,7 +85,6 @@ The workflow records keep, delete, rewrite, and unresolved verdicts with evidenc
 It preserves uncertain tests and separates production defects from test-only cleanup.
 Test quantity, age, and presumed AI authorship do not establish test value.
 
-Evaluate rules against task outcomes and counterexamples under `skills/programming/evals/`.
 Treat historical incidents as evidence for investigation rather than permanent mandates.
 
 Archived skills reside under `skills_archive/` and do not belong in the active discovery tree.
