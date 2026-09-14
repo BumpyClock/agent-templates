@@ -46,6 +46,7 @@ Shared workflows do not require Poteto mode, mandatory delegation, fixed agent p
 | Bug fix | [Systematic diagnosis](../skills/programming/systematic-debugging/guide.md) |
 | Feature | [Feature workflow](../skills/programming/references/workflows/feature.md) |
 | Investigation | [How](../skills/pstack/how/SKILL.md) |
+| Architecture improvement | [Improve codebase architecture](../skills/engineering/improve-codebase-architecture/SKILL.md) |
 | Perf issue | [Performance workflow](../skills/programming/references/performance/perf-issue.md) |
 | Prototype | [Prototype skill](../skills/engineering/prototype/SKILL.md) |
 | Refactoring | [Clean refactoring](../skills/programming/references/refactoring/clean-refactoring.md) |
@@ -118,7 +119,6 @@ These skill directories retain their original files under the corresponding grou
 | `improve` | Request a codebase audit or implementation plan directly. Use `programming` for implementation. |
 | `research` | Request source research directly, with a cited report when needed. |
 | `resolving-merge-conflicts` | Request conflict resolution under the repository's Git authorization rules. |
-| `improve-codebase-architecture` | Request an architecture audit with `codebase-design`. |
 | `architect` | Use `codebase-design` and the architecture references under `programming`. |
 | `blast-radius` | Request dependency-impact analysis with `code-review`. |
 | `interrogate` | Request independent reviewers with `code-review` when needed. |
