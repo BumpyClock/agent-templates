@@ -1,6 +1,6 @@
 ---
 name: programming
-description: "Risk-proportional code and design guidance. Use for implementation, diagnosis, refactors, or tests. Includes conditional principles and workflows."
+description: "Use when coding or programming (implementation, diagnosis, refactors, or tests). "
 ---
 
 # Programming
@@ -8,11 +8,8 @@ description: "Risk-proportional code and design guidance. Use for implementation
 Repository instructions and the user's contract override these defaults.
 
 - Implement the complete requested behavior with the least unnecessary complexity.
-- Prefer existing conventions, platform features, and dependencies when their semantics fit the task.
-- Preserve security, accessibility, boundary validation, and protections against data loss as part of the contract.
 - Do not write tests for reversible, low-impact changes that mirror the implementation. If you do choose to verify your work with tests, make sure that the tests are meaningful and necessary to verify implementation.
-
-- Run tests appropriate to the change ; repeat only with justification. Once those pass, broaden or repeat testing only when new changes, failures, or unresolved concerns justify it; otherwise, continue toward completing the task.
+  - Run tests appropriate to the change ; repeat only with justification. Once those pass, broaden or repeat testing only when new changes, failures, or unresolved concerns justify it; otherwise, continue toward completing the task.
 
 ## Principles
 
@@ -39,17 +36,6 @@ These are conditional references, not a checklist. Explain consequential choices
 
 For large outputs or context pressure, use [Guard the Context Window](references/execution/principle-guard-the-context-window.md).
 
-### Oracle
-
-Consider Oracle only for consequential unresolved uncertainty when independent review has enough expected value to justify its cost and sharing the selected context is authorized.
-Continue locally when existing evidence resolves the question.
-Confirm `oracle` is on PATH before use.
-Oracle combines a prompt with selected files for an external review.
-Respect repository data-sharing restrictions when selecting context.
-Run `oracle --help` once per session before first use.
-Use only the browser engine (`--engine browser`), never an API key.
-If the browser engine fails, report the failure and continue without Oracle.
-
 ## Workflows
 
 Select the workflow that matches the requested deliverable:
@@ -74,7 +60,6 @@ Select the relevant nested guide rather than load its complete reference set.
 - TypeScript domain types or external input contracts: [TypeScript patterns](references/languages/typescript-patterns.md).
 
 ## References
-
 
 - Module boundaries, contracts, or prerequisite decisions: [Architecture](references/architecture/architecture-planning.md).
 - Type or schema review: [Type design](references/design/type-design.md).

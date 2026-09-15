@@ -16,11 +16,7 @@ A pre-existing defect can still matter if the PR exposes or worsens it.
 Support each decision with applicable code, a contract, a test result, or a commit.
 Reuse valid evidence for the same revision and behavior.
 For stale claims, check whether the exact concern still applies.
-An outdated comment marker alone does not establish a fix.
-
-Preserve authorization and independent acceptance requirements for high-risk changes.
-An owner's preference does not disprove a security or data-loss defect.
-Report an approved deferral as a valid issue with a follow-up task, not a false positive.
+An outdated comment marker alone does not establish a fix. if comment is already fixed then reply + resolve
 Keep unresolved risk open.
 
 For stacked PRs, identify the lowest unmerged PR that owns the defect.
