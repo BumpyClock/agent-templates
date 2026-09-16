@@ -18,7 +18,9 @@ Identify the intended audience. For a library or developer tool, public API and 
 
 Resolve the requested scope from the conversation and repository state: a PR, branch diff, commit range, local changes, or release. For a PR, read its title, body, labels, and complete diff against the base. Use `gh` when available. For local work, include the relevant staged, unstaged, and untracked files without disturbing unrelated edits. Do not invent a comparison base, release version, date, or PR number when that information is required but unavailable.
 
-When there is no existing convention, use `CHANGELOG.md` with an `Unreleased` section and only the categories needed from Added, Changed, Deprecated, Removed, Fixed, and Security. Do not introduce a generator dependency for a single entry. If the repository needs a release or fragment policy beyond this default, settle that choice before wiring automation.
+For a create or update request, if no changelog Markdown file exists, create `CHANGELOG.md` at the repository's documented location, or at the repository root when none is documented. Reuse an existing `changelog.md` or other filename casing rather than creating a duplicate. If a generator owns the file, create it through that generator. An assessment-only request does not authorize file creation.
+
+When there is no existing format, initialize the file with an `Unreleased` section and only the categories needed from Added, Changed, Deprecated, Removed, Fixed, and Security. If no entry qualifies, leave `Unreleased` empty rather than inventing content. Do not introduce a generator dependency for a single entry. If the repository needs a release or fragment policy beyond this default, settle that choice before wiring automation.
 
 ## Decide whether an entry belongs
 
