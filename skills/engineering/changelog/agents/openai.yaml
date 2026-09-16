@@ -1,0 +1,6 @@
+interface:
+  display_name: "Changelog"
+  short_description: "Write changelog entries or set up PR automation"
+  default_prompt: "Use $changelog to create or update changelog entries for the requested changes, following this repository's format and release criteria. If I request automation, use the GitHub Actions reference to set up PR entry generation."
+policy:
+  allow_implicit_invocation: false

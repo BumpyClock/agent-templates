@@ -13,6 +13,7 @@ Reachable only when you type them (Claude Code: `disable-model-invocation: true`
 - **[to-tickets](./to-tickets/SKILL.md)** — Break any plan, spec, or conversation into a set of tracer-bullet tickets, each declaring its blocking edges — text in a local file, or native blocking links on a real tracker.
 - **[wayfinder](./wayfinder/SKILL.md)** — Plan a huge chunk of work — more than one agent session can hold — as a shared map of decision tickets on the issue tracker, resolved one at a time until the way to the destination is clear.
 - **[test-cleanup](./test-cleanup/SKILL.md)** — Audit an existing test suite against the programming skill's test standards: delete/rewrite/keep verdicts with evidence, report first, then apply approved cleanups.
+- **[changelog](./changelog/SKILL.md)** — Create or update user-facing changelog entries, or set up PR entry generation using the separate GitHub Actions reference.
 
 ## Model-invoked
 
