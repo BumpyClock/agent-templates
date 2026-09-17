@@ -7,6 +7,7 @@ description: "Implement, debug, refactor, or test code; review code designs."
 
 Repository instructions and the user's requested deliverable override these defaults.
 
+
 ## Completion and scope
 
 - Honor requested review checkpoints. Otherwise, continue implementation until the requested behavior and its completion evidence are established, including corrections to failures caused by the change. Do not stop solely for review of a first pass.
@@ -15,7 +16,10 @@ Repository instructions and the user's requested deliverable override these defa
 
 ## Code clarity and comments
 
-- Use clear names, types, and structure. Comments should explain non-obvious reasons, constraints, or tradeoffs rather than repeat the code or justify avoidable complexity.
+- Correct code 
+- Performant code — think about allocations, data structures, hot paths
+- Readable code — every line should earn its place. Use clear names, types, and structure. 
+- Comments should explain non-obvious reasons, constraints, or tradeoffs rather than repeat the code or justify avoidable complexity.
 - Keep comments current and preserve required API documentation, safety notes, licenses, and tool directives.
 
 ## Reuse and restraint
