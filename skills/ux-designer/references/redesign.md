@@ -7,7 +7,7 @@ Misclassifying the mode is the biggest source of bad redesign output. Detect the
 ## Detect the mode (first action)
 - **Preserve** — modernize within the existing brand. Extract brand tokens and retain established interaction patterns.
 - **Overhaul** — replace the visual language while preserving content and IA. Keep the information density appropriate to existing user tasks.
-- **Greenfield** — the brand itself is changing. No preservation constraints.
+- **Rebrand** — replace the visual language while preserving product truth, required functionality, confirmed content, and protected downstream contracts unless the user explicitly changes them.
 
 If ambiguous, ask once: "Preserve the existing brand, or start visually from scratch?"
 
@@ -18,7 +18,7 @@ Document current state before proposing changes:
 - **Content blocks** — what exists, what's doing work, what's filler.
 - **Keep vs retire** — preserve useful signature interactions, recognizable identity, and copy voice. Identify broken layouts, dead links, and performance defects.
 - **Existing visual behavior** — identify layout variation, motion purpose, and information density before changes.
-- **SEO baseline** — ranking pages, meta titles, structured data, OG cards. **SEO migration is the #1 redesign risk.**
+- **SEO baseline for indexable web surfaces** — ranking pages, meta titles, structured data, and social cards.
 
 ## What never changes silently
 Never modify without explicit user approval — each breaks SEO, analytics, autofill, or muscle memory:
@@ -39,6 +39,6 @@ Apply in order; stop when the brief is satisfied. Higher levers give more visual
 6. **Full block replacement** — only when a block is unsalvageable.
 
 ## Targeted evolution vs full redesign
-- IA, content, and SEO are sound → **targeted evolution** (levers 1-4). ~70% of the value at ~40% of the risk. Default here.
+- IA, content, and relevant discovery paths are sound → **targeted evolution** (levers 1-4). Default here when the brief does not require structural change.
 - Visual debt is structural (broken IA, no design system, broken mobile) → **full redesign** with strict content preservation.
-- Brand itself is changing → **greenfield**.
+- Brand itself is changing → **rebrand**, with the preservation rules above.

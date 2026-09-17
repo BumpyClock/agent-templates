@@ -45,7 +45,8 @@ Protect in this order — never sacrifice a higher item for a lower one:
 
 ## Scale to Scope
 
-- New product, page, or feature: full workflow below.
+- New product, page, screen, or requested full redesign: full workflow below.
+- Feature within an established surface: inherit its visual system and resolve only the affected structure, states, and interactions unless the request changes the broader direction.
 - Small change: edit the affected component or state within the existing design system.
 - Preserve relevant accessibility and interaction behavior.
 - A small edit needs no design document, mockup, direction statement, or micro-polish note.
@@ -84,7 +85,7 @@ Select references by the requested outcome. Do not run every refinement pass by 
 
 ## Full Design Workflow
 
-1. **Gather inputs** — goals, users, platforms, constraints, content requirements. Identify existing design system/tokens/components (theme configs, CSS vars, Storybook). Missing input that changes meaning (data, claims, brand facts) → ask once, grouped; otherwise label the unknown honestly and proceed.
+1. **Gather inputs** — goals, users, platforms, constraints, content requirements. Identify existing design system/tokens/components (theme configs, CSS vars, Storybook), preferring representative shipped patterns over unfinished experiments. Missing input that changes meaning (data, claims, brand facts) → ask once, grouped; otherwise label the unknown honestly and proceed.
 2. **Choose direction** (Gate 1) — use `references/design-direction.md`.
 3. **Define structure.** Use `references/layout.md` to define the user task, content order, and key flows.
 4. **Compose layout.** Define regions, grid, responsive behavior, navigation, and hierarchy. When alternative structures could improve the task, use `references/page-composition.md` to compare them.

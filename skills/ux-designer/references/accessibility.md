@@ -2,6 +2,12 @@
 
 Read when: building or speccing any custom interactive component — dialog/modal, dropdown menu, accordion, custom select/combobox, disclosure/toggle, tabs — or any focus, motion, form-validation, or contrast behavior. This is the a11y contract for the custom UI this skill prescribes.
 
+## Platform scope
+
+Apply the platform's native accessibility model. The HTML, DOM, and WAI-ARIA patterns below are web-specific; do not transfer their roles or keyboard contracts mechanically to native or terminal controls.
+
+For terminal interfaces, preserve logical reading order, complete labels, keyboard operation, and usable noninteractive output when input or a TTY is unavailable. Follow the project's terminal framework for focus and screen-reader behavior.
+
 ## Control Selection
 
 - Reuse established project components that meet the required behavior and accessibility needs.
@@ -30,7 +36,7 @@ Terse contract per pattern — roles, states, keys. Full detail: w3.org/WAI/ARIA
 - Indicator: solid, ≥2px thick, ≥3:1 contrast against adjacent colors, with `outline-offset: 2px` so it clears the element. A visible-by-default ring beats a subtle one.
 - Focus order follows DOM order and reading order. Don't reorder with positive `tabindex`; fix the DOM. `tabindex="0"` adds to order, `tabindex="-1"` makes programmatically focusable only.
 - Trap focus ONLY in modals; nowhere else. When a popover/menu closes, return focus to its trigger.
-- First interactive element on every page: a skip link (`<a href="#main">`) visible on focus.
+- For web pages with repeated navigation, provide a skip link (`<a href="#main">`) visible on focus before the repeated controls.
 - Focus must not be hidden behind sticky headers or the on-screen keyboard (WCAG 2.4.11 Focus Not Obscured, AA).
 
 ## Forms
