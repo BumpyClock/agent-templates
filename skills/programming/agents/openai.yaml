@@ -1,4 +1,4 @@
 interface:
   display_name: "Programming"
   short_description: "Risk-proportional code, design principles, and checks"
-  default_prompt: "Use $programming for code changes, diagnosis, refactors, or tests."
+  default_prompt: "Use $programming for code changes, diagnosis, refactors, tests, or code-design review."

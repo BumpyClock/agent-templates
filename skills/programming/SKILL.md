@@ -1,15 +1,38 @@
 ---
 name: programming
-description: "Use when coding or programming (implementation, diagnosis, refactors, or tests). "
+description: "Implement, debug, refactor, or test code; review code designs."
 ---
 
 # Programming
 
-Repository instructions and the user's contract override these defaults.
+Repository instructions and the user's requested deliverable override these defaults.
 
-- Implement the complete requested behavior with the least unnecessary complexity.
-- Do not write tests for reversible, low-impact changes that mirror the implementation. If you do choose to verify your work with tests, make sure that the tests are meaningful and necessary to verify implementation.
-  - Run tests appropriate to the change ; repeat only with justification. Once those pass, broaden or repeat testing only when new changes, failures, or unresolved concerns justify it; otherwise, continue toward completing the task.
+## Completion and scope
+
+- Honor requested review checkpoints. Otherwise, continue implementation until the requested behavior and its completion evidence are established, including corrections to failures caused by the change. Do not stop solely for review of a first pass.
+- Continue independent, unblocked work when another part needs input. Stop at the agreed outcome or a required product decision, unavailable access, or authorization boundary.
+- Handle small tasks and continuous investigations directly. Delegate independent, substantial work only when its benefit exceeds coordination cost; give each delegate a bounded objective and assess the result against it.
+
+## Code clarity and comments
+
+- Use clear names, types, and structure. Comments should explain non-obvious reasons, constraints, or tradeoffs rather than repeat the code or justify avoidable complexity.
+- Keep comments current and preserve required API documentation, safety notes, licenses, and tool directives.
+
+## Reuse and restraint
+
+- Reuse or extend an existing helper, type, component, or pattern when practical. Prefer a smaller complete change over a parallel path or speculative abstraction.
+- Do not add unrelated features, infrastructure, or refactors. Ask before expanding the agreed scope, not merely because the implementation is larger than expected.
+- Follow the repository's file organization and co-location conventions. Split files when cohesion or the requested structural change warrants it, not to meet a fixed file-size or one-concept rule.
+- When integrating upstream files, stage them in the platform's temporary directory and review the diff before applying selected changes. Preserve unrelated local edits.
+- Use web research for current, high-risk, or uncertain facts, not stable facts already known. Prefer authoritative sources; use exact errors in diagnostic searches and the session date when recency matters.
+
+## Validation
+
+- Use the smallest existing checks that cover the affected contract and risk. Leave full suites to CI unless repository requirements or wider risk justify a local run.
+- Prefer a focused E2E check for changed app behavior when it directly establishes the outcome. Use lower-level tests when they cover the contract more directly or economically.
+- Preserve test intent and meaningful assertions. Add or revise tests for material coverage gaps, not to mirror the implementation. Reuse valid evidence; repeat or broaden checks only after relevant changes, failures, unresolved concerns, or required project gates.
+- Read documentation when it defines an affected contract or resolves project-specific uncertainty. Follow relevant `read_when` hints; a small, understood edit does not need a repository map or documentation sweep.
+- Update relevant documentation for behavior or API changes unless repository policy prohibits it. Keep completion evidence observable through task-appropriate inspection tools or logs.
 
 ## Principles
 
@@ -48,8 +71,9 @@ Select the workflow that matches the requested deliverable:
 - Live-process diagnosis: [Runtime forensics](references/performance/runtime-forensics.md).
 - Provided capture analysis: [Trace forensics](references/performance/trace-forensics.md).
 - A design or behavior question needs a throwaway probe: [Prototype](../engineering/prototype/SKILL.md).
+- Commit or PR preparation, an authorized merge, or release preparation: [Git and releases](references/workflows/git-and-releases.md).
 
-## Platform Context
+## Platform context
 
 Read platform context only when the task concerns that platform.
 Select the relevant nested guide rather than load its complete reference set.
@@ -61,6 +85,6 @@ Select the relevant nested guide rather than load its complete reference set.
 
 ## References
 
-- Module boundaries, contracts, or prerequisite decisions: [Architecture](references/architecture/architecture-planning.md).
+- Module boundaries, contracts, prerequisite decisions, or ADRs: [Architecture](references/architecture/architecture-planning.md).
 - Type or schema review: [Type design](references/design/type-design.md).
 - Language or UI uncertainty: the relevant file under `references/languages/` or [Web development](references/web-development.md).

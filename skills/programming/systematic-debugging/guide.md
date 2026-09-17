@@ -31,7 +31,6 @@ For uncertain causes, state predictions that available evidence can support or r
 
 For intermittent failures, consider repeated trials, stress, or controlled scheduling. Preserve the conditions that matter to the failure. Report trial counts and observed failures instead of treating one successful run as proof of absence.
 
-Keep credentials out of commands and captured output. Use bounded probes that respect the environment and authorization for external effects.
 
 ## Fix Root Causes
 

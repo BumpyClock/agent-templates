@@ -11,7 +11,7 @@ arguments:
 Please get the details for the following issue(s): $ISSUE_NUMBER
 
 
-Relevant skills `programming` (use `systematic-debugging/guide.md` when needed), `test-driven-development` (use only when explicitly required), `dispatching-parallel-agents`. Read the skills you feel you need to complete the tasks before proceeding, do not read skills you don't need.
+Use `programming` for coding and delegation guidance, and its [systematic diagnosis reference](../skills/programming/systematic-debugging/guide.md) when the cause needs investigation. Use `tdd` only when the user or repository requires test-first development.
 
 Fetch issue $ISSUE_NUMBER with the available GitHub tools.
 For `all`, `all issues`, or no argument, fetch the repository's issues.
@@ -31,7 +31,7 @@ If you're in plan mode create a comprehensive plan to resolve the issue.
 
 To fix the issue, create a branch named `fix/issue-<ISSUE_NUMBER>` from the repository's base branch.
 Use the `programming` skill for the fix.
-For authorized PR creation, follow the PR conventions in the active global instructions.
+For authorized PR creation, follow [Git and release conventions](../skills/programming/references/workflows/git-and-releases.md).
 Reference the issue in the PR description.
 
 Ensure all changes are tested thoroughly and there are no linting and formatting issues before creating the PR. 

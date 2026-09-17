@@ -6,9 +6,13 @@ read_when: Update coding workflow skills or their shared references.
 
 `skills/programming/SKILL.md` contains cross-cutting defaults and routes to task-specific references.
 
+- `defaults/AGENTS.md` owns shared scope, authorization boundaries, and output policy. Coding conventions belong in `programming`, not the always-loaded global file.
+- `skills/programming/SKILL.md` owns implementation completion, bounded delegation, code comments, and reuse guidance.
 - `skills/engineering/tdd/SKILL.md` owns the explicit TDD workflow. `skills/programming/references/tdd-rules.md` is a compatibility pointer to that owner.
 - `skills/programming/systematic-debugging/guide.md` owns diagnosis.
 - `skills/programming/SKILL.md` owns risk-proportional check selection and evidence reuse. Task workflows define the observation that establishes completion.
+- `skills/programming/references/architecture/architecture-planning.md` owns ADR guidance. Follow repository conventions and preserve superseded decisions as history.
+- `skills/programming/references/workflows/git-and-releases.md` owns branch, commit, PR, merge, and release conventions. Load it for that work, not for every code edit.
 - `skills/engineering/data-structure-audit/SKILL.md` owns requested complete data-structure audits. It is a standalone skill in a discoverable group, not nested inside another skill.
 
 The `diagnosing-bugs` skill routes to the diagnosis reference; `tdd` contains its own workflow.
