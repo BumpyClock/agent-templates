@@ -41,8 +41,12 @@ const result = getResult();
 expect(result).toBeDefined();
 
 // ✅ AFTER: Waiting for condition
-await waitFor(() => getResult() !== undefined);
-const result = getResult();
+const result = await waitFor(
+  () => getResult(),
+  value => value !== undefined,
+  () => false,
+  'result'
+);
 expect(result).toBeDefined();
 ```
 
@@ -50,35 +54,46 @@ expect(result).toBeDefined();
 
 | Scenario | Pattern |
 |----------|---------|
-| Wait for event | `waitFor(() => events.find(e => e.type === 'DONE'))` |
-| Wait for state | `waitFor(() => machine.state === 'ready')` |
-| Wait for count | `waitFor(() => items.length >= 5)` |
-| Wait for file | `waitFor(() => fs.existsSync(path))` |
-| Complex condition | `waitFor(() => obj.ready && obj.value > 10)` |
+| Wait for event | Observe the event collection; succeed when the expected event appears. |
+| Wait for state | Observe the current state; succeed on the target state and stop on a terminal failure state. |
+| Wait for count | Observe the current count; succeed when it reaches the threshold. |
+| Wait for file | Observe current filesystem state; succeed when the expected path exists. |
+| Complex condition | Observe the owning state object; evaluate success and failure from the same fresh snapshot. |
 
 ## Implementation
 
 Generic polling function:
 ```typescript
 async function waitFor<T>(
-  condition: () => T | undefined | null | false,
+  observe: () => T,
+  isReady: (observation: T) => boolean,
+  isFailed: (observation: T) => boolean,
   description: string,
   timeoutMs = 5000
 ): Promise<T> {
   const startTime = Date.now();
+  let lastObservation: T;
 
   while (true) {
-    const result = condition();
-    if (result) return result;
-
-    if (Date.now() - startTime > timeoutMs) {
-      throw new Error(`Timeout waiting for ${description} after ${timeoutMs}ms`);
+    lastObservation = observe();
+    if (isReady(lastObservation)) return lastObservation;
+    if (isFailed(lastObservation)) {
+      throw new Error(`${description} failed: ${JSON.stringify(lastObservation)}`);
     }
 
-    await new Promise(r => setTimeout(r, 10)); // Poll every 10ms
+    if (Date.now() - startTime > timeoutMs) {
+      throw new Error(
+        `Timeout waiting for ${description} after ${timeoutMs}ms; ` +
+        `last observation: ${JSON.stringify(lastObservation)}`
+      );
+    }
+
+    await new Promise(r => setTimeout(r, 10));
   }
 }
 ```
+
+Observe the authoritative source of state on each iteration. Model known terminal failures separately from pending states so the wait stops when success is no longer possible. Use one outer deadline and include the last useful observation in timeout diagnostics.
 
 ## Common Mistakes
 
@@ -91,6 +106,12 @@ async function waitFor<T>(
 **❌ Stale data:** Cache state before loop
 **✅ Fix:** Call getter inside loop for fresh data
 
+**❌ Waiting through terminal failure:** Treat failed and pending as the same state
+**✅ Fix:** Stop on known failure and report the observation
+
+**❌ Opaque timeout:** Report only elapsed time
+**✅ Fix:** Include the last authoritative observation
+
 ## Timer intervals and output completion
 
 Use a controlled scheduler when the contract concerns timer intervals.
@@ -100,7 +121,9 @@ When the contract concerns output completion, wait for the output condition with
 
 ```typescript
 await waitFor(
-  () => outputs.length >= 2,
+  () => outputs.length,
+  count => count >= 2,
+  () => false,
   'two output chunks',
   5000
 );

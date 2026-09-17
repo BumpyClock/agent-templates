@@ -20,6 +20,13 @@ Use [architecture guidance](../architecture/architecture-planning.md) when bound
 Choose the representation before dependent logic when scattered flags or repeated branches obscure the domain.
 For upstream-derived code, compare the source revision before edits and carry shared-primitive changes through every affected consumer.
 
+When relevant, check the integration paths that commonly drift:
+
+- Creating and resuming, loading, or restoring the same feature preserve the intended state.
+- Enabling and disabling a gate or option apply compatible behavior.
+- A reused helper preserves the information and side effects required by the new caller.
+- Removing a producer does not silently remove the only source of a required effect.
+
 Delegate only when independent work warrants a separate context and has a clear acceptance condition.
 Give each delegate the owned paths, agreed data shape, and completion condition.
 Coordinate writes to shared artifacts under [shared-state guidance](../principles/principle-separate-before-serializing-shared-state.md).

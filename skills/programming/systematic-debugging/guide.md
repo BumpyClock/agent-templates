@@ -21,6 +21,8 @@ For an obvious cause, these steps can collapse into a source check, correction, 
 
 Check branch, build, service instance, versions, and persistent state when those could explain the symptom. Use a test, request replay, CLI fixture, browser check, or captured trace when it offers a useful feedback loop.
 
+For test failures, distinguish failures in product behavior, test expectations, setup or teardown, workers, and the harness or CI environment before changing production code. If cleanup also fails, preserve the primary failure and report cleanup as additional evidence rather than replacing the original error.
+
 For failures after restart, inspect saved configuration, caches, locks, and serialized state before assuming a code regression.
 Preserve suspect state before any authorized reset so diagnosis does not destroy the evidence.
 If a reset restores behavior, investigate state validation or migration rather than prescribe repeated deletion.

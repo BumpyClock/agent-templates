@@ -17,8 +17,7 @@ This guide defines conventions, not permission to commit, publish, merge, or rel
 
 ## Merges and releases
 
-For authorized merges, squash pull requests targeting `main`; do not squash stacked pull requests.
-Repository merge policy takes precedence.
+For authorized merges, follow the repository's merge policy. Do not infer squash, merge-commit, or rebase strategy from the target branch name. If no policy is available and the strategy affects history or a stacked change, ask before merging.
 
 For release preparation, follow the repository's release checklist.
 Read `docs/RELEASING.md` when present; otherwise, locate the applicable instructions.
