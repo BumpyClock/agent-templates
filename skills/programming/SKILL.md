@@ -38,6 +38,12 @@ Repository instructions and the user's requested deliverable override these defa
 - Read documentation when it defines an affected contract or resolves project-specific uncertainty. Follow relevant `read_when` hints; a small, understood edit does not need a repository map or documentation sweep.
 - Update relevant documentation for behavior or API changes unless repository policy prohibits it. Keep completion evidence observable through task-appropriate inspection tools or logs.
 
+## Observability
+
+For new or materially changed app behavior, identify how important outcomes, failures, and performance will be observed. Preserve existing telemetry contracts and reuse signals that already answer the question.
+
+When adding or changing instrumentation, or addressing a material coverage gap, use [Telemetry](../telemetry/SKILL.md). Cosmetic changes and behavior-preserving refactors do not by themselves need new events.
+
 ## Principles
 
 Read the relevant reference before the decision it informs. Apply its limits as well as its advice.

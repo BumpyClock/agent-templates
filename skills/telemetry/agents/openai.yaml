@@ -1,0 +1,4 @@
+interface:
+  display_name: "Telemetry"
+  short_description: "Application instrumentation contracts and delivery"
+  default_prompt: "Use $telemetry to design, implement, or review application instrumentation within the repository's collection policies."
