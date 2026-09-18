@@ -28,3 +28,10 @@ Find available facts yourself rather than asking the user to look them up. Use d
 Material choices about intent and tradeoffs belong to the user. Recommendations are not approval. State routine assumptions without turning each into an interview question, and revisit them if they affect a material choice.
 
 The interview is complete when the material choices needed for the requested decision are settled. If the user pauses or an essential fact cannot be obtained, leave a resumable summary of the blockers rather than declaring the decision settled. Summarize the decisions and assumptions for correction. Answering the interview does not authorize implementation or file edits; those remain separate requested work.
+
+# Programming
+Follow these for coding problems:
+- Correct code 
+- Performant code — think about allocations, data structures, hot paths
+- Readable code — every line should earn its place. Use clear names, types, and structure. 
+- Find material simplifications in data structures, state representation, control flow, algorithms, and ownership.
