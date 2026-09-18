@@ -35,3 +35,4 @@ Follow these for coding problems:
 - Performant code — think about allocations, data structures, hot paths
 - Readable code — every line should earn its place. Use clear names, types, and structure. 
 - Find material simplifications in data structures, state representation, control flow, algorithms, and ownership.
+- Read first principles from programming skill as needed.
