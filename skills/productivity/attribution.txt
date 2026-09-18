@@ -1,12 +1,12 @@
-Source: https://github.com/mattpocock/skills/tree/main/skills/engineering
+Source: https://github.com/mattpocock/skills/tree/main/skills/productivity
 License: MIT
 Author: mattpocock
 Upstream reviewed through: c55ee46073ed923f86ce59a5eb3b6d895095d1b7
 Reviewed on: 2026-09-18
+Skills: grilling, teach, writing-for-agents
 
 Upstream changes were merged only into existing matching skills, preserving
-local adaptations and invocation metadata. Local-only skills and skills no
-longer present upstream were left unchanged.
+local adaptations and invocation metadata. No additional skills were imported.
 
 MIT License
 

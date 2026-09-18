@@ -1,6 +1,6 @@
 # MISSION.md Format
 
-`MISSION.md` lives at the workspace root. It captures the _reason_ the user is learning this topic. Every teaching decision — what to teach next, which resources to surface, which exercises to design — should trace back to this document.
+`MISSION.md` lives at the workspace root. It captures the _reason_ the user is learning this topic. Every teaching decision (what to teach next, which resources to surface, which exercises to design) should trace back to this document.
 
 ## Template
 
@@ -19,7 +19,7 @@
 - {Time, budget, prior commitments, learning preferences, anything that bounds the approach}
 
 ## Out of scope
-- {Adjacent topics the user explicitly does not want to chase right now — protects the zone of proximal development}
+- {Adjacent topics the user explicitly does not want to chase right now, protecting the zone of proximal development}
 ```
 
 ## Rules

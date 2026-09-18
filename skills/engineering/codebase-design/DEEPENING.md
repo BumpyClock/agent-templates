@@ -1,6 +1,6 @@
 # Deepening
 
-How to deepen a cluster of shallow modules safely, given its dependencies. Assumes the vocabulary in [SKILL.md](SKILL.md) — **module**, **interface**, **seam**, **adapter**.
+How to deepen a cluster of shallow modules safely, given its dependencies. Assumes the vocabulary in [SKILL.md](SKILL.md): **module**, **interface**, **seam**, **adapter**.
 
 ## Dependency categories
 
@@ -8,7 +8,7 @@ When assessing a candidate for deepening, classify its dependencies. The categor
 
 ### 1. In-process
 
-Pure computation, in-memory state, no I/O. Always deepenable — merge the modules and test through the new interface directly. No adapter needed.
+Pure computation, in-memory state, no I/O. Always deepenable: merge the modules and test through the new interface directly. No adapter needed.
 
 ### 2. Local-substitutable
 

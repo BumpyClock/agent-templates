@@ -2,7 +2,7 @@
 
 Generate **several radically different UI variations** on a single route, switchable from a floating bottom bar. The user flips between variants in the browser, picks one (or steals bits from each), then throws the rest away.
 
-If the question is about logic/state rather than what something looks like — wrong branch. Use [LOGIC.md](LOGIC.md).
+If the question is about logic/state rather than what something looks like, this is the wrong branch. Use [LOGIC.md](LOGIC.md).
 
 ## When this is the right shape
 
@@ -11,21 +11,21 @@ If the question is about logic/state rather than what something looks like — w
 - "Try a different layout for the settings screen."
 - Any time the user would otherwise spend a day picking between three vague mockups in their head.
 
-## Two sub-shapes — strongly prefer sub-shape A
+## Two sub-shapes: strongly prefer sub-shape A
 
-A UI prototype is much easier to judge when it's **butting up against the rest of the app** — real header, real sidebar, real data, real density. A throwaway route on its own is a vacuum: every variant looks fine in isolation. Default to sub-shape A whenever there's a plausible existing page to host the variants. Only reach for sub-shape B if the prototype genuinely has no nearby home.
+A UI prototype is much easier to judge when it's **butting up against the rest of the app**: real header, real sidebar, real data, real density. A throwaway route on its own is a vacuum: every variant looks fine in isolation. Default to sub-shape A whenever there's a plausible existing page to host the variants. Only reach for sub-shape B if the prototype genuinely has no nearby home.
 
-### Sub-shape A — adjustment to an existing page (preferred)
+### Sub-shape A: adjustment to an existing page (preferred)
 
 The route already exists. Enable variants **on the same route** only in an explicitly non-production environment and with a valid `?variant=` selection. Production and requests without a valid preview selection retain the ordinary rendering. Preserve existing data fetching, params, and auth.
 
-If the prototype is for something that doesn't yet have a page but *would naturally live inside one* (a new section of the dashboard, a new card on the settings screen, a new step in an existing flow) — that's still sub-shape A. Mount the variants inside the host page.
+If the prototype is for something that doesn't yet have a page but *would naturally live inside one* (a new section of the dashboard, a new card on the settings screen, a new step in an existing flow), it's still sub-shape A. Mount the variants inside the host page.
 
-### Sub-shape B — a new page (last resort)
+### Sub-shape B: a new page (last resort)
 
-Only use this when the thing being prototyped genuinely has no existing page to live inside — e.g. an entirely new top-level surface, or a flow that can't be embedded anywhere sensible.
+Only use this when the thing being prototyped genuinely has no existing page to live inside (e.g. an entirely new top-level surface, or a flow that can't be embedded anywhere sensible).
 
-Create a **throwaway route** following whatever routing convention the project already uses — don't invent a new top-level structure. Name it so it's obviously a prototype (e.g. include the word `prototype` in the path or filename). Use the same `?variant=` pattern, and exclude the route from production or use the framework's production route guard.
+Create a **throwaway route** following whatever routing convention the project already uses. Don't invent a new top-level structure. Name it so it's obviously a prototype (e.g. include the word `prototype` in the path or filename). Use the same `?variant=` pattern, and exclude the route from production or use the framework's production route guard.
 
 Before committing to sub-shape B, sanity-check: is there really no existing page this could be embedded in? An empty route hides design problems that a populated one would expose.
 
@@ -35,7 +35,7 @@ In both sub-shapes the floating bottom bar is identical.
 
 ### 1. State the question and pick N
 
-Default to **3 variants**. More than 5 stops being radically different and starts being noise — cap there.
+Default to **3 variants**. More than 5 stops being radically different and starts being noise, so cap there.
 
 Write down the plan in one line, in the prototype's location or a top-of-file comment:
 
@@ -51,7 +51,7 @@ Draft each variant. Hold each one to:
 - The project's component library / styling system (TailwindCSS, shadcn, MUI, plain CSS, whatever).
 - A clear exported component name, e.g. `VariantA`, `VariantB`, `VariantC`.
 
-Variants must be **structurally different** — different layout, different information hierarchy, different primary affordance, not just different colours. Three slightly-tweaked card grids isn't a UI prototype, it's wallpaper. If two drafts come out too similar, redo one with explicit "do not use a card grid" guidance.
+Variants must be **structurally different**: different layout, different information hierarchy, different primary affordance, not just different colours. Three slightly-tweaked card grids isn't a UI prototype, it's wallpaper. If two drafts come out too similar, redo one with explicit "do not use a card grid" guidance.
 
 ### 3. Wire them together
 
@@ -59,7 +59,7 @@ Gate the entire preview subtree, including its switcher. Use the framework's dev
 For an existing page:
 
 ```tsx
-// pseudo-code — adapt to the project's framework
+// pseudo-code, adapt to the project's framework
 const previewEnabled = process.env.NODE_ENV === 'development';
 const variant = searchParams.get('variant');
 if (!previewEnabled || (variant !== 'A' && variant !== 'B' && variant !== 'C')) {
@@ -83,13 +83,13 @@ For sub-shape B (new page): mount the same preview and switcher only behind the 
 
 A small fixed-position bar at the bottom-centre of the screen with three pieces:
 
-- **Left arrow** — cycles to the previous variant (wraps around).
-- **Variant label** — shows the current variant key and, if the variant exports a name, that name too. e.g. `B — Sidebar layout`.
-- **Right arrow** — cycles forward (wraps around).
+- **Left arrow**: cycles to the previous variant (wraps around).
+- **Variant label**: shows the current variant key and, if the variant exports a name, that name too. e.g. `B (Sidebar layout)`.
+- **Right arrow**: cycles forward (wraps around).
 
 Behaviour:
 
-- Clicking an arrow updates the URL search param (use the framework's router — `router.replace` on Next, `navigate` on React Router, etc) so the variant is shareable and reload-stable.
+- Clicking an arrow updates the URL search param (use the framework's router, e.g. `router.replace` on Next, `navigate` on React Router, etc) so the variant is shareable and reload-stable.
 - Keyboard: `←` and `→` arrow keys also cycle. Don't intercept arrow keys when an `<input>`, `<textarea>`, or `[contenteditable]` is focused.
 - Visually distinct from the page (e.g. high-contrast pill, subtle shadow) so it's obviously not part of the design being evaluated.
 - Mount only inside the enabled preview subtree. Hiding the bar alone does not isolate prototype behavior from production.
@@ -100,7 +100,7 @@ Put the switcher in a single shared component so both sub-shapes can reuse it. L
 
 Run and inspect the requested variants before handover. Check ordinary rendering without a valid selection and confirm that production cannot render previews, even with `?variant=` set. Use relevant existing checks; disclose any unverified environment.
 
-Surface the URL (and the `?variant=` keys). The user will flip through whenever they get to it. The interesting feedback is usually **"I want the header from B with the sidebar from C"** — that's the actual design they want.
+Surface the URL (and the `?variant=` keys). The user will flip through whenever they get to it. The interesting feedback is usually **"I want the header from B with the sidebar from C"**, which is the actual design they want.
 
 ### 6. Capture the answer and clean up
 
@@ -116,5 +116,5 @@ Preserve a separate prototype branch only when the agreed workflow requires it.
 
 - **Variants that differ only in colour or copy.** That's a tweak, not a prototype. Real variants disagree about structure.
 - **Sharing too much code between variants.** A shared `<Header>` is fine; a shared `<Layout>` defeats the point. Each variant should be free to throw out the layout.
-- **Wiring variants to real mutations.** Read-only prototypes are fine. If a variant needs to mutate, point it at a stub — the question is "what should this look like", not "does the backend work".
+- **Wiring variants to real mutations.** Read-only prototypes are fine. If a variant needs to mutate, point it at a stub: the question is "what should this look like", not "does the backend work".
 - **Promoting the prototype directly to production.** The variant code was written under prototype constraints (checks limited to the design question, minimal error handling). Rewrite it properly when you fold it in.

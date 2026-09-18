@@ -2,7 +2,7 @@
 
 When the user wants to explore alternative interfaces for a chosen deepening candidate, compare viable designs against the task's constraints. Based on "Design It Twice" (Ousterhout): the first idea need not be the best.
 
-Uses the vocabulary in [SKILL.md](SKILL.md) — **module**, **interface**, **seam**, **adapter**, **leverage**.
+Uses the vocabulary in [SKILL.md](SKILL.md): **module**, **interface**, **seam**, **adapter**, **leverage**.
 
 ## Process
 
@@ -32,11 +32,11 @@ For delegated work, provide a bounded technical brief with owned paths, coupling
 
 Each design states:
 
-1. Interface (types, methods, params — plus invariants, ordering, error modes)
+1. Interface (types, methods, params, plus invariants, ordering, error modes)
 2. Usage example showing how callers use it
 3. What the implementation hides behind the seam
 4. Dependency strategy and adapters (see [DEEPENING.md](DEEPENING.md))
-5. Trade-offs — where leverage is high, where it's thin
+5. Trade-offs: where leverage is high, where it's thin
 
 ### 3. Present and compare
 

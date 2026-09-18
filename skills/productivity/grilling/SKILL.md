@@ -7,10 +7,16 @@ Stress-test the material decisions within the user's requested scope. Reuse sett
 
 Work the tree in **rounds**. The **frontier** contains decisions whose prerequisites are already settled. Ask a manageable, prioritized subset in each round, starting with choices that gate the most important work. Number each question and give your recommended answer. Wait for the user's answers before asking dependent questions.
 
-Each question should be formatted like so:
+Format a round like so:
 
 ```
 ❓ **Q1** - **<question title>**: <question body, might be multiple paragraphs, including multiple choices>
+
+➡️ <your recommended answer>
+
+---
+
+❓ **Q2** - **<question title>**: <question body, might be multiple paragraphs, including multiple choices>
 
 ➡️ <your recommended answer>
 ```
