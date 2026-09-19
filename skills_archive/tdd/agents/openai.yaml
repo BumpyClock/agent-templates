@@ -1,0 +1,4 @@
+interface:
+  display_name: "TDD"
+  short_description: "Test-first development at contract seams"
+  default_prompt: "Use $tdd for requested test-first work. Apply the linked test-behavior principle, confirm seams with the user before writing tests, and deliver one seam, one test, and one minimal implementation per red-to-green cycle. Defer refactoring to the review stage."

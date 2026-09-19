@@ -11,7 +11,7 @@ arguments:
 Please get the details for the following issue(s): $ISSUE_NUMBER
 
 
-Use `programming` for coding and delegation guidance, and its [systematic diagnosis reference](../skills/programming/systematic-debugging/guide.md) when the cause needs investigation. Use `tdd` only when the user or repository requires test-first development.
+Use `programming` for coding and delegation guidance, and its [systematic diagnosis reference](../skills/programming/systematic-debugging/guide.md) when the cause needs investigation. When the user or repository requires test-first development, use the [test-behavior principle's TDD loop](../skills/programming/references/principles/principle-test-behavior-not-implementation.md#test-driven-development).
 
 Fetch issue $ISSUE_NUMBER with the available GitHub tools.
 For `all`, `all issues`, or no argument, fetch the repository's issues.

@@ -9,7 +9,7 @@ description: Inspect Windows UI Automation state or automate requested UI behavi
 
 ### Test policy
 
-When the user or repository requires TDD, use [TDD rules](../../../tdd-rules.md).
+When the user or repository requires TDD, use the [test-behavior principle's TDD loop](../../../principles/principle-test-behavior-not-implementation.md#test-driven-development).
 The examples below describe UIA mechanics, not a required test inventory.
 
 ### Approach

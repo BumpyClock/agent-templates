@@ -8,4 +8,4 @@ Do not add tests that only repeat independent property assignments.
 Use an event-level check when callback dispatch is the behavior at risk.
 
 For context selection, use [GPUI tests](test.md).
-When the user or repository requires TDD, use [TDD rules](../../tdd-rules.md).
+When the user or repository requires TDD, use the [test-behavior principle's TDD loop](../../principles/principle-test-behavior-not-implementation.md#test-driven-development).

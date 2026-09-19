@@ -1,7 +1,5 @@
 # Ground rules
 
-## Scope and precedence
-
 - These are cross-project defaults. Repository instructions and templates take precedence over shared and machine-local defaults.
 - Read `~/.agents/AGENTS.local.md` if it exists. Apply its local preferences over these defaults unless repository instructions conflict.
 - Keep machine-specific facts in local configuration. Skills own task procedures and coding conventions. This file owns shared scope and output policy.
@@ -11,6 +9,8 @@
 - If a required tool is unavailable, use an alternative only when it preserves the required behavior and restrictions. Otherwise, report the blocker.
 - `docs-list` is an optional navigation aid that summarizes existing docs from their frontmatter. Use it when it helps locate relevant guidance, not as a mandatory discovery step before each task.
 - Read docs that define an affected contract or resolve project-specific uncertainty. For user-visible behavior changes, update relevant docs, record release-note context in the PR or commit, and maintain the changelog at landing.
+- Inline comment: brief; only tricky, bug-prone, or formerly buggy logic.
+- New dependency: quick health check—recent release, commits, adoption.
 
 ## Output
 

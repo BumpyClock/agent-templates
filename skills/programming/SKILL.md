@@ -3,16 +3,6 @@ name: programming
 description: "Implement, debug, refactor, or test code; review code designs."
 ---
 
-# Programming
-
-Repository instructions and the user's requested deliverable override these defaults.
-
-
-## Completion and scope
-
-- Honor requested review checkpoints. Otherwise, continue implementation until the requested behavior and its completion evidence are established, including corrections to failures caused by the change. Do not stop solely for review of a first pass.
-- Continue independent, unblocked work when another part needs input. Stop at the agreed outcome or a required product decision, unavailable access, or authorization boundary.
-- Handle small tasks and continuous investigations directly. Delegate independent, substantial work only when its benefit exceeds coordination cost; give each delegate a bounded objective and assess the result against it.
 
 ## Code clarity and comments
 
@@ -29,6 +19,9 @@ Repository instructions and the user's requested deliverable override these defa
 - Follow the repository's file organization and co-location conventions. Split files when cohesion or the requested structural change warrants it, not to meet a fixed file-size or one-concept rule.
 - When integrating upstream files, stage them in the platform's temporary directory and review the diff before applying selected changes. Preserve unrelated local edits.
 - Use web research for current, high-risk, or uncertain facts, not stable facts already known. Prefer authoritative sources; use exact errors in diagnostic searches and the session date when recency matters.
+- Use /tdd where possible, at pre-agreed seams.
+- Fix/refactor: delete old path by default. Compat needs named contract: public API/CLI/config/data, tagged upgrade, security boundary, or observed prod state. Unsure: ask before alias/shim/fallback. Tests alone != contract.
+
 
 ## Validation
 
@@ -63,7 +56,7 @@ These are conditional references, not a checklist. Explain consequential choices
 - A requirement creates repeated design exceptions: [Redesign from First Principles](references/principles/principle-redesign-from-first-principles.md).
 - Several changes depend on one prerequisite: [Foundational Thinking](references/principles/principle-foundational-thinking.md).
 - Product or API tradeoffs affect consumers: [Experience First](references/principles/principle-experience-first.md).
-- Test assertions depend on internal structure rather than behavior: [Test Behavior Not Implementation](references/principles/principle-test-behavior-not-implementation.md).
+- Adding, changing, or reviewing tests: [Test Behavior Not Implementation](references/principles/principle-test-behavior-not-implementation.md).
 
 ## Execution
 

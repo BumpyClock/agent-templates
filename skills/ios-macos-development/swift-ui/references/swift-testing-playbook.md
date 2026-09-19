@@ -13,7 +13,7 @@ A hands-on, comprehensive guide for migrating from XCTest to Swift Testing and m
 
 ## Scope and test policy
 
-When the user or repository requires TDD, use [TDD rules](../../../programming/references/tdd-rules.md).
+When the user or repository requires TDD, use the [test-behavior principle's TDD loop](../../../programming/references/principles/principle-test-behavior-not-implementation.md#test-driven-development).
 Use the migration sections only when framework migration is part of the task. Preserve the repository's existing framework otherwise.
 
 ## **1. Migration & Tooling Baseline**

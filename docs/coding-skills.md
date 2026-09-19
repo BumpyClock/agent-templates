@@ -8,14 +8,14 @@ read_when: Update coding workflow skills or their shared references.
 
 - `defaults/AGENTS.md` owns shared scope, authorization boundaries, and output policy. Coding conventions belong in `programming`, not the always-loaded global file.
 - `skills/programming/SKILL.md` owns implementation completion, bounded delegation, code comments, and reuse guidance.
-- `skills/engineering/tdd/SKILL.md` owns the explicit TDD workflow. `skills/programming/references/tdd-rules.md` is a compatibility pointer to that owner.
+- `skills/programming/references/principles/principle-test-behavior-not-implementation.md` owns test quality, user-confirmed seams, and the explicit TDD loop.
 - `skills/programming/systematic-debugging/guide.md` owns diagnosis.
 - `skills/programming/SKILL.md` owns risk-proportional check selection and evidence reuse. Task workflows define the observation that establishes completion.
 - `skills/programming/references/architecture/architecture-planning.md` owns ADR guidance. Follow repository conventions and preserve superseded decisions as history.
 - `skills/programming/references/workflows/git-and-releases.md` owns branch, commit, PR, merge, and release conventions. Load it for that work, not for every code edit.
 - `skills/engineering/data-structure-audit/SKILL.md` owns requested complete data-structure audits. It is a standalone skill in a discoverable group, not nested inside another skill.
 
-The `diagnosing-bugs` skill routes to the diagnosis reference; `tdd` contains its own workflow.
+The `diagnosing-bugs` skill routes to the diagnosis reference; test-first work uses the test-behavior principle without a separate skill invocation.
 Current workflows use the shared check-selection guidance.
 Keep shared rules in their owner instead of duplicate workflow checklists.
 Platform guides retain runner APIs and domain-specific examples.
@@ -68,7 +68,7 @@ Shared workflows do not require Poteto mode, mandatory delegation, fixed agent p
 | Prototype | [Prototype skill](../skills/engineering/prototype/SKILL.md) |
 | Refactoring | [Clean refactoring](../skills/programming/references/refactoring/clean-refactoring.md) |
 | Runtime forensics | [Live diagnosis](../skills/programming/references/performance/runtime-forensics.md) |
-| Explicit TDD | [TDD skill](../skills/engineering/tdd/SKILL.md) |
+| Explicit TDD | [Test-behavior principle](../skills/programming/references/principles/principle-test-behavior-not-implementation.md#test-driven-development) |
 | Trace forensics | [Capture analysis](../skills/programming/references/performance/trace-forensics.md) |
 
 The prototype skill separates interactive state demonstrations, UI alternatives, and bounded behavioral probes.
@@ -107,6 +107,7 @@ Treat historical incidents as evidence for investigation rather than permanent m
 
 Archived skills reside under `skills_archive/` and do not belong in the active discovery tree.
 Preserve archive contents and replace active invocation routes when a skill moves there.
+The former `tdd` skill is preserved under `skills_archive/tdd/`; active TDD guidance lives only in the test-behavior principle.
 
 ## Archived workflow aliases and process skills
 
