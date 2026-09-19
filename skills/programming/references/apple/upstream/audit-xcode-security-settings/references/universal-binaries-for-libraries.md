@@ -28,11 +28,12 @@ Enabling `ENABLE_POINTER_AUTHENTICATION = YES` on the target (directly, or via t
 | Build Setting | Value | Why |
 |---|---|---|
 | `ONLY_ACTIVE_ARCH` | `NO` (distribution config) | Ensures the distributed build emits every slice in `ARCHS`, not just the active development architecture. Debug typically builds active-arch-only — that's fine for local development. |
-| `ARCHS` | `arm64 arm64e` *(optional)* | Belt-and-suspenders: pins both slices explicitly so the binary stays universal even if pointer authentication is later toggled off, decoupling the universal-binary decision from the `ENABLE_ENHANCED_SECURITY` / `ENABLE_POINTER_AUTHENTICATION` cascade. Not required when pointer authentication is enabled — `arm64e` is appended automatically. |
 
 Apply at target level, not project level. Apps in the same project need no special handling — pointer authentication already gives them both slices.
 
-For projects that use `.xcconfig` files, set the keys in the target's xcconfig. For projects that don't, use `UpdateTargetBuildSetting`. Skip the `ARCHS` change if the target already has an explicit `ARCHS` value — respect existing user intent.
+Use the target's maintained configuration and preserve explicit architecture choices.
+Do not write a fixed `ARCHS` list merely to duplicate pointer authentication's architecture expansion.
+Inspect effective architectures for each SDK and distribution configuration; changing an explicit architecture policy requires the corresponding scope.
 
 Verify after building:
 
@@ -43,7 +44,8 @@ lipo -info path/to/YourFramework.framework/YourFramework
 
 ## XCFramework Distribution
 
-If you distribute via `.xcframework` (typical for binary Swift Package and CocoaPods deliveries), each per-platform slice inside the XCFramework should itself be a universal binary built with `ARCHS = "arm64 arm64e"`. Bundle them with `xcodebuild -create-xcframework -framework <ios-device-build> -framework <ios-sim-build> ...` as usual; the `-create-xcframework` step does not change architectures, it just packages already-built frameworks for multiple platforms.
+If you distribute via `.xcframework`, verify each platform's built artifact against its supported architecture contract.
+Bundle the artifacts with `xcodebuild -create-xcframework -framework <ios-device-build> -framework <ios-sim-build> ...`; this packages existing frameworks and does not change their architectures.
 
 Note that `arm64e` exists on every device platform (iOS device, macOS, visionOS device, DriverKit, tvOS device, watchOS device) but on no Simulator SDK. Simulator slices stay `arm64` (Apple Silicon Mac) plus `x86_64` (Intel Mac) — see `pointer-authentication.md` for the full platform table.
 

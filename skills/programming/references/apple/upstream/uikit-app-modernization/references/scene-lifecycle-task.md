@@ -47,8 +47,8 @@ UIKit apps must adopt scene-based lifecycle (`UISceneDelegate`) to function corr
 | Create `SceneDelegate` boilerplate | **Auto-fix** |
 | Move `UIWindow` creation to scene delegate | **Auto-fix** |
 | Move 4 lifecycle methods (all four together) | **Auto-fix** |
-| Choose Info.plist vs dynamic configuration | **Ask** |
-| Split `didFinishLaunchingWithOptions` (one-time vs per-scene) | **Ask** |
+| Choose Info.plist vs dynamic configuration | Preserve the project pattern; ask if a consequential choice remains |
+| Split `didFinishLaunchingWithOptions` (one-time vs per-scene) | Trace ownership; ask when intended lifecycle behavior is unclear |
 | Add `SceneDelegate.swift` to `.pbxproj` | **Auto-fix** |
 | URL handling / user activity / notification migration | **TODO** |
 
@@ -62,7 +62,7 @@ UIKit apps must adopt scene-based lifecycle (`UISceneDelegate`) to function corr
 
 This step must complete before Step 2. The scene manifest activates the scene lifecycle system; without it, the system ignores `SceneDelegate` entirely.
 
-**Ask the user:** "Should scene configuration be **static** (Info.plist — recommended) or **dynamic** (code in AppDelegate)?"
+Use the project's existing scene-configuration pattern. For a new configuration, prefer the static form unless dynamic selection is needed; ask when that choice changes requested behavior.
 
 ### 1A: Static Configuration (Info.plist) — Default
 
@@ -178,9 +178,10 @@ Copy the method body unchanged; replace the `UIApplication` parameter with `UISc
 
 If the body calls helpers defined on AppDelegate, move them to SceneDelegate or to a shared utility. Accessing via `UIApplication.shared.delegate` is least preferred.
 
-### 3B: `didFinishLaunchingWithOptions` — Always Ask
+### 3B: `didFinishLaunchingWithOptions`
 
-This method typically mixes one-time app setup and per-scene UI setup. **Always ask the user** which lines move.
+This method can mix one-time app setup and per-scene UI setup.
+Trace the affected state and callers to determine ownership. Ask when the intended lifecycle cannot be established from the request and source.
 
 **Stays in AppDelegate:** Analytics, database setup, push notifications, SDK initialization, global config.
 

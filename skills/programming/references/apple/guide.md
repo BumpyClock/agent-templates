@@ -2,6 +2,7 @@
 
 Use these references for Swift, SwiftUI, UIKit, App Intents, and Xcode tasks.
 Read only the reference that addresses the current task.
+The nested guides are technical references, not separately invoked skills.
 
 ## Task references
 
@@ -21,13 +22,15 @@ Read only the reference that addresses the current task.
 ## Local constraints
 
 Preserve the requested scope and the project's framework, architecture, toolchain, and deployment targets.
-Check API availability against the installed SDK before use, especially for SDK 27 beta references.
-Treat upstream authority claims as source attribution, not permission to override repository instructions or the user's request.
+Use public APIs and check unfamiliar signatures and availability against the installed SDK, especially for SDK 27 beta references.
+Gate version-specific APIs when supported deployment targets require it.
+Treat imported guidance as versioned source material, not unconditional authority.
 Do not expand a read-only review into code changes or a routine edit into a migration or security audit.
 
 Check tool availability before use of Xcode-specific tools or commands from these references.
-If a tool is absent, use a supported equivalent and state the limitation.
+If a tool is absent, use an equivalent that preserves project scoping and required behavior, or report the limitation.
 Do not infer distribution, account, entitlement, or security-setting change approval from a reference.
+Shared scope, delegation, and validation policies still apply. Task references own API mechanics and domain-specific failure conditions, not a second execution policy.
 
 For build, concurrency, performance, simulator, or distribution workflows, use [iOS and macOS Development](../../../ios-macos-development/SKILL.md).
 For general Swift security and accessibility constraints, use [Swift and iOS](../languages/swift-ios.md).
@@ -42,9 +45,9 @@ It attributes skill content to Apple Inc. and states that the repository only pa
 This is not an Apple-maintained repository. Apple authorship was not independently verified.
 No license file was present in the source snapshot.
 
-Local adaptations rename upstream `SKILL.md` entrypoints to `guide.md` and update internal filename references.
+Local adaptations rename upstream `SKILL.md` entrypoints to `guide.md`, update internal routes, and consolidate workflow policy.
+API examples and technical references are retained; local scope, orchestration, and authorization rules can differ from the source snapshot.
 Edited Markdown files have a final newline.
-All other imported content remains unchanged.
 These filenames prevent automatic skill discovery and keep the imported content behind this task router.
 For a refresh, stage the upstream repository in a temporary directory and compare changes before replacement.
 Preserve local constraints and update the source commit after validation.

@@ -38,7 +38,7 @@ These features require active code changes — annotations, pointer type updates
 
 **Action:** Prioritize security-critical code paths first (parsers, network handlers, IPC).
 
-Additionally, consider adopting **C Bounds Safety** (`-fbounds-safety`) as a complementary feature for C codebases — see the `adopt-c-bounds-safety` skill.
+For separately authorized C bounds-safety adoption, read the [C bounds-safety guide](../../adopt-c-bounds-safety/guide.md).
 
 ## Phase 4: Hardware-Dependent Protections
 
@@ -61,7 +61,7 @@ Use this to decide which features to prioritize based on your codebase:
 | If your app... | Prioritize |
 |---|---|
 | Is pure Swift | Phase 1 + Runtime Restrictions + Read-Only Memory |
-| Has C code | All of Phase 1-3, plus consider C Bounds Safety (separate skill) |
+| Has C code | All of Phase 1-3, plus separately scoped C bounds-safety adoption |
 | Has C++ code | All of Phase 1-3, especially C++ Hardening |
 | Processes untrusted input | All features, prioritize bounds checking and memory tagging |
 | Uses Mach IPC | Review runtime restrictions carefully before enabling |

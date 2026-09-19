@@ -1,14 +1,13 @@
 # Security Settings Reference
 
-Complete reference for the security build settings and entitlements managed by this skill, organized by application order.
-
-> **Skill-internal use only.** Do not call this the "catalog" or use terms like "catalog macro" / "catalog regex" in user-facing narration — those are skill-internal jargon. In any text shown to the user, describe what's being checked plainly: "the known security build settings", "the security setting `CLANG_WARN_…`", etc.
+Reference values for assessment and authorized hardening.
+These recommendations do not authorize changes during an audit or replacement of deliberate overrides.
 
 **Language relevance:** Only enable or inquire about a setting if the codebase contains code in a language the setting applies to. The Scope column indicates which languages each setting is relevant to. Do not enable clang-only settings for pure Swift codebases.
 
 **Filtering recipe.** `scripts/filter_build_settings.py` filters `GetTargetBuildSettings` output to entries in this reference; it derives its filter regex from this file at runtime by extracting backtick-quoted macro names. Adding a new setting here automatically extends the filter. See `references/reading-build-settings.md` for usage.
 
-## Warnings — Always Enable
+## Recommended warnings
 
 ### Compiler Warnings
 
@@ -48,7 +47,8 @@ Clang-tidy-integrated checks that are part of the clang static analyzer; they fi
 |---|---|---|---|
 | `ENABLE_ENHANCED_SECURITY` | `YES` | Enables the Enhanced Security capability (build-setting + entitlements) | See `enhanced-security.md` |
 | `ENABLE_POINTER_AUTHENTICATION` | `YES` | Adds an `arm64e` slice — builds both `arm64` and `arm64e` (no compiler flag; appends `arm64e` to `ARCHS_STANDARD`) | Set at project level. The simulator needs no override — the build system drops `arm64e` for simulator SDKs automatically (they define no `arm64e`). |
-| `ARCHS` | `arm64 arm64e` | Pins both slices explicitly | Optional belt-and-suspenders on distributed library/framework targets — pointer authentication already builds both slices automatically. Use it to keep the binary universal independent of the enhanced-security cascade. See `universal-binaries-for-libraries.md`. |
+| `ARCHS` | Preserve project policy | Effective architecture list | Do not pin a generic list as part of hardening. See `universal-binaries-for-libraries.md` for distribution checks. |
+| `ONLY_ACTIVE_ARCH` | `NO` for distribution | Builds every effective architecture | Preserve explicit project choices and assess the actual distribution configuration. |
 
 **Cascaded by `ENABLE_ENHANCED_SECURITY` (do not set manually):**
 
@@ -121,7 +121,7 @@ These are managed per-target in each target's `.entitlements` file. See `enhance
 
 ## Default-ON Security Checkers — Audit Only
 
-These default to YES in Xcode. The skill does not actively enable them, but Phase 3 will flag them if explicitly set to NO.
+These default to YES in Xcode. Report explicit opt-outs and their rationale; changing them requires the corresponding hardening scope.
 
 | Build Setting | Value | What It Checks | Scope |
 |---|---|---|---|

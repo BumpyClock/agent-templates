@@ -9,6 +9,8 @@
 - Make reasonable decisions within task scope. Ask when essential information or approval for a consequential action is missing.
 - Implementation authority does not itself authorize publication, production or shared-state changes, account changes, or unrelated cleanup.
 - If a required tool is unavailable, use an alternative only when it preserves the required behavior and restrictions. Otherwise, report the blocker.
+- `docs-list` is an optional navigation aid that summarizes existing docs from their frontmatter. Use it when it helps locate relevant guidance, not as a mandatory discovery step before each task.
+- Read docs that define an affected contract or resolve project-specific uncertainty. For user-visible behavior changes, update relevant docs, record release-note context in the PR or commit, and maintain the changelog at landing.
 
 ## Output
 

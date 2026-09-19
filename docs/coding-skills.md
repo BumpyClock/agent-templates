@@ -21,6 +21,19 @@ Keep shared rules in their owner instead of duplicate workflow checklists.
 Platform guides retain runner APIs and domain-specific examples.
 Git and PR skills use the same verification owner. They retain authorization and operation safety without extra test gates, independent completion reviews, or automatic review loops.
 
+`docs-list` is an optional index of existing documentation summaries and `read_when` hints from frontmatter.
+Use it to find relevant guidance, not to require a documentation sweep before each edit.
+Related cleanup is a judgment call under `programming`: include bounded improvements when they support the current work and justify their risk and review cost; otherwise skip them.
+
+## Apple reference ownership
+
+`skills/programming/references/apple/guide.md` owns shared Apple scope, source provenance, and SDK checks.
+Imported guides are local references, not separately invoked skills.
+They select API examples and task-specific constraints without mandatory subagents, repeated full-document reads, or automatic commits.
+UIKit references keep migration decisions and exceptions together, including supporting caller and invalidation edits.
+Xcode security reviews are read-only; hardening and persistent decision records require the corresponding authorized scope.
+Bounds-safety adoption preserves header-only versus full-adoption boundaries, ABI compatibility, and partial-adoption limits without prescribing checkpoint commits.
+
 ## Design principles
 
 `skills/programming/references/principles/` owns conditional code and design principles.

@@ -70,7 +70,7 @@ static int GetExtNext(Handle *H, uint8_t *__bidi_indexable *Out) {
 
 **Before reaching for this pattern, prune.** Check each `__bidi_indexable` / `__indexable` against [Redundant `__bidi_indexable` / `__indexable` Annotations](#redundant-__bidi_indexable--__indexable-annotations) below. Locals already default to `__bidi_indexable`, and casts on expressions that are already (or can implicitly become) `__bidi_indexable` don't need the annotation. If pruning leaves no remaining uses in this file, you don't need this pattern at all.
 
-**When this pattern applies (after pruning).** A `.c` file *still* uses `__bidi_indexable` (or `__indexable`) by name — on internal helper signatures, on local variable declarations where the annotation is load-bearing, or inside cast expressions where the annotation is load-bearing — and must also compile cleanly with `-fbounds-safety` off (e.g. for the two-commit-dance source-changes commit in [adoption-strategies.md](adoption-strategies.md)).
+**When this pattern applies (after pruning).** A `.c` file still uses `__bidi_indexable` or `__indexable` by name on an internal signature, local declaration, or cast where the annotation is needed, and must also compile with `-fbounds-safety` off. This can be a supported build configuration or an explicitly requested source-before-enablement checkpoint in [adoption strategies](adoption-strategies.md).
 
 **Pattern.** At the top of the `.c` file, after `#include <ptrcheck.h>`:
 
@@ -196,10 +196,9 @@ The `UnionSafe` definition is unchanged from the full-adoption example.
 - The legacy wrapper exists purely for API/ABI backwards compatibility
 - Forward-declare safe functions as `static` only if needed for ordering (e.g., mutual recursion between related safe functions)
 
-**Coordinating with the adoption workflow.** If you decide on a Safe Wrapper *during* the headers-first phase (Phase 1 in [adoption-strategies.md](adoption-strategies.md#1-headers-first)), do not retrofit it inline — Phase 1 is source-file-free, and the retrofit is intrinsically cross-file. Instead, create a per-item `Add Safe Wrapper for <funcName>` task per the [Capturing deferred Safe Wrapper retrofits](adoption-strategies.md#capturing-deferred-safe-wrapper-retrofits) sub-heading. Execution lands at different points depending on the adoption mode:
-
-- **Full adoption**: at [Step 5.1 Safe Wrapper retrofits](adoption-strategies.md#51-safe-wrapper-retrofits), after the project switches to target-level `ENABLE_C_BOUNDS_SAFETY`. The `5.1 Commit Safe Wrapper batch` umbrella task is the single commit point. Under partial-target adoption (some file skipped per [Skipping a file's enablement](adoption-strategies.md#skipping-a-files-enablement)), Step 4 is bypassed and Safe Wrappers still apply at §5.1 — see §5.1's verify-step caveat for what changes.
-- **Header-only adoption**: at [§3 Safe Wrapper retrofits (if any captured)](adoption-strategies.md#3-safe-wrapper-retrofits-if-any-captured), gated on a user opt-in stop. On approval, the per-items are applied with the "switch internal callers" step skipped — header-only deliberately leaves implementation call sites untouched. The `3b. Commit Safe Wrapper batch` umbrella is the single commit point.
+For sequencing and authorization, use the adoption workflow's [deferred-wrapper guidance](adoption-strategies.md#capturing-deferred-safe-wrapper-retrofits).
+Full adoption migrates internal callers; [header-only wrapper work](adoption-strategies.md#3-safe-wrapper-retrofits-if-any-captured) leaves those callers unchanged and requires the corresponding source-edit scope.
+For [partial adoption](adoption-strategies.md#skipping-a-files-enablement), compilation does not establish caller migration in non-adopting translation units.
 
 ### Calling Non-Adopted Libraries
 

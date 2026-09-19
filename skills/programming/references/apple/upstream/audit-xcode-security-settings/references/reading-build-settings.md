@@ -1,6 +1,6 @@
 # Reading Build Settings
 
-How to consume `GetTargetBuildSettings` output during a security audit, and how to assemble the audit table that Phases 2–4 of `guide.md` rely on.
+Use for `GetTargetBuildSettings` output and the evidence needed to distinguish inherited defaults from explicit overrides.
 
 ## Schema
 
@@ -23,7 +23,7 @@ Field reference:
 
 If `GetTargetBuildSettings` writes its output to a saved file due to a token limit, run `scripts/filter_build_settings.py` against that file to extract the tracked macros (security-reference macros plus `CODE_SIGN_ENTITLEMENTS`, `SDKROOT`, `SUPPORTED_PLATFORMS`). Do not read the saved file linearly.
 
-The script lives at `scripts/filter_build_settings.py` (relative to the skill root). It derives its filter regex from `references/security-settings-reference.md` at runtime, so adding settings to the reference automatically extends the filter. Override with `--regex` if you need a narrower filter.
+The script lives at `scripts/filter_build_settings.py` relative to the parent guide. It derives its filter regex from `references/security-settings-reference.md` at runtime, so adding settings to the reference automatically extends the filter. Override with `--regex` if you need a narrower filter.
 
 ### Compact `name=value` view
 
@@ -44,10 +44,12 @@ python3 scripts/filter_build_settings.py <saved-file> --unhardened-only
 ```
 
 The `--show-overrides` and `--unhardened-only` flags can be combined.
+The latter is a coarse value filter, not a complete policy evaluation: architecture lists, paths, and settings whose hardened value is not a form of `YES` need their own interpretation.
 
 ## The audit table
 
-The audit table is a per-(target, tracked macro) view assembled by Phase 3 of `guide.md`. Phases 4–6 consume it; nothing else is re-fetched. Each target's rows physically live in that target's `Audit <target>` task description — see `guide.md` Phase 3 Step 4 for the on-task format.
+Keep a per-target, per-configuration view of the tracked settings in the working notes or existing task mechanism.
+Reuse it for assessment and proposed changes. Refresh affected values after edits or when configuration changes; stale pre-edit values cannot establish the final state.
 
 A *tracked macro* is either:
 
@@ -59,6 +61,7 @@ A *tracked macro* is either:
 | Column | Meaning |
 |---|---|
 | `target` | the target name |
+| `configuration` | the build configuration and SDK used to resolve the values |
 | `macroName` | the setting name — a security-reference macro or one of `CODE_SIGN_ENTITLEMENTS` / `SDKROOT` / `SUPPORTED_PLATFORMS` |
 | `evaluatedValue` | what the build sees (from `GetTargetBuildSettings` JSON) |
 | `setAtTargetLevel` | `yes` if `targetValue` is present in the JSON, else `no` |
@@ -76,7 +79,8 @@ The filter regex comes from `references/security-settings-reference.md` (backtic
 
 ### Predicates
 
-Three named predicates referenced from `guide.md`. They apply to the security-reference macros. The other three (`CODE_SIGN_ENTITLEMENTS`, `SDKROOT`, `SUPPORTED_PLATFORMS`) are path/identifier values, not security toggles, so the YES/NO comparisons in the predicates are not meaningful for them.
+Use these predicates for warning and protection switches whose recommended value is a form of `YES`.
+Interpret `ARCHS`, `ONLY_ACTIVE_ARCH`, paths, platform identifiers, and enumerated hardening modes using their own contracts rather than these Boolean comparisons.
 
 - **already hardened** ≡ `evaluatedValue ∈ {YES, YES_AGGRESSIVE, YES_ERROR}`
 - **at default OFF** ≡ `evaluatedValue = NO` AND `setAtTargetLevel = no` AND `numMatchesInXCConfigs = 0` AND `numMatchesInPbxproj = 0`
@@ -84,6 +88,6 @@ Three named predicates referenced from `guide.md`. They apply to the security-re
 
 ## Product type
 
-The target's product type identifier comes from `XcodeListTargets` (`PRODUCT_TYPE_IDENTIFIER`). It matches the strings used in `enhanced-security.md` ("Supported Product Types") and `universal-binaries-for-libraries.md` ("Qualifying Product Types"), so phases that classify targets by capability can compare against those lists directly.
+The target's product type identifier comes from `XcodeListTargets` (`PRODUCT_TYPE_IDENTIFIER`). Compare it with the supported types in `enhanced-security.md` and `universal-binaries-for-libraries.md`.
 
-Targets with `IS_AGGREGATE = true` have no product type and are skipped at enumeration time (see `guide.md` Phase 3 Step 3).
+Targets with `IS_AGGREGATE = true` have no product type and are skipped at enumeration time.

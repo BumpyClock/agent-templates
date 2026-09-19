@@ -1,15 +1,16 @@
 # Decision Document
 
-Maintain a persistent `xcode-security-settings.md` that records every setting considered, its status, and the rationale.
-This file is under source control and serves as the single source of truth for security build setting decisions.
-All settings must be recorded in the decision document.
+Use when the requested work includes a persistent security decision record.
+Follow the repository's documentation location and format; use `xcode-security-settings.md` only when establishing a new record is in scope.
+An audit-only request does not require creating this file or adding it to the Xcode project.
 
 ## Step 1: Locate or Create the File
 
-The decision document path comes from the plan file approved in Phase 4 (the `Path:` value under the "Decision document" heading). Use `XcodeRead` / `XcodeGlob` to locate; use `XcodeWrite` (new file) or `XcodeUpdate` (existing file) to write.
+Use the existing decision record or the path agreed for this task.
+Choose a write mechanism that preserves the intended project membership. `XcodeWrite` registers a new file in the project as well as writing it, so use it only when that registration is wanted.
 
-1. If a file at the planned path exists, use it. Skip to Step 2.
-2. If it doesn't, create the file at the planned path with the initial structure (see Document Structure below) via `XcodeWrite`. `XcodeWrite` both writes to disk and registers the file in the project, so the new file appears in the Project Navigator without a separate add-to-project step.
+1. If a record exists, preserve its organization.
+2. Otherwise, create it at the authorized path using the structure below when no repository template applies.
 
 ## Step 2: Merge Decisions
 
@@ -30,7 +31,7 @@ Sections:
 
 ## Step 3: Write the File
 
-Write the merged document via `XcodeUpdate` if you opened an existing file in Step 1, or `XcodeWrite` if you're creating it. Report the path: "Decision document updated at `<path>`."
+Write through the mechanism selected above and report the actual path and changes.
 
 ## Document Structure
 

@@ -9,16 +9,10 @@ DO NOT TRIGGER when: user asks about unit tests only, build-only requests withou
 
 ---
 
-# For the Main Agent
+# Session ownership
 
-**This is a SUBAGENT skill.** Invoke it via the Agent tool when device verification is needed. If there is an open session for that work, provide that session identifier to a subagent for exclusive use by that subagent.
-
-```
-Agent tool:
-- subagent_type: "general-purpose"
-- description: "Verify login feature works"
-- prompt: "Using the device-interaction skill, verify that the login feature works correctly on session <session-identifier>. Launch the app, capture screenshot and UI hierarchy, check that the login button is visible and tappable, and report if the implementation is working correctly."
-```
+Keep one owner for a device interaction session so concurrent input cannot corrupt the observation.
+Work directly for a focused check. When delegation is justified by the shared execution policy, pass the session identifier, target behavior, and completion condition to its owner.
 
 
 ## Session Lifecycle
@@ -53,7 +47,7 @@ Omit both parameters to leave the scheme's arguments and environment unchanged.
 
 ---
 
-# For the Subagent
+# Observations
 
 **ALWAYS** report UI issues that might be caused by code: overlapping or unreadable text, unexpectedly cropped image/text, wrong colors etc.
 
@@ -152,9 +146,9 @@ The `interactionCommand` parameter accepts a command syntax:
 - `"r select"` - tvOS: press Select on the focused element
 - `"r home"` - tvOS: go to the Home screen
 
-## Standard Subagent Workflow
+## Interaction workflow
 
-Before any interaction, always capture and read the hierarchy (and screenshot). After any interaction, capture again and verify the result. For complex components (like toggles or switches), look at nested elements (like `Switch` or `Slider`) — nearby elements might correspond to the actual control. When done, report findings to the main agent.
+Capture the hierarchy and screenshot before interaction when current state or target identity is uncertain. After an action or coherent action sequence, capture again to verify the expected result. For complex components such as toggles, inspect nested elements such as `Switch` or `Slider`; a nearby element may not be the actual control.
 
 - To capture without interacting, use DeviceEventSynthesize with an empty interactionCommand.
 - Never guess positions from screenshots alone — use hierarchy hitPoint coordinates; screenshot estimation is only a fallback after a hitPoint is tried and fails.
@@ -190,4 +184,4 @@ When verifying, distinguish between these categories:
 - If application is not visible, retry once, as this might be caused by a slow device.
 - If tap target unclear, re-read hierarchy data for correct hitPoint coordinates.
 - You can inspect runtime logs to troubleshoot. If you suspect timing bugs, suggest to the main agent that temporarily adding `print` statements in the relevant code may help diagnose the issue.
-- Report issues back to the main agent with details and suggestions.
+- Report observed issues, the affected interaction, and any remaining execution limits.
