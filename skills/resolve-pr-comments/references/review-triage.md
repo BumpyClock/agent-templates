@@ -6,17 +6,20 @@ Reviewer identity and repeated comments do not establish correctness.
 | Decision | Basis |
 | --- | --- |
 | `fix` | Evidence supports a correction within the user's authorized scope. |
-| `dismiss` | Evidence shows the claim is false, already addressed, or explicitly deferred by the owner. |
+| `dismiss` | Evidence shows the claim is false, already addressed, an optional or out-of-scope suggestion not needed for the user's goal, or explicitly deferred by the owner. |
 | `ask` | A material decision requires user intent, new authority, or evidence that the agent cannot obtain. |
 
 Investigate uncertainty before you ask the user.
 Distinguish a verified defect from a preference or a proposed scope change.
 A pre-existing defect can still matter if the PR exposes or worsens it.
+Do not dismiss a verified in-scope defect merely because it is inconvenient to fix.
 
 Support each decision with applicable code, a contract, a test result, or a commit.
+Explain why a false positive or suggestion will not be addressed before resolving it.
 Reuse valid evidence for the same revision and behavior.
 For stale claims, check whether the exact concern still applies.
-An outdated comment marker alone does not establish a fix. if comment is already fixed then reply + resolve
+An outdated comment marker alone does not establish a fix.
+If the concern is already fixed on the PR head, reply with evidence and resolve the thread.
 Keep unresolved risk open.
 
 For stacked PRs, identify the lowest unmerged PR that owns the defect.

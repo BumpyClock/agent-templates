@@ -1,4 +1,4 @@
 interface:
   display_name: "Resolve PR Comments"
-  short_description: "Triage PR feedback as fix, dismiss, or ask"
-  default_prompt: "Use $resolve-pr-comments to assess this PR's review comments and address them within the authorized scope."
+  short_description: "Resolve PR feedback and monitor review and CI"
+  default_prompt: "Use $resolve-pr-comments to assess this PR's review comments and address them within the authorized scope. After publishing fixes, or when asked to watch the PR, monitor review and CI until ready or the monitoring limit is reached."
