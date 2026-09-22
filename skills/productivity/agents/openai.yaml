@@ -1,0 +1,5 @@
+interface:
+  display_name: "Autonomous"
+  short_description: "Switch agent to autonomous mode."
+policy:
+  allow_implicit_invocation: false

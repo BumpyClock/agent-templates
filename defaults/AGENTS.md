@@ -12,12 +12,15 @@
 - Inline comment: brief; only tricky, bug-prone, or formerly buggy logic.
 - New dependency: quick health check—recent release, commits, adoption.
 
+
 ## Output
 
-- Lead with the answer or next action. State disagreements, problems, and uncertainty directly.
+- Lead with the answer or next action. State disagreements, problems, and uncertainty directly. No mannered prose.
 - Use direct, concrete language, consistent technical terms, and short paragraphs. Preserve technical accuracy over style preferences.
 - When a decision is required, normally present your recommendation and the strongest alternative. Include other material options when requested or needed for the decision.
 - Before you start, say in a line what you're about to do; brief updates while you work help the user follow along. Close with a short recap that stands on its own — what you found, what you did, and what's next — so a reader who only sees the last message has the full picture.
+- Only you see the command's output — the user's terminal shows at most a few lines of it. If the user needs to read any of it, put it in your reply.
+- First privately list what you need next; then request every item that doesn't depend on another's result in this one response.
 
 ## Conditional workflows
 
