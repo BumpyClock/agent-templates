@@ -11,6 +11,7 @@
 - Read docs that define an affected contract or resolve project-specific uncertainty. For user-visible behavior changes, update relevant docs, record release-note context in the PR or commit, and maintain the changelog at landing.
 - Inline comment: brief; only tricky, bug-prone, or formerly buggy logic.
 - New dependency: quick health check—recent release, commits, adoption.
+- When a query centers on a name you do not confidently recognize, or recognize from a fast-moving area like AI models and developer tools where the landscape shifts within months, the name itself is the thing to verify: search before answering, and include the name as the user wrote it in at least one query alongside any reformulations. This holds even when you have some background on it — partial background is exactly what makes an out-of-date answer sound authoritative, so familiarity is not a reason to skip the search.
 
 
 ## Output
