@@ -16,6 +16,9 @@ description: "Implement, debug, refactor, or test code; review code designs."
 
 - Reuse or extend an existing helper, type, component, or pattern when practical. Prefer a smaller complete change over a parallel path or speculative abstraction.
 - Use judgment about related cleanup, including bounded refactors and high-confidence flaky-test fixes. Include it when it supports the current work and its benefit outweighs the risk and review cost; otherwise skip it. Do not add unrelated features or infrastructure. Ask before materially expanding the agreed scope, not merely because the implementation is larger than expected.
+- Before adding a dependency, check whether existing dependencies already cover the need; read their docs and type definitions rather than assuming a feature is missing. When adding one, prefer a mature, well-maintained library over reimplementing general-purpose functionality.
+- When similar code stays duplicated on purpose, comment why the copies evolve independently or are not yet abstracted.
+- Never leave a `TODO` without context: state the reason and removal condition, or link a trackable task.
 - Follow the repository's file organization and co-location conventions. Split files when cohesion or the requested structural change warrants it, not to meet a fixed file-size or one-concept rule.
 - When integrating upstream files, stage them in the platform's temporary directory and review the diff before applying selected changes. Preserve unrelated local edits.
 - Use web research for current, high-risk, or uncertain facts, not stable facts already known. Prefer authoritative sources; use exact errors in diagnostic searches and the session date when recency matters.

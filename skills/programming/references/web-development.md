@@ -8,6 +8,7 @@
 - Associate labels with controls, choose input types that match data, and preserve native form submission.
 - Support keyboard and touch alongside pointer input. Keep focus visible, return it after transient UI closes, and avoid hover-only behavior.
 - Give compact controls usable hit areas without requiring their visual bounds to grow.
+- Cover loading, empty, error, retry, and feedback states in user flows; control rendering cost and handle concurrent or stale async requests.
 - Reuse existing design tokens, components, and styling conventions before adding one-off primitives.
 
 ## Layout And Motion
