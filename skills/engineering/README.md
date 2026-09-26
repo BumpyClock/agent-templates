@@ -14,6 +14,7 @@ Reachable only when you type them (Claude Code: `disable-model-invocation: true`
 - **[wayfinder](./wayfinder/SKILL.md)** — Plan a huge chunk of work — more than one agent session can hold — as a shared map of decision tickets on the issue tracker, resolved one at a time until the way to the destination is clear.
 - **[test-cleanup](./test-cleanup/SKILL.md)** — Audit an existing test suite against the programming skill's test standards: delete/rewrite/keep verdicts with evidence, report first, then apply approved cleanups.
 - **[changelog](./changelog/SKILL.md)** — Create or update user-facing changelog entries, or set up PR entry generation using the separate GitHub Actions reference.
+- **[split-to-prs](./split-to-prs/SKILL.md)** — Split current work into small reviewable PRs. Propose the slices and wait for approval before branching, committing, or opening PRs.
 
 ## Model-invoked
 

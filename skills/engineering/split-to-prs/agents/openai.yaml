@@ -1,0 +1,6 @@
+interface:
+  display_name: "Split to PRs"
+  short_description: "Split current work into small reviewable PRs"
+  default_prompt: "Use $split-to-prs to split this work into small reviewable PRs. Propose the split and wait for approval before creating branches, commits, or PRs."
+policy:
+  allow_implicit_invocation: false
