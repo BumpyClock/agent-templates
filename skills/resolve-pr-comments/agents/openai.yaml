@@ -1,4 +1,6 @@
 interface:
   display_name: "Resolve PR Comments"
   short_description: "Resolve PR feedback and monitor review and CI"
-  default_prompt: "Use $resolve-pr-comments to assess this PR's review comments and address them within the authorized scope. After publishing fixes, or when asked to watch the PR, monitor review and CI until ready or the monitoring limit is reached."
+  default_prompt: "Use $resolve-pr-comments to resolve feedback on this existing PR or stack within the authorized scope. After committing and pushing authorized fixes, assess the updated PR and babysit review and CI until mergeable or another documented stop condition applies. Honor assessment-only requests."
+policy:
+  allow_implicit_invocation: false

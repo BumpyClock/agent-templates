@@ -1,26 +1,36 @@
-model = "gpt-5.1-codex-max"
-model_reasoning_effort = "xhigh"
+suppress_unstable_features_warning = true
+tui.status_line = ["current-dir", "git-branch", "model-with-reasoning", "weekly-limit", "context-remaining", "pull-request-number", "permissions", "approval-mode", "fast-mode"]
+tui.notifications = true
+tui.notification_method = "auto"
+tui.notification_condition = "always"
+tui.screen_reader_detection_done = true
+tui.status_line_use_colors = true
+approval_policy = "never"
+sandbox_mode = "danger-full-access"
+commit_attribution = ""
+plan_mode_reasoning_effort = "high"
+approvals_reviewer = "auto_review"
 
+agents.max_concurrent_threads_per_session = 40
 
-[projects."/home/adityasharma/.codex"]
-trust_level = "trusted"
 
 [features]
-web_search_request = true
+collaboration_modes = true
 unified_exec = true
+shell_snapshot = true
+powershell_utf8 = true
+steer = true
+personality = true
+multi_agent = true
+prevent_idle_sleep = true
+apps = false
+guardian_approval = true
+goals = true
+terminal_resize_reflow = true
+mentions_v2 = true
+js_repl = false
+context_management.experimental_mode = true
+default_mode_request_user_input = true
 
-
-
-[mcp_servers.code-tools]
-command = "pnpx"
-args = ["code-tools-mcp@latest"]
-startup_timeout_ms = 30_000
-
-[mcp_servers.archon]
-url ="http://localhost:8051/mcp"
-
-[mcp_servers.exa-search]
-command = "pnpx"
-args = ["mcp-remote" , "https://mcp.exa.ai/mcp"]
-startup_timeout_ms = 30_000
-env = { "EXA_API_KEY" = "0b3e8d1c-6330-45d9-be1f-0c4d2c0e1989" }
+[computer_use]
+allow_locked_computer_use = true

@@ -1,34 +1,36 @@
-projects = { 'C:\Users\adity\Projects\mcp-manager' = { trust_level = "trusted" } , 'C:\Users\adity' = { trust_level = "trusted" } , 'C:\Users\adity\Projects\Digests-Windows' = { trust_level = "trusted" } }
-sandbox_mode = "workspace-write"
-model = "gpt-5-codex"
+suppress_unstable_features_warning = true
+tui.status_line = ["current-dir", "git-branch", "model-with-reasoning", "weekly-limit", "context-remaining", "pull-request-number", "permissions", "approval-mode", "fast-mode"]
+tui.notifications = true
+tui.notification_method = "auto"
+tui.notification_condition = "always"
+tui.screen_reader_detection_done = true
+tui.status_line_use_colors = true
+approval_policy = "never"
+sandbox_mode = "danger-full-access"
+commit_attribution = ""
+plan_mode_reasoning_effort = "high"
+approvals_reviewer = "auto_review"
+
+agents.max_concurrent_threads_per_session = 40
 
 
-[mcp_servers.exa-search]
-command = "C:\\Users\\adityasharma\\AppData\\Local\\fnm_multishells\\5708_1759432040927\\npx.cmd"
-args = [ "-y", "exa-mcp-server@2.0.9"]
-env = { "EXA_API_KEY" = "0b3e8d1c-6330-45d9-be1f-0c4d2c0e1989", APPDATA = "C:\\Users\\adityasharma\\AppData\\Roaming", LOCALAPPDATA = "C:\\Users\\adityasharma\\AppData\\Local", HOME = "C:\\Users\\adityasharma", SystemRoot = "C:\\Windows", ComSpec = "C:\\Windows\\System32\\cmd.exe" }
-startup_timeout_ms = 20_000
+[features]
+collaboration_modes = true
+unified_exec = true
+shell_snapshot = true
+powershell_utf8 = true
+steer = true
+personality = true
+multi_agent = true
+prevent_idle_sleep = true
+apps = false
+guardian_approval = true
+goals = true
+terminal_resize_reflow = true
+mentions_v2 = true
+js_repl = false
+context_management.experimental_mode = true
+default_mode_request_user_input = true
 
-
-[mcp_servers.sequentialthinking]
-command = "C:\\Users\\adityasharma\\AppData\\Local\\fnm_multishells\\5708_1759432040927\\npx.cmd"
-args = [ "-y", "@modelcontextprotocol/server-sequential-thinking"]
-env = { APPDATA = "C:\\Users\\adityasharma\\AppData\\Roaming", LOCALAPPDATA = "C:\\Users\\adityasharma\\AppData\\Local", HOME = "C:\\Users\\adityasharma", SystemRoot = "C:\\Windows", ComSpec = "C:\\Windows\\System32\\cmd.exe" }
-startup_timeout_ms = 40_000
-
-[mcp_servers.serena]
-command = "C:\\Users\\adityasharma\\.local\\bin\\uvx.exe"
-args = ["--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server", "--context", "codex"]
-env = { APPDATA = "C:\\Users\\adityasharma\\AppData\\Roaming", LOCALAPPDATA = "C:\\Users\\adityasharma\\AppData\\Local", HOME = "C:\\Users\\adityasharma", SystemRoot = "C:\\Windows", ComSpec = "C:\\Windows\\System32\\cmd.exe" }
-startup_timeout_ms = 40_000
-
-
-[mcp_servers.code-tools]
-command = "C:\\Users\\adity\\AppData\\Local\\fnm_multishells\\36892_1760635713137\\pnpx.cmd"
-args = [  "code-tools-mcp@latest"]
-env = { APPDATA = "C:\\Users\\adityasharma\\AppData\\Roaming", LOCALAPPDATA = "C:\\Users\\adityasharma\\AppData\\Local", HOME = "C:\\Users\\adityasharma", SystemRoot = "C:\\Windows", ComSpec = "C:\\Windows\\System32\\cmd.exe" }
-startup_timeout_ms = 40_000
-
-
-[tools]
-web_search = true
+[computer_use]
+allow_locked_computer_use = true

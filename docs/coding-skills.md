@@ -8,18 +8,21 @@ read_when: Update coding workflow skills or their shared references.
 
 - `defaults/AGENTS.md` owns shared scope, authorization boundaries, and output policy. Coding conventions belong in `programming`, not the always-loaded global file.
 - `skills/programming/SKILL.md` owns implementation completion, bounded delegation, code comments, and reuse guidance.
+- `skills/programming/SKILL.md` also owns focused development-time debug logging for agent and human inspection. Persistent instrumentation uses `telemetry`; temporary local probes do not require its full workflow.
 - `skills/programming/references/principles/principle-test-behavior-not-implementation.md` owns test quality, user-confirmed seams, and the explicit TDD loop.
 - `skills/programming/systematic-debugging/guide.md` owns diagnosis.
 - `skills/programming/SKILL.md` owns risk-proportional check selection and evidence reuse. Task workflows define the observation that establishes completion.
 - `skills/programming/references/architecture/architecture-planning.md` owns ADR guidance. Follow repository conventions and preserve superseded decisions as history.
-- `skills/programming/references/workflows/git-and-releases.md` owns branch, commit, PR, merge, and release conventions. Load it for that work, not for every code edit.
+- `skills/git-and-releases/SKILL.md` owns branch, commit, PR, merge, and release conventions, stacked-PR planning, and requested worktree cleanup. Load it for that work, not for every code edit.
 - `skills/engineering/data-structure-audit/SKILL.md` owns requested complete data-structure audits. It is a standalone skill in a discoverable group, not nested inside another skill.
 
 The `diagnosing-bugs` skill routes to the diagnosis reference; test-first work uses the test-behavior principle without a separate skill invocation.
 Current workflows use the shared check-selection guidance.
 Keep shared rules in their owner instead of duplicate workflow checklists.
 Platform guides retain runner APIs and domain-specific examples.
-Git and PR skills use the same verification owner. They retain authorization and operation safety without extra test gates, independent completion reviews, or automatic review loops.
+Git and PR skills use the same verification owner. Stack planning adds dependency, ownership, and handoff guidance without fixed agent counts, orchestration tools, or extra verification gates.
+`skills/resolve-pr-comments/references/review-triage.md` owns the evidence-based rubric for human and automated feedback. Invoking feedback resolution includes assessment and babysitting after authorized fixes are committed and pushed, without a separate watch request. Assessment-only requests remain bounded, and opening a PR alone does not invoke monitoring. Monitoring readiness is defined by PR state, not a particular watcher's verdict names.
+For CI-service billing, quota, or runner outages, `resolve-pr-comments` uses local checks appropriate to the changed contract and reports unavailable remote checks. Exact CI environment reconstruction and paid CI recovery are not required. Material environment differences and unavailable checks remain explicit validation gaps. Local validation does not override forge merge requirements.
 
 `docs-list` is an optional index of existing documentation summaries and `read_when` hints from frontmatter.
 Use it to find relevant guidance, not to require a documentation sweep before each edit.
@@ -49,14 +52,16 @@ Migrate Callers Then Delete Legacy APIs is a named rule in `references/refactori
 Fix Root Causes is a named rule in `systematic-debugging/guide.md`.
 These names use the existing procedures rather than duplicate them in separate principle files.
 Guard the Context Window lives in `references/execution/`, separate from design principles.
-Laziness Protocol uses the shared refactor contract.
+Minimize Reader Load owns indirection and simplification guidance without file-count thresholds.
 Outcome-Oriented Execution uses the shared completion guidance and the refactor contract.
+Completion evidence matches the changed contract and explicit user requests. Static checks, unit tests, runtime checks, and artifact inspection are valid when they establish that contract.
 Keep the adapted rules in their shared owners rather than duplicate active workflow checklists.
 
 ## Shared workflows
 
 `programming` routes by the requested deliverable.
-Shared workflows do not require Poteto mode, mandatory delegation, fixed agent panels, or automatic PR creation.
+Shared workflows do not require Poteto mode or automatic PR creation.
+Design exploration and delegation follow the triggers in `programming` and the referenced skills.
 
 | Workflow | Owner |
 | --- | --- |
@@ -78,7 +83,8 @@ Live diagnostics require explicit authority for code injection or shared-state m
 Poteto mode is preserved unchanged under `skills_archive/poteto-mode/`.
 Its companion agent definition is archived under `agents-archive/poteto-agent.md`.
 Active workflows use the shared owners above instead of loading the archived mode.
-Cross-function changes do not require design panels, delegated implementation, or repeated review by themselves.
+Unresolved module-interface decisions route through `codebase-design`. Exhaust the Design Space applies when consequential choices have viable alternatives and no established answer.
+Ordinary function-boundary changes do not require parallel exploration, delegated implementation, or repeated review.
 
 ## Review and diagnosis cost
 
@@ -92,7 +98,8 @@ An explicit request to apply findings changes the task to implementation without
 Reserve the animation advisor for audits and roadmaps, not ordinary animation changes.
 
 The Rust entrypoint routes by category instead of loading the complete rule catalog.
-Routine prose uses the global voice rules. The full style catalog applies to substantial revision or explicit style review.
+Routine prose uses the global voice rules. The full style catalog applies to substantial revision, explicit style review, or pre-PR cleanup.
+`skills/git-and-releases/references/opening-a-pr.md` owns the pre-PR cleanup sequence. Its passes cover code complexity, comments, technical accuracy and reviewer context, then prose cleanup. Cheaper capable reviewers can share context across passes. The coordinator inspects edits, and unchanged passes are not repeated merely for a handoff.
 SSH diagnosis remains read-only. Service changes require authorized repair and checks for active sessions.
 
 ## Existing test cleanup
@@ -148,4 +155,4 @@ These skill directories retain their original files under the corresponding grou
 `wayfinder`, `to-spec`, `to-tickets`, `triage`, and `teach` remain active.
 Wayfinder assigns source research directly rather than invokes the archived `research` skill.
 `technical-writing` retains explicit invocation and routes document-type guidance to a separate reference.
-Its root owns technical accuracy and document scope without a duplicate global prose standard.
+Its root owns technical accuracy, terminology, reader context, and document scope, including the PR and commit text pass. `unslop` owns prose cleanup without duplicating the global prose standard.

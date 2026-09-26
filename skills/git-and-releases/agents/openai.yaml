@@ -1,0 +1,4 @@
+interface:
+  display_name: "Git and Releases"
+  short_description: "Prepare PRs, stack plans, releases, and safe cleanup"
+  default_prompt: "Use $git-and-releases for the requested git, PR, stack-plan, release, or worktree task. Follow repository policies and authorization boundaries."
