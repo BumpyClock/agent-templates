@@ -47,7 +47,7 @@ Use a flat, restrained composition that serves the content. Give the main findin
 
 Define a small palette with CSS custom properties for background, surface, text, muted text, borders, and accent. Use neutral colors for most content, accent for emphasis, and consistent semantic colors across charts. Do not rely on color alone to convey meaning.
 
-Avoid decorative gradients, emoji icons, box shadows, rainbow coloring, oversized display text, and decorative colored borders. Honor an explicit user-supplied visual style over these defaults. Keep text readable, contrast sufficient, and tables usable on narrow screens, with local horizontal scrolling when necessary.
+Avoid decorative gradients, emoji icons, box shadows, rainbow coloring, oversized display text, and decorative colored borders. Honor an explicit user-supplied visual style over these defaults. Keep text readable and contrast sufficient. Check chart labels at their actual rendered size: shrinking an SVG to fit a narrow column also shrinks its text. Reflow charts or use local horizontal scrolling instead of making labels illegible; keep wide tables locally scrollable too.
 
 ## Verify and hand off
 
