@@ -1,6 +1,6 @@
 ---
 name: programming
-description: "Implement, debug, refactor, or test code; review code designs."
+description: "Use when coding. Implement, debug, refactor; review code designs."
 ---
 
 
