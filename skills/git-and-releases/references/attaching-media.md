@@ -59,4 +59,3 @@ printf '%s\n\n![%s](%s)\n' "$BODY" "$NAME" "$URL" |
 ```
 
 Use `![alt text](url)` for images. Put a video URL on its own line so GitHub can render its player, or use a plain markdown link when that reads better. Set `MIME` to the file's actual media type, such as `video/mp4`. Never use multipart forms, base64, or JSON wrappers for the upload, and do not proceed unless the response contains a validated `https://` URL.
-

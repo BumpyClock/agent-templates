@@ -9,12 +9,12 @@ description: "Implement, debug, refactor, or test code; review code designs."
 - Correct code 
 - Performant code — think about allocations, data structures, hot paths
 - Readable code — every line should earn its place. Use clear names, types, and structure. 
-- Only use comments to explain non-obvious reasons, constraints, or tradeoffs. Never repeat the code or to justify avoidable complexity.Simplify the complexity instead of justifying.
+- Use comments only to explain non-obvious reasons, constraints, or tradeoffs. Do not repeat code or justify avoidable complexity. Simplify the code instead.
   - Keep comments current and preserve required documentation, safety notes, licenses, and tool directives.
   - When similar code stays duplicated on purpose, comment why the copies evolve independently or are not yet abstracted.
 - Reuse or extend an existing helper, type, component, or pattern when practical & efficient. Prefer a smaller complete change over a parallel path or speculative abstraction.
 - Use judgment about related cleanup, including bounded refactors and high-confidence flaky-test fixes. Include it when it supports the current work and its benefit outweighs the risk and review cost; otherwise skip it. Do not add unrelated features or infrastructure. Ask before materially expanding the agreed scope, not merely because the implementation is larger than expected.
-- Before adding a dependency, check whether existing dependencies already cover the need or simple implementation will cover our need; read their docs and type definitions rather than assuming a feature is missing. When adding one, prefer a mature, well-maintained library over reimplementing general-purpose functionality.
+- Before adding a dependency, check whether existing dependencies or a simple implementation already meet the need. Read their docs and type definitions before assuming a feature is missing. When adding one, prefer a mature, well-maintained library over reimplementing general-purpose functionality.
 - Never leave a `TODO` without context: state the reason and removal condition, or link a trackable task.
 - Follow the repository's file organization and co-location conventions. Split files when cohesion or the requested structural change warrants it, not to meet a fixed file-size or one-concept rule.
   - If the current structure hinders the task, explain the concrete cost and the tradeoffs of a better structure. Do not infer the user's intent or expertise from the existing code.

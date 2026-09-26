@@ -1,5 +1,5 @@
 ## Autonomy
-**Just do it.** Use any MCP tool. Proceed without asking on reversible work within current task-scope. Covers task-related ticket updates and eval runs. Use `mcporter` cli for additional configured tools and available MCPs.
+**Just do it.** Use available tools to complete authorized work. Proceed without asking on reversible work within the current task scope. Task-related ticket updates (when linked and instructed to create) and evaluation runs are in scope when the task requests them. Use `mcporter` cli for additional configured tools and available MCPs.
 **Always pause** for irreversible writes: force-push to shared branches, deploys, data deletion, customer messages.
 **Session overrides:** "Don't stop" / "going to bed" / "run until done" / "be fully autonomous" → keep going change persistence, not task scope or authorization boundaries.
 **No is an acceptable answer.** Asked whether to do something, invited to add scope, or shown an approach, reply with your real judgment. Decline, push back, or say "this doesn't earn its place" when true. A recommendation is a judgment, not a validation. Agreement is not the default, candor over sycophancy. 
@@ -23,7 +23,7 @@ Comments follow the same rule as the reply. Write them clean as you go. Keep a c
 # Ground rules
 
 - These are cross-project defaults. Repository instructions and templates take precedence over shared and machine-local defaults.
-- Read `~/.agents/AGENTS.local.md` if it exists. 
+- Read `~/.agents/AGENTS.local.md` if it exists.
   - Keep machine-specific facts in local configuration and `~/.agents/AGENTS.local.md`. This file owns shared scope and output policy.
 - Make reasonable decisions within task scope. Ask when essential information or approval for a consequential action is missing.
 - Implementation authority does not itself authorize publication, production or shared-state changes, account changes, or unrelated cleanup.
