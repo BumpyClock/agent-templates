@@ -1,33 +1,34 @@
 # Review triage
 
-Assess each claim against the current PR head and repository requirements.
-Reviewer identity and repeated comments do not establish correctness.
+Assess human and automated claims against the current PR head, supported contracts, and the user's goal.
+Reviewer identity, repeated comments, and review pass count do not establish correctness.
 
 | Decision | Basis |
 | --- | --- |
-| `fix` | Evidence supports a correction within the user's authorized scope. |
-| `dismiss` | Evidence shows the claim is false, already addressed, an optional or out-of-scope suggestion not needed for the user's goal, or explicitly deferred by the owner. |
-| `ask` | A material decision requires user intent, new authority, or evidence that the agent cannot obtain. |
+| `fix` | Evidence supports a correction within the authorized scope. |
+| `dismiss` | Evidence shows the claim is false, already addressed, or a suggestion that does not warrant changing this PR. |
+| `ask` | A material decision requires user intent, new authority, or evidence the agent cannot obtain. |
 
-Investigate uncertainty before you ask the user.
-Distinguish a verified defect from a preference or a proposed scope change.
-A pre-existing defect can still matter if the PR exposes or worsens it.
-Do not dismiss a verified in-scope defect merely because it is inconvenient to fix.
+Investigate uncertainty before asking. Novelty alone is not a reason to ask.
+Distinguish defects from preferences and scope changes. A pre-existing defect can matter if the PR exposes or worsens it.
+Report verified defects outside the repair scope without treating them as false positives.
+Keep unresolved risk open, especially for security, privacy, data integrity, or migration claims.
+An earlier dismissal in the same area is not evidence that a new finding is harmless.
 
-Support each decision with applicable code, a contract, a test result, or a commit.
-Explain why a false positive or suggestion will not be addressed before resolving it.
-Reuse valid evidence for the same revision and behavior.
-For stale claims, check whether the exact concern still applies.
-An outdated comment marker alone does not establish a fix.
-If the concern is already fixed on the PR head, reply with evidence and resolve the thread.
-Keep unresolved risk open.
+## Evidence that changes the decision
 
-For stacked PRs, identify the lowest unmerged PR that owns the defect.
-If that PR has merged, respect the active workflow's scope for a separate fix.
-Never rewrite merged history to address a review comment.
+- Check stale findings against the current implementation. An outdated marker or withdrawn comment is not proof of a fix. For a claimed missing guard, verify that it protects the relevant principal before the side effect.
+- Verify usage across the relevant stack before dismissing an unused-code claim. Do not assume a future consumer exists or ignore a public API contract.
+- An intentional visual change can explain a changed default. It does not by itself answer accessibility, focus, or keyboard-behavior concerns.
+- For manual replacements of native UI behavior, compare input handling, hit-testing, and update timing rather than assuming visual equivalence preserves behavior.
+- A framework or type invariant can disprove a warning when it actually enforces the claimed guarantee. Trace timing and state changes when that guarantee could be lost across a boundary.
+- Temporary duplication or owner-deferred cleanup can be reasonable. Confirm the scope and removal plan; do not use them to excuse a new regression.
+- When a suggested fallback broadens an error condition, check whether it conflates a missing dependency with a failed operation and masks the original error.
 
-## Record reusable patterns
+For a claim that an existing test fails, run the relevant test on the PR head and inspect the result.
+A failure supports the claim only when it fails for the cited reason.
+A passing test does not disprove missing coverage or semantic drift. Compare the assertions with the required behavior when coverage is the disputed point.
+Reuse applicable evidence instead of repeating a run solely because another reviewer raised the same claim.
 
-Keep repository-specific lessons with that repository.
-Propose a shared rule only when repeated evidence establishes a useful decision boundary.
-Do not turn individual dismissals into a catalog of universal exceptions.
+Keep project-specific lessons with that project.
+Promote a shared rule only when repeated evidence establishes a useful decision boundary, not a catalog of past dismissals.

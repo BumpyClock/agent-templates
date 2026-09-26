@@ -1,21 +1,4 @@
-# Git and releases
-
-Use for commit or PR preparation, an authorized merge, or release preparation.
-Follow repository templates and policies before these defaults.
-This guide defines conventions, not permission to commit, publish, merge, or release.
-
-## Branches and change descriptions
-
-- Use short, descriptive branch names such as `fix/issue-123` or `feat/session-cache`.
-- Use `type(scope): subject` for PR titles and commit subjects. Choose `feat`, `fix`, `docs`, `refactor`, `test`, `chore`, or `perf`; name the affected area in the scope.
-- Write a short, imperative subject without a final period.
-- Explain the problem and reason for the change before implementation details. Name concrete behavior, relevant symbols, compatibility changes, and material decisions.
-- Use `Why`, `Scope`, `Tradeoffs`, `Blast Radius`, and `Verification` sections when useful, not as a required template. Omit empty sections and boilerplate.
-- State relevant validation commands and results, plus material checks omitted and why. Reuse evidence under the [shared validation guidance](../../SKILL.md#validation); preparing a commit or PR does not add a test gate.
-- Include screenshots or videos for user-visible changes when they substantiate a claim or improve reviewability. When asked to attach local media to a PR description or comment, follow [Attaching media to a pull request](#attaching-media-to-a-pull-request).
-- Keep commit bodies focused on rationale that the subject and diff do not explain.
-
-## Attaching media to a pull request
+# Attaching media to a pull request
 
 Use GitHub's user-attachments API when a screenshot, diagram, or short recording genuinely improves reviewer understanding. This procedure uploads a local file and submits the resulting URL to the requested PR; generating markdown without updating the PR is incomplete.
 
@@ -77,11 +60,3 @@ printf '%s\n\n![%s](%s)\n' "$BODY" "$NAME" "$URL" |
 
 Use `![alt text](url)` for images. Put a video URL on its own line so GitHub can render its player, or use a plain markdown link when that reads better. Set `MIME` to the file's actual media type, such as `video/mp4`. Never use multipart forms, base64, or JSON wrappers for the upload, and do not proceed unless the response contains a validated `https://` URL.
 
-## Merges and releases
-
-For authorized merges, follow the repository's merge policy. Do not infer squash, merge-commit, or rebase strategy from the target branch name. If no policy is available and the strategy affects history or a stacked change, ask before merging.
-
-For release preparation, follow the repository's release checklist.
-Read `docs/RELEASING.md` when present; otherwise, locate the applicable instructions.
-Create a missing checklist only when it is necessary for the requested release work.
-Stop at the requested deliverable without inferring permission to publish or deploy.

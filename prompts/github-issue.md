@@ -31,7 +31,7 @@ If you're in plan mode create a comprehensive plan to resolve the issue.
 
 To fix the issue, create a branch named `fix/issue-<ISSUE_NUMBER>` from the repository's base branch.
 Use the `programming` skill for the fix.
-For authorized PR creation, follow [Git and release conventions](../skills/programming/references/workflows/git-and-releases.md).
+For authorized PR creation, follow [Git and release conventions](../skills/git-and-releases/SKILL.md).
 Reference the issue in the PR description.
 
 Ensure all changes are tested thoroughly and there are no linting and formatting issues before creating the PR. 
