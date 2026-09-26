@@ -13,7 +13,7 @@ An assessment-only or one-time status request ends with the assessment. Opening 
 ## Assess and correct
 
 - Establish whether the request covers one PR or a stack, and whether it asks for a status check, feedback resolution, or ongoing monitoring.
-- Fetch feedback and replies, including summary comments within scope. Use `origin pr` when available and able to resolve the repository; otherwise use `gh` or an available GitHub integration. Keep the forge choice consistent.
+- Fetch feedback and replies, including summary comments within scope. Use `pr-comments` cli when available and able to resolve the repository; otherwise use `gh` or an available GitHub integration. Keep the forge choice consistent.
 - Associate each distinct claim with its thread or comment ID and current head SHA. Apply authorized fixes on the branch that owns the defect.
 - Commit and push only when publication is authorized. For a fix reply, cite the published commit. Leave local-only fixes unresolved until publication.
 - Reply with the decision and evidence before resolving a thread. Resolve only when every claim has a completed fix or supported dismissal. Report comments without resolvable thread IDs separately.
