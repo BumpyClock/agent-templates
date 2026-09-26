@@ -6,6 +6,7 @@ AI agent configurations, prompts, skills, and personalities for:
 - GitHub Copilot
 - OpenCode
 - Pi
+- Cursor
 
 ## Quick Start
 
@@ -48,6 +49,7 @@ The `link-agent-templates.ts` script creates symlinks from this repo to the appr
 - **Copilot**: `~/.copilot/prompts`, `~/.copilot/skills`, etc.
 - **OpenCode**: `~/.config/opencode/...`
 - **Pi**: `~/.pi/agent/...`
+- **Cursor**: `~/.cursor/skills` (one symlink per skill, same flat layout as Claude). This is the user-level directory Cursor loads and syncs to Cloud Agents.
 
 ## Platform Support
 

@@ -20,7 +20,7 @@ This repo (`agent-templates`) holds AI agent configurations — prompts, skills,
 
 - **Add a skill/prompt**: drop it in the right directory and re-run the linker. No build step for plain markdown.
 - **Add an agent**: author under `agent-templates/`, then compile with `bun run agent-templates/scripts/compile-agents.ts` to regenerate `dist/`.
-- **Re-link after changes**: `bun scripts/link-agent-templates/link-agent-templates.ts --setup all` (or `--setup claude|codex|copilot|opencode|pi`).
+- **Re-link after changes**: `bun scripts/link-agent-templates/link-agent-templates.ts --setup all` (or `--setup claude|codex|copilot|opencode|pi|cursor`).
 - **Edit global rules**: change `defaults/AGENTS.md` — that file is the source of truth linked into every tool. Do not put tool-specific rules there.
 - **Edit cross-machine local rules**: change the baseline in the secrets repo (`<secrets>/AGENTS.local.md`) and commit it there. New machines pick it up on first link; existing machines keep their already-seeded copy (delete + re-link to refresh).
 - **Edit this-machine-only rules**: edit `defaults/AGENTS.local.md` directly. It's gitignored and never re-seeded once present.

@@ -69,7 +69,7 @@ fi
 SETUP_MODE="${1:-all}"
 
 # Validate setup mode
-VALID_MODES=("claude" "codex" "copilot" "opencode" "pi" "all")
+VALID_MODES=("claude" "codex" "copilot" "opencode" "pi" "cursor" "all")
 if [[ ! " ${VALID_MODES[@]} " =~ " ${SETUP_MODE} " ]]; then
     log_error "Invalid setup mode: $SETUP_MODE"
     echo "Valid modes: ${VALID_MODES[*]}"

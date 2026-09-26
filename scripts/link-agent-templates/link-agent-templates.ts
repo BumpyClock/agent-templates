@@ -14,7 +14,14 @@ import os from "node:os";
 import path from "node:path";
 import readline from "node:readline/promises";
 
-type AgentTool = "claude" | "codex" | "copilot" | "opencode" | "pi" | "all";
+type AgentTool =
+	| "claude"
+	| "codex"
+	| "copilot"
+	| "opencode"
+	| "pi"
+	| "cursor"
+	| "all";
 
 type CliOptions = {
 	agentTemplatesDir: string;
@@ -83,12 +90,18 @@ function parseArgs(argv: string[]): CliOptions {
 			const value = argv[i + 1] as AgentTool;
 			if (
 				!value ||
-				!["claude", "codex", "copilot", "opencode", "pi", "all"].includes(
-					value,
-				)
+				![
+					"claude",
+					"codex",
+					"copilot",
+					"opencode",
+					"pi",
+					"cursor",
+					"all",
+				].includes(value)
 			) {
 				throw new Error(
-					"--setup must be one of: claude, codex, copilot, opencode, pi, all",
+					"--setup must be one of: claude, codex, copilot, opencode, pi, cursor, all",
 				);
 			}
 			setupMode = value;
@@ -639,6 +652,26 @@ async function linkPi(agentTemplatesDir: string): Promise<void> {
 }
 
 // =============================================================================
+// Cursor linking
+// =============================================================================
+
+// User skills are ~/.cursor/skills/<name>/SKILL.md. That directory is the one
+// Cursor syncs to Cloud Agents. ~/.agents/skills is also read locally, but it
+// stays on this machine. Flat links keep grouped skills (skills/<group>/<name>)
+// visible, since the skill name is the folder that contains SKILL.md.
+async function linkCursor(agentTemplatesDir: string): Promise<void> {
+	info("Linking Cursor agent templates...");
+
+	const cursorRoot = homePath(".cursor");
+	await mkdir(cursorRoot, { recursive: true });
+
+	await linkSkillsFlat(
+		path.join(agentTemplatesDir, "skills"),
+		path.join(cursorRoot, "skills"),
+	);
+}
+
+// =============================================================================
 // Generic .agents linking (shared personalities and prompts)
 // =============================================================================
 
@@ -801,6 +834,10 @@ async function main(): Promise<void> {
 
 	if (mode === "pi" || mode === "all") {
 		await linkPi(options.agentTemplatesDir);
+	}
+
+	if (mode === "cursor" || mode === "all") {
+		await linkCursor(options.agentTemplatesDir);
 	}
 
 	if (mode === "all") {

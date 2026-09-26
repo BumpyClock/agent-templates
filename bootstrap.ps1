@@ -4,7 +4,7 @@
 [CmdletBinding()]
 param(
     [Parameter(Position = 0)]
-    [ValidateSet("claude", "codex", "copilot", "opencode", "pi", "all")]
+    [ValidateSet("claude", "codex", "copilot", "opencode", "pi", "cursor", "all")]
     [string]$SetupMode = "all",
 
     # Skip interactive prompts in the linker (for non-interactive/CI runs)
