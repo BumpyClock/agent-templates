@@ -1,31 +1,31 @@
 # Instruction design
 
-This reference explains editorial tradeoffs. Use the [root checklist](../SKILL.md) for routine edits.
+This reference explains editorial tradeoffs. For routine edits, use the [root checklist](../SKILL.md).
 
-Use this reference for skills, `AGENTS.md` / `CLAUDE.md`, and linked guidance. Aim for contract-complete results within the user's scope, not the same process on every task. Preserve an ordered procedure where causal correctness, safety, or reproducibility depends on that order.
+It applies to skills, `AGENTS.md`, `CLAUDE.md`, and linked guidance. Aim for results that meet the full contract within the user's scope. Do not run the same process on every task. Keep an ordered procedure when correctness, safety, or reproducibility depends on the order.
 
-When the document you're writing is a skill, read [`SKILL-MECHANICS.md`](../SKILL-MECHANICS.md) for frontmatter, invocation choice, and router skills.
+For skill frontmatter, invocation choices, and router skills, read [`SKILL-MECHANICS.md`](../SKILL-MECHANICS.md).
 
-Use the repository's concise voice rules for routine edits. Read `unslop` or `technical-writing` only for substantial prose revision or explicit style review.
+For wording and token cost, use [Concise wording](concise-wording.md). Read `unslop` or `technical-writing` only for substantial prose revision or explicit style review.
 
 ## Context pointers
 
-A **context pointer** names linked material and the condition for reading it. A skill description and an `AGENTS.md` reference both guide discovery, but actual skill invocation also depends on the host. If needed material is missed, inspect the pointer, target, and available loading mechanism before adding more instructions.
+A **context pointer** names linked material and the condition for reading it. Skill descriptions and `AGENTS.md` references both guide discovery. Actual skill invocation also depends on the host. When an agent misses needed material, inspect the pointer, the target, and the loading mechanism. Do this before adding more instructions.
 
-A pointer should identify the material and the specific decision or workflow that needs it:
+A pointer names the material and the decision or workflow that needs it:
 
-- Front-load the task, not a broad subject area or a list of loosely related requests.
-- Distinguish genuinely different routes without repeating synonyms for the same route.
-- Keep essential scope visible even if a host shortens the description. Put route-specific detail in the body.
+- Put the task first. Do not lead with a broad subject area or a list of loosely related requests.
+- Separate genuinely different routes. Do not repeat synonyms for one route.
+- Keep essential scope visible if a host shortens the description. Put route-specific detail in the body.
 
 ## The two loads
 
-Consider both context cost and discovery effort:
+Weigh both context cost and discovery effort:
 
-- **Context load** is the material a host exposes to the model, including metadata and any documents it loads. Exposure and retention depend on the host, not just the document's location.
-- **Discovery effort** is the work of finding the right guidance. Explicit invocation can preserve deliberate user choice, but requiring the user to remember many unrelated commands also has a cost.
+- **Context load** is the material a host exposes to the model, including metadata and loaded documents. The host decides exposure and retention. Document location alone does not.
+- **Discovery effort** is the work of finding the right guidance. Explicit invocation preserves deliberate user choice. Making users remember many unrelated commands also has a cost.
 
-Progressive disclosure can avoid loading irrelevant detail. Referenced material still consumes context when read; a link is not a guarantee of zero cost or reliable discovery.
+Progressive disclosure avoids loading irrelevant detail. Referenced material still consumes context when read. A link does not guarantee zero cost or reliable discovery.
 
 ## Information hierarchy
 
@@ -33,56 +33,62 @@ Separate shared decisions from task-specific detail:
 
 - Keep purpose, activation, authorization boundaries, and completion conditions in the root.
 - Keep a short procedure or reference inline when the selected task needs it.
-- Move substantial conditional detail behind a link that states when it is needed.
+- Move substantial conditional detail behind a link. State when the link is needed.
 
-Preserve useful examples, scripts, compatibility details, and pitfalls. A short, single-purpose document does not need more files.
+Keep useful examples, scripts, compatibility details, and pitfalls. A short, single-purpose document needs no extra files.
 
-**Co-location** keeps a concept's definition, conditions, and caveats together. Avoid scattering one rule across sections or moving its exception somewhere readers are unlikely to find.
+**Co-location** keeps a concept's definition, conditions, and caveats together. Do not scatter one rule across sections. Do not move an exception to a place readers are unlikely to look.
 
-If a root covers several workflows, use a minimal router. Split along the different tasks and their reference needs, rather than an arbitrary line count.
+If a root covers several workflows, use a minimal router. Split by task and reference need, not by line count.
 
 ## Steps and completion criteria
 
-Define what must be true at completion, the relevant evidence, and the scope that bounds the work. Criteria should cover the requested contract without requiring exhaustive investigation of unrelated concerns.
+Define the completion state, the evidence, and the scope that bounds the work. Criteria cover the requested contract. They do not require exhaustive investigation of unrelated concerns.
 
-- Prefer an observable result over an artifact proxy. A change list does not establish that the requested behavior works.
-- Permit safe, in-scope corrections until the result meets its acceptance criteria. The first plausible answer is not necessarily completion.
-- Stop when the requested result is supported and no material in-scope issue remains. Broaden or repeat investigation only for new evidence, a failure, or an unresolved concern.
-- If a required result cannot be established within scope, report the specific blocker and verification limit instead of claiming success or exploring indefinitely.
+- Prefer an observable result over an artifact proxy. A change list does not prove that the requested behavior works.
+- Allow safe, in-scope corrections until the result meets its acceptance criteria. The first plausible answer is not necessarily complete.
+- Stop when evidence supports the requested result and no material in-scope issue remains. Broaden or repeat investigation only for new evidence, a failure, or an unresolved concern.
+- If you cannot establish a required result within scope, report the specific blocker and verification limit. Do not claim success or explore indefinitely.
 
-Specify a sequence only where its order matters. For example, reproducing a failure before a change may preserve diagnostic evidence; a fixed number of search, planning, or review rounds usually does not establish correctness.
+Specify a sequence only where order matters. For example, reproducing a failure before a change can preserve diagnostic evidence. A fixed number of search, planning, or review rounds usually does not establish correctness.
 
 ## When to split
 
 Split when the boundary helps the task:
 
-- **By workflow or reference need:** separate material that only a selected route needs.
-- **By causal dependency:** retain required prerequisites and handoff conditions when correctness, safety, or reproducibility depends on them.
-- **By invocation:** create independently discoverable skills only when independent selection is useful. See [`SKILL-MECHANICS.md`](../SKILL-MECHANICS.md).
+- **By workflow or reference need.** Separate material that only one route needs.
+- **By causal dependency.** Keep required prerequisites and handoff conditions when correctness, safety, or reproducibility depends on them.
+- **By invocation.** Create independently discoverable skills only when independent selection is useful. See [`SKILL-MECHANICS.md`](../SKILL-MECHANICS.md).
 
-Do not require a subagent or hidden later steps merely to induce more thinking. Claims that context isolation improves task outcomes need evidence, not a prescribed agent count.
+Do not require a subagent or hidden later steps only to induce more thinking. A claim that context isolation improves task outcomes needs evidence. A prescribed agent count is not evidence.
 
 ## Terminology and cognitive hypotheses
 
-Use consistent, established terms when they preserve the intended distinctions. A compact term can reduce repetition, but define it when its meaning is not shared. Do not replace precise conditions such as "fast, deterministic, low-overhead" with an ambiguous label such as "tight."
+Use consistent, established terms that preserve the intended distinctions. A compact term can reduce repetition. Define it when readers do not share its meaning. Do not replace precise conditions such as "fast, deterministic, low-overhead" with an ambiguous label such as "tight."
 
-A term such as "red" is useful when it names an observable state, such as a relevant test failing for the expected reason. It is not a substitute for defining that state.
+A term such as "red" is useful when it names an observable state, such as a relevant test failing for the expected reason. The term does not replace a definition of that state.
 
-Claims that leading words recruit particular model priors, that repetition guarantees behavior, or that negation makes a prohibited action more likely are hypotheses unless supported by relevant evidence. Do not turn those explanations into universal authoring rules.
+Treat these claims as hypotheses unless relevant evidence supports them:
 
-State required actions and prohibitions directly. Add a positive alternative when it clarifies what is permitted; keep necessary negative constraints rather than weakening them to avoid a supposed cognitive effect.
+- Leading words recruit particular model priors.
+- Repetition guarantees behavior.
+- Negation makes a prohibited action more likely.
+
+Do not turn these hypotheses into universal authoring rules.
+
+State required actions and prohibitions directly. Add a positive alternative when it clarifies what is permitted. Keep necessary negative constraints. Do not weaken them to avoid a supposed cognitive effect.
 
 ## Pruning
 
-- Keep each policy in its owning document. Use a pointer rather than copying a rule into several places.
-- Prefer current environment evidence for discoverable settings, commands, and interfaces. Preserve conventions, reasons, and pitfalls that the environment does not explain. See [Encode Lessons in Structure](../../../programming/references/principles/principle-encode-lessons-in-structure.md).
-- Remove generic reminders or redundant material when they change no useful decision or have equivalent coverage in a reachable maintained reference.
-- Do not treat model familiarity as evidence that technical knowledge is redundant. Preserve useful examples, scripts, and boundary conditions.
-- When technical value or correctness remains uncertain, retain the material conditionally and state the uncertainty until evidence supports correction or removal.
-- Replace vague demands for more effort with the missing outcome, evidence, or stop condition. Stronger adjectives do not establish a better workflow.
+- Keep each policy in its owning document. Point to it instead of copying the rule.
+- Prefer current environment evidence for discoverable settings, commands, and interfaces. Keep conventions, reasons, and pitfalls that the environment does not explain. See [Encode Lessons in Structure](../../../programming/references/principles/principle-encode-lessons-in-structure.md).
+- Remove generic reminders and redundant material that change no useful decision. Also remove material that a reachable maintained reference already covers.
+- Model familiarity does not make technical knowledge redundant. Keep useful examples, scripts, and boundary conditions.
+- When technical value or correctness is uncertain, keep the material conditionally. State the uncertainty until evidence supports correction or removal.
+- Replace vague demands for more effort with the missing outcome, evidence, or stop condition. Stronger adjectives do not produce a better workflow.
 
 ## Evidence
 
-Distinguish source review, static checks, and measured task behavior. Assess task correctness, scope, unnecessary work, and retained knowledge rather than prompt recitation or adjective strength.
+Separate source review, static checks, and measured task behavior. Assess task correctness, scope, unnecessary work, and retained knowledge. Do not assess prompt recitation or adjective strength.
 
-An editorial improvement or a successful link check does not demonstrate better model performance. Preserve guidance that remains useful across supported models; do not generalize a model-specific result without evidence.
+An editorial improvement or a passing link check does not show better model performance. Keep guidance that stays useful across supported models. Do not generalize a model-specific result without evidence.

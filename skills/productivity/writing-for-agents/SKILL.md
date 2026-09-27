@@ -5,29 +5,26 @@ description: Create or revise agent instructions in skills, AGENTS.md, or CLAUDE
 
 # Writing for Agents
 
-Write instructions that change useful decisions without prescribing a process for every task.
+Write instructions that change useful decisions. Do not prescribe a process for every task.
 
 ## Checklist
 
 - State the purpose, activation condition, and completion condition.
 - Preserve user intent, project constraints, and authorization boundaries.
 - Keep non-obvious rules that prevent a concrete failure.
-- Remove generic reminders and duplicate rules already owned elsewhere.
-- Before adding a rule, identify the decision it should change and a case where it should not apply.
-- Revise the section that owns the decision instead of appending an overlapping exception.
-- Place conditional procedures behind links with explicit activation conditions.
-- Use project terms consistently without replacing valid domain vocabulary.
+- Remove generic reminders. Remove rules that another document already owns.
+- Before adding a rule, name the decision it changes and one case where it does not apply.
+- Revise the section that owns the decision. Do not append an overlapping exception elsewhere.
+- Put conditional procedures behind links. State when to read each link.
+- Use project terms consistently. Keep valid domain vocabulary.
 - Prefer observable outcomes over required artifacts, agent counts, or fixed sequences.
+- Word every edit by [Concise wording](references/concise-wording.md). Cut words only where meaning stays exact.
 
-Keep the root document small enough to expose its decisions.
-A short, single-purpose document does not need more files.
-Preserve useful examples and scripts when their replacement would require repeated work.
+Keep the root document small enough to show its decisions. A short, single-purpose document needs no extra files. Keep useful examples and scripts when replacing them would require repeated work.
 
 ## Shared execution defaults
 
-For behavior changes to shared execution defaults, select applicable cases below to define acceptance criteria.
-Assess task outcomes, unnecessary work, authorization, and response usefulness rather than prompt recitation or mechanical compliance.
-These cases define expected outcomes, not measured results.
+When changing shared execution defaults, pick the applicable cases below as acceptance criteria. Judge task outcomes, unnecessary work, authorization, and response usefulness. Do not judge prompt recitation or mechanical compliance. These cases define expected outcomes, not measured results.
 
 | Task | Expected outcome |
 |---|---|
@@ -40,7 +37,7 @@ These cases define expected outcomes, not measured results.
 ## References
 
 - For skill frontmatter and invocation choices, read [Skill mechanics](SKILL-MECHANICS.md).
-- For a difficult choice about disclosure, pointers, or document structure, read [Instruction design](references/instruction-design.md).
+- For hard choices about disclosure, pointers, or document structure, read [Instruction design](references/instruction-design.md).
+- For word choice, compression limits, and sentence rules, read [Concise wording](references/concise-wording.md).
 
-Validate links and metadata after structural edits.
-Distinguish editorial judgment from measured model behavior.
+After structural edits, validate links and metadata. Separate editorial judgment from measured model behavior.
