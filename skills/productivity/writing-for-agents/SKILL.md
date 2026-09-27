@@ -18,7 +18,7 @@ Write instructions that change useful decisions. Do not prescribe a process for 
 - Put conditional procedures behind links. State when to read each link.
 - Use project terms consistently. Keep valid domain vocabulary.
 - Prefer observable outcomes over required artifacts, agent counts, or fixed sequences.
-- Word every edit by [Concise wording](references/concise-wording.md). Cut words only where meaning stays exact.
+- Apply [Concise wording](references/concise-wording.md) to every edit. Cut words only where meaning stays exact.
 
 Keep the root document small enough to show its decisions. A short, single-purpose document needs no extra files. Keep useful examples and scripts when replacing them would require repeated work.
 
@@ -38,6 +38,5 @@ When changing shared execution defaults, pick the applicable cases below as acce
 
 - For skill frontmatter and invocation choices, read [Skill mechanics](SKILL-MECHANICS.md).
 - For hard choices about disclosure, pointers, or document structure, read [Instruction design](references/instruction-design.md).
-- For word choice, compression limits, and sentence rules, read [Concise wording](references/concise-wording.md).
 
 After structural edits, validate links and metadata. Separate editorial judgment from measured model behavior.

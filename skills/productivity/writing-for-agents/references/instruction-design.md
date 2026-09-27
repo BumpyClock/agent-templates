@@ -2,7 +2,7 @@
 
 This reference explains editorial tradeoffs. For routine edits, use the [root checklist](../SKILL.md).
 
-It applies to skills, `AGENTS.md`, `CLAUDE.md`, and linked guidance. Aim for results that meet the full contract within the user's scope. Do not run the same process on every task. Keep an ordered procedure when correctness, safety, or reproducibility depends on the order.
+This reference applies to skills, `AGENTS.md`, `CLAUDE.md`, and linked guidance. Aim for results that meet the full contract within the user's scope. Do not run the same process on every task. Keep an ordered procedure when causal correctness, safety, or reproducibility depends on the order.
 
 For skill frontmatter, invocation choices, and router skills, read [`SKILL-MECHANICS.md`](../SKILL-MECHANICS.md).
 
@@ -12,7 +12,7 @@ For wording and token cost, use [Concise wording](concise-wording.md). Read `uns
 
 A **context pointer** names linked material and the condition for reading it. Skill descriptions and `AGENTS.md` references both guide discovery. Actual skill invocation also depends on the host. When an agent misses needed material, inspect the pointer, the target, and the loading mechanism. Do this before adding more instructions.
 
-A pointer names the material and the decision or workflow that needs it:
+A pointer names the material and the specific decision or workflow that needs it:
 
 - Put the task first. Do not lead with a broad subject area or a list of loosely related requests.
 - Separate genuinely different routes. Do not repeat synonyms for one route.
@@ -82,7 +82,7 @@ State required actions and prohibitions directly. Add a positive alternative whe
 
 - Keep each policy in its owning document. Point to it instead of copying the rule.
 - Prefer current environment evidence for discoverable settings, commands, and interfaces. Keep conventions, reasons, and pitfalls that the environment does not explain. See [Encode Lessons in Structure](../../../programming/references/principles/principle-encode-lessons-in-structure.md).
-- Remove generic reminders and redundant material that change no useful decision. Also remove material that a reachable maintained reference already covers.
+- Remove generic reminders and redundant material that change no useful decision. Also remove material that has equivalent coverage in a reachable maintained reference.
 - Model familiarity does not make technical knowledge redundant. Keep useful examples, scripts, and boundary conditions.
 - When technical value or correctness is uncertain, keep the material conditionally. State the uncertainty until evidence supports correction or removal.
 - Replace vague demands for more effort with the missing outcome, evidence, or stop condition. Stronger adjectives do not produce a better workflow.

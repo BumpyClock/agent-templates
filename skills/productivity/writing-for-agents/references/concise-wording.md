@@ -43,7 +43,7 @@ A useful line shape is the rule, then its reason, then its exception. For exampl
 
 ## Where full prose is required
 
-Write complete sentences with explicit connectives in these cases, even in a compact document:
+Keep explicit connectives such as "then", "because", and "unless" in these cases:
 
 - Security warnings and irreversible actions.
 - Ordered procedures where a missing conjunction could obscure the order. "Migrate table drop column backup first" is ambiguous. "Back up the table, then migrate it, then drop the column" is not.

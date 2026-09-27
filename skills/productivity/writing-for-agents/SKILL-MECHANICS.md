@@ -4,7 +4,7 @@ Use this reference for skill frontmatter, invocation choices, and routers. For r
 
 ## Invocation controls
 
-Implicit selection and explicit invocation are separate. A host can select a skill that matches a request. A user can invoke a skill by name. Controls and entry points differ by host.
+Separate implicit selection from explicit invocation. A host can select a skill that matches a request. A user can invoke a skill by name. Controls and entry points differ by host.
 
 | Host | Explicit-only control | Explicit invocation |
 | --- | --- | --- |
