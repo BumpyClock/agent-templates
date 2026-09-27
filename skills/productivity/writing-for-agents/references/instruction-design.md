@@ -16,16 +16,16 @@ A pointer names the material and the specific decision or workflow that needs it
 
 - Put the task first. Do not lead with a broad subject area or a list of loosely related requests.
 - Separate genuinely different routes. Do not repeat synonyms for one route.
-- Keep essential scope visible if a host shortens the description. Put route-specific detail in the body.
+- Keep essential scope visible even if a host shortens the description. Put route-specific detail in the body.
 
 ## The two loads
 
 Weigh both context cost and discovery effort:
 
 - **Context load** is the material a host exposes to the model, including metadata and loaded documents. The host decides exposure and retention. Document location alone does not.
-- **Discovery effort** is the work of finding the right guidance. Explicit invocation preserves deliberate user choice. Making users remember many unrelated commands also has a cost.
+- **Discovery effort** is the work of finding the right guidance. Explicit invocation can preserve deliberate user choice. Making users remember many unrelated commands also has a cost.
 
-Progressive disclosure avoids loading irrelevant detail. Referenced material still consumes context when read. A link does not guarantee zero cost or reliable discovery.
+Progressive disclosure can avoid loading irrelevant detail. Referenced material still consumes context when read. A link does not guarantee zero cost or reliable discovery.
 
 ## Information hierarchy
 
@@ -70,9 +70,9 @@ A term such as "red" is useful when it names an observable state, such as a rele
 
 Treat these claims as hypotheses unless relevant evidence supports them:
 
-- Leading words recruit particular model priors.
-- Repetition guarantees behavior.
-- Negation makes a prohibited action more likely.
+- The claim that leading words recruit particular model priors.
+- The claim that repetition guarantees behavior.
+- The claim that negation makes a prohibited action more likely.
 
 Do not turn these hypotheses into universal authoring rules.
 

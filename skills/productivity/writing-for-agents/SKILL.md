@@ -12,9 +12,9 @@ Write instructions that change useful decisions. Do not prescribe a process for 
 - State the purpose, activation condition, and completion condition.
 - Preserve user intent, project constraints, and authorization boundaries.
 - Keep non-obvious rules that prevent a concrete failure.
-- Remove generic reminders. Remove rules that another document already owns.
+- Remove generic reminders. Remove duplicate rules that another section or document already owns.
 - Before adding a rule, name the decision it changes and one case where it does not apply.
-- Revise the section that owns the decision. Do not append an overlapping exception elsewhere.
+- Revise the section that owns the decision. Do not append an overlapping exception.
 - Put conditional procedures behind links. State when to read each link.
 - Use project terms consistently. Keep valid domain vocabulary.
 - Prefer observable outcomes over required artifacts, agent counts, or fixed sequences.

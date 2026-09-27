@@ -28,14 +28,14 @@ Keep the `agents/openai.yaml` UI text and `default_prompt` consistent with the r
 
 ## Linked files and shared references
 
-Reading a linked file differs from invoking a skill through the host. Invocation flags do not control filesystem access. Within task authorization and available tools, an agent can read a reference inside another skill's directory.
+Reading a linked file differs from invoking a skill through the host's skill mechanism. Invocation flags do not control filesystem access. Within task authorization and available tools, an agent may read a reference inside another skill's directory.
 
-Keep shared technical knowledge in one maintained reference. Link it from the tasks that need it. Its directory does not need to become an implicitly invoked skill to make the file readable. Reading the file does not authorize running its workflow or bypassing an explicit-request boundary.
+Keep shared technical knowledge in a maintained reference. Link it from the tasks that need it. Its directory does not need to become an implicitly invoked skill to make the file readable. Reading the file does not authorize running its workflow or bypassing an explicit-request boundary.
 
 ## Routers and splitting
 
-Use a small router when one skill supports distinct workflows with different inputs, outputs, or reference needs. Keep common constraints in the root. Link each route's material from the router. A short, single-purpose skill does not need a router.
+Use a small router when one skill supports distinct workflows with different inputs, outputs, or reference needs. Keep common constraints in the root. Link each route's material so the agent reads only the selected route. A short, single-purpose skill does not need a router.
 
-Create a separate skill when a workflow needs independent discovery or invocation. A memorable trigger word alone is not a reason. A router can direct the agent to ordinary linked references. Whether a router can invoke another skill depends on the host's mechanism and the activation policy.
+Create a separate skill when a workflow needs independent discovery or invocation. A memorable trigger word alone is not a reason. A router can direct the agent to ordinary linked references. Whether a router can invoke another skill through a tool depends on the host's supported mechanism and the applicable activation policy.
 
-After changing activation or structure, check the host settings, description, default prompt, and local links. Separate a static metadata check from observed host behavior.
+After changing activation or structure, check the relevant host settings, description, default prompt, and local links. Separate a static metadata check from observed host behavior.
