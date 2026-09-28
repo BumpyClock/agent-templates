@@ -27,9 +27,7 @@ When relevant, check the integration paths that commonly drift:
 - A reused helper preserves the information and side effects required by the new caller.
 - Removing a producer does not silently remove the only source of a required effect.
 
-Delegate only when independent work warrants a separate context and has a clear acceptance condition.
-Give each delegate the owned paths, agreed data shape, and completion condition.
-Coordinate writes to shared artifacts under [shared-state guidance](../principles/principle-separate-before-serializing-shared-state.md).
+Use [Delegate After the Contract](../execution/principle-delegate-after-the-contract.md) when parts could run in separate contexts or on a less capable model.
 
 ## Limits
 

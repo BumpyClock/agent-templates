@@ -88,6 +88,7 @@ Report consequential choices and evidence, not a recital of principle names.
 **Execution**
 
 - [Guard the Context Window](references/execution/principle-guard-the-context-window.md) applies when retrieval or separate workstreams threaten useful context.
+- [Delegate After the Contract](references/execution/principle-delegate-after-the-contract.md) applies when work could run in separate contexts, in parallel, or on a less capable model.
 - [Never Block on the Human](references/principles/principle-never-block-on-the-human.md) guides reversible decisions within the authorized task.
 - [Encode Lessons in Structure](references/principles/principle-encode-lessons-in-structure.md) applies to recurring defects or corrections that reveal an unenforced invariant.
 

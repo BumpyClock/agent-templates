@@ -13,7 +13,7 @@ Reuse relevant context rather than repeat a read without a changed question or a
 Keep short templates used on every invocation in the root guide when separate files only add retrieval cost.
 Keep optional procedures behind references with explicit activation conditions.
 
-For independent work that needs substantial separate context, delegate a bounded question with an acceptance condition.
+For independent work that needs substantial separate context, delegate a bounded question with an acceptance condition. For how to split implementation work, see [Delegate After the Contract](principle-delegate-after-the-contract.md).
 Retain ownership of the result and inspect evidence that supports consequential claims.
 Before a phase transition or context reduction, preserve the contract, current state, evidence locations, and next action.
 
