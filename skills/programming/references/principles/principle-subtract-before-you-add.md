@@ -2,7 +2,7 @@
 
 ## Trigger
 
-An addition would extend obsolete structure, duplicate a decision, or require another adapter around an existing owner.
+An addition would extend obsolete structure, duplicate a decision, require another adapter around an existing owner, or defend a path that no caller reaches.
 
 ## Decision
 
@@ -17,7 +17,8 @@ For agent guidance, remove redundant rules and content-free stubs only when anot
 ## Limit
 
 Deletion is a means to the requested outcome, not a prerequisite for every task.
-Preserve valid public contracts, boundary checks, accessibility, and data-loss protections.
+Preserve valid public contracts, boundary checks, accessibility, and data-loss protections on reachable paths.
+Treat a path as unreachable only with a cited producer trace.
 Do not treat missing local callers as proof that a public API is unused.
 A short reference can still preserve a useful entry point.
 Defer unrelated cleanup or removal whose behavior cannot be established.

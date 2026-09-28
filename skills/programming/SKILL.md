@@ -61,8 +61,8 @@ Report consequential choices and evidence, not a recital of principle names.
 
 - [Foundational Thinking](references/principles/principle-foundational-thinking.md) applies when several changes share an unresolved prerequisite.
 - [Redesign from First Principles](references/principles/principle-redesign-from-first-principles.md) applies when a requirement creates repeated exceptions or parallel representations.
-- [Attack the Premise](references/principles/principle-attack-the-premise.md) applies when repeated fixes fail or evidence challenges the requested mechanism.
-- [Subtract Before You Add](references/principles/principle-subtract-before-you-add.md) applies when an addition would extend obsolete structure or duplicate decisions.
+- [Attack the Premise](references/principles/principle-attack-the-premise.md) applies when repeated fixes fail, when later findings target the previous fix's own machinery, or when evidence challenges the requested mechanism.
+- [Subtract Before You Add](references/principles/principle-subtract-before-you-add.md) applies when an addition would extend obsolete structure, duplicate decisions, or defend a path that no caller reaches.
 - [Minimize Reader Load](references/principles/principle-minimize-reader-load.md) applies to unnecessary indirection or hidden mutable state.
 - [Outcome-Oriented Execution](references/principles/principle-outcome-oriented-execution.md) applies to planned migrations with explicit phase boundaries.
 - [Experience First](references/principles/principle-experience-first.md) applies when implementation convenience conflicts with consumer outcomes.

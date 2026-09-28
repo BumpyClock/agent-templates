@@ -84,7 +84,7 @@ Run a comprehensive pull request review using specialized agents plus focused pr
    1. Fix critical issues first
    2. Address important issues
    3. Consider suggestions
-   4. Re-run review after fixes
+   4. Re-run review after fixes. If new findings target code that the previous fix round added, reassess the design before another round.
    ```
 
 ## Usage Examples:
@@ -152,7 +152,7 @@ Run a comprehensive pull request review using specialized agents plus focused pr
 - **Run early**: Before creating PR, not after
 - **Focus on changes**: Agents analyze git diff by default
 - **Address critical first**: Fix high-priority issues before lower priority
-- **Re-run after fixes**: Verify issues are resolved
+- **Re-run after fixes**: Verify issues are resolved. Findings on code from the last fix round signal a design problem, not another patch.
 - **Use specific reviews**: Target specific aspects when you know the concern
 
 ## Workflow Integration:
@@ -176,10 +176,11 @@ Run a comprehensive pull request review using specialized agents plus focused pr
 
 **After PR feedback:**
 ```
-1. Make requested changes
-2. Run targeted reviews based on feedback
-3. Verify issues are resolved
-4. Push updates
+1. If findings cluster on code from a prior fix round, reassess the design first
+2. Make requested changes
+3. Run targeted reviews based on feedback
+4. Verify issues are resolved
+5. Push updates
 ```
 
 ## Notes:
