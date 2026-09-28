@@ -5,7 +5,6 @@ description: "Use when coding. Implement, debug, refactor; review code designs."
 
 
 ## Code clarity and comments
-
 - Correct code 
 - Performant code — think about allocations, data structures, hot paths
 - Readable code — every line should earn its place. Use clear names, types, and structure. 
@@ -23,6 +22,11 @@ description: "Use when coding. Implement, debug, refactor; review code designs."
 - Fix/refactor: delete old path by default. Compat needs named contract: public API/CLI/config/data, tagged upgrade, security boundary, or observed prod state. Unsure: ask before alias/shim/fallback. Tests alone != contract.
 - The number of tokens used to edit files is best minimized, all else being equal. Therefore, when it will not affect the end result, try to surgically edit a file rather than rewrite the entire thing.
 
+## Comments
+
+Write comments clearly and keep inline comments brief. Keep comments only for non-obvious reasons the code cannot show. Do not narrate phases in verification scripts. Use assertions or log messages to identify steps. Apply this rule to every file, including delegated work.
+
+Write normal prose in persisted comments, commits, docs, issues, PRs, MRs, defect reports, tickets, bug reports, memory files, and third-party messages. Write code normally. Treat "open a defect" and "file a bug" like "open issue"; write their bodies for other humans.
 
 ## Testing & Validation
 
