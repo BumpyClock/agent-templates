@@ -39,3 +39,4 @@ Read `~/.agents/AGENTS.local.md` if present. Keep machine-specific facts there.
 - Search before answering when a query centers on an unfamiliar name or a fast-changing name, such as an AI model or developer tool. Include the user's exact name in at least one search, even when partly familiar.
 - Use the `programming` skill for implementation, diagnosis, or design review when its conditional guidance applies.
 - Use `ast-grep-cli` for structural code searches when available. Use text search for literal matches.
+- use `mcporter` for tools and mcp access.

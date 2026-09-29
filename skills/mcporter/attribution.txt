@@ -1,0 +1,6 @@
+Browser workflow adapted from the former skills/browser-use skill.
+Original source: https://github.com/steipete/agent-scripts
+Original path: skills/browser-use
+Original commit: 5dc3c2435ba70f39a7fd022a80bf12c5c2b6b0c5
+Original pull date: 2026-06-03T16:44:58Z
+Other server references use locally discovered MCP tool schemas.

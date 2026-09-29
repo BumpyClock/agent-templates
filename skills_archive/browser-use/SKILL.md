@@ -15,7 +15,7 @@ mcporter call chrome-devtools.<tool>
 
 Login-heavy sites fail in isolated profiles (captcha, device checks, missing SSO/extension). Prefer existing Chrome for any site needing login.
 
-Never use `chrome-isolated`, or other mechanisms for browser control unless user explicitly asks for isolated/new browser.
+Never use `chrome-isolated`, Playwright, Puppeteer, Codex in-app browser, AppleScript, `osascript`, GUI scripting, or macOS `open` for browser control unless user explicitly asks for isolated/new browser.
 
 Screenshot/live UI bugs require existing-Chrome path. `curl`, source inspection, Worker tests, local Playwright = supporting proof only; not equivalent when user showed rendered browser problem or page depends on login/profile state.
 

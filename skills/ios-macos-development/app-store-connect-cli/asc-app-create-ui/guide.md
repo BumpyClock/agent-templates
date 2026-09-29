@@ -9,7 +9,7 @@ Use this skill to create a new App Store Connect app by driving the web UI.
 This is opt-in, local-only automation that requires the user to be signed in.
 
 ## Preconditions
-- Existing-session Chrome automation is available under [Browser Use](../../../browser-use/SKILL.md). Preserve its profile, consent, and recovery restrictions; do not silently switch browsers.
+- Use [mcporter](../../../mcporter/SKILL.md) and its [existing Chrome reference](../../../mcporter/references/browser-use.md) for browser automation. Preserve its profile, consent, and recovery restrictions; do not silently switch browsers.
 - User is signed in to App Store Connect (or can complete login + 2FA).
 - The **bundle ID must already be registered** in the Apple Developer portal.
 - Required inputs are known:
