@@ -20,7 +20,7 @@ An assessment-only or one-time status request ends with the assessment. Opening 
   - Two or more claims target lines that an earlier fix wave added. Use `git blame` to check.
   - A proposed fix adds a stateful mechanism, such as a table, marker, clock, or key binding.
 - For a triggered group, name the invariant the mechanism defends. Check whether a narrower owner or a removed path makes the failure impossible, under [Attack the Premise](../pstack/principle-attack-the-premise/SKILL.md) and [Subtract Before You Add](../pstack/principle-subtract-before-you-add/SKILL.md). Adopt the redesign when it leaves fewer mechanisms and states than the fixes it replaces. Otherwise, fix the claims. A redesign beyond the authorized scope is `ask`. A single claim or style nit never triggers this check.
-- Limit fix waves to two. After two waves, if claims still land on code this PR added and the diff keeps growing, stop fixing. Report one design note or one `ask` instead. Do not ask about each claim separately.
+- Don't endlessly churn on fixes. After a few waves, if claims still land on code this PR added and the diff keeps growing, stop fixing. Report one design note or one `ask` instead. Do not ask about each claim separately.
 - Commit and push when done. For a fix reply, cite the published commit. 
 - Reply and resolve comments you chose to ignore or refute with reason and rationale.
 - Reply with the decision and evidence before resolving a thread. Resolve only when every claim has a completed fix or supported dismissal. Report comments without resolvable thread IDs separately.
