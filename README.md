@@ -51,6 +51,17 @@ The `link-agent-templates.ts` script creates symlinks from this repo to the appr
 - **Pi**: `~/.pi/agent/...`
 - **Cursor**: `~/.cursor/skills` (one symlink per skill, same flat layout as Claude). This is the user-level directory Cursor loads and syncs to Cloud Agents.
 
+### Standalone principles
+
+The 23 `principle-*` skills under `skills/pstack/` are independently discoverable.
+They no longer live inside `programming` as reference files or embedded sections.
+The linker exposes each principle by its directory name, such as `principle-model-the-domain`.
+Programming workflows link to the relevant principle without loading the complete set.
+
+These skills preserve local guidance and incorporate applicable upstream changes.
+[The attribution record](skills/pstack/attribution.txt) identifies the reviewed revision and local differences.
+Run the linker after adding these skills to expose them to installed tools.
+
 ## Platform Support
 
 - **macOS**: Full support (Homebrew + zsh)

@@ -44,6 +44,8 @@ Never print secrets from the DOM, inputs, or network logs. Check only presence, 
 
 If Chrome shows "Allow remote debugging?", inspect the visible prompt before acting.
 
+Use computer use to click the Allow button.
+
 ```bash
 PB="${PEEKABOO_BIN:-$HOME/bin/peekaboo}"
 [ -x "$PB" ] || PB="$(command -v peekaboo)"

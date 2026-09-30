@@ -2,7 +2,7 @@
 
 Use these examples for domain types and external input contracts.
 Match existing repository conventions before introducing a new type pattern.
-Use [Type System Discipline](../principles/principle-type-system-discipline.md) for the design decision.
+Use [Type System Discipline](../../../pstack/principle-type-system-discipline/SKILL.md) for the design decision.
 
 ## Distinct identifiers
 
@@ -110,4 +110,4 @@ Preserve a protocol's unknown-field policy rather than reject or ignore extra fi
 For persisted JSON, define version handling and report parse failures through the existing error path.
 Do not convert corrupt state into a silent success-shaped default.
 
-Use [Boundary Discipline](../principles/principle-boundary-discipline.md) for input and mutation guarantees.
+Use [Boundary Discipline](../../../pstack/principle-boundary-discipline/SKILL.md) for input and mutation guarantees.

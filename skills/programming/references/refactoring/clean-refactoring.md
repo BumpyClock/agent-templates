@@ -8,28 +8,12 @@ Core rule: refactoring replaces the old shape with the simpler shape the codebas
 
 1. Establish the behavior contract and relevant evidence before structural edits. Include outputs, errors, side effects, and required compatibility.
 2. Identify the concept, current owners, and consumers. Include configuration, documentation, and string-based references where they can affect behavior.
-3. Choose the target owner and representation. Use [Redesign from First Principles](../principles/principle-redesign-from-first-principles.md) when new constraints expose repeated exceptions.
-4. Move consumers in coherent behavior-preserving units. Apply the API migration rule below when one interface replaces another.
+3. Choose the target owner and representation. Use [Redesign from First Principles](../../../pstack/principle-redesign-from-first-principles/SKILL.md) when new constraints expose repeated exceptions.
+4. Move consumers in coherent behavior-preserving units. Use [Migrate Callers Then Delete Legacy APIs](../../../pstack/principle-migrate-callers-then-delete-legacy-apis/SKILL.md) when one interface replaces another.
 5. Assess the result through affected consumers against the behavior contract. Account for stale references and any retained bridge.
 
-Use [Subtract Before You Add](../principles/principle-subtract-before-you-add.md) when a bounded removal simplifies the requested change.
+Use [Subtract Before You Add](../../../pstack/principle-subtract-before-you-add/SKILL.md) when a bounded removal simplifies the requested change.
 For a discovered defect or new behavior, separate that work from the refactor contract.
-
-## Migrate Callers Then Delete Legacy APIs
-
-Use coordinated migration when an internal API replaces an old API and its consumers can change together.
-Inventory consumers before retirement, including callers outside the immediate package when the contract permits them.
-Migrate those consumers and remove the obsolete path in the same coherent change when feasible.
-Remove duplicate implementations after the replacement serves the required contract.
-Update tests for the supported contract and remove assertions that only preserve obsolete implementation details.
-Use [Test Behavior Not Implementation](../principles/principle-test-behavior-not-implementation.md) to distinguish those assertions from compatibility coverage.
-
-For required public API, CLI, configuration, or stored-data compatibility, preserve an explicit bridge or use an authorized migration plan.
-Name the consumer contract, owner, and removal condition for a temporary bridge.
-An absent local caller does not prove that an externally supported API is unused.
-For persisted data, replayed requests, or independently upgraded consumers, identify the supported reader and writer combinations before changing the format.
-Retain representative historical payloads or fixtures when they establish a compatibility contract that current producers no longer exercise.
-Use dual reads, dual writes, aliases, or versioned migration only when the supported rollout requires them; do not preserve every historical shape by default.
 
 ## Rules
 

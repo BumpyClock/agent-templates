@@ -2,7 +2,7 @@
 
 Use when module boundaries, contracts, prerequisites, or architectural tradeoffs need a decision.
 
-Use [Foundational Thinking](../principles/principle-foundational-thinking.md) when dependent work needs a shared prerequisite.
+Use [Foundational Thinking](../../../pstack/principle-foundational-thinking/SKILL.md) when dependent work needs a shared prerequisite.
 
 ## Workflow
 

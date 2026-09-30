@@ -40,3 +40,21 @@ Read `~/.agents/AGENTS.local.md` if present. Keep machine-specific facts there.
 - Use the `programming` skill for implementation, diagnosis, or design review when its conditional guidance applies.
 - Use `ast-grep-cli` for structural code searches when available. Use text search for literal matches.
 - use `mcporter` for tools and mcp access.
+ - chrome-devtools 
+ - exa-search
+ - figma — Figma MCP for design context, components, and variables. 
+ - craft 
+ - msft-learn (Microsoft Learn MCP)
+  - Work MCPs
+    - MicrosoftCalendar 
+    - MicrosoftEmail 
+    - Workiq 
+    - m365-user 
+    - m365-copilot 
+    - planner 
+    - teams 
+    - ado 
+    - engage - MicrosoftEngage
+    - powerbi 
+    - word 
+    - onedrive

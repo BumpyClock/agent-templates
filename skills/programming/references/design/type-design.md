@@ -2,7 +2,7 @@
 
 Use when creating or reviewing domain models, public APIs, schemas, protocol types, state machines, or any type meant to enforce business rules.
 
-Read [Type System Discipline](../principles/principle-type-system-discipline.md) for representation choices and their limits.
+Read [Type System Discipline](../../../pstack/principle-type-system-discipline/SKILL.md) for representation choices and their limits.
 Use the framework below to assess a concrete type.
 
 ## Core mission

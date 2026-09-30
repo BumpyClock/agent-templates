@@ -13,9 +13,9 @@ For a small, clear change, use the same contract and evidence without a separate
 
 ## Design decisions
 
-Use [Model the Domain](../principles/principle-model-the-domain.md) when state or repeated shape assumptions need a representation.
-Use [Foundational Thinking](../principles/principle-foundational-thinking.md) when several consumers depend on one prerequisite.
-Use [Experience First](../principles/principle-experience-first.md) for consumer tradeoffs.
+Use [Model the Domain](../../../pstack/principle-model-the-domain/SKILL.md) when state or repeated shape assumptions need a representation.
+Use [Foundational Thinking](../../../pstack/principle-foundational-thinking/SKILL.md) when several consumers depend on one prerequisite.
+Use [Experience First](../../../pstack/principle-experience-first/SKILL.md) for consumer tradeoffs.
 Use [architecture guidance](../architecture/architecture-planning.md) when boundaries or contracts need a decision.
 Choose the representation before dependent logic when scattered flags or repeated branches obscure the domain.
 For upstream-derived code, compare the source revision before edits and carry shared-primitive changes through every affected consumer.
@@ -27,7 +27,7 @@ When relevant, check the integration paths that commonly drift:
 - A reused helper preserves the information and side effects required by the new caller.
 - Removing a producer does not silently remove the only source of a required effect.
 
-Use [Delegate After the Contract](../execution/principle-delegate-after-the-contract.md) when parts could run in separate contexts or on a less capable model.
+Use [Delegate After the Contract](../../../pstack/principle-delegate-after-the-contract/SKILL.md) when parts could run in separate contexts or on a less capable model.
 
 ## Limits
 

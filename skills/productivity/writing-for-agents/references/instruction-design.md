@@ -81,7 +81,7 @@ State required actions and prohibitions directly. Add a positive alternative whe
 ## Pruning
 
 - Keep each policy in its owning document. Point to it instead of copying the rule.
-- Prefer current environment evidence for discoverable settings, commands, and interfaces. Keep conventions, reasons, and pitfalls that the environment does not explain. See [Encode Lessons in Structure](../../../programming/references/principles/principle-encode-lessons-in-structure.md).
+- Prefer current environment evidence for discoverable settings, commands, and interfaces. Keep conventions, reasons, and pitfalls that the environment does not explain. See [Encode Lessons in Structure](../../../pstack/principle-encode-lessons-in-structure/SKILL.md).
 - Remove generic reminders and redundant material that change no useful decision. Also remove material that has equivalent coverage in a reachable maintained reference.
 - Model familiarity does not make technical knowledge redundant. Keep useful examples, scripts, and boundary conditions.
 - When technical value or correctness is uncertain, keep the material conditionally. State the uncertainty until evidence supports correction or removal.

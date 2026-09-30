@@ -74,3 +74,54 @@ Refresh choices
 
 No archived skill is restored by this refresh.
 Local adaptation history includes 2bdf7d4, 02cc19e, c4a8945, 20f52f8, and 69c5a5c.
+
+Standalone principle extraction and refresh, 2026-09-30
+
+Source: https://github.com/cursor/plugins/tree/fae2c6ed95821bd85f614a73e4842e13229fa5e5/pstack/skills
+Revision: fae2c6ed95821bd85f614a73e4842e13229fa5e5
+Compared with the previous programming import at c5db7fef1f1b1ebb2d4b7ae0308bf4beb10cb4c1.
+License: MIT, Copyright (c) 2026 Lauren Tan. LICENSE.txt matches the reviewed upstream pstack/LICENSE.
+The five non-principle skills above retain their earlier revision.
+
+Import map
+
+- 19 programming/references/principles/principle-*.md files
+  -> corresponding principle-*/SKILL.md files in this directory.
+- programming/references/execution/principle-guard-the-context-window.md
+  -> principle-guard-the-context-window/SKILL.md.
+- programming/references/execution/principle-delegate-after-the-contract.md
+  -> principle-delegate-after-the-contract/SKILL.md, a local principle with no upstream counterpart.
+- programming/references/refactoring/clean-refactoring.md API-migration section
+  -> principle-migrate-callers-then-delete-legacy-apis/SKILL.md.
+- programming/systematic-debugging/guide.md root-cause section and restart-state guidance
+  -> principle-fix-root-causes/SKILL.md.
+
+Each upstream-derived skill adapts the corresponding pstack/skills/principle-*/SKILL.md.
+The upstream laziness-protocol skill was not embedded in programming and is not restored by this extraction.
+All 23 extracted skills have task-specific descriptions and updated relative links.
+The grouped skill linker exposes them independently without a new build step.
+Upstream disable-model-invocation flags are not imported: conditional discovery remains available, as it was through programming.
+
+Upstream changes since the previous import
+
+Only five corresponding principle files changed, in commits 70b2dc8 and b0b9c7a on September 22-23.
+All changes remove instructions; no new principle content was added.
+
+- never-block-on-the-human removes redundant question and asynchronous-supervision bullets.
+  Essential missing information, authorization, and scope boundaries remain explicit locally.
+- outcome-oriented-execution removes its duplicate completion-verification instruction.
+  Completion evidence remains owned by prove-it-works and programming's validation guidance.
+- guard-the-context-window removes a generic selective-reading reminder.
+  The local version already uses decision-directed retrieval rather than that bullet.
+- prove-it-works removes generic proof prompts, a mandatory runtime sequence, and a delegation checklist.
+  The local version already uses direct, contract-proportional evidence without those mandates.
+- sequence-verifiable-units removes its redundant pattern checklist.
+  The local version already groups changes by contracts and dependencies without that checklist.
+
+Retained local guidance
+
+These remain selective adaptations, not upstream mirrors.
+Keep Trigger/Decision/Limit guidance, counterexamples, authorization, public compatibility, mutation checks, and evidence limits.
+Keep the test principle's agreed seams and conditional TDD loop.
+Keep direct execution for small tasks and bounded delegation only when it earns its coordination cost.
+Do not restore prescribed models, mandatory delegation, Cursor-only tools, automatic commits/PRs, compulsory test additions, or unconditional state resets.
