@@ -97,7 +97,7 @@ Import map
   -> principle-fix-root-causes/SKILL.md.
 
 Each upstream-derived skill adapts the corresponding pstack/skills/principle-*/SKILL.md.
-The upstream laziness-protocol skill was not embedded in programming and is not restored by this extraction.
+The upstream laziness-protocol skill was not embedded in programming and was not restored by this extraction.
 All 23 extracted skills have task-specific descriptions and updated relative links.
 The grouped skill linker exposes them independently without a new build step.
 Upstream disable-model-invocation flags are not imported: conditional discovery remains available, as it was through programming.
@@ -125,3 +125,11 @@ Keep Trigger/Decision/Limit guidance, counterexamples, authorization, public com
 Keep the test principle's agreed seams and conditional TDD loop.
 Keep direct execution for small tasks and bounded delegation only when it earns its coordination cost.
 Do not restore prescribed models, mandatory delegation, Cursor-only tools, automatic commits/PRs, compulsory test additions, or unconditional state resets.
+
+Laziness Protocol import, 2026-10-05
+
+Source: https://raw.githubusercontent.com/cursor/plugins/main/pstack/skills/principle-laziness-protocol/SKILL.md
+Imported principle-laziness-protocol/SKILL.md from upstream main on this date.
+The body and description match upstream. The disable-model-invocation flag is
+omitted to preserve automatic discovery, consistent with the other local principles.
+License: MIT, Copyright (c) 2026 Lauren Tan. See LICENSE.txt.
