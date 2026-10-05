@@ -11,7 +11,7 @@ Reviewer identity, repeated comments, and review pass count do not establish cor
 
 Investigate uncertainty before asking. Novelty alone is not a reason to ask.
 Choose a mechanism within an unchanged guarantee yourself.
-Narrowing, broadening, or reinterpreting a guarantee changes it. So does turning a documented known limit into a requirement.
+Narrowing, broadening, or reinterpreting a guarantee changes it. So does turning a documented known limit into a requirement. So does documenting a new known limit, even for behavior older than the PR.
 When a subagent reports that a product decision is needed, relay the question to the user. Do not turn the report into a spec.
 Distinguish defects from preferences and scope changes. A pre-existing defect can matter if the PR exposes or worsens it.
 Report verified defects outside the repair scope without treating them as false positives.

@@ -14,13 +14,14 @@ An assessment-only or one-time status request ends with the assessment. Opening 
 
 - Establish whether the request covers one PR or a stack.
 - Fetch feedback and replies, including summary comments within scope. Use `pr-comments` cli when available and able to resolve the repository; otherwise use `gh` or an available GitHub integration. 
-- Associate each distinct claim with its thread or comment ID and current head SHA. Apply authorized fixes on the branch that owns the defect.
-- Before fixing, group the claims by the mechanism or invariant they touch. Check whether a group indicts the design rather than the code. Any of these triggers the check:
+- Associate each distinct claim with its thread or comment ID and current head SHA. Apply authorized fixes on the branch that owns the defect. When another actor owns that branch, report the claim to that owner. Do not fix it on your branch.
+- Before fixing, group the claims by the mechanism or invariant they touch. Check whether a group indicts the design rather than the code. A fix wave is one pushed batch of fixes that answers one review round. Any of these triggers the check:
   - Two or more claims share one mechanism that this PR introduced.
   - Two or more claims target lines that an earlier fix wave added. Use `git blame` to check.
   - A proposed fix adds a stateful mechanism, such as a table, marker, clock, or key binding.
-- For a triggered group, name the invariant the mechanism defends. Check whether a narrower owner or a removed path makes the failure impossible, under [Attack the Premise](../pstack/principle-attack-the-premise/SKILL.md) and [Subtract Before You Add](../pstack/principle-subtract-before-you-add/SKILL.md). Adopt the redesign when it leaves fewer mechanisms and states than the fixes it replaces. Otherwise, fix the claims. A redesign beyond the authorized scope is `ask`. A single claim or style nit never triggers this check.
-- Don't endlessly churn on fixes. After a few waves, if claims still land on code this PR added and the diff keeps growing, stop fixing. Report one design note or one `ask` instead. Do not ask about each claim separately.
+  - The fixes would start a third wave on code this PR added.
+- For a triggered group, name the invariant the mechanism defends. Check whether a narrower owner or a removed path makes the failure impossible, under [Attack the Premise](../pstack/principle-attack-the-premise/SKILL.md) and [Subtract Before You Add](../pstack/principle-subtract-before-you-add/SKILL.md). Adopt the redesign when it leaves fewer mechanisms and states than the fixes it replaces. Otherwise, fix the claims. A redesign beyond the authorized scope is one `ask` for the group, not one per claim. A single claim or style nit never triggers this check.
+- When a coordinator owns design decisions, hand a triggered group to the coordinator instead of running the check. Report each claim's thread, the wave that added each targeted line, and the open threads. Stop fixing until the coordinator decides.
 - Commit and push when done. For a fix reply, cite the published commit. 
 - Reply and resolve comments you chose to ignore or refute with reason and rationale.
 - Reply with the decision and evidence before resolving a thread. Resolve only when every claim has a completed fix or supported dismissal. Report comments without resolvable thread IDs separately.
@@ -49,7 +50,7 @@ Apply that condition to every PR in the requested scope. A ready stack root does
 For a merge queue, report a queue handoff only after required pre-queue checks and reviews are satisfied, unresolved claims are cleared, and the forge confirms queue acceptance.
 Do not describe a queue handoff as a completed merge.
 
-Continue monitoring until readiness, a confirmed queue handoff, completion of the requested scope by another actor, completion under the local CI fallback below, a fix-wave limit report, an explicit stop, or a blocker that prevents further in-scope progress without user input or authority.
+Continue monitoring until readiness, a confirmed queue handoff, completion of the requested scope by another actor, completion under the local CI fallback below, a design handoff to a coordinator, an explicit stop, or a blocker that prevents further in-scope progress without user input or authority.
 Answer mid-task questions without abandoning monitoring. Do not post filler comments when nothing changes.
 If an overlapping PR makes the work obsolete, report it and ask before closing unless closure is already authorized.
 
