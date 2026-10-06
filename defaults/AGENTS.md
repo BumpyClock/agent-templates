@@ -32,10 +32,9 @@ Read `~/.agents/AGENTS.local.md` if present. Keep machine-specific facts there.
  
 ## Ground rules
 
-- If a required tool is unavailable, use an alternative only when it preserves behavior and restrictions. Otherwise, install with the platform package manager after any required approval for changes outside this repository: macOS `brew`, Windows `winget`, Linux `apt`, `yay`, or `pacman`.
+- If a required tool is unavailable, install with the platform package manager after any required approval for changes outside this repository: macOS `brew`, Windows `winget`, Linux `apt`, `yay`, or `pacman`.
 - Use `docs-list` when its optional frontmatter summary helps locate guidance. Read docs that define affected contracts or resolve project-specific uncertainty.
 - For user-visible behavior changes, update relevant docs and record release-note context in the PR or commit. Update the changelog at landing.
-- Check recent releases, commits, and adoption before adding a dependency.
 - Search before answering when a query centers on an unfamiliar name or a fast-changing name, such as an AI model or developer tool. Include the user's exact name in at least one search, even when partly familiar.
 - Use the `programming` skill for implementation, diagnosis, or design review when its conditional guidance applies.
 - Use `ast-grep-cli` for structural code searches when available. Use text search for literal matches.

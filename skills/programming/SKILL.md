@@ -12,12 +12,7 @@ description: "Use when coding. Implement, debug, refactor; review code designs."
   - Keep comments current and preserve required documentation, safety notes, licenses, and tool directives.
   - When similar code stays duplicated on purpose, comment why the copies evolve independently or are not yet abstracted.
 - Reuse or extend an existing helper, type, component, or pattern when practical & efficient. Prefer a smaller complete change over a parallel path or speculative abstraction.
-- Use judgment about related cleanup, including bounded refactors and high-confidence flaky-test fixes. Include it when it supports the current work and its benefit outweighs the risk and review cost; otherwise skip it. Do not add unrelated features or infrastructure. Ask before materially expanding the agreed scope, not merely because the implementation is larger than expected.
-- Delete low quality tests if related to the current work. 
 - Before adding a dependency, check whether existing dependencies or a simple implementation already meet the need. Read their docs and type definitions before assuming a feature is missing. When adding one, prefer a mature, well-maintained library over reimplementing general-purpose functionality.
-- Never leave a `TODO` without context: state the reason and removal condition, or link a trackable task.
-- Follow the repository's file organization and co-location conventions. Split files when cohesion or the requested structural change warrants it, not to meet a fixed file-size or one-concept rule.
-  - If the current structure hinders the task, explain the concrete cost and the tradeoffs of a better structure. Do not infer the user's intent or expertise from the existing code.
 - When integrating upstream files, stage them in the platform's temporary directory and review the diff before applying selected changes. Preserve unrelated local edits.
 - Use web research for current, high-risk, or uncertain facts, not stable facts already known. Prefer authoritative sources; use exact errors in diagnostic searches and the session date when recency matters.
 - Fix/refactor: delete old path by default. Compat needs named contract: public API/CLI/config/data, tagged upgrade, security boundary, or observed prod state. Unsure: ask before alias/shim/fallback. Tests alone != contract.
@@ -35,7 +30,6 @@ Write normal prose in persisted comments, commits, docs, issues, PRs, MRs, defec
 - Use the smallest existing checks that cover the affected contract and risk. Honor explicit user requests for additional verification. Leave full suites to CI unless the user requests them, repository requirements apply, or wider risk justifies a local run.
 - Prefer a focused E2E check for changed app behavior when it directly establishes the outcome. Use lower-level tests when they cover the contract more directly or economically. 
 - Preserve test intent and meaningful assertions. Add or revise tests for material coverage gaps, not to mirror the implementation. Reuse valid evidence; repeat or broaden checks only after relevant changes, failures, unresolved concerns, or required project gates.
-- Read documentation when it defines an affected contract or resolves project-specific uncertainty. Follow relevant `read_when` hints; a small, understood edit does not need a repository map or documentation sweep.
 - Update relevant documentation for behavior or API changes unless repository policy prohibits it. Keep completion evidence observable through task-appropriate inspection tools or logs.
 
 ## Observability
@@ -87,16 +81,6 @@ Read the leaf skill in full for any principle you apply. Each entry names when i
 **Meta**
 
 - **Encode Lessons in Structure** (**principle-encode-lessons-in-structure**). You catch yourself writing the same instruction a second time. Encode it as a lint, metadata flag, runtime check, or script instead of more text.
-
-## Autonomy
-
-**Just do it.** Use any MCP tool. Reversible work and external actions (team chat, ticket updates, kicking off evals) proceed without asking.
-
-**Always pause** for irreversible writes: force-push to shared branches, deploys, data deletion, customer messages.
-
-**Session overrides:** "Don't stop" / "going to bed" / "run until done" / "be fully autonomous" → keep going.
-
-**No is an acceptable answer.** Asked whether to do something, invited to add scope, or shown an approach, reply with your real judgment. Decline, push back, or say "this doesn't earn its place" when true. A recommendation is a judgment, not a validation. Agreement is not the default, candor over sycophancy.
 
 ## Related guidance
 
