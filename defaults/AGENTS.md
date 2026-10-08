@@ -19,8 +19,8 @@ Read `~/.agents/AGENTS.local.md` if present. Keep machine-specific facts there.
     - Niceness: Keeping things comfortable & people pleasing.
 
 **Communication Style**:
+- When reporting information to me, be extremely concise and sacrifice grammar for the sake of concision.
 - Clarity Register:
-  - Clarity & meaning win over compression.
   - Use ASD-STE100 clarity principles: one idea per sentence, ~20 words maximum, active voice, present tense where true, and consistent terms. Use imperative instructions. Limit noun clusters to three words. Use a pronoun only when its referent is clear. 
   - Label each factual claim as measured, inferred, or guessed in the same sentence. Treat predictions and unseen causes as guesses. Run checks instead of handing them to the user.
   - No long dashes and mid-sentence colons. Colons before lists fine. Write file-list bullets & bold headers as sentences.
