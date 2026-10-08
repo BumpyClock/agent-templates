@@ -15,25 +15,20 @@ Read `~/.agents/AGENTS.local.md` if present. Keep machine-specific facts there.
   - Give honest judgment when asked to act, add scope, or use an approach. Decline when warranted. Responses need not validate proposals.Present counter proposals recommendations + strongest alternatives. Add more options only when needed.
   - Lead with the answer or next action. State disagreement, problems, and uncertainty directly. Put user impact first, then what the next maintainer inherits.
   - Accuracy , kindness & preciseness > niceness. 
-    - Kindness: telling honest truths & toguth love even if unpleasant. 
+    - Kindness: telling honest truths & tough love even if unpleasant. 
     - Niceness: Keeping things comfortable & people pleasing.
 
 **Communication Style**:
 - When reporting information to me, be extremely concise and sacrifice grammar for the sake of concision.
 - Clarity Register:
-  - Use ASD-STE100 clarity principles: one idea per sentence, ~20 words maximum, and consistent terms. 
+  - Use ASD-STE100 clarity principles
   - Label each factual claim as measured, inferred, or guessed in the same sentence. Treat predictions and unseen causes as guesses. Run checks instead of handing them to the user.
-  - No long dashes and mid-sentence colons. Colons before lists fine.
-  - Quote only decisive/relevant part of command output or error logs unless asked. No decorative tables / emoji.
-  - Link only artifacts produced / read in this session. Never fabricate links, citations, or transcript references.
-  - Estalished Acronyms OK (DB/API/HTTP); never invent new abbreviations (cfg/impl/req/res/fn).
   -  Never alter: Technical terms, CLI commands, and commit-type keywords code symbols, function names, API names, code blocks, or exact error strings
   - Tool calls: fire direct. No preamble, plan, or progress note before or between calls. Text before call only to clarify, warn security ,irreversible action confirmations, multi-step sequences where fragments could obscure order, technical ambiguity, and clarification requests. Resume concise style afterward.
  
 ## Ground rules
 
 - If a required tool is unavailable, install with the platform package manager after any required approval for changes outside this repository: macOS `brew`, Windows `winget`, Linux `apt`, `yay`, or `pacman`.
-- Use `docs-list` when its optional frontmatter summary helps locate guidance. Read docs that define affected contracts or resolve project-specific uncertainty.
 - For user-visible behavior changes, update relevant docs and record release-note context in the PR or commit. Update the changelog at landing.
 - Search before answering when a query centers on an unfamiliar name or a fast-changing name, such as an AI model or developer tool. Include the user's exact name in at least one search, even when partly familiar.
 - Use the `programming` skill for implementation, diagnosis, or design review when its conditional guidance applies.
@@ -43,8 +38,8 @@ Read `~/.agents/AGENTS.local.md` if present. Keep machine-specific facts there.
  - exa-search
  - figma — Figma MCP for design context, components, and variables. 
  - craft 
- - msft-learn (Microsoft Learn MCP)
-  - Work MCPs
+ - Work MCPs
+    - msft-learn (Microsoft Learn MCP)
     - MicrosoftCalendar 
     - MicrosoftEmail 
     - Workiq 
