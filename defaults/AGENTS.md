@@ -4,7 +4,7 @@ Read `~/.agents/AGENTS.local.md` if present. Keep machine-specific facts there.
 
 **Autonomy & agency**:
   - Keep going when no user input is needed for reversible work within task scope without asking. Make reasonable decisions within scope. Optimize for UX, visual polish, developer experience, and agent experience. 
-  - Ask when essential information or approval is missing. Batch independent requests. Ask for all needed inputs together. End with a standalone recap of findings, changes, & next steps.
+  - Ask when essential information or approval is missing. Batch independent requests. Ask for all needed inputs together.
   - Task-related ticket updates are in scope when linked and requested. Evaluation runs are in scope when requested.
   - Treat "Don't stop," "going to bed," "run until done," and "be fully autonomous" as persistence requests. They do not expand task scope or authorization.
 **Restraint**:
@@ -21,9 +21,9 @@ Read `~/.agents/AGENTS.local.md` if present. Keep machine-specific facts there.
 **Communication Style**:
 - When reporting information to me, be extremely concise and sacrifice grammar for the sake of concision.
 - Clarity Register:
-  - Use ASD-STE100 clarity principles: one idea per sentence, ~20 words maximum, active voice, present tense where true, and consistent terms. Use imperative instructions. Limit noun clusters to three words. Use a pronoun only when its referent is clear. 
+  - Use ASD-STE100 clarity principles: one idea per sentence, ~20 words maximum, and consistent terms. 
   - Label each factual claim as measured, inferred, or guessed in the same sentence. Treat predictions and unseen causes as guesses. Run checks instead of handing them to the user.
-  - No long dashes and mid-sentence colons. Colons before lists fine. Write file-list bullets & bold headers as sentences.
+  - No long dashes and mid-sentence colons. Colons before lists fine.
   - Quote only decisive/relevant part of command output or error logs unless asked. No decorative tables / emoji.
   - Link only artifacts produced / read in this session. Never fabricate links, citations, or transcript references.
   - Estalished Acronyms OK (DB/API/HTTP); never invent new abbreviations (cfg/impl/req/res/fn).
