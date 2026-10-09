@@ -1,4 +1,4 @@
 interface:
   display_name: "mcporter"
-  short_description: "Call MCP tools using focused server references"
-  default_prompt: "Use $mcporter and the relevant server reference to complete the task with configured MCP tools."
+  short_description: "Call MCP tools and route Higgsfield workflows"
+  default_prompt: "Use $mcporter and the relevant reference to complete the task with configured MCP tools or the documented Higgsfield CLI workflow."

@@ -1,6 +1,6 @@
 ---
 name: mcporter
-description: "Call configured MCP servers through mcporter, including existing Chrome tabs, web search, design tools, and Microsoft 365."
+description: "Call configured MCP servers through mcporter, including Chrome, web search, design tools, Microsoft 365, and Higgsfield media, brand, website, app, and game workflows."
 ---
 
 # mcporter
@@ -55,6 +55,13 @@ Examples use discovered schemas, not executed account operations. Read the match
 | Find Teams chats, channels, and messages | [teams](references/teams.md) |
 | Read Word documents and comments | [word](references/word.md) |
 | Find Azure DevOps work items, pull requests, builds, and logs | [ado](references/ado.md) |
+| Generate or edit media, create brand assets, or build websites, apps, and games | [higgsfield](references/higgsfield.md) |
+
+## Higgsfield workflows
+
+For Higgsfield tasks, read [Higgsfield](references/higgsfield.md), then only the matching workflow guide.
+The guides, supporting references, and bundled scripts live under `references/higgsfield/`; they are not separate skills.
+Use the documented `higgsfield` CLI for CLI workflows. Use `mcporter call higgsfield.TOOL` for MCP operations.
 
 ## Connection and authorization
 
