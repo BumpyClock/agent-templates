@@ -26,3 +26,4 @@ Model- or user-reachable (rich trigger phrasing so the model can reach for them)
 - **[domain-modeling](./domain-modeling/SKILL.md)** — Actively build and sharpen a project's domain model — challenge terms, stress-test with scenarios, update `CONTEXT.md` and ADRs inline.
 - **[codebase-design](./codebase-design/SKILL.md)** — Shared discipline and vocabulary for designing deep modules: small interfaces, clean seams, testable through the interface.
 - **[code-review](./code-review/SKILL.md)** — Review a PR, branch, commit, or local diff for actionable defects and regressions. Load Git scope and maintainability guidance as needed.
+- **[autonomous-delivery](./autonomous-delivery/SKILL.md)** — Adapt an orchestrator-worker system for substantial implementation, cross-repository work, research, or migrations. Periodically reshape task boundaries, context, and specialization to improve quality and throughput together. MIT, Evan Boyle, v2.1.0.
