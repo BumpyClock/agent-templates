@@ -70,6 +70,8 @@ Blocking uses the tracker's **native** dependency relationship: essential becaus
 
 The answer isn't part of the body; it's recorded on resolution (see [Work through the map](#work-through-the-map)). Assets created while resolving a ticket are linked from the issue, not pasted in.
 
+Use request_user_input or whatever your native equivalent of question answer tool is for requesting user input instead of asking in the chat.
+
 ## Ticket Types
 
 Every ticket is either **HITL** (human in the loop, worked _with_ a human who speaks for themselves) or **AFK**, driven by the agent alone. A HITL ticket only resolves through that live exchange; the agent never stands in for the human's side of it (a grilling agent that answers its own questions has broken this).

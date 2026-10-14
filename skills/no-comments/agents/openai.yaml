@@ -1,0 +1,6 @@
+interface:
+  display_name: "No Comments"
+  short_description: "Delete comments outside the keep list and flag the code"
+  default_prompt: "Use $no-comments on this diff. Delete every comment that is not on the keep list, leave application code untouched, and mark each guilty symbol MUST KILL."
+policy:
+  allow_implicit_invocation: false

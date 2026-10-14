@@ -8,8 +8,8 @@ description: "Use when coding. Implement, debug, refactor; review code designs."
 - Correct code 
 - Performant code — think about allocations, data structures, hot paths
 - Readable code — every line should earn its place. Use clear names, types, and structure. 
-- Use comments only to explain non-obvious reasons, constraints, or tradeoffs. Do not repeat code or justify avoidable complexity. Simplify the code instead.
-  - Keep comments current and preserve required documentation, safety notes, licenses, and tool directives.
+- No comments in the code unless they explain non-obvious reasons, constraints, or tradeoffs. Do not repeat code or justify avoidable complexity. Simplify the code instead.
+  - Only preserve required documentation, safety notes, licenses, and tool directives.
   - When similar code stays duplicated on purpose, comment why the copies evolve independently or are not yet abstracted.
 - Reuse or extend an existing helper, type, component, or pattern when practical & efficient. Prefer a smaller complete change over a parallel path or speculative abstraction.
 - Before adding a dependency, check whether existing dependencies or a simple implementation already meet the need. Read their docs and type definitions before assuming a feature is missing. When adding one, prefer a mature, well-maintained library over reimplementing general-purpose functionality.
@@ -18,12 +18,8 @@ description: "Use when coding. Implement, debug, refactor; review code designs."
 - Fix/refactor: delete old path by default. Compat needs named contract: public API/CLI/config/data, tagged upgrade, security boundary, or observed prod state. Unsure: ask before alias/shim/fallback. Tests alone != contract.
 - The number of tokens used to edit files is best minimized, all else being equal. Therefore, when it will not affect the end result, try to surgically edit a file rather than rewrite the entire thing.
 - use Negative Space programming when it’s necessary
-
-## Comments
-
-Write comments clearly and keep inline comments brief. Keep comments only for non-obvious reasons the code cannot show. Do not narrate phases in verification scripts. Use assertions or log messages to identify steps. Apply this rule to every file, including delegated work.
-
-Write normal prose in persisted comments, commits, docs, issues, PRs, MRs, defect reports, tickets, bug reports, memory files, and third-party messages. Write code normally. Treat "open a defect" and "file a bug" like "open issue"; write their bodies for other humans.
+-  Use assertions or log messages to identify steps. Apply this rule to every file, including delegated work.
+- Write normal prose in persisted comments, commits, docs, issues, PRs, MRs, defect reports, tickets, bug reports, memory files, and third-party messages. Write code normally. Treat "open a defect" and "file a bug" like "open issue"; write their bodies for other humans.
 
 ## Testing & Validation
 
@@ -94,7 +90,6 @@ Read the leaf skill in full for any principle you apply. Each entry names when i
 - Any prose surface → the **unslop** skill. Your reply is a prose surface. Write it per **Writing the reply**. Agent-facing prose also follows the **create-skill** skill (Cursor's built-in for authoring SKILL.md files).
 - Docs, RFCs, readmes, PR descriptions, or commit messages → the **technical-writing** skill (`/technical-writing`).
 - Before commit → the `deslop` skill from the `cursor-team-kit` plugin (`/deslop`).
-- Before review → the **no-comments** skill (`/no-comments`).
 - Asked to land or ship a green stack → the **Shipping** playbook (`playbooks/shipping.md`). Green is not safe. Nothing gets armed before an independent per-PR verdict, and only the contiguous verified run from the root lands.
 - Each skill owns its advice and limits.
   Report consequential choices and evidence, not a recital of principle names.
