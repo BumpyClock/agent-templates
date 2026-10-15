@@ -15,6 +15,7 @@ Reachable only when you type them (Claude Code: `disable-model-invocation: true`
 - **[test-cleanup](./test-cleanup/SKILL.md)** — Audit an existing test suite against the programming skill's test standards: delete/rewrite/keep verdicts with evidence, report first, then apply approved cleanups.
 - **[changelog](./changelog/SKILL.md)** — Create or update user-facing changelog entries, or set up PR entry generation using the separate GitHub Actions reference.
 - **[split-to-prs](./split-to-prs/SKILL.md)** — Split current work into small reviewable PRs. Propose the slices and wait for approval before branching, committing, or opening PRs.
+- **[deslop](./deslop/SKILL.md)** — Check the diff against main and remove AI-generated slop introduced in the branch without changing behavior.
 
 ## Model-invoked
 

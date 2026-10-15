@@ -133,3 +133,13 @@ Imported principle-laziness-protocol/SKILL.md from upstream main on this date.
 The body and description match upstream. The disable-model-invocation flag is
 omitted to preserve automatic discovery, consistent with the other local principles.
 License: MIT, Copyright (c) 2026 Lauren Tan. See LICENSE.txt.
+
+Playbooks restore, 2026-10-15
+
+Source: https://github.com/cursor/plugins/tree/main/pstack/skills/poteto-mode/playbooks
+Copied all 23 playbooks into playbooks/ from skills_archive/poteto-mode/playbooks,
+then replaced them with upstream main. The archived copies were the 2026-09-07
+snapshot and differed in every file. Latest upstream playbook commit on this date:
+8043881, pstack: autopilot loops catch the operator up with /ketchup (#616).
+No local adaptations were kept. These are the upstream playbooks, not a skill.
+License: MIT, Copyright (c) 2026 Lauren Tan. See LICENSE.txt.

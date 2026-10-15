@@ -1,0 +1,6 @@
+interface:
+  display_name: "Swarm"
+  short_description: "Coordinate parallel workers and combine their results"
+  default_prompt: "Use $swarm to fan this task out across parallel workers and combine their findings into one report."
+policy:
+  allow_implicit_invocation: false
