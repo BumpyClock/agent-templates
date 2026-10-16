@@ -4,15 +4,32 @@ This reference owns typography defaults for new designs and refinements. Preserv
 
 Apply aesthetic recipes only when they suit the chosen direction. Preserve readability and accessibility across all treatments.
 
----
+Typography carries the personality of the page. You don't need a different typeface for display or headline text and body content: use one family or two. If two, make them clearly distinct, second type family must earn it's existence.
 
-## Visitor mode
+Choose your typefaces deliberately, not the default families you would reach for on any other project, and set a clear type scale following the default guidance of The Elements of Typographic Style with intentional weights, widths, and spacing. When type is used as a headline or visual element, use the type treatment itself as an active part of the design, not a neutral delivery vehicle for the content.
 
-- **Persuade + Experience:** display type may carry the voice. Use decisive contrast and responsive scale when the composition benefits.
-- **Operate + Read:** stability, scanability, and measure come first. A single well-tuned family and fixed role scale are often right.
-- **Native:** follow platform conventions for text scaling and accessibility behavior.
 
-Preserve confirmed families and improve their use unless the user requests a new identity.
+## Typography — optical sizing, tracking, leading
+
+Design type to change shape with size; the same discipline applies on the web. (From *The Details of UI Typography*, WWDC 2020.)
+
+- **Tracking (letter-spacing) is size-specific — never one value for all sizes.** Large display text wants *negative* tracking (letters read too far apart as they grow); small text wants slightly *positive* tracking for legibility. A fixed `letter-spacing` is wrong somewhere. Tighten headings, leave body near `0`.
+- **Leading (line-height) tracks size inversely.** Tight on large headings, looser on body copy. Increase it for scripts with tall ascenders/descenders; tighten it for dense, information-heavy UI.
+- **Build hierarchy from weight + size + leading as a set,** not size alone. Emphasize with weight — it adds presence without taking more space.
+- **Respect the user's text-size setting** (Dynamic Type). Scale layout *with* the text — spacing in `rem`/`em`, not fixed px — so a larger font doesn't break the layout.
+- **Default to the platform's system font** before a custom face; it already ships optical sizing, tracking tables, and legibility tuning. Override only with a reason.
+
+```css
+:root { font: 100%/1.5 system-ui, sans-serif; } /* body: system font, comfortable leading */
+
+.display {
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 1.05;        /* tight leading for large text */
+  letter-spacing: -0.02em;  /* negative tracking as it grows */
+  font-optical-sizing: auto;
+}
+```
+
 
 ## Assess the Affected Typography
 
@@ -38,6 +55,11 @@ Before a typography system change, identify the relevant constraints:
 - any performance, localization, or accessibility constraints.
 
 Use the fewest roles and families that make the hierarchy unmistakable. Combine size, weight, space, and tone deliberately instead of asking size alone to do all the work. Role names and tokens should describe purpose rather than values.
+
+Avoid these default typographic treatments; they are the commonest tells of a generated page:
+- Accenting just a single word or phrase in a headline, like putting one word in italic/bold or a different color.
+- Using all caps for labels.
+- Adding unnecessary typographic labels above content.
 
 ## Apply
 

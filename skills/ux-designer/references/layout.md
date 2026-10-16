@@ -2,6 +2,8 @@
 
 Use this structural baseline for new designs and refinements. Preserve established project and platform conventions.
 
+Visual structure is information. Structural devices like outlines, borders, numbering, eyebrows, dividers, labels, etc., encode useful information about the content rather than decorate it. Many generic designs use numbered markers (01 / 02 / 03), but that's only appropriate if the content actually is a sequence — like a stepped process or a timeline. Before adding numbered markers, check the content really is a sequence.
+
 For full pages, apply the shared [job and hierarchy guidance](page-composition.md#frame-the-job-first).
 When alternative structures could improve the task, use [Page Composition](page-composition.md#choose-a-composition) to compare them.
 Do not require a distinctive layout when a familiar structure serves the task.
@@ -9,12 +11,33 @@ Do not require a distinctive layout when a familiar structure serves the task.
 ---
 
 ## Visitor mode
+Understand why the user is on this page / screen state. 
 
 - **Persuade + Experience:** composition may be asymmetric, fluid, or intentionally disruptive when the selected world earns it.
 - **Operate + Read:** predictable structure, stable density, and navigable linearity are affordances.
 - **Native:** follow platform conventions for navigation, insets, adaptation, and touch targets.
 
 Preserve the established visual world. Change the identity only when the user requests it.
+
+## Materials & depth — translucency conveys hierarchy
+
+Use translucent materials as a floating functional layer that brings structure without stealing focus. On the web, approximate with `backdrop-filter`.
+
+- **Build nav/toolbars/sheets as translucent layers** (`backdrop-filter: blur()` + a semi-transparent background) with content scrolling underneath — not opaque bars that consume a fixed strip.
+- **Material weight encodes hierarchy:** darker/heavier materials separate structural regions (sidebars); lighter materials draw attention to interactive elements (buttons). **Never stack a light translucent surface on another** — legibility collapses.
+- **Bigger surfaces should read as thicker:** stronger blur + a deeper shadow than small chips. Consider context-aware shadow — heavier over busy/text content for separation, lighter over plain backgrounds.
+- **Dim to focus, separate to keep flow.** A modal task pairs the surface with a dimming scrim and pushes the background back/down. A parallel, non-blocking panel uses translucency and offset *without* a scrim so the flow isn't broken. For stacked sheets, progressively dim and push back each parent layer.
+- **Vibrancy keeps text legible over changing backgrounds.** Over blurred/translucent surfaces, don't use flat gray text — use higher-contrast, slightly heavier weight, and a small letter-spacing bump. Put color on a solid layer, not the translucent foreground.
+- **Scroll edge effects, not hard dividers.** Instead of a 1px border under a sticky header, fade a small blur/gradient mask where content meets floating chrome — only where floating UI actually overlaps content.
+- **Materialize, don't just fade.** For glass/blur surfaces, animate blur radius and scale together on enter/exit, so the surface reads as a real material arriving rather than a plain opacity fade.
+
+```css
+.toolbar {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-top: 1px solid rgba(255, 255, 255, 0.4); /* bright top edge = light catching the material */
+}
+```
 
 ## Assess the Affected Layout
 
@@ -57,6 +80,8 @@ Choose the simplest structural model that expresses those relationships. Use lay
 - Make optical corrections only after inspecting the rendered result.
 
 Variation is not a goal by itself. Repetition should support recognition; break it only when content or priority changes.
+
+
 
 ## Verify
 

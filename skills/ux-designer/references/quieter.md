@@ -1,7 +1,7 @@
 # Quieter
 
 Use this optional recipe for a restrained new design or less visual intensity in an existing interface.
-When the direction is uncertain, follow the [direction choice rule](../SKILL.md#defaults-not-dogma).
+When the direction is uncertain, follow the [direction choice rule](../SKILL.md#full-design-workflow).
 Use [Typeset](typeset.md) as the typography baseline.
 
 ## Choose the Emphasis
