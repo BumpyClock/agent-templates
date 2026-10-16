@@ -1,0 +1,6 @@
+interface:
+  display_name: "Architect"
+  short_description: "Sketch types and module structure before implementing"
+  default_prompt: "Use $architect to sketch parallel design candidates for this change, synthesize one, and implement against it."
+policy:
+  allow_implicit_invocation: false

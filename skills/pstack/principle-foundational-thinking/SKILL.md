@@ -1,29 +1,21 @@
 ---
 name: principle-foundational-thinking
-description: "Resolve a shared prerequisite when several changes depend on an unsettled contract, representation, or integration point."
+description: "Apply before writing logic: choosing core types and data structures, sequencing scaffold-vs-feature work, asking what concurrent actors share. Get the data structures right so downstream code becomes obvious."
+disable-model-invocation: true
 ---
 
 # Foundational Thinking
 
-## Trigger
+**Structural decisions** protect option value. **Code-level decisions** protect simplicity.
 
-Several changes depend on a common contract, data representation, integration point, or unresolved prerequisite.
+**Data structures first.** Get the data shape right before writing logic. Define core types early, trace every access pattern, and choose structures that match the dominant paths.
 
-## Decision
+At code level, DRY the structure, not every line. Types and data models should converge. Three similar statements still beat a premature abstraction. Prefer explicit over clever. Test behavior and edge cases, not line counts.
 
-Identify the prerequisite that makes dependent work concrete.
-Establish the smallest usable version before consumers depend on assumptions about it.
-Use [Model the Domain](../principle-model-the-domain/SKILL.md) for the representation itself.
-Use [architecture guidance](../../programming/references/architecture/architecture-planning.md) for ownership, interfaces, and dependency direction.
+**Concurrency corollary.** Before sharing state between actors, ask "what happens if another actor modifies this concurrently?" If not "nothing", isolate.
 
-For example, agree the event shape and its owner before separate producers and consumers implement different versions.
-A thin end-to-end slice can expose an incorrect foundation sooner than a complete infrastructure layer.
-Order units so each resolves a dependency or produces relevant evidence for the next.
-Establish or deepen one coherent contract per increment rather than distribute special-case coordination across callers.
+**Scaffold first.** If something helps every later phase, do it first. Ask "does every subsequent phase benefit from this existing?" CI, linting, test infrastructure, and shared types are scaffold. Sequence for option value: setup before features, tests before fixes. Keep commits small and single-purpose.
 
-## Limit
+Each increment should land a coherent abstraction or deepen one that exists. Do not spread a new capability across callers as special-case coordination.
 
-A foundation needs current consumers or a demonstrated prerequisite.
-Do not add a framework, CI system, abstraction layer, or schema for hypothetical future phases.
-Do not let a speculative scaffold delay a direct solution.
-Preserve the product target under [Experience First](../principle-experience-first/SKILL.md).
+Subtraction comes before scaffolding. Remove dead code first, then lay foundations.

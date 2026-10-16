@@ -1,30 +1,18 @@
 ---
 name: principle-minimize-reader-load
-description: "Reduce unnecessary indirection and hidden mutable state when readers must reconstruct a contract across multiple owners."
+description: "Apply when reviewing or shaping code that's hard to trace. Count layers between question and answer, and hidden state in the reader's head; collapse one-caller wrappers and shrink mutable scope."
+disable-model-invocation: true
 ---
 
 # Minimize Reader Load
 
-## Trigger
+Maintainability is the work a reader must do to understand code. Track two axes: **layers to trace** (indirections between the question and the answer) and **state to hold** (hidden or mutable context the reader must keep in their head). LOC, cyclomatic complexity, and "clean architecture" are proxies. Reader load is the thing that matters. The two axes are independent. A flat file with 50 globals can be as hard to reason about as a 6-layer adapter stack. Guard both. This is the human analog of [Guard the Context Window](../principle-guard-the-context-window/SKILL.md). Working memory is finite for readers too.
 
-A change requires a reader to trace repeated indirection or reconstruct hidden mutable state.
+- **Collapse layers** that cost more than they save: wrappers with one caller, adapters with no second implementation, speculative indirection that was never needed. Inline them.
+- **Make adjacent layers change the abstraction.** A layer that repeats the same methods and arguments adds reader load without compression. Collapse pass-through layers.
+- **Demand interface compression.** A broad interface that hides little complexity makes readers learn both the surface and the implementation. Prefer boundaries that hide meaningful decisions.
+- **Shrink state scope:** prefer pure functions (returns over mutations), locals over fields, fields over module state, and module state over globals. Derive instead of sync.
+- **Name the invariant at the boundary,** not in every consumer, so the reader learns it once.
+- Before adding a layer or a piece of state, ask: does it reduce reader load elsewhere by at least as much?
 
-## Decision
-
-Examine both the path to the answer and the state needed to understand it.
-
-- Collapse a wrapper when it only repeats another contract and hides no useful decision.
-- Keep an interface that hides substantial domain knowledge, even when its implementation spans several files.
-- Prefer derived values to mutable copies that must remain synchronized.
-- Restrict mutable state to the smallest owner that can preserve its invariant.
-- Expose the invariant at its owner rather than repeat it in every consumer.
-
-Ask where a value originates and which operations can change it.
-A useful simplification reduces the facts a caller must know, not merely the line count.
-
-## Limit
-
-File count, caller count, and trace time are clues, not deletion thresholds.
-A one-caller module can isolate a platform dependency, protect an invariant, or preserve a public contract.
-Keep that separation when removal would transfer complexity or risk to the caller.
-Use [refactoring guidance](../../programming/references/refactoring/clean-refactoring.md) to preserve contracts during a structural change.
+**The test:** can a new reader answer "where does X come from?" and "what can change X?" in under 30 seconds? If not, cut layers or cut state.

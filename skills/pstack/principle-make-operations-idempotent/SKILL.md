@@ -1,40 +1,22 @@
 ---
 name: principle-make-operations-idempotent
-description: "Define safe repetition and recovery for retries, restarts, duplicate delivery, or partially completed operations."
+description: "Apply when designing commands, lifecycle steps, or processing loops that run amid crashes, restarts, and retries. Converge to the same end state regardless of partial prior runs."
+disable-model-invocation: true
 ---
 
 # Make Operations Idempotent
 
-## Trigger
+Design operations so they converge to the correct state regardless of how many times they run or where the previous run stopped. Every state-mutating operation should answer: "What happens if this runs twice? What happens if the previous run crashed halfway?"
 
-A command, lifecycle operation, or consumer can repeat after a retry, restart, duplicate delivery, or partial failure.
+**Why:** Commands, lifecycle operations, and processing loops run where crashes, restarts, and retries are normal. If partial state changes the next run's outcome, every restart becomes a debugging session.
 
-## Decision
+**The idea:** derive each step from the state that exists, not from what the previous run meant to do. Read the current state, compare it to the goal, and apply only the difference. A step written this way is safe to repeat, because a repeat finds nothing left to do.
 
-Define the identity of one logical operation and the state that successful completion must produce.
-Distinguish a retry of that operation from a new intentional request.
+Anything a run leaves behind, such as a lock, a temporary file, a half-written record, or a claimed job, must be recognizable as stale by the next run. Judge staleness by evidence that stays true wherever the previous run could have stopped, not only in the common case. A marker that the next run cannot judge turns every crash into manual cleanup. For example, write to a temporary path and rename it into place, or compare artifacts by content instead of by creation order.
 
-- Reconcile existing state when the contract describes a desired end state.
-- Use an operation identifier or deduplication key when repeated delivery must produce one effect.
-- Define recovery at failure points between the effect and its completion record.
-- Use transactions or atomic state changes when the available storage can preserve the required invariant.
-- Observe remote completion when a timeout leaves the outcome unknown.
+**The test:**
+1. What happens if this runs twice in a row?
+2. What happens if the previous run crashed at every possible point?
+3. Does re-execution converge to the same end state?
 
-At startup, adopt compatible live state.
-Remove stale artifacts only after an ownership check.
-Base cleanup on the artifact's role and relevant content, not creation order alone.
-A PID alone does not establish lock ownership across process reuse or hosts.
-Refresh inputs for each new scheduler cycle.
-Preserve a retried operation's identity and payload.
-
-Select checks for duplicate delivery and relevant interrupted states under [programming guidance](../../programming/SKILL.md).
-A restart that appears clean can still hide a duplicated external effect.
-
-## Limit
-
-Not every operation should converge to the same state.
-Distinct purchases, increments, and log events can legitimately accumulate.
-Preserve those semantics rather than deduplicate requests by equal payload alone.
-
-Local bookkeeping cannot guarantee exactly one effect in a remote system without support from that system.
-When safe recovery is unavailable, report the uncertain outcome rather than retry blindly or claim success.
+If any answer is "it depends on what state was left behind," the operation needs a reconciliation step.

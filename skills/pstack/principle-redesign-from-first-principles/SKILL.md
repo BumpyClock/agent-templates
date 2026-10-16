@@ -1,28 +1,16 @@
 ---
 name: principle-redesign-from-first-principles
-description: "Reassess a design when new requirements create repeated exceptions, parallel representations, or scattered coordination."
+description: "Apply when integrating a new requirement into an existing design."
+disable-model-invocation: true
 ---
 
-# Redesign from First Principles
+# Redesign From First Principles
 
-## Trigger
+When integrating a change, don't bolt it onto the existing design. Redesign as if the requirement had been a foundational assumption from the start.
 
-A new requirement creates repeated exceptions, parallel representations, or coordination across owners that should share one contract.
+- Read all affected files and understand the current design
+- Ask: "if we were writing this from scratch with this new requirement, what would we build?"
+- Propagate the change through every reference: types, docs, examples, rationale sections
+- Think about the whole redesign, then deliver it incrementally
 
-## Decision
-
-Describe the design that would fit if the requirement had existed from the start.
-Compare that target with the current design and its compatibility obligations.
-Choose a bounded change that improves ownership or removes invalid states without unnecessary replacement.
-Update affected types, callers, documentation, and examples so they describe the same contract.
-
-For example, a second delivery method may reveal a transport-independent domain contract.
-Extract that contract only if it removes real duplication or a repeated special case.
-Use [refactoring guidance](../../programming/references/refactoring/clean-refactoring.md) for caller migration and old-path removal.
-
-## Limit
-
-The thought experiment does not authorize a rewrite or expand the task scope.
-Preserve requirements that remain valid, including compatibility, performance, and operational constraints.
-A local extension can be the right result when the existing design already fits.
-Deliver a larger authorized redesign in coherent units under [programming guidance](../../programming/SKILL.md).
+This is the method for preserving option value when integrating changes into an existing design.

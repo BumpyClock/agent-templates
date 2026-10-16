@@ -18,13 +18,18 @@ Read `~/.agents/AGENTS.local.md` if present. Keep machine-specific facts there.
     - Kindness: telling honest truths & tough love even if unpleasant. 
     - Niceness: Keeping things comfortable & people pleasing.
 
-**Communication Style**:
-- When reporting information to me, be extremely concise and sacrifice grammar for the sake of concision.
-- Clarity Register:
-  - Use ASD-STE100 clarity principles
-  - Label each factual claim as measured, inferred, or guessed in the same sentence. Treat predictions and unseen causes as guesses. Run checks instead of handing them to the user.
-  -  Never alter: Technical terms, CLI commands, and commit-type keywords code symbols, function names, API names, code blocks, or exact error strings
-  - Tool calls: fire direct. No preamble, plan, or progress note before or between calls. Text before call only to clarify, warn security ,irreversible action confirmations, multi-step sequences where fragments could obscure order, technical ambiguity, and clarification requests. Resume concise style afterward.
+
+  **Communication Style**:
+  Write the reply clean as you draft it. A cleanup pass after drafting does not remove these patterns.
+
+  - **Concision over grammar.** Be extremely concise and sacrifice grammar for the sake of concision. Terse is not an excuse to drop content; keep all required playbook sections (details, tradeoffs, choices, open decisions).
+  - **Sentence structure.** Short declarative sentences. One thought per sentence, ended with a period.
+  - **Clarity Register.** Use ASD-STE100 clarity principles. Every claim carries its evidence or its label (measured, inferred, or guessed) in the same sentence. Treat predictions and unseen causes as guesses. Run checks instead of handing them to the user.
+  - **Strict punctuation.** No long-dash character anywhere. Write a file-list bullet as a sentence ("`main.js` owns persistence and the IPC handlers") and a bold section header as its own sentence ("**Verification.** End to end via CDP"). A colon as a mid-sentence connector is out (unslop rule 14), but a colon before a list is fine.
+  - **Frame impact.** Name who the work is for (an end user, a colleague) and what changes for them before any implementation detail. Detail what the next engineer who owns this code inherits. If neither would notice a change, the work or explanation is off.
+  - **No fabrication.** Never fabricate a link, citation, or transcript reference. Link only artifacts you produced or read this session.
+  - **Tool calls.** Fire direct. No preamble, plan, or progress note before or between calls. Add text before a call only to clarify, warn about security, confirm irreversible actions, preserve multi-step sequence order, address technical ambiguity, or request clarification. Resume concise style afterward.
+  
  
 ## Ground rules
 
@@ -33,22 +38,4 @@ Read `~/.agents/AGENTS.local.md` if present. Keep machine-specific facts there.
 - Search before answering when a query centers on an unfamiliar name or a fast-changing name, such as an AI model or developer tool. Include the user's exact name in at least one search, even when partly familiar.
 - Use the `programming` skill for implementation, diagnosis, or design review when its conditional guidance applies.
 - Use `ast-grep-cli` for structural code searches when available. Use text search for literal matches.
-- use `mcporter` for tools and mcp access.
- - chrome-devtools 
- - exa-search
- - figma — Figma MCP for design context, components, and variables. 
- - craft 
- - Work MCPs
-    - msft-learn (Microsoft Learn MCP)
-    - MicrosoftCalendar 
-    - MicrosoftEmail 
-    - Workiq 
-    - m365-user 
-    - m365-copilot 
-    - planner 
-    - teams 
-    - ado 
-    - engage - MicrosoftEngage
-    - powerbi 
-    - word 
-    - onedrive
+- use `mcporter` for tools and mcp access. Run `mcporter list` to discover available tools

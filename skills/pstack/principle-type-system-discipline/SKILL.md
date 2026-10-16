@@ -1,35 +1,13 @@
 ---
 name: principle-type-system-discipline
-description: "Strengthen types when they permit invalid combinations, interchangeable identifiers, unhandled variants, or undefined operations."
+description: "Apply when designing types, reviewing a function signature, or writing code in any statically-typed language. Make illegal states unrepresentable, brand semantic primitives, parse external data at boundaries, exhaust variants, derive from authoritative schemas."
+disable-model-invocation: true
 ---
 
 # Type System Discipline
 
-## Trigger
+Make the compiler reject impossible states, mismatched primitives, and unhandled variants. Prefer defining errors and special cases out of existence over proliferating handlers. For TypeScript syntax, see the `typescript-best-practices` skill.
 
-A type permits invalid field combinations, interchangeable identifiers, unhandled variants, or operations with undefined cases.
-
-## Decision
-
-Use the type system to exclude concrete failures at construction or use sites.
-
-- Model alternatives as sum types rather than a collection of optional fields.
-- Construct valid values directly when practical. A non-empty collection can contain a head and a remainder.
-- Distinguish semantic primitives when accidental interchange would cause a real defect, such as `UserId` and `OrderId`.
-- Use exhaustive variant checks so a new variant exposes each incomplete consumer.
-- Derive types from an authoritative schema when a maintained generator or language feature supports it.
-- Validate external data under [Boundary Discipline](../principle-boundary-discipline/SKILL.md) before the application treats it as a domain value.
-- Prefer validation, type refinement, or a better representation to an assertion that only silences the compiler.
-
-For example, `{ kind: 'open' } | { kind: 'done'; at: Date }` excludes a completed task without its timestamp.
-A runtime assertion or unexplained null check can identify an invariant that the current type does not express.
-
-## Limit
-
-Strengthen a type when a consumer needs the guarantee, not merely because greater precision is possible.
-An empty list has a valid sum of zero, so `sum` does not need a non-empty input type.
-A first-element operation may need that guarantee.
-
-Keep plain primitives when interchange is harmless or extra wrappers add more complexity than protection.
-At an unavoidable interop boundary, isolate an unsafe assertion and state its precondition.
-Types do not replace authorization, runtime resource checks, or invariant preservation after mutation.
+- **Brand semantic primitives.** `UserId` and `OrderId` are strings underneath but should not be interchangeable. Give each its own type, such as a branded intersection in TypeScript or a newtype elsewhere. Validate once at creation, trust the type downstream. If two arguments share a primitive type but mean different things, brand them.
+- **External data is untyped until parsed.** RPC payloads, JSON, IPC messages, CLI args, config files, environment variables, database rows. Have a parse function at every boundary that turns unstructured input into the typed model. The **boundary-discipline** principle skill says where to put validation.
+- **Derive types from authoritative schemas.** When a protocol buffer, OpenAPI spec, GraphQL schema, database migration, design-token file, or another file owns a shape, derive from it instead of hand-rolling a parallel type. See the **encode-lessons-in-structure** principle skill.

@@ -1,43 +1,21 @@
 ---
 name: principle-attack-the-premise
-description: "Challenge a mechanism when repeated fixes fail, reviews target earlier fixes, or evidence contradicts its premise."
+description: "Apply when two or more fixes that share one premise have failed the same gate. Write the premise down and test it directly before you write another fix that assumes it."
+disable-model-invocation: true
 ---
 
-# Attack the premise
+# Attack the Premise
 
-## Trigger
+When two or more fixes that share one premise have failed the same gate, suspect the premise, not the fixes.
 
-Any of these conditions applies:
+**Why:** Each failed fix is evidence against the belief it assumed. A third fix on the same premise spends effort where the evidence already says the cause is not.
 
-- Repeated fixes fail the same acceptance check.
-- Fixes pass, but each review round finds defects in machinery that the previous fix added.
-- A proposed defense targets a failure path that has no reachability evidence.
-- Evidence contradicts an assumption behind the requested mechanism.
+**Pattern:**
+- **Write the premise down.** The premise is the one sentence that every failed fix assumed.
+- **Test the premise before the next fix.** Find an observation that would come out differently if the premise were false, and make it. Look at how the failures are distributed, not only at how large they are. Make the check rerunnable per [Build the Lever](../principle-build-the-lever/SKILL.md).
+- **Follow the evidence.** If it contradicts the premise, the cause is elsewhere. Look for what the failures have in common that the premise did not predict. If it confirms the premise, ask the next "why" per [Fix Root Causes](../principle-fix-root-causes/SKILL.md). The earlier fixes may have treated a consequence instead of the cause.
+- **Remove the condition instead of compensating for it**, per the [Laziness Protocol](../principle-laziness-protocol/SKILL.md). If the evidence shows that one part always lands on the losing side, change what puts it there. A mechanism that cleans up after it leaves the cause in place and adds work on every run.
 
-## Decision
+**Stop:** Do not start the next fix before the premise is written down and tested.
 
-State the required outcome and the assumption shared by candidate fixes.
-Choose a bounded observation that could disprove that assumption before another similar fix.
-For a defended failure path, trace the producer of the condition from real callers before you add another guard.
-Prefer removing the path or narrowing its owner over hardening the guard.
-
-For uneven work or resource use, compare the distribution across actors rather than only the aggregate.
-Use existing metrics or a repeatable query under [Build the Lever](../principle-build-the-lever/SKILL.md) when a census is useful.
-
-- Compare affected and unaffected actors across equivalent runs.
-- Account for capacity and workload differences before a conclusion about role assignment.
-- Trace who assigns a persistent role under [Fix Root Causes](../principle-fix-root-causes/SKILL.md).
-- Remove or rotate the assignment when the shared contract does not require a fixed owner.
-
-For example, a persistent resource imbalance may come from a fixed producer role, not an inadequate cleanup path.
-Compare an assignment change with repeated compensation against the original acceptance check.
-Use [Redesign from First Principles](../principle-redesign-from-first-principles/SKILL.md) when a new requirement, rather than an unsupported assumption, motivates the change.
-
-## Limit
-
-Repeated failure is a reason to test a premise, not proof that the premise is false.
-An unreachable path needs a cited trace, not an assertion. When reachability cannot be established with bounded effort, treat the path as reachable.
-An even census does not disprove assumptions about timing, payload size, or causal order.
-Keep fixed ownership when ordering, affinity, security, or another contract requires it.
-Do not require a census for a failure without actors or distributional imbalance.
-An alternative mechanism still needs authorization and must preserve the user's constraints.
+This principle is distinct from [Redesign from First Principles](../principle-redesign-from-first-principles/SKILL.md), which rebuilds a design around a new requirement. It questions a fact the current design assumes.

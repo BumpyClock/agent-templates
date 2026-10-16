@@ -1,31 +1,16 @@
 ---
 name: principle-separate-before-serializing-shared-state
-description: "Choose separate ownership or structural coordination when concurrent actors can modify the same state."
+description: "Apply when concurrent actors might write to the same file, branch, key, or state object. Eliminate the sharing first; serialize structurally only when one shared writer is a real invariant."
+disable-model-invocation: true
 ---
 
 # Separate Before Serializing Shared State
 
-## Trigger
+When concurrent actors might share mutable state, first ask whether they need the same mutable object. If not, eliminate the sharing. When sharing is real, enforce serialization structurally: lockfiles, sequential phases, exclusive ownership. Instructions and conventions are not concurrency control.
 
-Concurrent actors can modify the same file, key, branch, object, or related state.
+**Why:** Concurrent writes to shared state create race conditions that are intermittent, hard to reproduce, and expensive to debug.
 
-## Decision
-
-Determine whether the actors need one canonical mutable object or merely publish independent facts.
-
-- Give independent facts separate owned records when readers can combine them without a consistency violation.
-- Preserve one authoritative object when a shared invariant requires it.
-- For shared mutation, use structural coordination such as a transaction, single writer, lock, or atomic compare-and-swap.
-- Include partial failure and ownership transfer in the coordination contract.
-
-Two workers that update independent fields in one JSON file still share a write target.
-Separate status files can remove that contention when no atomic snapshot across the fields is required.
-Instructions to take turns do not enforce exclusive access.
-
-## Limit
-
-Separate storage can make a cross-record invariant harder to preserve.
-Keep related state together when atomic consistency is part of the contract.
-
-Do not fragment a coherent source file or test suite merely to give each agent a file.
-Assign one owner or serialize edits when the artifact should remain coherent.
+**Pattern:**
+1. **Identify shared mutable state** (files both read and write, branches both push to, APIs both define and consume).
+2. **Default: eliminate the shared write target.** Ask: do these actors need one canonical object, or are they publishing independent facts? Give each actor its own owned file, key, branch, or state directory, and merge only at the read/reporting boundary. Two workers writing their own `lastX` field into one `state.json` is still shared mutation. `indexer-state.json` + `metrics-state.json` is not.
+3. **Only when one shared write target is a real invariant, serialize access structurally** (lockfiles, sequential phases, single-writer actor, or atomic compare-and-swap). Treat "we need a lock" as a design smell to check, not as the default answer.

@@ -1,29 +1,18 @@
 ---
 name: principle-subtract-before-you-add
-description: "Find a bounded removal before adding to obsolete structure, duplicate decisions, adapters, or unreachable defenses."
+description: "Apply when sequencing an addition, refactor, or rewrite. Remove dead code, redundant validators, and stub references first, then build on the simpler base."
+disable-model-invocation: true
 ---
 
 # Subtract Before You Add
 
-## Trigger
+When evolving a system, remove complexity first, then build. Default to subtraction.
 
-An addition would extend obsolete structure, duplicate a decision, require another adapter around an existing owner, or defend a path that no caller reaches.
+Make simplification a continual investment. Leave the design slightly simpler and more capable behind the same or smaller surface than you found it.
 
-## Decision
-
-Identify whether a bounded removal makes the requested change simpler.
-Remove obsolete branches or duplicate representations before dependent additions when that sequence preserves the contract.
-Compare the complete result, not just the size of the first patch.
-
-For example, retire an internal configuration alias before another consumer adopts it.
-Keep the authoritative value and migrate its consumers under [refactoring guidance](../../programming/references/refactoring/clean-refactoring.md).
-For agent guidance, remove redundant rules and content-free stubs only when another source preserves their useful contract.
-
-## Limit
-
-Deletion is a means to the requested outcome, not a prerequisite for every task.
-Preserve valid public contracts, boundary checks, accessibility, and data-loss protections on reachable paths.
-Treat a path as unreachable only with a cited producer trace.
-Do not treat missing local callers as proof that a public API is unused.
-A short reference can still preserve a useful entry point.
-Defer unrelated cleanup or removal whose behavior cannot be established.
+- Sequence removal before construction
+- Cut before you polish (get to the minimum before investing in quality)
+- Design for observed usage, not speculative edge cases
+- No speculative validators, parsers, or guards beyond what the spec demands
+- Simplify prompts (remove redundant instructions, excessive templates)
+- When a reference has no novel content, delete it rather than leaving a stub

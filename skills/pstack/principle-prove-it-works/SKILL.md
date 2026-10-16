@@ -1,20 +1,22 @@
 ---
 name: principle-prove-it-works
-description: "Select direct evidence for the changed contract before declaring a task complete."
+description: "Apply after completing a task, before declaring done. Verify against the real artifact (run the feature, read the actual value, inspect the diff), not a proxy, self-report, or 'it compiles.'"
+disable-model-invocation: true
 ---
 
-# Prove it works
+# Prove It Works
 
-## Trigger
+Verify every task output by checking the real thing directly. Do not infer from proxies, self-reports, or "it compiles."
 
-A task is about to be declared done.
+**Why:** Unverified work has unknown correctness. Indirect verification (file mtimes, output freshness, agent self-reports, cached screenshots) feels cheaper than direct observation. Acting on a wrong inference costs far more than checking the source.
 
-## Decision
+Check the real thing, not a proxy:
+- Check process liveness directly, not indirectly through derived state
+- Read the actual value, not a cached or derived representation
+- When verification fails, suspect the observation method before suspecting the system
 
-Match completion evidence to the changed contract and any verification the user explicitly requests.
-Compilation, type checks, unit tests, runtime checks, or artifact inspection can establish completion when they directly cover that contract.
-Report the evidence and any remaining verification gaps.
+## Script the check when you can
 
-## Limit
+The strongest proof is a deterministic script that re-runs the same comparison, not a one-time eyeball. Write the script, run it, and keep its output as an artifact a reviewer can re-run instead of trusting your word.
 
-Use the smallest check that establishes the outcome. See Testing & Validation in [the programming skill](../../programming/SKILL.md#testing--validation) for check scope and evidence reuse.
+Keep the artifact visible for the human. Commit it only for large or complex work where the trail has to be auditable later, like a big port or migration (the **show-me-your-work** skill).

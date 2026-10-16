@@ -143,3 +143,22 @@ snapshot and differed in every file. Latest upstream playbook commit on this dat
 8043881, pstack: autopilot loops catch the operator up with /ketchup (#616).
 No local adaptations were kept. These are the upstream playbooks, not a skill.
 License: MIT, Copyright (c) 2026 Lauren Tan. See LICENSE.txt.
+
+Architect import, 2026-10-16
+
+Source: https://github.com/cursor/plugins/tree/main/pstack/skills/architect
+Imported architect/SKILL.md and architect/references/{design-red-flags,
+rationale-template,runner-prompt}.md from upstream main on this date. Main is
+newer than the c5db7fef pin: it adds four agent-aware red flags (split
+ownership, two ways to do one task, importable internals, hand-synced list)
+and restructured grounding/deviation guidance. rationale-template.md matches
+both revisions. License: MIT, Copyright (c) 2026 Lauren Tan. See LICENSE.txt.
+
+Local adaptations: runner selection reads the `architect runners` line in
+~/.agents/configured-models.md instead of the Cursor pstack-models.mdc rule,
+rejected slugs fall back to the closest valid slug of the same family, and
+Phase B gains a self-run Task-tool fallback when the arena skill is not
+installed (arena and why are not imported). The rationale template's
+synthesis note points at Phase B synthesis instead of a relative link to the
+absent arena skill. agents/openai.yaml is local harness metadata. The
+disable-model-invocation flag is retained, matching swarm and interrogate.

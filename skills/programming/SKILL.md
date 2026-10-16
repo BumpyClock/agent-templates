@@ -12,25 +12,19 @@ description: "Use when coding. Implement, debug, refactor; review code designs."
   - Only preserve required documentation, safety notes, licenses, and tool directives.
   - When similar code stays duplicated on purpose, comment why the copies evolve independently or are not yet abstracted.
 - Reuse or extend an existing helper, type, component, or pattern when practical & efficient. Prefer a smaller complete change over a parallel path or speculative abstraction.
-- Before adding a dependency, check whether existing dependencies or a simple implementation already meet the need. Read their docs and type definitions before assuming a feature is missing. When adding one, prefer a mature, well-maintained library over reimplementing general-purpose functionality.
-- When integrating upstream files, stage them in the platform's temporary directory and review the diff before applying selected changes. Preserve unrelated local edits.
 - Use web research for current, high-risk, or uncertain facts, not stable facts already known. Prefer authoritative sources; use exact errors in diagnostic searches and the session date when recency matters.
-- Fix/refactor: delete old path by default. Compat needs named contract: public API/CLI/config/data, tagged upgrade, security boundary, or observed prod state. Unsure: ask before alias/shim/fallback. Tests alone != contract.
-- The number of tokens used to edit files is best minimized, all else being equal. Therefore, when it will not affect the end result, try to surgically edit a file rather than rewrite the entire thing.
-- use Negative Space programming when it’s necessary
 
 
 ## Testing & Validation
 
-- Use the smallest existing checks that cover the affected contract and risk. Honor explicit user requests for additional verification. Leave full suites to CI unless the user requests them, repository requirements apply, or wider risk justifies a local run.
+- Use the smallest existing checks that cover the affected contract and risk.
 - Prefer a focused E2E check for changed app behavior when it directly establishes the outcome. Use lower-level tests when they cover the contract more directly or economically. Add or revise tests for material coverage gaps, not to mirror the implementation. Reuse valid evidence; repeat or broaden checks only after relevant changes, failures, unresolved concerns, or required project gates.
-- Update relevant documentation for behavior or API changes unless repository policy prohibits it. Keep completion evidence observable through task-appropriate inspection tools or logs.
 
 ## Observability
 
 For new or materially changed app behavior identify how important outcomes, failures, and performance will be observed. Preserve existing telemetry contracts and reuse signals that already answer the question.
 
-During implementation and debugging, add focused debug logs where they help agents and humans follow execution, inspect relevant state changes, and locate failures. Reuse the existing logging facilities and inspect the output during development. Keep sensitive data out of logs. Remove temporary probes before delivery, or deliberately retain useful, low-noise diagnostics at the appropriate log level.
+During implementation and debugging, add focused debug logs to help agents and humans follow execution, inspect relevant state changes, and locate failures. Reuse the existing logging facilities and inspect the output during development. Remove temporary probes before delivery, only retain useful, low-noise diagnostics at the appropriate log level.
 
 For persistent application instrumentation or changes to telemetry collection, use `telemetry` skill. Temporary local debug probes do not require the full telemetry workflow. Cosmetic changes and behavior-preserving refactors do not by themselves need new events.
 
@@ -48,8 +42,9 @@ Read the leaf skill in full for any principle you apply. Each entry names when i
 - **Minimize Reader Load** (**principle-minimize-reader-load**). Reviewing or shaping code that's hard to trace. Count layers and hidden state, collapse one-caller wrappers, shrink mutable scope.
 - **Outcome-Oriented Execution** (**principle-outcome-oriented-execution**). Planned rewrites and migrations with explicit phase boundaries. Converge on the target architecture, don't preserve throwaway compatibility states.
 - **Experience First** (**principle-experience-first**). Product, UX, or feature-scope tradeoffs. Choose user delight over implementation convenience.
-- **Exhaust the Design Space** (**principle-exhaust-the-design-space**). A novel interaction or architectural decision with no precedent. Build 2-3 competing prototypes and compare before committing.
-- **Build the Lever** (**principle-build-the-lever**). Any non-trivial work. Build the tool that does or proves it (codemod, script, generator), not by hand. The tool is the artifact a reviewer reruns.
+- **Exhaust the Design Space** (**principle-exhaust-the-design-space**). A novel interaction or architectural decision with no precedent. 
+- 
+- **Build the Lever** (**principle-build-the-lever**). Any non-trivial repeated work. Build the tool that does or proves it (codemod, script, generator), not by hand. The tool is the artifact a reviewer reruns.
 
 **Architecture**
 
@@ -85,16 +80,16 @@ Read the leaf skill in full for any principle you apply. Each entry names when i
 - Parallel fan-out → the **swarm** skill for coverage matrices, races, gauntlets, and exploration partitions. Use **arena** for design or code bakeoffs with base selection and grafting.
 - Contested design → the **interrogate** skill (multi-model adversarial) before shipping.
 - Nontrivial multi-step → write the throughput checkpoint (Feature step 3).
-- Any prose surface → the **unslop** skill. Your reply is a prose surface. Write it per **Writing the reply**. Agent-facing prose also follows the **create-skill** skill (Cursor's built-in for authoring SKILL.md files).
+- Any prose surface → the **unslop** skill.
 - Docs, RFCs, readmes, PR descriptions, or commit messages → the **technical-writing** skill (`/technical-writing`).
-- Before commit → the `deslop` skill from the `cursor-team-kit` plugin (`/deslop`).
+- Before commit → the `deslop` skill.
 - Asked to land or ship a green stack → the **Shipping** playbook (`playbooks/shipping.md`). Green is not safe. Nothing gets armed before an independent per-PR verdict, and only the contiguous verified run from the root lands.
 - Each skill owns its advice and limits.
   Report consequential choices and evidence, not a recital of principle names.
 - For an unresolved module-interface or ownership decision, use [Codebase design](../engineering/codebase-design/SKILL.md).
 - For a contested design or consequential acceptance claim, use an independent review with the [Code review](../engineering/code-review/SKILL.md) rubric.
 - For technical documents whose structure or explanation needs work, use [Technical writing](../pstack/technical-writing/SKILL.md). Routine replies follow shared prose rules. Substantial prose revision uses [Unslop](../pstack/unslop/SKILL.md); agent instructions use the harness's skill-authoring guidance.
-- Before a commit, use the [deslop pass](references/refactoring/deslop.md). Review comments against **Code clarity and comments** when preparing your own changes for review.
+
 
 
 ## Workflows

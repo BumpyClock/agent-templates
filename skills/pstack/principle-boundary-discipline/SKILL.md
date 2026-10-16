@@ -1,33 +1,34 @@
 ---
 name: principle-boundary-discipline
-description: "Define validation and domain guarantees when external input enters a system or framework adapters mix transport and domain logic."
+description: "Apply when wiring validation, error handling, or framework adapters. Concentrate guards at system boundaries (CLI, config, network, external APIs); trust internal types and keep business logic in pure functions."
+disable-model-invocation: true
 ---
 
 # Boundary Discipline
 
-## Trigger
+Place validation, type narrowing, and error handling at system boundaries. Trust internal code unconditionally. Business logic lives in pure functions. The shell is thin and mechanical.
 
-External input enters the system, or a framework adapter mixes transport details with domain logic.
+**Why:** Scattered validation is noisy, redundant, and gives a false sense of safety. Keep logic out of framework wiring so it can be tested without the framework.
 
-## Decision
+**The pattern:**
+- **At boundaries** (CLI args, config files, external APIs, network protocols): validate, return errors, handle defensively.
+- **Inside the system:** typed data, error propagation, no re-validation. Trust the types.
+- **Across the boundary.** Expose domain concepts, not the boundary's private representation. Keep general-purpose mechanism inside and special-purpose policy at the edge.
 
-Validate data where trust changes. Convert raw input into a domain value before internal consumers depend on its guarantees.
+**Applications:**
 
-- Validate CLI arguments, configuration, network payloads, and stored data against the relevant contract.
-- Keep transport and framework representations inside their adapters unless the public contract deliberately exposes them.
-- Keep reusable mechanisms inside their owner and caller-specific policy at the boundary that chooses it.
-- Keep domain transformations independent of framework state where this reduces dependencies.
-- Propagate errors to the owner that can recover or report them.
-- Remove repeated validation only when an upstream guarantee still holds at the use site.
+Validation and error handling:
+- Validate config at parse time (the boundary), not inside business logic
+- Parse raw data into domain types at the boundary
+- Do not re-export transport, storage, framework, or wire types through the public surface
+- No redundant nil checks deep in call chains if the boundary already validated
 
-A validated identifier can pass between internal functions without repeated syntax checks.
-Access to the resource can still require a current authorization decision.
+Code organization:
+- Business logic in pure functions with no framework dependencies
+- Parse functions: pure transforms from raw bytes to typed state
+- Prompt construction: structured state in, string out
+- Scoring and assessment: pure transforms from state to results
 
-## Limit
-
-Internal code is not unconditionally trustworthy.
-Mutation, concurrency, stale data, plugins, and unsafe interop can invalidate earlier guarantees.
-Preserve invariants at construction and mutation points.
-Retain checks for runtime conditions that the type or input parser cannot establish.
-
-Extract a pure function when it clarifies the contract, not to create a wrapper around every framework call.
+**The tests:**
+- "Is this data crossing a system boundary right now?" If not, validation is redundant.
+- "Can this be a pure function that the shell just calls?" If yes, extract it.

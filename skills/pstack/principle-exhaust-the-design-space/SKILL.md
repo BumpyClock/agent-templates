@@ -1,29 +1,9 @@
 ---
 name: principle-exhaust-the-design-space
-description: "Compare materially different alternatives for a consequential design choice with no established answer."
+description: "Apply when facing a novel UI interaction or architectural decision with no precedent in the codebase. Build 2-3 competing prototypes and compare side by side before committing."
+disable-model-invocation: true
 ---
 
 # Exhaust the Design Space
 
-## Trigger
-
-A consequential design choice has several viable alternatives and no established answer in the codebase.
-
-## Decision
-
-Compare materially different designs against explicit criteria before commitment.
-Use criteria such as contract fit, user behavior, state ownership, reversibility, and operational cost.
-
-Use the cheapest evidence that separates the alternatives.
-A source example or interface sketch can resolve a structural choice.
-A bounded prototype can resolve uncertain runtime behavior.
-Stop when the evidence supports a choice or exposes a product preference that requires the user.
-
-## Limit
-
-The name does not require an exhaustive search or a fixed number of prototypes.
-Do not invent alternatives for a mechanical change or a choice already determined by the contract.
-Do not mandate parallel agents.
-
-An experiment can establish behavior, but it cannot decide the user's priorities or grant permission for external effects.
-Keep prototypes within the authorized scope.
+It also applies to product design decisions where user experience depends on feel, not logic.
