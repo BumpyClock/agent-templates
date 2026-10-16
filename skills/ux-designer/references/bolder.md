@@ -1,7 +1,7 @@
 # Bolder
 
 Use this optional recipe for an expressive new design or stronger emphasis in an existing interface.
-When the direction is uncertain, follow the [direction choice rule](../SKILL.md#defaults-not-dogma).
+When the direction is uncertain, follow the [direction choice rule](../SKILL.md#full-design-workflow).
 Use [Typeset](typeset.md) as the typography baseline.
 
 ## Establish the Scope
