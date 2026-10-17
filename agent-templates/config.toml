@@ -9,22 +9,22 @@ balanced = { model = "sonnet" }
 fast = { model = "haiku" }
 
 [providers.copilot]
-heavy = { model = "gpt-5.6-sol", reasoning = "high" }
-strong = { model = "gpt-5.6-terra", reasoning = "high" }
-balanced = { model = "gpt-5.6-luna", reasoning = "xhigh" }
+heavy = { model = "gpt-6-astra", reasoning = "high" }
+strong = { model = "gpt-6.1-sol", reasoning = "high" }
+balanced = { model = "gpt-6.1-sol", reasoning = "xhigh" }
 fast = { model = "claude-sonnet-5" }
 
 [providers.codex]
-heavy = { model = "gpt-5.6-sol", reasoning = "high" }
-strong = { model = "gpt-5.6-terra", reasoning = "high" }
-balanced = { model = "gpt-5.6-luna", reasoning = "xhigh" }
-fast = { model = "gpt-5.6-luna", reasoning = "medium" }
+heavy = { model = "gpt-6-astra", reasoning = "high" }
+strong = { model = "gpt-6.1-sol", reasoning = "high" }
+balanced = { model = "gpt-6.1-sol", reasoning = "xhigh" }
+fast = { model = "gpt-6-luna", reasoning = "medium" }
 
 [providers.pi]
-heavy = { model = "openai-codex/gpt-5.6-sol", reasoning = "high" }
-strong = { model = "openai-codex/gpt-5.6-terra", reasoning = "high" }
-balanced = { model = "openai-codex/gpt-5.6-luna", reasoning = "xhigh" }
-fast = { model = "zai/glm-5.2", reasoning = "low" }
+heavy = { model = "openai-codex/gpt-6-astra", reasoning = "high" }
+strong = { model = "openai-codex/gpt-6.1-sol", reasoning = "high" }
+balanced = { model = "openai-codex/gpt-6.1-sol", reasoning = "xhigh" }
+fast = { model = "zai/glm-5.3-flash", reasoning = "low" }
 
 # Codex CLI settings shared by every compiled agent; templates override per key.
 [codex]
