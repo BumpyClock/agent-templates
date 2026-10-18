@@ -5,6 +5,7 @@ compatibility: "Uses session orchestration and isolated workspaces when availabl
 license: MIT
 metadata:
   version: "2.1.0"
+disable-model-invocation: true
 ---
 
 # Autonomous delivery

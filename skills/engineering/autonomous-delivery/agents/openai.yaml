@@ -1,0 +1,5 @@
+interface:
+  display_name: "Autonomous delivery"
+  short_description: "Orchestrate workers to deliver verified outcomes"
+policy:
+  allow_implicit_invocation: false
