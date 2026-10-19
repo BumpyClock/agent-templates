@@ -21,6 +21,8 @@ Use `sag` for requested or standing-authorized speech. Match the message and del
 
 Generation transmits text to ElevenLabs. Send only approved notification text. Exclude secrets, repository excerpts, logs, and unrelated private details. A short project label may identify an update; do not upload repository files or full task context to enrich it. If provider use or content is not authorized, report that boundary in text instead of transmitting it.
 
+For expressive delivery, enhance the text first with the `enhance-text-for-tts` skill.
+
 Read the [CLI reference](references/cli-reference.md) for generation, playback, output formats, and timeout controls.
 
 ## Prerequisites

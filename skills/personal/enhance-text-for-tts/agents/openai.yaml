@@ -1,0 +1,6 @@
+interface:
+  display_name: "Enhance Text for TTS"
+  short_description: "Add audio tags and emphasis before speech generation"
+  default_prompt: "Use $enhance-text-for-tts to add context-appropriate audio tags and emphasis to text before generating speech."
+policy:
+  allow_implicit_invocation: true
