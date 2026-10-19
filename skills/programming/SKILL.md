@@ -22,6 +22,7 @@ Use project constraints and established context. Scale planning, exploration, an
 - For stateful or asynchronous changes, examine authoritative state, ordering, partial failure, retries, cancellation, cleanup, and resource bounds where relevant. Make failures observable; recover only when the resulting behavior remains valid.
 - Refactor in behavior-preserving steps. Capture uncertain existing behavior before changing it. Migrate controlled callers coherently; preserve external and stored-data contracts unless their migration is authorized. Give necessary compatibility bridges a removal condition.
 - Explain non-obvious intent, constraints, or tradeoffs in comments. Preserve useful contract documentation, safety notes, licenses, and directives; remove comments that merely restate code.
+- Always work from first principles. invoke the relevant principle-* skills from ../pstack/
 
 ## Verify and finish
 
