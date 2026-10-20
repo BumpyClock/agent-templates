@@ -46,4 +46,4 @@ Open references only when their specific guidance is needed. They provide task d
 | Performance investigation | [Performance](references/performance/perf-issue.md); [live process](references/performance/runtime-forensics.md); [capture analysis](references/performance/trace-forensics.md), as applicable |
 | Platform-specific work | [Apple](references/apple/guide.md), [WinUI](references/winui/guide.md), [GPUI](references/gpui/guide.md), or [TypeScript contracts](references/languages/typescript-patterns.md) |
 | Persistent telemetry changes | [Telemetry](../engineering/telemetry/SKILL.md) |
-| Requested commits, PRs, or release work | [Git and releases](../git-and-releases/SKILL.md) |
+| Requested commits, PRs, or release work | [Git and releases](../git-workflow/SKILL.md) |

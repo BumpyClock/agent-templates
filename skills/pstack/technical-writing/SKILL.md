@@ -42,7 +42,7 @@ For STE-controlled documents, use the required edition and dictionary before a c
 Use this pass during pre-PR cleanup or a requested review of PR or commit text.
 Check claims against the proposed diff, user intent, and available verification evidence. Distinguish implemented behavior from plans and passing checks from unverified expectations.
 Give reviewers the reason for the change, its scope, and material risks or tradeoffs without repeating the diff. Preserve exact symbols and use consistent terms across the text and changed documentation.
-Follow the repository's template and the [Git and releases conventions](../../git-and-releases/SKILL.md). PR and commit text do not require document-type analysis.
+Follow the repository's template and the [Git and releases conventions](../../git-workflow/SKILL.md). PR and commit text do not require document-type analysis.
 Correct unsupported or misleading wording within the requested scope. Report unresolved factual questions or code defects rather than hiding them with more confident prose.
 
 ## Completion

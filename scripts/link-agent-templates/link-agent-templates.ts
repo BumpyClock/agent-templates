@@ -279,14 +279,9 @@ async function linkIfPresent(
 }
 
 // =============================================================================
-// Flat skill linking
+// Skill linking
 // =============================================================================
 
-// Claude Code and Copilot CLI discover skills one level deep:
-// <root>/<name>/SKILL.md. The repo groups some skills under a parent dir
-// (skills/pstack/unslop, ...), which a whole-dir symlink hides. This links each
-// skill dir individually into a real target dir so grouped skills appear flat.
-//
 // Discovery: a top-level dir with SKILL.md is a skill. A top-level dir without
 // SKILL.md is a group; each child dir with SKILL.md is a skill. Dot dirs and
 // plain files are skipped. Groups do not nest further.
@@ -329,15 +324,25 @@ async function discoverSkills(
 	return skills;
 }
 
-async function linkSkillsFlat(
+export async function linkSkills(
 	skillsDir: string,
 	targetDir: string,
+	layout: "flat" | "nested",
 ): Promise<void> {
 	if (!(await pathExists(skillsDir))) {
 		return;
 	}
 
-	const skills = await discoverSkills(skillsDir);
+	// Copilot discovers grouped skills recursively. Link each group intact so
+	// relative references keep the source layout; Claude and Cursor stay flat.
+	const skills =
+		layout === "flat"
+			? await discoverSkills(skillsDir)
+			: new Map(
+					(await readdir(skillsDir, { withFileTypes: true }))
+						.filter((entry) => entry.isDirectory() && !entry.name.startsWith("."))
+						.map((entry) => [entry.name, path.join(skillsDir, entry.name)]),
+				);
 
 	// The target may be a whole-dir symlink from an earlier layout. mkdir on a
 	// symlink-to-dir succeeds silently, and every link created afterwards would
@@ -349,17 +354,29 @@ async function linkSkillsFlat(
 			await unlink(targetDir);
 			action(`Removed whole-dir symlink: ${targetDir}`);
 		} else if (!stat.isDirectory()) {
-			await removeExisting(targetDir);
+			throw new Error(`Refusing to replace a real skills file: ${targetDir}`);
 		}
 	}
 	await mkdir(targetDir, { recursive: true });
+
+	for (const name of skills.keys()) {
+		const targetPath = path.join(targetDir, name);
+		if (
+			(await pathExists(targetPath)) &&
+			!(await lstat(targetPath)).isSymbolicLink()
+		) {
+			throw new Error(
+				`Refusing to replace a real skill file or directory: ${targetPath}`,
+			);
+		}
+	}
 
 	for (const [name, sourcePath] of skills) {
 		await ensureLinked(sourcePath, path.join(targetDir, name));
 	}
 
 	// Prune stale links that point into the repo skills dir but no longer match
-	// a discovered skill. Real dirs and links to other places stay untouched.
+	// the selected layout. Real dirs and links to other places stay untouched.
 	const repoPrefix = skillsDir + path.sep;
 	for (const entry of await readdir(targetDir, { withFileTypes: true })) {
 		if (skills.has(entry.name) || !entry.isSymbolicLink()) continue;
@@ -389,9 +406,10 @@ async function linkClaude(agentTemplatesDir: string): Promise<void> {
 		"prompts",
 		path.join(claudeRoot, "commands"),
 	);
-	await linkSkillsFlat(
+	await linkSkills(
 		path.join(agentTemplatesDir, "skills"),
 		path.join(claudeRoot, "skills"),
+		"flat",
 	);
 	await linkIfPresent(
 		agentTemplatesDir,
@@ -506,9 +524,10 @@ async function linkCopilot(agentTemplatesDir: string): Promise<void> {
 		"prompts",
 		path.join(copilotRoot, "prompts"),
 	);
-	await linkSkillsFlat(
+	await linkSkills(
 		path.join(agentTemplatesDir, "skills"),
 		path.join(copilotRoot, "skills"),
+		"nested",
 	);
 	await linkIfPresent(
 		agentTemplatesDir,
@@ -665,9 +684,10 @@ async function linkCursor(agentTemplatesDir: string): Promise<void> {
 	const cursorRoot = homePath(".cursor");
 	await mkdir(cursorRoot, { recursive: true });
 
-	await linkSkillsFlat(
+	await linkSkills(
 		path.join(agentTemplatesDir, "skills"),
 		path.join(cursorRoot, "skills"),
+		"flat",
 	);
 }
 

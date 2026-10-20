@@ -46,7 +46,7 @@ The `link-agent-templates.ts` script creates symlinks from this repo to the appr
 
 - **Claude**: `~/.claude/commands`, `~/.claude/skills`, `~/.claude/docs`, etc. Skills link one per skill, so grouped skills (`skills/pstack/unslop`) appear flat as `~/.claude/skills/unslop`. Group dirs are any `skills/<group>/` without a `SKILL.md`.
 - **Codex**: `~/.codex/prompts`, `~/.codex/skills`, `~/.codex/agents`, etc.
-- **Copilot**: `~/.copilot/prompts`, `~/.copilot/skills`, etc.
+- **Copilot**: `~/.copilot/prompts`, `~/.copilot/skills`, etc. Copilot discovers nested skills, so skill groups retain their source layout, such as `~/.copilot/skills/pstack/technical-writing`. This preserves relative references between skills. Re-linking removes obsolete flat links into this repo and preserves unrelated local skills. A conflicting real file or directory stops skill linking instead of being replaced.
 - **OpenCode**: `~/.config/opencode/...`
 - **Pi**: `~/.pi/agent/...`
 - **Cursor**: `~/.cursor/skills` (one symlink per skill, same flat layout as Claude). This is the user-level directory Cursor loads and syncs to Cloud Agents.
@@ -56,6 +56,7 @@ The `link-agent-templates.ts` script creates symlinks from this repo to the appr
 The 23 `principle-*` skills under `skills/pstack/` are independently discoverable.
 They no longer live inside `programming` as reference files or embedded sections.
 The linker exposes each principle by its directory name, such as `principle-model-the-domain`.
+Copilot keeps these directories under `pstack`; Claude and Cursor expose them at the skill root.
 Programming workflows link to the relevant principle without loading the complete set.
 
 These skills preserve local guidance and incorporate applicable upstream changes.
