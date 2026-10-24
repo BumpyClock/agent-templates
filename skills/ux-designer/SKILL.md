@@ -56,6 +56,7 @@ For design tradeoffs, prefer this order. Depart from it when a concrete benefit 
 - Preserve relevant accessibility and interaction behavior.
 - A small edit needs no design document, mockup, direction statement, or micro-polish note.
 - Use only references needed for the affected behavior.
+- Cut taglines, helper text and secondary labels. If a screen needs them to make sense, fix the layout.
 
 ## Deliverable
 

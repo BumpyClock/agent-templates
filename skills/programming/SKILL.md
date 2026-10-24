@@ -23,6 +23,7 @@ Use project constraints and established context. Scale planning, exploration, an
 - Refactor in behavior-preserving steps. Capture uncertain existing behavior before changing it. Migrate controlled callers coherently; preserve external and stored-data contracts unless their migration is authorized. Give necessary compatibility bridges a removal condition.
 - Explain non-obvious intent, constraints, or tradeoffs in comments. Preserve useful contract documentation, safety notes, licenses, and directives; remove comments that merely restate code.
 - Always work from first principles. invoke the relevant principle-* skills from ../pstack/
+- Before you add code for a race condition or security edge case that is unlikely or purely hypothetical, tell me exactly what would go wrong, how likely that is, and how much complexity the extra code adds, in words a 10-year-old could understand. Then wait for my OK. If it can be prevented by invalidating the path so it never occurs, then tell me that option as well. Don't quietly widen the scope to guard against problems that only exist in theory.
 
 ## Verify and finish
 
@@ -32,6 +33,7 @@ Use project constraints and established context. Scale planning, exploration, an
 - For performance work, measure a representative baseline and compare equivalent workloads after the change. Preserve correctness; bound claims to what was measured.
 - Reuse existing diagnostics. Retain only useful, low-noise instrumentation. Update affected contracts and documentation when the change makes them inaccurate.
 - Complete implementation, integration, and necessary verification within the authorized scope. Review-only requests end with findings. Report the result, consequential decisions, verification, and unresolved limits.
+- Make the best decision that will elevate all three: the user experience (UX), developer experience (DX), and agent experience (AX) always, without breaking anything
 
 ## Conditional references
 
