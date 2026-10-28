@@ -24,6 +24,9 @@ Use project constraints and established context. Scale planning, exploration, an
 - Explain non-obvious intent, constraints, or tradeoffs in comments. Preserve useful contract documentation, safety notes, licenses, and directives; remove comments that merely restate code.
 - Always work from first principles. invoke the relevant principle-* skills from ../pstack/
 - Before you add code for a race condition or security edge case that is unlikely or purely hypothetical, tell me exactly what would go wrong, how likely that is, and how much complexity the extra code adds, in words a 10-year-old could understand. Then wait for my OK. If it can be prevented by invalidating the path so it never occurs, then tell me that option as well. Don't quietly widen the scope to guard against problems that only exist in theory.
+- Validate unknown values once at the boundary that owns them. Pass typed values inward instead of repeating `typeof value === "object"` and property-existence checks.
+- Do not defensively revalidate values already guaranteed by a schema, constructor, or internal type.
+- Do not extract single-use helpers preemptively. Inline the logic at the call site unless the helper is reused, hides a genuinely complex boundary, or has a clear independent name that improves the caller.
 
 ## Verify and finish
 
