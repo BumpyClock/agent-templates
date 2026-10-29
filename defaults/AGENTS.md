@@ -45,3 +45,4 @@ Read `~/.agents/AGENTS.local.md` if present. Keep machine-specific facts there.
 - run ci on boat follow docs: https://docs.boat.dev/ci
 - delegate to agents in a linux sandbox with boat: https://docs.boat.dev/recipes/agent-on-repo or windows apps https://docs.boat.dev/windows-apps
 - run parallel agents with boat : https://docs.boat.dev/recipes/parallel-agents
+- install boat if it's not installed already
