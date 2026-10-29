@@ -40,3 +40,8 @@ Read `~/.agents/AGENTS.local.md` if present. Keep machine-specific facts there.
 - Use `ast-grep-cli` for structural code searches when available. Use text search for literal matches.
 - use `mcporter` for tools and mcp access. Run `mcporter list` to discover available tools
 - Prefer using current directory instead of worktrees for yourself and subagents unless  necessary or explicit ask from user.
+
+# boat
+- run ci on boat follow docs: https://docs.boat.dev/ci
+- delegate to agents in a linux sandbox with boat: https://docs.boat.dev/recipes/agent-on-repo or windows apps https://docs.boat.dev/windows-apps
+- run parallel agents with boat : https://docs.boat.dev/recipes/parallel-agents
