@@ -91,22 +91,21 @@ links settings, models, cloak, extensions, themes, instructions, and compiled
 agents. It does not activate `SYSTEM.md`, `APPEND_SYSTEM.md`, or archived extensions.
 Copying this directory does not change existing links or the live models file.
 
-The model catalog was refreshed from the live Pi config with all 46 model
-definitions preserved. Both connection fields reference environment variables:
+The shared `models.json` contains `modelOverrides`, keyed by the exact model ID.
+It preserves the curated names, prices, context limits, and thinking maps without
+connection fields or credentials. Pi applies these overrides after the CLIProxyAPI
+extension registers its discovered models. Overrides do not add unavailable models.
 
-- `baseUrl` is `$CLIPROXYAPI_BASE_URL`.
-- `apiKey` is `$CLIPROXYAPI_API_KEY`.
+The CLIProxyAPI package declared in `settings.json` supplies the API, connection,
+and discovered catalog. Configure the machine-local `~/.pi/agent/cliproxyapi.json`
+with the base URL and use `/login cliproxyapi` for credentials stored in local
+`auth.json`. The extension also accepts an `apiKey` in its local config.
+Environment variables are optional and take precedence when present.
 
-Store the actual values in the private dotfiles secrets repo at
-`secrets/api-keys/env.json`, under the `cliproxyapi` group. The dotfiles environment
-generator exports them through `~/.config/dotfiles/env.sh` and `env.ps1`.
-Start Pi from a shell that loads that generated environment.
-
-The CLIProxyAPI package declared in `settings.json` is required. Pi core resolves
-the API-key reference, but not a static `baseUrl` reference. The package reads
-`CLIPROXYAPI_BASE_URL` and applies its normalized URL when registering the provider,
-replacing the public reference before requests. Without that package, the URL
-reference alone is not a working endpoint.
+The extension writes `cliproxyapi-models.json` as a generated cache. Do not edit or
+sync that cache. Run `/cliproxyapi-refresh` in Pi after proxy changes to replace it.
+The proxy supplies the `GH ` Copilot names; local `modelOverrides.name` can also
+customize a display name. Routing IDs such as `copilot/gpt-6.1-sol` stay unchanged.
 
 Keep `auth.json`, `cliproxyapi.json`, model caches, and backups machine-local.
 These paths are gitignored. Never copy a raw live models file into this repo.

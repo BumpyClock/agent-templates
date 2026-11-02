@@ -1,12 +1,8 @@
 {
   "providers": {
     "cliproxyapi": {
-      "baseUrl": "$CLIPROXYAPI_BASE_URL",
-      "api": "openai-responses",
-      "apiKey": "$CLIPROXYAPI_API_KEY",
-      "models": [
-        {
-          "id": "gpt-6.1-sol",
+      "modelOverrides": {
+        "gpt-6.1-sol": {
           "name": "GPT 6.1 Sol",
           "reasoning": true,
           "input": [
@@ -41,8 +37,7 @@
             "ultra": "ultra"
           }
         },
-        {
-          "id": "gpt-6-astra",
+        "gpt-6-astra": {
           "name": "GPT 6.0 Astra",
           "reasoning": true,
           "input": [
@@ -77,8 +72,7 @@
             "ultra": "ultra"
           }
         },
-        {
-          "id": "gpt-6.1-terra",
+        "gpt-6.1-terra": {
           "name": "GPT 6.1 Terra",
           "reasoning": true,
           "input": [
@@ -113,8 +107,7 @@
             "ultra": "ultra"
           }
         },
-        {
-          "id": "gpt-6-sol",
+        "gpt-6-sol": {
           "name": "GPT 6.0 Sol",
           "reasoning": true,
           "input": [
@@ -149,8 +142,7 @@
             "ultra": "ultra"
           }
         },
-        {
-          "id": "gpt-6-luna",
+        "gpt-6-luna": {
           "name": "GPT 6.0 Luna",
           "reasoning": true,
           "input": [
@@ -185,8 +177,7 @@
             "ultra": null
           }
         },
-        {
-          "id": "gpt-5.6-sol",
+        "gpt-5.6-sol": {
           "name": "GPT 5.6 Sol",
           "reasoning": true,
           "input": [
@@ -221,8 +212,7 @@
             "ultra": "ultra"
           }
         },
-        {
-          "id": "gpt-5.6-terra",
+        "gpt-5.6-terra": {
           "name": "GPT 5.6 Terra",
           "reasoning": true,
           "input": [
@@ -257,8 +247,7 @@
             "ultra": "ultra"
           }
         },
-        {
-          "id": "gpt-5.6-luna",
+        "gpt-5.6-luna": {
           "name": "GPT 5.6 Luna",
           "reasoning": true,
           "input": [
@@ -293,8 +282,7 @@
             "ultra": null
           }
         },
-        {
-          "id": "xai/grok-composer-2.5-fast",
+        "xai/grok-composer-2.5-fast": {
           "name": "Composer 2.5 Fast",
           "reasoning": true,
           "input": [
@@ -319,8 +307,7 @@
           "contextWindow": 200000,
           "maxTokens": 32768
         },
-        {
-          "id": "zai/GLM-4.5",
+        "zai/GLM-4.5": {
           "name": "glm-4.5",
           "reasoning": true,
           "input": [
@@ -336,8 +323,7 @@
           "contextWindow": 500000,
           "maxTokens": 16384
         },
-        {
-          "id": "zai/GLM-4.5-Air",
+        "zai/GLM-4.5-Air": {
           "name": "glm-4.5-air",
           "reasoning": true,
           "input": [
@@ -362,8 +348,7 @@
           "contextWindow": 500000,
           "maxTokens": 16384
         },
-        {
-          "id": "zai/GLM-4.6",
+        "zai/GLM-4.6": {
           "name": "glm-4.6",
           "reasoning": true,
           "input": [
@@ -379,8 +364,7 @@
           "contextWindow": 500000,
           "maxTokens": 16384
         },
-        {
-          "id": "zai/GLM-4.7",
+        "zai/GLM-4.7": {
           "name": "glm-4.7",
           "reasoning": true,
           "input": [
@@ -405,8 +389,7 @@
           "contextWindow": 500000,
           "maxTokens": 16384
         },
-        {
-          "id": "zai/GLM-5",
+        "zai/GLM-5": {
           "name": "glm-5",
           "reasoning": true,
           "input": [
@@ -431,8 +414,7 @@
           "contextWindow": 500000,
           "maxTokens": 16384
         },
-        {
-          "id": "zai/GLM-5-Turbo",
+        "zai/GLM-5-Turbo": {
           "name": "glm-5-turbo",
           "reasoning": true,
           "input": [
@@ -448,8 +430,7 @@
           "contextWindow": 500000,
           "maxTokens": 16384
         },
-        {
-          "id": "zai/GLM-5.1",
+        "zai/GLM-5.1": {
           "name": "glm-5.1",
           "reasoning": true,
           "input": [
@@ -474,8 +455,7 @@
           "contextWindow": 500000,
           "maxTokens": 16384
         },
-        {
-          "id": "zai/GLM-5.2",
+        "zai/GLM-5.2": {
           "name": "glm-5.2",
           "reasoning": true,
           "input": [
@@ -491,8 +471,7 @@
           "contextWindow": 500000,
           "maxTokens": 16384
         },
-        {
-          "id": "zai/GLM-5.3",
+        "zai/GLM-5.3": {
           "name": "glm-5.3",
           "reasoning": true,
           "input": [
@@ -508,8 +487,7 @@
           "contextWindow": 500000,
           "maxTokens": 16384
         },
-        {
-          "id": "zai/GLM-5.3-Flash",
+        "zai/GLM-5.3-Flash": {
           "name": "glm-5.3-flash",
           "reasoning": true,
           "input": [
@@ -525,8 +503,7 @@
           "contextWindow": 500000,
           "maxTokens": 16384
         },
-        {
-          "id": "zai/GLM-5.3-FlashX",
+        "zai/GLM-5.3-FlashX": {
           "name": "glm-5.3-flashx",
           "reasoning": true,
           "input": [
@@ -542,8 +519,7 @@
           "contextWindow": 500000,
           "maxTokens": 16384
         },
-        {
-          "id": "xai/grok-3-mini",
+        "xai/grok-3-mini": {
           "name": "Grok 3 Mini",
           "reasoning": true,
           "input": [
@@ -558,8 +534,7 @@
           "contextWindow": 131072,
           "maxTokens": 32768
         },
-        {
-          "id": "xai/grok-3-mini-fast",
+        "xai/grok-3-mini-fast": {
           "name": "Grok 3 Mini Fast",
           "reasoning": true,
           "input": [
@@ -574,8 +549,7 @@
           "contextWindow": 131072,
           "maxTokens": 32768
         },
-        {
-          "id": "xai/grok-4.20-0309-non-reasoning",
+        "xai/grok-4.20-0309-non-reasoning": {
           "name": "Grok 4.20 0309 Non Reasoning",
           "reasoning": true,
           "input": [
@@ -600,8 +574,7 @@
           "contextWindow": 2000000,
           "maxTokens": 65536
         },
-        {
-          "id": "xai/grok-4.20-0309-reasoning",
+        "xai/grok-4.20-0309-reasoning": {
           "name": "Grok 4.20 0309 Reasoning",
           "reasoning": true,
           "input": [
@@ -626,8 +599,7 @@
           "contextWindow": 2000000,
           "maxTokens": 65536
         },
-        {
-          "id": "xai/grok-4.20-multi-agent-0309",
+        "xai/grok-4.20-multi-agent-0309": {
           "name": "Grok 4.20 Multi Agent 0309",
           "reasoning": true,
           "input": [
@@ -652,8 +624,7 @@
           "contextWindow": 2000000,
           "maxTokens": 65536
         },
-        {
-          "id": "xai/grok-4.3",
+        "xai/grok-4.3": {
           "name": "Grok 4.3",
           "reasoning": true,
           "input": [
@@ -678,8 +649,7 @@
           "contextWindow": 1000000,
           "maxTokens": 65536
         },
-        {
-          "id": "xai/grok-4.5",
+        "xai/grok-4.5": {
           "name": "Grok 4.5",
           "reasoning": true,
           "input": [
@@ -704,8 +674,7 @@
           "contextWindow": 500000,
           "maxTokens": 65536
         },
-        {
-          "id": "xai/grok-4.6",
+        "xai/grok-4.6": {
           "name": "Grok 4.6",
           "reasoning": true,
           "input": [
@@ -740,8 +709,7 @@
             "ultra": null
           }
         },
-        {
-          "id": "xai/grok-4.7",
+        "xai/grok-4.7": {
           "name": "Grok 4.7",
           "reasoning": true,
           "input": [
@@ -776,8 +744,7 @@
             "ultra": null
           }
         },
-        {
-          "id": "xai/grok-4.7-build-fast",
+        "xai/grok-4.7-build-fast": {
           "name": "Grok 4.7 Fast",
           "reasoning": true,
           "input": [
@@ -793,8 +760,7 @@
           "contextWindow": 500000,
           "maxTokens": 500000
         },
-        {
-          "id": "xai/grok-build-0.1",
+        "xai/grok-build-0.1": {
           "name": "Grok Build 0.1",
           "reasoning": true,
           "input": [
@@ -819,8 +785,7 @@
           "contextWindow": 256000,
           "maxTokens": 256000
         },
-        {
-          "id": "xai/grok-imagine-video-1.5-lite",
+        "xai/grok-imagine-video-1.5-lite": {
           "name": "Grok Imagine Video 1.5 Lite",
           "reasoning": true,
           "input": [
@@ -836,8 +801,7 @@
           "contextWindow": 500000,
           "maxTokens": 16384
         },
-        {
-          "id": "muse-spark-1.1",
+        "muse-spark-1.1": {
           "name": "Muse Spark 1.1",
           "reasoning": true,
           "input": [
@@ -852,8 +816,7 @@
           "contextWindow": 1048576,
           "maxTokens": 65536
         },
-        {
-          "id": "muse-spark-1.2",
+        "muse-spark-1.2": {
           "name": "Muse Spark 1.2",
           "reasoning": true,
           "input": [
@@ -869,8 +832,7 @@
           "contextWindow": 1048576,
           "maxTokens": 65536
         },
-        {
-          "id": "muse-spark-1.2-contributor",
+        "muse-spark-1.2-contributor": {
           "name": "Muse Spark 1.2 Contributor",
           "reasoning": true,
           "input": [
@@ -886,8 +848,7 @@
           "contextWindow": 1048576,
           "maxTokens": 65536
         },
-        {
-          "id": "muse-wonder-full-1.0",
+        "muse-wonder-full-1.0": {
           "name": "Muse Wonder Full 1.0",
           "reasoning": true,
           "input": [
@@ -903,8 +864,7 @@
           "contextWindow": 1007997,
           "maxTokens": 128000
         },
-        {
-          "id": "copilot/gpt-6.1-sol",
+        "copilot/gpt-6.1-sol": {
           "name": "GH GPT-6.1 Sol",
           "input": [
             "text"
@@ -929,8 +889,7 @@
             "ultra": "ultra"
           }
         },
-        {
-          "id": "copilot/gpt-6-astra",
+        "copilot/gpt-6-astra": {
           "name": "GH GPT-6 Astra",
           "input": [
             "text"
@@ -955,8 +914,7 @@
             "ultra": "ultra"
           }
         },
-        {
-          "id": "copilot/gpt-6.1-terra",
+        "copilot/gpt-6.1-terra": {
           "name": "GH GPT-6.1 Terra",
           "input": [
             "text"
@@ -981,8 +939,7 @@
             "ultra": "ultra"
           }
         },
-        {
-          "id": "copilot/gpt-6-sol",
+        "copilot/gpt-6-sol": {
           "name": "GH GPT-6 Sol",
           "input": [
             "text"
@@ -1007,8 +964,7 @@
             "ultra": "ultra"
           }
         },
-        {
-          "id": "copilot/gpt-6-luna",
+        "copilot/gpt-6-luna": {
           "name": "GH GPT-6 Luna",
           "input": [
             "text"
@@ -1033,8 +989,7 @@
             "ultra": null
           }
         },
-        {
-          "id": "copilot/gpt-5.6-sol",
+        "copilot/gpt-5.6-sol": {
           "name": "GH GPT-5.6 Sol",
           "input": [
             "text"
@@ -1059,8 +1014,7 @@
             "ultra": "ultra"
           }
         },
-        {
-          "id": "copilot/gpt-5.6-terra",
+        "copilot/gpt-5.6-terra": {
           "name": "GH GPT-5.6 Terra",
           "input": [
             "text"
@@ -1085,8 +1039,7 @@
             "ultra": "ultra"
           }
         },
-        {
-          "id": "copilot/gpt-5.6-luna",
+        "copilot/gpt-5.6-luna": {
           "name": "GH GPT-5.6 Luna",
           "input": [
             "text"
@@ -1111,8 +1064,7 @@
             "ultra": null
           }
         },
-        {
-          "id": "copilot/grok-4.6",
+        "copilot/grok-4.6": {
           "name": "GH Grok 4.6",
           "input": [
             "text",
@@ -1138,8 +1090,7 @@
             "ultra": null
           }
         },
-        {
-          "id": "copilot/grok-4.7",
+        "copilot/grok-4.7": {
           "name": "GH Grok 4.7",
           "input": [
             "text",
@@ -1165,7 +1116,7 @@
             "ultra": null
           }
         }
-      ]
+      }
     }
   }
 }
