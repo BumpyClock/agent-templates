@@ -32,3 +32,19 @@ AGENTS.local.md
 
 # Bun build cache artifacts
 *.bun-build
+
+# Pi credentials, private endpoints, caches, and machine-local state.
+/.pi/agent/auth.json*
+/.pi/agent/cliproxyapi*.json
+/.pi/agent/models.json.*
+/.pi/agent/models-store.json
+/.pi/agent/mcp-cache.json
+/.pi/agent/mcp-npx-cache.json
+/.pi/agent/trust.json
+/.pi/agent/*.local.json
+/.pi/agent/*.backup*
+/.pi/agent/.env*
+/.pi/agent/sessions/
+/.pi/agent/npm/
+/.pi/agent/tmp/
+/.pi/agent/pi-subagents/

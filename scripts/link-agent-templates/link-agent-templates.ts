@@ -3,16 +3,14 @@ import {
 	mkdir,
 	readdir,
 	readlink,
-	rm,
-	rmdir,
 	symlink,
-	unlink,
 	writeFile,
 	lstat,
 } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import readline from "node:readline/promises";
+import { backupAndReplace, pruneBackups } from "./backups";
 
 type AgentTool =
 	| "claude"
@@ -193,22 +191,6 @@ async function getSymlinkTarget(
 	}
 }
 
-async function removeExisting(targetPath: string): Promise<void> {
-	try {
-		await rm(targetPath, { force: true, recursive: true });
-	} catch (rmError) {
-		// Bun on Windows fails with EFAULT when rm'ing directory symlinks and
-		// junctions (dangling ones included). rmdir removes just the reparse
-		// point, so it works for all of those; surface the original rm error
-		// if even that fails.
-		try {
-			await rmdir(targetPath);
-		} catch {
-			throw rmError;
-		}
-	}
-}
-
 async function createSymlink(
 	sourcePath: string,
 	targetPath: string,
@@ -233,6 +215,7 @@ async function createSymlink(
 async function ensureLinked(
 	sourcePath: string,
 	targetPath: string,
+	backupRoot?: string,
 ): Promise<void> {
 	const targetDir = path.dirname(targetPath);
 	await mkdir(targetDir, { recursive: true });
@@ -253,15 +236,15 @@ async function ensureLinked(
 					return;
 				}
 			}
-			// Wrong symlink target, remove and recreate
-			await removeExisting(targetPath);
-		} else {
-			// Regular file or directory exists, remove it
-			await removeExisting(targetPath);
 		}
+		await backupAndReplace(
+			targetPath,
+			() => createSymlink(sourcePath, targetPath),
+			backupRoot,
+		);
+	} else {
+		await createSymlink(sourcePath, targetPath);
 	}
-
-	await createSymlink(sourcePath, targetPath);
 	action(`Linked: ${targetPath} -> ${sourcePath}`);
 }
 
@@ -328,6 +311,7 @@ export async function linkSkills(
 	skillsDir: string,
 	targetDir: string,
 	layout: "flat" | "nested",
+	backupRoot?: string,
 ): Promise<void> {
 	if (!(await pathExists(skillsDir))) {
 		return;
@@ -346,13 +330,14 @@ export async function linkSkills(
 
 	// The target may be a whole-dir symlink from an earlier layout. mkdir on a
 	// symlink-to-dir succeeds silently, and every link created afterwards would
-	// land inside the repo through it. Remove the link itself first, never its
+	// land inside the repo through it. Back up the link itself first, never its
 	// contents.
 	if (await pathExists(targetDir)) {
 		const stat = await lstat(targetDir);
 		if (stat.isSymbolicLink()) {
-			await unlink(targetDir);
-			action(`Removed whole-dir symlink: ${targetDir}`);
+			await backupAndReplace(targetDir, async () => {
+				await mkdir(targetDir, { recursive: true });
+			}, backupRoot);
 		} else if (!stat.isDirectory()) {
 			throw new Error(`Refusing to replace a real skills file: ${targetDir}`);
 		}
@@ -372,7 +357,7 @@ export async function linkSkills(
 	}
 
 	for (const [name, sourcePath] of skills) {
-		await ensureLinked(sourcePath, path.join(targetDir, name));
+		await ensureLinked(sourcePath, path.join(targetDir, name), backupRoot);
 	}
 
 	// Prune stale links that point into the repo skills dir but no longer match
@@ -385,8 +370,8 @@ export async function linkSkills(
 		if (!target) continue;
 		const resolved = path.resolve(targetDir, target);
 		if (resolved.startsWith(repoPrefix)) {
-			await unlink(entryPath);
-			action(`Pruned stale skill link: ${entryPath}`);
+			await backupAndReplace(entryPath, async () => {}, backupRoot);
+			action(`Archived stale skill link: ${entryPath}`);
 		}
 	}
 }
@@ -864,6 +849,7 @@ async function main(): Promise<void> {
 		await linkAgentsShared(options.agentTemplatesDir);
 	}
 
+	await pruneBackups();
 	info("Agent templates linking completed");
 }
 

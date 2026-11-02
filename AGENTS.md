@@ -30,4 +30,4 @@ This repo (`agent-templates`) holds AI agent configurations — prompts, skills,
 
 - Keep `defaults/AGENTS.md` tool-agnostic. Harness-specific overrides belong in that harness's own config, not the shared rules.
 - Never hardcode absolute machine paths in any linked file — these sync across Windows/macOS/Linux.
-- The linker is idempotent and only replaces a symlink when its target changed; it never deletes real files. Prefer the linker over manual symlinks.
+- Prefer the linker over manual symlinks. It preserves replaced paths in `~/.agent-templates/backups/` and keeps five backups per destination. Correct links stay unchanged. See [backup behavior and recovery](README.md#backups-for-every-tool).

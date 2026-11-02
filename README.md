@@ -51,6 +51,78 @@ The `link-agent-templates.ts` script creates symlinks from this repo to the appr
 - **Pi**: `~/.pi/agent/...`
 - **Cursor**: `~/.cursor/skills` (one symlink per skill, same flat layout as Claude). This is the user-level directory Cursor loads and syncs to Cloud Agents.
 
+### Backups for every tool
+
+Before replacing a file, directory, or changed symlink, the linker saves it under
+`~/.agent-templates/backups/`. This applies to every tool, shared `.agents` links,
+whole-tree skill migrations, and stale managed skill links.
+
+Each destination has its own history. The linker keeps the newest five successful
+backups per destination and removes older backups after a successful replacement.
+Missing destinations and already-correct links do not create backups. Real skill
+file or directory conflicts still stop linking without replacing local content.
+
+Each numbered backup contains `entry` and `target.json`. The metadata records the
+original destination and backup time. Files and directories are moved intact.
+Symlinks are saved as links, without following them or snapshotting their targets.
+Relative symlink backups may appear broken until restored to the original path.
+Backup directories use owner-only permissions on POSIX and stay outside this repo
+and tool discovery directories. Backups can contain private configuration.
+
+If saving a backup fails, the linker leaves that destination untouched. If link
+creation fails, it restores the original and does not prune successful backups.
+If the process stops after saving a backup, that backup remains available on retry.
+The linker prints each saved path. To restore, stop the affected tool, remove the
+current managed link itself, then move the chosen `entry` to the destination in
+its `target.json`. Do not copy backup contents into this public repo.
+
+Run the linker tests without changing your real home directory:
+
+```bash
+cd scripts/link-agent-templates
+bun test
+```
+
+### Pi configuration
+
+`.pi/agent/` contains the shareable settings, model catalog, extensions, themes,
+cloak configuration, and prompt files copied from dotfiles. The Pi linker only
+links settings, models, cloak, extensions, themes, instructions, and compiled
+agents. It does not activate `SYSTEM.md`, `APPEND_SYSTEM.md`, or archived extensions.
+Copying this directory does not change existing links or the live models file.
+
+The model catalog was refreshed from the live Pi config with all 46 model
+definitions preserved. Both connection fields reference environment variables:
+
+- `baseUrl` is `$CLIPROXYAPI_BASE_URL`.
+- `apiKey` is `$CLIPROXYAPI_API_KEY`.
+
+Store the actual values in the private dotfiles secrets repo at
+`secrets/api-keys/env.json`, under the `cliproxyapi` group. The dotfiles environment
+generator exports them through `~/.config/dotfiles/env.sh` and `env.ps1`.
+Start Pi from a shell that loads that generated environment.
+
+The CLIProxyAPI package declared in `settings.json` is required. Pi core resolves
+the API-key reference, but not a static `baseUrl` reference. The package reads
+`CLIPROXYAPI_BASE_URL` and applies its normalized URL when registering the provider,
+replacing the public reference before requests. Without that package, the URL
+reference alone is not a working endpoint.
+
+Keep `auth.json`, `cliproxyapi.json`, model caches, and backups machine-local.
+These paths are gitignored. Never copy a raw live models file into this repo.
+
+Before committing Pi config, run:
+
+```bash
+python3 scripts/check-pi-public.py
+python3 scripts/check-pi-public.test.py
+```
+
+The check rejects literal connection fields in JSON, credential-reading commands,
+known secret formats, machine-local state, symlinks, and URLs outside the reviewed
+public allowlist. It prints locations, not suspect values. Review new source
+constants too; pattern checks cannot prove the absence of every possible secret.
+
 ### Standalone principles
 
 The 23 `principle-*` skills under `skills/pstack/` are independently discoverable.

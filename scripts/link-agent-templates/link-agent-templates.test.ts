@@ -12,11 +12,19 @@ import {
 } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { linkSkills } from "./link-agent-templates";
+import { linkSkills as linkSkillsWithBackups } from "./link-agent-templates";
 
 let fixture: string;
 let source: string;
 let target: string;
+
+async function linkSkills(
+	skillsDir: string,
+	targetDir: string,
+	layout: "flat" | "nested",
+): Promise<void> {
+	await linkSkillsWithBackups(skillsDir, targetDir, layout, path.join(fixture, "backups"));
+}
 
 beforeEach(async () => {
 	fixture = await mkdtemp(path.join(os.tmpdir(), "agent-templates-linker-"));
