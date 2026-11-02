@@ -44,8 +44,8 @@
     }
   },
   "packages": [
-    
-    "npm:@quintinshaw/pi-dynamic-workflows",
+    "npm:pi-lens",
+    "npm:@bumpyclock/pi-statusbar",
     "npm:@router-for-me/pi-cliproxyapi-provider@1.4.23"
   ],
   "terminal": {
@@ -104,7 +104,7 @@
     }
   },
   "enabledModels": [
-
+   
   ],
   "extensions": [
   ],
