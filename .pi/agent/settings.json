@@ -6,35 +6,36 @@
   "subagents": {
     "agentOverrides": {
       "context-builder": {
-        "model": "openai-codex/gpt-6-luna"
+        "model": "gpt-6-luna"
       },
       "delegate": {
-        "model": "openai-codex/claude-opus-4.6",
+        "model": "gpt-6.1-sol",
         "disabled": true
       },
       "oracle": {
-        "model": "github-copilot/gpt-6-astra",
+        "model": "copilot/gpt-6-astra",
         "thinking": "high"
       },
       "planner": {
-        "model": "github-copilot/gpt-6.1-sol",
+        "model": "copilot/gpt-6-astra",
         "thinking": "xhigh",
         "disabled": true
       },
       "researcher": {
-        "model": "github-copilot/claude-sonnet-5.5",
+        "model": "copilot/claude-sonnet-5.5",
         "disabled": true
       },
       "reviewer": {
-        "model": "github-copilot/gpt-5.5",
+        "model": "copilot/gpt-6.1-astra",
+        "thinking": "high",
         "disabled": true
       },
       "scout": {
-        "model": "zai/glm-5.2",
+        "model": "zai/glm-5.3",
         "thinking": "medium"
       },
       "worker": {
-        "model": "github-copilot/claude-opus-5.5",
+        "model": "copilot/claude-opus-5.5",
         "disabled": true
       },
       "technical-writer": {
@@ -43,13 +44,7 @@
     }
   },
   "packages": [
-    "npm:pi-subagents",
-    "npm:pi-lens",
-    "npm:@juicesharp/rpiv-ask-user-question",
-    "npm:pi-markdown-preview",
-    "npm:@juicesharp/rpiv-advisor",
-    "npm:@juicesharp/rpiv-btw",
-    "npm:@bumpyclock/pi-statusbar",
+    
     "npm:@quintinshaw/pi-dynamic-workflows",
     "npm:@router-for-me/pi-cliproxyapi-provider@1.4.23"
   ],
@@ -109,9 +104,7 @@
     }
   },
   "enabledModels": [
-    "zai/glm-5.1",
-    "openai-codex/gpt-5.5",
-    "github-copilot/claude-opus-4.8"
+
   ],
   "extensions": [
   ],
