@@ -34,7 +34,7 @@ Read `~/.agents/AGENTS.local.md` if present. Keep machine-specific facts there.
 ## Ground rules
 
 - If a required tool is unavailable, install with the platform package manager after any required approval for changes outside this repository: macOS `brew`, Windows `winget`, Linux `apt`, `yay`, or `pacman`.
-- For user-visible behavior changes, update relevant docs and record release-note context in the PR or commit. Update the changelog at landing.
+- For user-visible behavior changes, update relevant documentation and record release-note context in the PR or commit. Update the changelog only during release preparation, covering substantive user-facing changes included in that release. Routine commits and PRs do not require changelog edits unless explicitly requested.
 - Search before answering when a query centers on an unfamiliar name or a fast-changing name, such as an AI model or developer tool. Include the user's exact name in at least one search, even when partly familiar.
 - Use the `programming` skill for implementation, diagnosis, or design review when its conditional guidance applies.
 - Use `ast-grep-cli` for structural code searches when available. Use text search for literal matches.
