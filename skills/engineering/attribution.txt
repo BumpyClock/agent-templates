@@ -1,8 +1,8 @@
 Source: https://github.com/mattpocock/skills/tree/main/skills/engineering
 License: MIT
 Author: mattpocock
-Upstream reviewed through: c55ee46073ed923f86ce59a5eb3b6d895095d1b7
-Reviewed on: 2026-09-18
+Upstream reviewed through: 4ae2317ddb22b046e26455e4f9c9b3aaaf62212d
+Reviewed on: 2026-11-07
 
 Upstream changes were merged only into existing matching skills, preserving
 local adaptations and invocation metadata. Local-only skills and skills no
@@ -29,3 +29,46 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+Refresh audit, 2026-11-07
+
+Compared existing matching skill trees against upstream main at the revision above.
+Imported glossary naming, explicit standards discovery, fresh-context briefs,
+native sub-issue publication, wayfinder type/label/reference fixes, and wizard
+input/env-file fixes. No new or archived skills were installed.
+
+Retained local differences from current upstream
+
+- code-review: scoped, read-only by default; optional delegation; no mandatory
+  tracker/spec setup; ranked actionable findings and a strict maintainability
+  bar instead of two fixed reviewer lanes and separate unranked reports.
+  Local description and disable-model-invocation flag remain.
+- codebase-design: preserves project terminology, contract-based test choices,
+  and bounded alternatives without an agent quota. Local description remains.
+- domain-modeling: discussion does not write files; authorized editing persists
+  resolved terms. New glossaries use GLOSSARY.md; legacy repository glossary
+  conventions remain readable without an automatic rename. Local description remains.
+- improve-codebase-architecture: SKILL.md matches upstream after this refresh.
+- prototype: adds bounded API/runtime probes alongside logic/UI prototypes;
+  permits useful tests and preserves authorization boundaries for implementation,
+  branches, commits, and publication. Local description remains.
+- to-spec: drafts without tracker setup, reuses settled requirements, scales
+  specification detail, and publishes only within authorized scope.
+  Local description remains; invocation flag matches upstream.
+- to-tickets: drafts without tracker setup, respects approved decomposition,
+  maps existing tracker roles, and does not implement published tickets.
+  Local description remains; invocation flag matches upstream.
+- triage: adds TRACKER.md for role/authorization/source-data boundaries,
+  safe verification of untrusted reports, targeted prior-rejection retrieval,
+  and direct authorized role changes without redundant approval. Frontmatter matches.
+- wayfinder: preserves draft/claim boundaries, configured roles, bounded AFK
+  runs, direct cheap research, and authorized artifact locations rather than
+  automatic research branches. Local description remains; invocation flag matches.
+- wizard: limits work to approved manual steps and secret destinations, avoids
+  collecting unrelated secrets, and does not commit automatically.
+  Local description remains. template.sh matches upstream bytes.
+
+No current upstream counterpart was found for autonomous-delivery,
+change-amplification, changelog, data-structure-audit, deslop, simplify,
+split-to-prs, telemetry, or test-cleanup. These were left unchanged.
+Local agents/openai.yaml metadata and local-only references were preserved.

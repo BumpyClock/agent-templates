@@ -63,7 +63,7 @@ Deliver the lesson with a usable path or link. Open it through available local t
 
 Use retrieval questions, quizzes, small browser tasks, or guided real-world exercises when they help the objective. Give prompt, specific feedback on the learner's attempt; automatic feedback is useful when it is reliable and worth implementing.
 
-Avoid answer-format giveaways such as a uniquely detailed correct option, inconsistent grammar, or distinctive styling. Use plausible alternatives with comparable presentation rather than forcing identical word or character counts. Preserve clarity and technical accuracy.
+Vary the position of the correct answer across quiz questions. Avoid answer-format giveaways such as a uniquely detailed correct option, inconsistent grammar, or distinctive styling. Use plausible alternatives with comparable presentation rather than forcing identical word or character counts. Preserve clarity and technical accuracy.
 
 For real-world judgment, answer within the available evidence first. Recommend reputable practitioners, forums, classes, or communities when external feedback would materially help. Respect the user's preferences, budget, and any decision not to join a community. A recommendation is not permission to enroll or spend money.
 

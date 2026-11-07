@@ -36,7 +36,7 @@ Resolve all placeholders against the repo.
 State the authorized instance, data, accounts, and side effects in the generated skill. Prefer an isolated local or test environment. Sending real messages, publishing data, changing access, or making other external mutations requires explicit authorization for those effects. Generating a verification skill does not grant it.
 Include these sections:
 
-- **Launch:** the exact command that starts the app for verification and the readiness signal. Include teardown. For a short-lived CLI or TUI, build once when needed, then start each drive in its own isolated PTY or tmux session. Reuse a valid build until changes or failures require rebuilding.
+- **Launch:** the exact command that starts the app for verification and the readiness signal. Reach a usable state from an empty data directory, including migrations and seed data. A responding process or database health check is not proof that initialization has finished. Include teardown. For a short-lived CLI or TUI, build once when needed, then start each drive in its own isolated PTY or tmux session. Reuse a valid build until changes or failures require rebuilding.
 - **Doctor:** a read-only readiness check for the instance, build, ownership, and authentication relevant to the proof. Reuse valid evidence; repeat the check when state changes or a failure calls it into question.
 - **Drive:** the harness recipe with real selectors/commands from this repo, not examples. Prefer stable handles (ARIA labels, data attributes, prompt strings, route paths) over coordinates and tab order.
 - **Evidence:** what to capture for a proof and where it goes. Exercise the real user path, not internal setters or test-only endpoints. Capture the action and resulting state, including authorized side effects. Use mocks only where a production boundary already isolates the external system. Establish the effects of a dry-run or test mode before executing it, then observe permitted file, network, or git-ref effects rather than trusting the mode's name. Report skipped behavior as unverified.
@@ -47,11 +47,13 @@ Include these sections:
 
 Create `<project-skills-dir>/verify-<app>/features/README.md` plus feature files for the initial scope.
 Start with the primary user paths from routes, commands, menus, or docs.
+If seed data lacks a journey's prerequisite, report the failure and record the missing prerequisite in that feature's Gotchas. Do not weaken the journey to make it pass.
 Follow the shape in [`references/feature-map-example/`](references/feature-map-example/), with a README index and one file per feature. Each file answers, from the user's point of view: what the feature is, how to reach it, how to drive it with the harness, and what observable end state proves it works. The four H2s are `Sub-features`, `How to get to it (user POV)`, `Driving it with <harness>`, and `Gotchas`. The map is the repo's maintained verification source; a proof that drives one convenient entry point is incomplete when the map lists others.
 
 ## 4. Prove the generated skill before handing it over
 
 Run the generated instructions end to end for one authorized, isolated mapped feature. Launch, check readiness, drive the feature, capture evidence, and clean up. One feature is enough for this initial proof; do not imply the rest of the map was verified.
+When a stand-in replaces the real target, list the setup steps the stand-in supplied that the target will not. Those steps remain unverified until exercised on the real target.
 
 After a failure, run the generated cleanup for instances and scratch state created by that attempt. Preserve its evidence. Repair generated helpers, selectors, or safe local setup and rerun the affected proof. Do not repeat unrelated baselines, make unapproved product changes, or bypass behavior just to obtain a passing result.
 

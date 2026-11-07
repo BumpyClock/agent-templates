@@ -28,7 +28,7 @@ Consider distinct constraints only when they serve the task:
 - Make the most common caller's use case straightforward.
 - Place ports and adapters where cross-seam contracts justify them.
 
-For delegated work, provide a bounded technical brief with owned paths, coupling details, constraints, and a completion condition. Reuse relevant project vocabulary and the terms in [SKILL.md](SKILL.md).
+For delegated work, use a fresh context when supported and provide a bounded technical brief with owned paths, coupling details, constraints, and a completion condition. Reuse relevant project glossary vocabulary and the terms in [SKILL.md](SKILL.md).
 
 Each design states:
 

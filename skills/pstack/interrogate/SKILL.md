@@ -13,10 +13,10 @@ Spawn one reviewer per configured model to adversarially review code changes. Th
 Identify what to review from context:
 
 - If the user points at specific files or a diff, use that.
-- If on a feature branch, run `git diff main...HEAD` (or the appropriate base branch) for the full changeset.
+- If on a feature branch, compare the working tree with the merge base of the base branch and HEAD. Include staged and unstaged changes and relevant untracked files, not only committed changes.
 - If the user's message references recent work, gather the relevant files.
 
-Package the diff or file contents with any surrounding context files the reviewers need to understand the code.
+Package the diff or file contents with any surrounding context files the reviewers need to understand the code. Give reviewers separate writable locations for reproduction scripts and fixtures. If they use separate checkouts, include the scoped uncommitted changes so they test the reviewed state.
 
 ## Step 2, Intent
 
@@ -37,7 +37,11 @@ Launch the model using the appropriate tool or cli as defined in `~/.agents/conf
 
 Read `references/reviewer-prompt.md` and fill in the same template for every reviewer with the stated intent, the diff or file contents, the rubric from `references/rubric.md`, and the code-quality lens from `references/code-quality-review.md`. Pick each subagent's reasoning level  for the job, per the Subagents section of the configured-models.
 
-## Step 4, Synthesize
+## Step 4, Verify and synthesize
+
+For each behavioral defect, require the exact reproduction command, actual output, and output required by the stated intent. Rerun the command against the reviewed state before treating the finding as verified. For a design or plan, use a bounded prototype or probe when it can test the claim. Keep reproduction changes isolated from the user's working tree. Do not execute a reproduction whose effects exceed the task's authorization.
+
+Drop disproven findings and merge findings with the same root cause. Label findings that cannot be reproduced as unverified, with the missing prerequisite. Keep source-backed design and maintainability concerns in the local judgment categories below, but do not present them as runtime-proven defects. No verified findings is a valid result.
 
 As results come back, build a unified picture. Parse every reviewer's findings. Merge findings that describe the same issue differently, and note which models raised each one. Findings two or more models raised independently are the highest signal. Read a lone model's finding, but weight it accordingly. Note disagreements. If one model flags something and another explicitly says the opposite, that is context for the verdict.
 
@@ -59,7 +63,7 @@ You are the lead reviewer, a pragmatic senior engineer, not a neutral aggregator
 - Reviewer [label]: [model name], [N findings] (one bullet per reviewer)
 
 ### Act On
-[Each: description, which models raised it, why it matters.]
+[Each: description, which models raised it, why it matters, and verification status. For behavioral defects, include the reproduction command, actual output, and expected output.]
 
 ### Consider
 [Each: description, which models raised it, the tradeoff.]

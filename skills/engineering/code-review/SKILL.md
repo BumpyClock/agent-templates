@@ -28,6 +28,7 @@ Do not require tracker setup or a new spec to review a diff.
 ## Assess
 
 Inspect changed code and the callers, contracts, or tests needed to establish its effects.
+Search for repository standards, including `CODING_STANDARDS.md` and `CONTRIBUTING.md` when present.
 Prioritize concrete defects, requirement gaps, and consequential maintainability regressions.
 Distinguish new or worsened problems from unrelated pre-existing defects.
 
@@ -52,7 +53,8 @@ Use targeted checks to resolve material uncertainty.
 Reuse applicable evidence instead of rerunning checks solely because review began.
 
 Delegate independent concerns when separate context or expertise will improve the review.
-Give each reviewer the actual scope and relevant evidence.
+Give each reviewer a fresh context with the actual scope and relevant evidence when the harness supports it.
+Wait for delegated review results and aggregate them before delivering the review.
 Reconcile duplicate or conflicting claims before delivery.
 
 ## Report

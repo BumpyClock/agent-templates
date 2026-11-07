@@ -39,6 +39,8 @@ Use the helper so rows stay well-formed: `scripts/log.sh <logfile> <phase> <deci
 
 Log decision points and checkpoints, not every action: a fork chosen, a unit completed with its verification result, a pivot or revert with its trigger, a blocker surfaced, a gate fixed. For loop runs, one row per iteration. Skip the trivial and self-evident.
 
+A run is one agent conversation, including later turns and summaries. A replacement agent or new conversation starts a new run. When appending to an existing log, begin with phase `start`. Add another `start` row when resuming after another run has written its own `start` row. Read the latest rows before resuming. Each `start` row identifies the timestamp range of preceding rows this run did not write, and its evidence identifies the current run. Reserve phase `start` for these boundaries.
+
 ## Where it lives
 
 By default the log is a working artifact, not committed. Keep it at `decisions.tsv` in the work dir, or `.audit/<task-slug>.tsv` when several efforts run at once, and leave it out of git. Most work doesn't need a committed trail; the local log still keeps the run honest and can be discarded after.
@@ -54,6 +56,7 @@ Commit the log only when the user authorizes a commit that includes it.
 ## Check the evidence
 
 Before delivery, compare the log with available results and artifacts from this task.
+Use the `start` rows to identify this run's stretches. Audit those stretches rather than claiming to have verified another run's work. If current evidence disproves an earlier run's claim, append a correction that identifies and supersedes that row.
 Use a task transcript only when its location is supplied and access is permitted.
 Do not search unrelated private conversations.
 

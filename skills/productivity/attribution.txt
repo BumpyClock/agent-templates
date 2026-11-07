@@ -1,8 +1,8 @@
 Source: https://github.com/mattpocock/skills/tree/main/skills/productivity
 License: MIT
 Author: mattpocock
-Upstream reviewed through: c55ee46073ed923f86ce59a5eb3b6d895095d1b7
-Reviewed on: 2026-09-18
+Upstream reviewed through: 4ae2317ddb22b046e26455e4f9c9b3aaaf62212d
+Reviewed on: 2026-11-07
 Skills: grilling, teach, writing-for-agents
 
 Upstream changes were merged only into existing matching skills, preserving
@@ -29,3 +29,28 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+Refresh audit, 2026-11-07
+
+Compared all existing matching skill trees against upstream main at the revision above.
+Imported recommended-answer wording for yes/no grilling questions and fresh-context
+briefs when delegation is useful. Added varied correct-answer positions to course
+quizzes. Course workspace paths were already explicitly anchored locally.
+
+Retained local differences from current upstream
+
+- grilling: scopes the interview, asks a manageable prioritized frontier,
+  handles cheap fact-finding directly, and does not treat agreement as editing
+  permission. Keeps the local programming-quality checklist and description.
+- teach: defaults to one-off conversational teaching; persistent course work is
+  conditional and has its own reference. Keeps bounded sourcing, observed learning
+  evidence, and comparable answer presentation instead of equal character counts.
+  Local description remains; invocation flag and argument hint match upstream.
+- writing-for-agents: concise decision-oriented checklist with conditional
+  references, explicit scope/authorization rules, observable outcomes, and
+  acceptance criteria for shared defaults rather than a full upstream essay.
+  Local description remains.
+
+No current upstream counterpart was found for autonomous or canvas. These were
+left unchanged. No additional skills were imported. Local agents/openai.yaml
+metadata and local-only references were preserved.

@@ -32,7 +32,7 @@ Each stage must have concrete instructions a stranger could follow.
 
 ### 3. Author the wizard
 
-Copy `template.sh` to the target path. Replace the example stage with one `stage` per focused step, in dependency order. Use the library helpers and set `TOTAL_STAGES` to the number of stages.
+Copy `template.sh` to the target path. Replace the example stage with one `stage` per focused step, in dependency order. Use the library helpers and set `TOTAL_STAGES` to the number of stages. Keep stages inside `run_wizard` and preserve its final invocation so the script is parsed before prompting.
 
 For browser steps, open the URL before asking for the value. Use `ask_secret` for secrets and `confirm` before irreversible actions. Use `write_env` only for approved `.env` destinations and `set_secret` or `set_var` only for approved CI destinations. Do not save a CI-only secret locally just to use a helper. Keep each stage focused because `stage` clears the screen.
 

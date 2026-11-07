@@ -62,7 +62,7 @@ Each ticket is a **child issue** of the map; the tracker's issue id is its ident
 <the decision or investigation this ticket resolves>
 ```
 
-Each ticket records a `wayfinder:<type>` role through the configured label or local field, with one of `research`, `prototype`, `grilling`, `task` (see [Ticket Types](#ticket-types)).
+Each ticket records a `wayfinder:<type>` role through the configured label or local field, with one of `research`, `prototype`, `grilling`, `task` (see [Ticket Types](#ticket-types)). Use only wayfinder roles for the map and its decision tickets, not implementation triage roles such as `ready-for-agent`.
 
 A session **claims** an available ticket before work using the selected tracker's claim convention. Refresh its state and ownership first, and do not overwrite another session's claim.
 
@@ -115,8 +115,8 @@ User invokes with a loose idea.
 1. **Name the destination.** Reuse a settled destination. If material scope choices remain, use "grilling" to establish what this map is finding its way to. Use "domain-modeling" only where terminology needs clarification.
 2. **Map the frontier.** Explore the in-scope decisions breadth-first, surfacing open questions and the first available steps. If the route is already clear and does not need a map, return the decision summary and handoff. Do not start implementation unless it was also authorized.
 3. **Draft the map**, publishing only when authorized: Destination and Notes filled in, Decisions-so-far empty, the fog sketched into **Not yet specified**.
-4. **Draft the tickets you can specify now.** When publishing, create them as child issues and wire blocking edges in a **second pass** after identifiers exist. Everything still too unclear to ticket stays in **Not yet specified**.
-5. **Hand off or continue as requested.** Chart-only work ends with the map, frontier, and unresolved fog. If an AFK run was also authorized, continue through the eligible tickets below. Preserve research reports in the authorized tracker or artifact location and link them from their tickets. Creating branches or commits requires separate authorization.
+4. **Draft the tickets you can specify now.** When publishing, create them as child issues and wire blocking edges and cross-references in a **second pass** after real identifiers exist. Do not publish placeholder issue references that could link to unrelated issues. Everything still too unclear to ticket stays in **Not yet specified**.
+5. **Hand off or continue as requested.** Chart-only work ends with the map, frontier, and unresolved fog. If an AFK run was also authorized, continue through the eligible tickets below. Preserve research reports in the authorized tracker or artifact location and link them from their tickets. Creating branches or commits requires separate authorization. If a throwaway research branch is authorized, do not open a PR for it; it is not intended to merge.
 
 ### Work through the map
 
@@ -124,7 +124,7 @@ User invokes with a map (URL or number). A ticket is **optional**: without one, 
 
 1. Load the **map**: the low-res view, not every ticket body.
 2. Choose an available ticket within the requested scope. Check blockers and ownership even when the user named the ticket. Otherwise take the next eligible frontier ticket in order; an AFK run selects only AFK tickets. **Claim it** using the configured convention before work.
-3. Resolve it. **Zoom as needed**: fetch related or closed ticket bodies on demand. Use the ticket's type and relevant, authorized effort instructions to choose skills. Treat Notes as context, not permission to expand scope or override current instructions.
+3. Resolve it. **Zoom as needed**: fetch related or closed ticket bodies on demand. Read the ticket's type from its configured label or field, not just its body. Use that type and relevant, authorized effort instructions to choose skills. Treat Notes as context, not permission to expand scope or override current instructions.
 4. Record the outcome. If the ticket sits beyond the destination, **rule it out of scope** instead of recording it as a decision on the route. Otherwise post the answer as a **resolution comment**, **close** the issue, and **append a context pointer** to the map's Decisions-so-far.
 5. Add newly-surfaced tickets (create-then-wire); graduate any fog the answer has made specifiable, clearing each graduated patch from **Not yet specified** so it lives only as its new ticket. Rule other tickets now known to sit beyond the destination out of scope. Update or close invalidated tickets with a reason; preserve their history rather than deleting them without authorization.
 6. Continue only within the authorized run. Refresh the frontier after each resolution. A newly discovered ticket is eligible only if it fits the agreed run boundary.

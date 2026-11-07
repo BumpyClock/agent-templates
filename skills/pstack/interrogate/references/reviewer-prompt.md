@@ -37,7 +37,7 @@ For each finding, provide:
    - `warning`: Design concern, maintainability risk, or correctness issue that isn't immediately broken but will cause pain
    - `nit`: Style, naming, minor improvement. Only include nits if they're genuinely useful, not to pad your review.
 2. **Finding**: What the problem is, in concrete terms. Reference specific lines/functions.
-3. **Evidence**: Why you believe this is a problem. Show your reasoning. Don't just assert.
+3. **Evidence**: For a behavioral defect, run a reproduction against the reviewed state and report the exact command, actual output, and expected output. Keep fixtures and scripts in your assigned writable location. Do not exceed the task's authorization. For a design or plan, use a bounded prototype or probe when it can test the claim. Label a finding without runtime proof as a source-backed concern or as unverified, with the missing prerequisite. Do not present reasoning alone as a reproduced defect.
 4. **Suggestion** (optional): What you'd do instead, if you have a concrete alternative. Skip this if you don't have a clear fix.
 
 ## What Makes a Good Finding

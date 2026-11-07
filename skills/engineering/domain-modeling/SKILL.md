@@ -5,7 +5,7 @@ description: Sharpen project domain terms or author glossary and ADR content. Us
 
 # Domain Modeling
 
-Build and sharpen the project's domain model by challenging terms and testing them against concrete scenarios. This skill changes or proposes changes to the model, rather than merely reading `CONTEXT.md` for vocabulary.
+Build and sharpen the project's domain model by challenging terms and testing them against concrete scenarios. This skill changes or proposes changes to the model, rather than merely reading `GLOSSARY.md` for vocabulary.
 
 ## Requested mode
 
@@ -15,11 +15,13 @@ When glossary or ADR edits are authorized, persist resolved terms and qualifying
 
 ## File structure
 
+Use the repository's existing glossary convention. Read a legacy `CONTEXT.md` or `CONTEXT-MAP.md` when it owns domain vocabulary; do not create a competing glossary or rename it without authorization. For new glossaries, use the names below.
+
 Most repos have a single context:
 
 ```
 /
-├── CONTEXT.md
+├── GLOSSARY.md
 ├── docs/
 │   └── adr/
 │       ├── 0001-event-sourced-orders.md
@@ -27,29 +29,29 @@ Most repos have a single context:
 └── src/
 ```
 
-If a `CONTEXT-MAP.md` exists at the root, the repo has multiple contexts. The map points to where each one lives:
+If a `GLOSSARY-MAP.md` exists at the root, the repo has multiple contexts. The map points to where each one lives:
 
 ```
 /
-├── CONTEXT-MAP.md
+├── GLOSSARY-MAP.md
 ├── docs/
 │   └── adr/                          ← system-wide decisions
 ├── src/
 │   ├── ordering/
-│   │   ├── CONTEXT.md
+│   │   ├── GLOSSARY.md
 │   │   └── docs/adr/                 ← context-specific decisions
 │   └── billing/
-│       ├── CONTEXT.md
+│       ├── GLOSSARY.md
 │       └── docs/adr/
 ```
 
-During authorized editing, create files lazily. Create `CONTEXT.md` when the first term is resolved, and `docs/adr/` when the first ADR is needed.
+During authorized editing, create files lazily. Create `GLOSSARY.md` when the first term is resolved, and `docs/adr/` when the first ADR is needed.
 
 ## During the session
 
 ### Challenge against the glossary
 
-When the user uses a term that conflicts with the existing language in `CONTEXT.md`, call it out immediately. "Your glossary defines 'cancellation' as X, but you seem to mean Y. Which is it?"
+When the user uses a term that conflicts with the existing language in `GLOSSARY.md`, call it out immediately. "Your glossary defines 'cancellation' as X, but you seem to mean Y. Which is it?"
 
 ### Sharpen fuzzy language
 
@@ -65,9 +67,9 @@ When the user states how something works, check whether the code agrees. If you 
 
 ### Capture resolved terms
 
-Record each resolved term in the requested proposal or authorized `CONTEXT.md` edit as it settles. Use the format in [CONTEXT-FORMAT.md](./CONTEXT-FORMAT.md).
+Record each resolved term in the requested proposal or authorized `GLOSSARY.md` edit as it settles. Use the format in [GLOSSARY-FORMAT.md](./GLOSSARY-FORMAT.md).
 
-`CONTEXT.md` should be totally devoid of implementation details. Do not treat `CONTEXT.md` as a spec, a scratch pad, or a repository for implementation decisions. It is a glossary and nothing else.
+`GLOSSARY.md` should be totally devoid of implementation details. Do not treat `GLOSSARY.md` as a spec, a scratch pad, or a repository for implementation decisions. It is a glossary and nothing else.
 
 ### Offer ADRs sparingly
 

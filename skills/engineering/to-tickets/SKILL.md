@@ -60,11 +60,11 @@ Obtain approval before publishing new or changed decomposition. Do not repeat th
 When publication to the selected tracker is requested or approved, publish the approved tickets using its configured operations:
 
 - **Local files** → write one file per ticket under `.scratch/<feature-slug>/issues/<NN>-<slug>.md`, numbered from `01` in dependency order (blockers first). Each file's "Blocked by" lists the numbers/titles it depends on. Use the per-ticket file template below: one ticket per file, never a single combined file.
-- **A real issue tracker (GitHub, Linear, …)** → publish one issue per ticket in dependency order (blockers first) so each ticket's blocking edges can reference real identifiers. Use native blocking relationships where available; otherwise set each ticket's "Blocked by" to the blocking issues. A parent/sub-issue relationship is not a substitute for blocking. Apply the configured `ready-for-agent` role to fully specified tickets.
+- **A real issue tracker (GitHub, Linear, …)** → publish one issue per ticket in dependency order (blockers first) so each ticket's blocking edges can reference real identifiers. Use native blocking relationships where available; otherwise set each ticket's "Blocked by" to the blocking issues. A parent/sub-issue relationship is not a substitute for blocking. When the source is an existing issue and native sub-issues are supported, attach the published tickets to that source using the configured tracker operation. Apply the configured `ready-for-agent` role to fully specified tickets.
 
 Hand off the **frontier**, the tickets whose blockers are all done. For a purely linear chain that means top to bottom. Return the published identifiers and any unfinished publication steps. Publishing tickets does not authorize implementing them.
 
-Do NOT close or modify any parent issue.
+Do not close or rewrite the parent issue. Adding the requested sub-issue relationships is part of publishing its approved breakdown.
 
 <local-ticket-template>
 
@@ -98,7 +98,7 @@ The end-to-end behaviour this ticket makes work, from the user's perspective, no
 
 ## Blocked by
 
-- A reference to each blocking ticket, or "None (can start immediately)".
+- A reference to each blocking ticket, or "None (can start immediately)". Omit this section when blockers are recorded as native edges.
 
 </issue-template>
 

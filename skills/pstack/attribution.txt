@@ -1,5 +1,55 @@
 pstack skill adaptations
 
+Current upstream review, 2026-11-07
+
+Source: https://github.com/cursor/plugins/tree/6b0300214a09fd6029cfb7077043125758cd1fd2/pstack/skills
+Reviewed through: 6b0300214a09fd6029cfb7077043125758cd1fd2
+Scope: all existing skills, their references and scripts, and existing playbooks.
+The dated sections below are historical import records, not current pins.
+
+Most principle bodies and benchmark-checklist already matched this revision
+after local commit 6c5f356. Their earlier attribution pins were stale.
+Invocation flags remain as configured locally, including commit 8449d15.
+The local-only delegate-after-the-contract skill has no upstream counterpart.
+
+Applied changes
+
+- explain-the-number now defines the decision and noise floor before a run.
+- create-verification-skill checks usable initialization, records missing seed
+  prerequisites without weakening journeys, and distinguishes stand-in setup
+  from proof on the real target.
+- show-me-your-work marks conversation ownership with start rows and audits
+  each run's stretches. Its log helper appends a header to missing or empty
+  files rather than truncating a log after a failed existence check.
+- interrogate includes the working tree in its scope, isolates reproduction
+  artifacts, requires command/output evidence for behavioral findings, and
+  reruns those commands before labeling findings verified.
+- swarm fixes Phase A numbering and its dangling result-table wording.
+- Six existing playbooks receive upstream changes. All existing playbook
+  files now match this revision. No new playbook or skill is imported.
+
+Retained adaptations
+
+- architect retains configured-models.md and its local arena fallback.
+- how retains direct execution, optional investigation and critique, source
+  evidence limits, and harness-neutral explorer and explainer briefs.
+- create-verification-skill retains harness-local paths, explicit mutation
+  authority, safe fixtures, and a draft outcome for blocked verification.
+- interrogate retains local model configuration and judgment categories.
+  Source-backed design concerns are not mislabeled as runtime-proven defects.
+  The upstream arena dependency and evidence-only deletion of all design
+  concerns are not adopted. The local review references remain in use.
+- swarm retains harness-neutral spawning and local model selection.
+- show-me-your-work retains authorized commits, permitted transcript access,
+  append-only corrections, and conditional independent review.
+- technical-writing retains conditional document structure, requested formats,
+  uncertainty, repository conventions, and separation from product edits.
+- unslop retains local rule IDs, genre and literal preservation, factual
+  safeguards, and shared AGENTS.md ownership of baseline prose rules.
+- agents/openai.yaml files remain local metadata. No archived skill is restored.
+
+Historical records
+
 Source: https://github.com/cursor/plugins/tree/c5db7fef1f1b1ebb2d4b7ae0308bf4beb10cb4c1/pstack/skills
 Revision: c5db7fef1f1b1ebb2d4b7ae0308bf4beb10cb4c1
 License: MIT, Copyright (c) 2026 Lauren Tan
