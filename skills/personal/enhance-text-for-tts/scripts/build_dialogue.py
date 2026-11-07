@@ -32,7 +32,8 @@ voices = cast["voices"]
 speakers = {int(k): v for k, v in cast.get("speakers", {}).items()}
 
 QUOTE = re.compile(r"(?:\[[^\]]*\]\s*)*“[^”]*”")
-SAY = r"(?:said|asked|whispered|shouted|called|told|replied|answered|muttered|cackled|snapped)"
+SAY = (r"(?:said|asked|whispered|shouted|called|told|replied|answered|muttered|cackled|snapped"
+       r"|screamed|yelled|grunted|wheezed|mimicked)")
 ATTRIB = re.compile(
     r"\s*(?:he|she|they|I|we|the [a-z]+(?: [a-z]+)?|[A-Z][a-z]+(?: [A-Z][a-z]+)?)\s+" + SAY
     + r"(?:\s+(?:me|him|her|them|us|again|after me|after him|quietly|softly))*\s*[.,]\s*")
