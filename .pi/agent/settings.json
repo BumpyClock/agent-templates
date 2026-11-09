@@ -53,7 +53,7 @@
     "clearOnShrink": false
   },
   "quietStartup": true,
-  "hideThinkingBlock": false,
+  "hideThinkingBlock": true,
   "statusbar": {
     "preset": "default-no-cost",
     "presets": {
