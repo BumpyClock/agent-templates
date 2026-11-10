@@ -38,7 +38,7 @@ Read `~/.agents/AGENTS.local.md` if present. Keep machine-specific facts there.
 - Search before answering when a query centers on an unfamiliar name or a fast-changing name, such as an AI model or developer tool. Include the user's exact name in at least one search, even when partly familiar.
 - Use the `programming` skill for implementation, diagnosis, or design review when its conditional guidance applies.
 - Use `ast-grep-cli` for structural code searches when available. Use text search for literal matches.
-- use `mcporter` for tools and mcp access. Run `mcporter list` to discover available tools
+- use `mcp-cli` for tools and additional mcp access that are not available by default. Run `mcp-cli list` to discover available tools
 - Prefer using current directory instead of worktrees for yourself and subagents unless  necessary or explicit ask from user.
 
 # boat
