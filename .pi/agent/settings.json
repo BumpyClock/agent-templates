@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "1.4.0",
+  "lastChangelogVersion": "1.5.0",
   "defaultProvider": "cliproxyapi",
   "defaultModel": "copilot/gpt-6.1-sol",
   "defaultThinkingLevel": "medium",
@@ -46,7 +46,9 @@
   "packages": [
     "npm:pi-lens",
     "npm:@bumpyclock/pi-statusbar",
-    "npm:@router-for-me/pi-cliproxyapi-provider@1.4.23"
+    "npm:@router-for-me/pi-cliproxyapi-provider@1.4.23",
+    "npm:pi-pretty-tui",
+    "npm:pi-subagents"
   ],
   "terminal": {
     "showTerminalProgress": true,
@@ -105,5 +107,10 @@
   },
   "enabledModels": [],
   "extensions": [],
-  "steeringMode": "all"
+  "steeringMode": "all",
+  "extensionChangelogVersions": {
+    "{\"source\":\"npm:pi-lens\",\"scope\":\"user\"}": "4.4.5",
+    "{\"source\":\"npm:@bumpyclock/pi-statusbar\",\"scope\":\"user\"}": "0.1.2",
+    "{\"source\":\"npm:pi-subagents\",\"scope\":\"user\"}": "0.82.1"
+  }
 }
