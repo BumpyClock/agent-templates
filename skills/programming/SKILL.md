@@ -27,6 +27,7 @@ Use project constraints and established context. Scale planning, exploration, an
 - Validate unknown values once at the boundary that owns them. Pass typed values inward instead of repeating `typeof value === "object"` and property-existence checks.
 - Do not defensively revalidate values already guaranteed by a schema, constructor, or internal type.
 - Do not extract single-use helpers preemptively. Inline the logic at the call site unless the helper is reused, hides a genuinely complex boundary, or has a clear independent name that improves the caller.
+- read all the principle-* skills from ../pstack/
 
 ## Verify and finish
 
@@ -37,6 +38,7 @@ Use project constraints and established context. Scale planning, exploration, an
 - Reuse existing diagnostics. Retain only useful, low-noise instrumentation. Update affected contracts and documentation when the change makes them inaccurate.
 - Complete implementation, integration, and necessary verification within the authorized scope. Review-only requests end with findings. Report the result, consequential decisions, verification, and unresolved limits.
 - Make the best decision that will elevate all three: the user experience (UX), developer experience (DX), and agent experience (AX) always, without breaking anything
+
 
 ## Conditional references
 
