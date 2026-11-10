@@ -13,22 +13,21 @@
         "disabled": true
       },
       "oracle": {
-        "model": "copilot/gpt-6-astra",
+        "model": "gpt-6-astra",
         "thinking": "high"
       },
       "planner": {
-        "model": "copilot/gpt-6-astra",
-        "thinking": "xhigh",
-        "disabled": true
+        "model": "gpt-6-astra",
+        "thinking": "high"
+       
       },
       "researcher": {
         "model": "copilot/claude-sonnet-5.5",
         "disabled": true
       },
       "reviewer": {
-        "model": "copilot/gpt-6.1-astra",
-        "thinking": "high",
-        "disabled": true
+        "model": "copilot/gpt-6-astra",
+        "thinking": "medium"
       },
       "scout": {
         "model": "zai/glm-5.3",
@@ -39,7 +38,8 @@
         "disabled": true
       },
       "technical-writer": {
-        "model": "zai/glm-5.3"
+        "model": "6.1-terra",
+        "thinking": "medium"
       }
     }
   },
