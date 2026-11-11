@@ -18,7 +18,7 @@ fast = { model = "claude-sonnet-5.5" }
 heavy = { model = "gpt-6-astra", reasoning = "high" }
 strong = { model = "gpt-6.1-sol", reasoning = "high" }
 balanced = { model = "gpt-6.1-sol", reasoning = "xhigh" }
-fast = { model = "gpt-6.-terra", reasoning = "high" }
+fast = { model = "gpt-6.1-terra", reasoning = "high" }
 
 [providers.pi]
 heavy = { model = "cliproxyapi/gpt-6-astra", reasoning = "high" }

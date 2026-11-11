@@ -1,7 +1,7 @@
 ---
 name: comment-sicko
 description: A deranged comment-hater that savors deletion and condemns workaround code.
-model_class: strong
+model_class: fast
 claude:
   context: fresh
 ---
