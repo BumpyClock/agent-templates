@@ -11,8 +11,8 @@ fast = { model = "haiku" }
 [providers.copilot]
 heavy = { model = "gpt-6-astra", reasoning = "high" }
 strong = { model = "gpt-6.1-sol", reasoning = "high" }
-balanced = { model = "gpt-6.1-sol", reasoning = "xhigh" }
-fast = { model = "claude-sonnet-5.5" }
+balanced = { model = "gpt-6-terra", reasoning = "high" }
+fast = { model = "gpt-6-luna", reasoning = "high" }
 
 [providers.codex]
 heavy = { model = "gpt-6-astra", reasoning = "high" }
@@ -24,7 +24,7 @@ fast = { model = "gpt-6.1-terra", reasoning = "high" }
 heavy = { model = "cliproxyapi/gpt-6-astra", reasoning = "high" }
 strong = { model = "cliproxyapi/gpt-6.1-sol", reasoning = "high" }
 balanced = { model = "cliproxyapi/gpt-6.1-terra", reasoning = "high" }
-fast = { model = "zai/glm-5.3", reasoning = "low" }
+fast = { model = "cliproxyapi/gpt-6-luna", reasoning = "high" }
 
 # Codex CLI settings shared by every compiled agent; templates override per key.
 [codex]
