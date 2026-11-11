@@ -69,6 +69,26 @@ if (-not (Test-Path "scripts\link-agent-templates\node_modules")) {
     }
 }
 
+# Compile agent templates before linking. The generated dist directory is not
+# tracked, so it can be missing or stale after a pull.
+Write-Info "Compiling agent templates..."
+Push-Location "agent-templates\scripts"
+try {
+    if (-not (Test-Path "node_modules\yaml\package.json")) {
+        bun install
+        if ($LASTEXITCODE -ne 0) {
+            throw "Compiler dependency installation failed with exit code $LASTEXITCODE"
+        }
+    }
+    bun run compile-agents
+    if ($LASTEXITCODE -ne 0) {
+        throw "Agent compilation failed with exit code $LASTEXITCODE"
+    }
+}
+finally {
+    Pop-Location
+}
+
 Write-Info "Linking agent templates for: $SetupMode"
 
 # Run the linker

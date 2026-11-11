@@ -21,6 +21,9 @@ cd agent-templates
 .\bootstrap.ps1
 ```
 
+Both bootstrap scripts compile agent templates before linking them into the
+selected tools. Run bootstrap again after pulling updated agent templates.
+
 ## Repository Layout
 
 ```
