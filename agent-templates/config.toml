@@ -12,19 +12,19 @@ fast = { model = "haiku" }
 heavy = { model = "gpt-6-astra", reasoning = "high" }
 strong = { model = "gpt-6.1-sol", reasoning = "high" }
 balanced = { model = "gpt-6.1-sol", reasoning = "xhigh" }
-fast = { model = "claude-sonnet-5" }
+fast = { model = "claude-sonnet-5.5" }
 
 [providers.codex]
 heavy = { model = "gpt-6-astra", reasoning = "high" }
 strong = { model = "gpt-6.1-sol", reasoning = "high" }
 balanced = { model = "gpt-6.1-sol", reasoning = "xhigh" }
-fast = { model = "gpt-6-luna", reasoning = "medium" }
+fast = { model = "gpt-6.-terra", reasoning = "high" }
 
 [providers.pi]
-heavy = { model = "openai-codex/gpt-6-astra", reasoning = "high" }
-strong = { model = "openai-codex/gpt-6.1-sol", reasoning = "high" }
-balanced = { model = "openai-codex/gpt-6.1-sol", reasoning = "xhigh" }
-fast = { model = "zai/glm-5.3-flash", reasoning = "low" }
+heavy = { model = "cliproxyapi/gpt-6-astra", reasoning = "high" }
+strong = { model = "cliproxyapi/gpt-6.1-sol", reasoning = "high" }
+balanced = { model = "cliproxyapi/gpt-6.1-terra", reasoning = "high" }
+fast = { model = "zai/glm-5.3", reasoning = "low" }
 
 # Codex CLI settings shared by every compiled agent; templates override per key.
 [codex]
