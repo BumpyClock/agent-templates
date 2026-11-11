@@ -46,8 +46,7 @@
     "npm:pi-lens",
     "npm:@bumpyclock/pi-statusbar",
     "npm:@bumpyclock/pi-codex-compat",
-    "npm:@router-for-me/pi-cliproxyapi-provider@1.4.23",
-    "npm:pi-pretty-tui",
+    "npm:@router-for-me/pi-cliproxyapi-provider",
     "npm:pi-subagents"
   ],
   "terminal": {
