@@ -26,6 +26,9 @@ node_modules/
 .pi-lens/
 AGENTS.local.md
 
+# Composed harness instructions, rebuilt by the linker.
+/defaults/generated/
+
 # Editor backup files
 *.save
 .pi/.pi-subagents

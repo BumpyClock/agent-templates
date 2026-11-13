@@ -86,7 +86,11 @@ test.each(targets)("%s preserves replaced real files", async (tool, source, dest
 	const saved = await snapshots(target);
 	expect(saved).toHaveLength(1);
 	expect(await readFile(saved[0]!, "utf8")).toBe("private previous config");
-	expect(await realpath(target)).toBe(await realpath(sourcePath));
+	const linkedSource = source === "defaults/AGENTS.md" && tool !== "all"
+		? path.join(repo, "defaults/generated", `${tool}.md`)
+		: sourcePath;
+	expect(await realpath(target)).toBe(await realpath(linkedSource));
+	expect(await readFile(target, "utf8")).toContain("shared config");
 	if (process.platform !== "win32") {
 		expect((await lstat(backups)).mode & 0o777).toBe(0o700);
 		expect((await lstat(path.dirname(saved[0]!))).mode & 0o777).toBe(0o700);

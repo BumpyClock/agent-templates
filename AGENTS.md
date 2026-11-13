@@ -5,7 +5,9 @@ This repo (`agent-templates`) holds AI agent configurations — prompts, skills,
 ## What lives where
 
 - `defaults/` — the global agent instruction files that get linked to each tool's top-level config. This is the actual agent behavior ruleset, not repo documentation.
-  - `defaults/AGENTS.md` — synced, cross-machine baseline rules.
+  - `defaults/AGENTS.md` holds synced, cross-machine baseline rules.
+  - `defaults/harnesses/{claude,codex,copilot,pi}.md` holds harness-specific guidance appended to the shared baseline.
+  - `defaults/generated/` holds gitignored composed instructions. The linker generates these files and symlinks the four harnesses to them. Do not edit outputs.
   - `defaults/AGENTS.local.md` — machine-local overrides. Gitignored; **not** committed here. The linker seeds it once by copying from the secrets repo baseline (`<secrets>/AGENTS.local.md`), then leaves it alone so per-device edits never sync back. To reset it from the baseline, delete the file and re-run the linker.
 - `prompts/` — slash commands and reusable prompts.
 - `skills/` — skills/capabilities loaded by the harnesses.
@@ -21,13 +23,14 @@ This repo (`agent-templates`) holds AI agent configurations — prompts, skills,
 - **Add a skill/prompt**: drop it in the right directory and re-run the linker. No build step for plain markdown.
 - **Add an agent**: author under `agent-templates/`, then compile with `bun run agent-templates/scripts/compile-agents.ts` to regenerate `dist/`.
 - **Re-link after changes**: `bun scripts/link-agent-templates/link-agent-templates.ts --setup all` (or `--setup claude|codex|copilot|opencode|pi|cursor`).
-- **Edit global rules**: change `defaults/AGENTS.md` — that file is the source of truth linked into every tool. Do not put tool-specific rules there.
+- **Edit global rules**: change `defaults/AGENTS.md`, then re-run the linker to regenerate harness instructions. Keep tool-specific rules out of the baseline. `~/.agents/AGENTS.md` still links directly to it.
+- **Edit harness-specific rules**: change `defaults/harnesses/<harness>.md`, then re-run the linker with `--setup <harness>` or `--setup all`. See [instruction composition](README.md#shared-and-harness-specific-instructions).
 - **Edit cross-machine local rules**: change the baseline in the secrets repo (`<secrets>/AGENTS.local.md`) and commit it there. New machines pick it up on first link; existing machines keep their already-seeded copy (delete + re-link to refresh).
 - **Edit this-machine-only rules**: edit `defaults/AGENTS.local.md` directly. It's gitignored and never re-seeded once present.
 - **Point at a non-default secrets dir**: pass `--secrets-dir <path>` or set `$DOTFILES_SECRETS_DIR` (default `~/Projects/dotfiles/secrets`).
 
 ## Conventions
 
-- Keep `defaults/AGENTS.md` tool-agnostic. Harness-specific overrides belong in that harness's own config, not the shared rules.
+- Keep `defaults/AGENTS.md` tool-agnostic. Put harness-specific instruction guidance in `defaults/harnesses/`, not the shared rules. Keep credentials and machine-specific settings in local configuration.
 - Never hardcode absolute machine paths in any linked file — these sync across Windows/macOS/Linux.
 - Prefer the linker over manual symlinks. It preserves replaced paths in `~/.agent-templates/backups/` and keeps five backups per destination. Correct links stay unchanged. See [backup behavior and recovery](README.md#backups-for-every-tool).

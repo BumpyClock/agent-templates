@@ -54,6 +54,55 @@ The `link-agent-templates.ts` script creates symlinks from this repo to the appr
 - **Pi**: `~/.pi/agent/...`
 - **Cursor**: `~/.cursor/skills` (one symlink per skill, same flat layout as Claude). This is the user-level directory Cursor loads and syncs to Cloud Agents.
 
+### Shared and harness-specific instructions
+
+The linker composes global instructions for Claude Code, Codex, GitHub Copilot,
+and Pi. Edit the shared baseline and the matching harness overlay:
+
+```text
+defaults/
+  AGENTS.md                 # Shared rules, tool-agnostic.
+  harnesses/
+    claude.md               # Claude Code guidance.
+    codex.md                # Codex guidance.
+    copilot.md              # GitHub Copilot guidance.
+    pi.md                   # Pi guidance.
+  generated/                # Gitignored outputs. Do not edit.
+```
+
+Each generated file contains a generated-file notice, the shared baseline, then
+that harness's overlay at the bottom. Use overlays for model selection, exact
+model IDs, reasoning settings, fallback choices, and subagent launch guidance.
+The starter overlays contain headings and authoring comments, not model choices.
+Keep credentials and machine-specific settings in local configuration.
+
+| Harness | Instruction symlink | Generated target in this repo |
+| --- | --- | --- |
+| Claude Code | `~/.claude/CLAUDE.md` | `defaults/generated/claude.md` |
+| Codex | `~/.codex/AGENTS.md` | `defaults/generated/codex.md` |
+| GitHub Copilot | `~/.copilot/copilot-instructions.md` | `defaults/generated/copilot.md` |
+| Pi | `~/.pi/agent/AGENTS.md` | `defaults/generated/pi.md` |
+
+After editing **either** the baseline or an overlay, regenerate and re-link:
+
+```bash
+bun scripts/link-agent-templates/link-agent-templates.ts --setup all
+# Or regenerate and link only one harness:
+bun scripts/link-agent-templates/link-agent-templates.ts --setup pi
+```
+
+Unlike the old direct baseline symlinks, these tool instructions do not reflect
+source edits until the linker runs. Unchanged outputs and correct symlinks stay
+untouched. Missing or empty overlays produce shared rules only. Removing an
+overlay removes its guidance on the next run. Existing instruction files or old
+baseline symlinks use the normal backup-and-replace behavior below.
+
+`~/.agents/AGENTS.md` still links directly to the shared baseline. Local
+`AGENTS.local.md` seeding and linking are unchanged; local contents are not
+embedded in generated files. OpenCode and Cursor linking are unchanged; this
+change does not add global instruction destinations for them. Restart the tool
+or reload its instructions as needed after regenerating.
+
 ### Backups for every tool
 
 Before replacing a file, directory, or changed symlink, the linker saves it under
@@ -83,7 +132,7 @@ Run the linker tests without changing your real home directory:
 
 ```bash
 cd scripts/link-agent-templates
-bun test
+bun test --timeout 30000
 ```
 
 ### Pi configuration
