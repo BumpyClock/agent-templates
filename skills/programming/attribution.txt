@@ -23,3 +23,7 @@ These are local adaptations, not verbatim mirrors. Standalone principles retain 
 Existing performance and evaluation workflows already cover upstream mechanisms. Stale links to the deleted verification guide were removed.
 Keep authorization, public compatibility, mutation checks, and evidence limits. Do not restore mandatory delegation, model choices, Cursor-only tools, automatic commits/PRs, or compulsory test additions.
 Upstream names the new premise principle "attack-the-premise", not "attach-the-premise".
+
+Removed since the entries above were written: systematic-debugging/ (2026-10-16), references/write-tests.md, and evals/README.md. Their attribution lines are kept as history.
+Defect diagnosis now routes to ../pstack/principle-fix-root-causes/.
+references/gpui/legacy/ and references/languages/{go,swift-ios,typescript-frontend}.md were removed on 2026-11-15; the frontend security notes moved to references/web-development.md.
