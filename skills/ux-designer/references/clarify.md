@@ -1,5 +1,3 @@
-**Additional context needed**: audience knowledge and emotional state.
-
 Rewrite unclear interface text so users understand what happened, what matters, and what to do next. Preserve factual meaning, product terminology, and brand voice.
 
 ## Audit the language
@@ -15,7 +13,7 @@ Read the entire interaction path, not isolated strings. Identify:
 - text that breaks at realistic widths or in translation;
 - tone that ignores stress, risk, success, or urgency.
 
-Infer audience and task from product context and surrounding UI. Ask before changing factual claims, legal meaning, or a term that may be domain-specific.
+Infer audience and task from product context and surrounding UI. Keep factual claims, legal meaning, and possibly domain-specific terms unchanged. When one looks wrong, list it in the report with a proposed wording.
 
 ## Set the message hierarchy
 
@@ -75,7 +73,7 @@ Voice stays consistent; tone adapts to the moment. Use plain language without fl
 - Keep screen-reader names aligned with visible labels and outcomes.
 - Do not rely on punctuation, color, or iconography to carry the message alone.
 
-Maintain a short terminology glossary when inconsistency spans the product. Do not vary words for literary effect in an interface.
+When terminology is inconsistent across the product, propose a short glossary in the report. Do not vary words for literary effect in an interface.
 
 ## Verify
 
@@ -90,5 +88,3 @@ Read the flow in context and test:
 - tone appropriate to consequence and emotional context.
 
 The final copy is as short as it can be without removing meaning or recovery.
-
-When the language reads cleanly, hand off to `{{command_prefix}}impeccable polish` for the final pass.

@@ -1,14 +1,14 @@
 # Bolder
 
 Use this optional recipe for an expressive new design or stronger emphasis in an existing interface.
-When the direction is uncertain, follow the [direction choice rule](../SKILL.md#full-design-workflow).
+When the direction is uncertain, follow the direction step in [Full design workflow](full-design-workflow.md).
 Use [Typeset](typeset.md) as the typography baseline.
 
 ## Establish the Scope
 
 For an existing interface, preserve its visual system and the limits of the requested change.
-When the brief says "Everything else stays", change only the named target.
-If a refinement needs a new system primitive, confirm that scope with the user.
+When the brief limits the change to a named target, change only that target.
+Prefer existing system primitives. If a refinement needs a new one, build it and name it in the report so the user can reject it.
 For a new design, choose a coherent visual system from the product, content, and project conventions.
 Preserve supplied meaning, readability, accessibility, and required behavior.
 
@@ -28,10 +28,8 @@ Select treatments that address an observed problem or support the chosen directi
 - **Support:** If nearby elements compete, reduce their emphasis within the requested scope.
 - **Rhythm:** If a section needs prominence, try a deliberate change in density or spatial rhythm.
 - **Evidence:** If real evidence can lead, give it more visual prominence than decorative support.
-- **Effects:** When an effect supports identity, hierarchy, or feedback, consider it.
 
-If necessary evidence is absent, request it rather than invent it.
-Use [Data and Evidence](data-and-evidence.md) for claims, placeholders, and mock data.
+If necessary evidence is absent, do not invent it. Use labelled mock content per [Data and Evidence](data-and-evidence.md), and list the real data that is needed in the report.
 
 ## Optional Structure Check
 

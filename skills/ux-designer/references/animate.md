@@ -4,7 +4,7 @@ Use motion to explain feedback, state, and spatial relationships, or to support 
 
 This guidance describes behavior rather than a platform API. Use the project's existing motion tokens and animation primitives; extend them rather than introducing a parallel system. Values below are starting points when project tokens are absent. Examples use pseudocode and equations: distances share one logical coordinate system, velocities use those units per second, and runtime-specific parameters require adaptation.
 
-Make a recommendation and explain it briefly. Explore alternatives when requested or when a meaningful tradeoff remains. Implement once the direction is clear.
+Choose a direction and implement it. State the choice and its reason briefly. Explore alternatives when requested or when a meaningful tradeoff remains.
 
 ## Build sequence
 
@@ -19,7 +19,7 @@ Decide whether and why to animate before choosing properties or timing.
 | Occasional (modals, drawers, toasts) | Standard animation |
 | Rare / first-time (onboarding, success, celebration) | More expressive motion when appropriate |
 
-Judge by frequency and task latency, not input method. Keyboard initiation alone does not disqualify motion. If motion would hinder the task, explain why and offer an instant state change or static affordance.
+Judge by frequency and task latency, not input method. Keyboard initiation alone does not disqualify motion. If motion would hinder the task, use an instant state change or static affordance and say why.
 
 ### 2. What is the purpose?
 
@@ -113,7 +113,7 @@ Pass the gesture's release velocity as the spring's initial velocity, converting
 relativeVelocity = releaseVelocity / (targetPosition − currentPosition)
 ```
 
-Example: current position = 50 logical units, target = 150, and release velocity = 50 units/second → normalized velocity = 0.5 per second. Preserve the sign. When remaining displacement is zero or near zero, do not divide; use the runtime's supported handling for that case or an absolute-velocity representation.
+Example: current position = 50 logical units, target = 150, and release velocity = 50 units/second give a normalized velocity of 0.5 per second. Preserve the sign. When remaining displacement is zero or near zero, do not divide; use the runtime's supported handling for that case or an absolute-velocity representation.
 
 ### Momentum projection
 

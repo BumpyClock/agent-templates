@@ -1,54 +1,12 @@
-Turn a vague description of a motion or effect into the precise term, so the user knows what to ask for.
+# Animation vocabulary
 
-## Quick Start
+Use this glossary to map a loose description of motion to a precise term. Users describe what they see or feel ("springy", "slides off", "draws itself in"), so read for intent.
 
-The user describes an effect loosely. You return the matching term(s) in this format:
-
-```
-**Stagger** — Animate several items one after another with a small delay between each, creating a cascade.
-```
-
-If several terms could fit, list the best match first, then 1–2 alternates with a one-line note on how they differ.
-
-## Instructions
-
-1. **Read for intent, not keywords.** Users describe what they *see* or *feel* ("springy", "slides off", "draws itself in"), not the technical name. Map the sensation to the glossary below.
-2. **Quote the glossary verbatim.** Its descriptions are authoritative — use them as-is, don't paraphrase.
-3. **Disambiguate close terms.** When two compete (*Clip-path* vs *Mask*, *Pop in* vs *Bounce*, *Shared element transition* vs *Layout animation*), contrast them so the user can pick.
-4. **When nothing matches exactly,** name the closest term and say plainly it's an approximation, or describe the effect in the glossary's vocabulary (e.g. "that's a *stagger* of *scale-in* entrances").
-5. **Stay within this glossary.** If a term genuinely isn't here, say so rather than inventing one — though you may explain the concept using these words.
-6. **Keep it tight.** A naming question wants a name, not an essay. Lead with the term; expand only if asked.
-
-## Examples
-
-**Example 1 — feel-based**
-User: "What's it called when a popover seems to grow out of the button you clicked instead of from its middle?"
-Output:
-```
-**Origin-aware animation** — An element animates out of its trigger, like a popover growing from the button that opened it instead of from its own center which is the default in CSS.
-```
-
-**Example 2 — disambiguation**
-User: "The thing where one image turns into another image."
-Output:
-```
-**Morph** — One shape smoothly turns into another shape, e.g. Dynamic Island.
-
-Close alternates:
-- **Crossfade** — if they simply fade over each other in the same spot.
-- **Shared element transition** — if an element travels and transforms from one position into another.
-```
-
-**Example 3 — physics feel**
-User: "That iOS scroll where it resists and snaps back when you pull too far."
-Output:
-```
-**Rubber-banding** — Resistance and snap-back when you drag past a boundary (the iOS overscroll feel).
-```
+- When the user asks what an effect is called, lead with the term and its one-line definition. If several terms fit, give the best match first, then one or two alternates with how they differ.
+- Prefer glossary terms. When the glossary has no match, use another established term, or name the closest glossary term and say it is an approximation. Do not coin new terms.
+- [Animate](animate.md) and [Optimize](optimize.md) own motion behavior and performance rules. This glossary only names things.
 
 ## Glossary
-
-_A curated snapshot mirroring the project's `/vocabulary` page; keep the two in sync when either changes._
 
 ### Entrances & Exits — how elements appear and disappear
 - **Fade in / Fade out** — Element appears or disappears by changing opacity.
@@ -110,7 +68,7 @@ _A curated snapshot mirroring the project's `/vocabulary` page; keep the two in 
 - **Ease-out** — Starts fast, ends slow. The default for most UI and anything responding to the user.
 - **Ease-in** — Starts slow, ends fast. Usually avoided; can feel sluggish.
 - **Ease-in-out** — Slow, fast, slow. Good for elements already on screen moving from A to B.
-- **Linear** — Constant speed. Avoid for UI; reserve for spinners or marquees.
+- **Linear** — Constant speed. Suits progress fills, spinners, marquees, and motion tied directly to input or scroll.
 - **Cubic-bezier** — A custom easing curve you define for precise control.
 - **Asymmetric easing** — A curve that accelerates and decelerates at different rates. Feels more alive than a symmetric one.
 
@@ -152,7 +110,7 @@ _A curated snapshot mirroring the project's `/vocabulary` page; keep the two in 
 - **Dropped frame** — A frame the browser missed its deadline to draw, causing a tiny hitch in motion.
 - **Compositing** — Letting the GPU move or fade an element on its own layer without redoing layout or paint.
 - **will-change** — A CSS hint that an element is about to animate, so the browser can promote it to its own layer ahead of time.
-- **Layout thrashing** — Animating properties like width, height, top, or left that force the browser to recalculate layout every frame, causing jank.
+- **Layout thrashing** — Alternating DOM reads and writes so the browser must recompute layout repeatedly within one frame, causing jank.
 
 ### Principles to Know — concepts that guide when and how to animate
 - **Purposeful animation** — Motion should serve a function — orient, give feedback, show relationships — not just decorate.
@@ -162,5 +120,5 @@ _A curated snapshot mirroring the project's `/vocabulary` page; keep the two in 
 - **Perceived performance** — The right animation makes an interface feel faster, even when it isn't.
 - **Frequency of use** — The more often a user sees an animation, the shorter and subtler it should be.
 - **Spatial consistency** — Animating so an element keeps its identity and position across states, so users never lose track of where things went.
-- **Hardware acceleration** — Animating transform and opacity lets the GPU keep motion smooth.
+- **Hardware acceleration** — Animating transform and opacity can let the compositor move or fade an element without layout or paint. It does not guarantee smooth output.
 - **Reduced motion** — Respecting the user's prefers-reduced-motion setting by toning down or removing motion.

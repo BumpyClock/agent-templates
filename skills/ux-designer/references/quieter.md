@@ -1,7 +1,7 @@
 # Quieter
 
 Use this optional recipe for a restrained new design or less visual intensity in an existing interface.
-When the direction is uncertain, follow the [direction choice rule](../SKILL.md#full-design-workflow).
+When the direction is uncertain, follow the direction step in [Full design workflow](full-design-workflow.md).
 Use [Typeset](typeset.md) as the typography baseline.
 
 ## Choose the Emphasis
@@ -10,8 +10,10 @@ Identify the primary task and the emphasis it needs.
 For an existing interface, identify which elements compete with that emphasis.
 For a new design, choose a restrained direction from the brief, content, and project conventions.
 
-- **Persuasion and experience:** A restrained palette, open space, or lighter typography can support the product's character.
-- **Operation and text:** Fewer background accents, flatter surfaces, or less motion can keep attention on the task.
+Use the visitor modes defined in [Layout](layout.md#visitor-mode):
+
+- **Persuade + Experience:** A restrained palette, open space, or lighter typography can support the product's character.
+- **Operate + Read:** Fewer background accents, flatter surfaces, or less motion can keep attention on the task.
 
 Preserve project conventions, supplied meaning, readability, accessibility, and required behavior.
 For a scoped refinement, preserve everything outside the requested target.
@@ -31,7 +33,7 @@ Select treatments that address an observed problem or support the chosen directi
 
 ### Visual Weight and Space
 
-- If secondary text competes with primary content, try a lighter role, such as 700 → 500.
+- If secondary text competes with primary content, try a lighter role, such as weight 700 to 500.
 - If scale dominates the content, compare smaller type within the typography baseline.
 - If groups compete, increase separation without extra distance between frequent actions.
 - If a border is decorative, try a thinner or lower-contrast version.
@@ -47,7 +49,7 @@ Select treatments that address an observed problem or support the chosen directi
 ### Motion
 
 - If travel overwhelms feedback, try a shorter distance, such as 10–20px instead of 40px.
-- If overshoot distracts, compare a restrained curve such as `ease-out-quart` with the existing motion.
+- If overshoot distracts, compare a restrained curve such as `cubic-bezier(0.25, 1, 0.5, 1)` with the existing motion.
 - When spring motion supports clear, restrained feedback, retain it.
 - If an animation serves no useful purpose, compare immediate feedback.
 - Preserve feedback, continuity, and reduced-motion behavior.

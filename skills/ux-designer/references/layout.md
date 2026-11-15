@@ -13,23 +13,23 @@ Do not require a distinctive layout when a familiar structure serves the task.
 ## Visitor mode
 Understand why the user is on this page / screen state. 
 
-- **Persuade + Experience:** composition may be asymmetric, fluid, or intentionally disruptive when the selected world earns it.
-- **Operate + Read:** predictable structure, stable density, and navigable linearity are affordances.
+- **Persuade + Experience** (marketing, portfolio, and showcase pages): composition may be asymmetric, fluid, or intentionally disruptive when the chosen visual system supports it.
+- **Operate + Read** (task tools and reading surfaces): predictable structure, stable density, and navigable linearity are affordances.
 - **Native:** follow platform conventions for navigation, insets, adaptation, and touch targets.
 
-Preserve the established visual world. Change the identity only when the user requests it.
+## Materials and depth
 
-## Materials & depth — translucency conveys hierarchy
+Use this section only when the platform or the chosen direction uses translucent materials, such as Apple system materials. Otherwise, follow the depth approach chosen in [Craft Foundations](craft-foundations.md#depth-and-elevation-strategy).
 
-Use translucent materials as a floating functional layer that brings structure without stealing focus. On the web, approximate with `backdrop-filter`.
+Translucent materials form a floating functional layer that brings structure without stealing focus. On the web, approximate with `backdrop-filter`.
 
 - **Build nav/toolbars/sheets as translucent layers** (`backdrop-filter: blur()` + a semi-transparent background) with content scrolling underneath — not opaque bars that consume a fixed strip.
-- **Material weight encodes hierarchy:** darker/heavier materials separate structural regions (sidebars); lighter materials draw attention to interactive elements (buttons). **Never stack a light translucent surface on another** — legibility collapses.
+- **Material weight encodes hierarchy:** darker/heavier materials separate structural regions (sidebars); lighter materials draw attention to interactive elements (buttons). Do not stack a light translucent surface on another, because legibility collapses.
 - **Bigger surfaces should read as thicker:** stronger blur + a deeper shadow than small chips. Consider context-aware shadow — heavier over busy/text content for separation, lighter over plain backgrounds.
 - **Dim to focus, separate to keep flow.** A modal task pairs the surface with a dimming scrim and pushes the background back/down. A parallel, non-blocking panel uses translucency and offset *without* a scrim so the flow isn't broken. For stacked sheets, progressively dim and push back each parent layer.
 - **Vibrancy keeps text legible over changing backgrounds.** Over blurred/translucent surfaces, don't use flat gray text — use higher-contrast, slightly heavier weight, and a small letter-spacing bump. Put color on a solid layer, not the translucent foreground.
-- **Scroll edge effects, not hard dividers.** Instead of a 1px border under a sticky header, fade a small blur/gradient mask where content meets floating chrome — only where floating UI actually overlaps content.
-- **Materialize, don't just fade.** For glass/blur surfaces, animate blur radius and scale together on enter/exit, so the surface reads as a real material arriving rather than a plain opacity fade.
+- **Scroll edge effects.** Under floating translucent chrome, instead of a 1px border under a sticky header, fade a small blur/gradient mask where content meets floating chrome — only where floating UI actually overlaps content.
+- **Materialize, don't just fade.** For glass/blur surfaces, animate blur radius and scale together on enter/exit when the result stays within [Runtime and performance](animate.md#runtime-and-performance), so the surface reads as a real material arriving rather than a plain opacity fade.
 
 ```css
 .toolbar {
@@ -43,7 +43,7 @@ Use translucent materials as a floating functional layer that brings structure w
 
 Select the questions relevant to the change or an unresolved concern. Inspect the affected output through [Critique](critique.md).
 
-- **Reading order:** Apply the squint test. With detail blurred, can you still identify the primary element, the secondary element, and the major groups in order?
+- **Reading order:** Apply the [squint test](page-composition.md#perceptual-tests). With detail blurred, can you still identify the primary element, the secondary element, and the major groups in order?
 - **Grouping:** Are related items close and distinct groups separated, or are containers compensating for weak proximity?
 - **Rhythm:** Do tight and generous intervals create a deliberate cadence, or is one spacing value repeated until everything has equal weight?
 - **Structure:** Does the topology match the content and task? Are repeated cards, columns, or sections genuinely equivalent, or merely a framework default?
@@ -69,13 +69,13 @@ Choose the simplest structural model that expresses those relationships. Use lay
 
 - Group by meaning. Use proximity before adding containers or decoration.
 - Create rhythm through deliberate contrast between tight and generous intervals.
-- Use a documented spacing scale rather than one-off values. A 4-unit base usually provides the useful middle steps that an 8-only scale misses.
+- Use a documented spacing scale rather than one-off values. [Craft Foundations](craft-foundations.md) owns the starting scale.
 - Let hierarchy follow product priority, not framework defaults.
 - Keep distinct content visually distinct without turning every group into an isolated component.
 - Make responsive behavior structural: reorder, collapse, reflow, or reveal based on what remains important.
 - Prefer container-aware components when the same component appears in different contexts.
 - Use `gap` for sibling rhythm when it expresses the relationship more directly than child margins.
-- Keep touch targets usable even when their visible marks are small.
+- Keep touch targets usable even when their visible marks are small, per [Touch targets](accessibility.md#touch-targets).
 - Use depth only when it clarifies state or hierarchy.
 - Make optical corrections only after inspecting the rendered result.
 

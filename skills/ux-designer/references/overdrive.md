@@ -1,27 +1,22 @@
-Start your response with:
+# Overdrive
 
-```
-──────────── ⚡ OVERDRIVE ─────────────
-》》》 Entering overdrive mode...
-```
+Read only when the user asks for a technically ambitious effect, or the brief needs one. This reference covers web techniques.
 
-Push an interface past conventional limits. This isn't just about visual effects. It's about using the full power of the browser to make any part of an interface feel extraordinary: a table that handles a million rows, a dialog that morphs from its trigger, a form that validates in real-time with streaming feedback, a page transition that feels cinematic.
+Push an interface past conventional limits: a table that handles a million rows, a dialog that morphs from its trigger, a form that validates in real time with streaming feedback, a page transition that feels cinematic.
 
-Context decides what "extraordinary" means. A particle system on a creative portfolio is impressive. The same particle system on a settings page is embarrassing. But a settings page with instant optimistic saves and animated state transitions? That's extraordinary too. Understand the project's personality and goals before deciding what's appropriate.
+Context decides what "extraordinary" means. A particle system on a creative portfolio is impressive. The same particle system on a settings page is embarrassing. A settings page with instant optimistic saves and animated state transitions is extraordinary too. Understand the project's personality and goals before you choose.
 
-### Propose Before Building
+Apply [Reduced Motion](accessibility.md#reduced-motion) and [Animate](animate.md) to every effect.
 
-This command has the highest potential to misfire. Do NOT jump straight into implementation. You MUST:
+### Choose the direction
 
-1. **Think through 2-3 different directions**: consider different techniques, levels of ambition, and aesthetic approaches. For each direction, briefly describe what the result would look and feel like.
-2. **Get the user's pick before writing any code.** {{ask_instruction}} Carry each direction's description and its trade-offs (browser support, performance cost, complexity) inside the option itself, so the user is choosing between things they can read. A structured question blocks the message it rides in until the user answers, so directions written alongside the question stay invisible while the user is being asked to choose between them.
-3. Only proceed with the direction the user confirms.
+Ambitious effects misfire easily, so compare a few directions before you build: different techniques, levels of ambition, and aesthetic approaches. Weigh browser support, performance cost, and complexity.
 
-Skipping this step risks building something embarrassing that needs to be thrown away.
+When the user named the effect, or the brief makes one direction the clear fit, build it and name the alternatives in the report. Ask the user to choose first when the directions differ substantially in cost or character and the brief does not settle it. Also ask before you add a dependency or large asset, request a device permission, or change product behavior. Put each direction's description and trade-offs in the question, so the user chooses between things they can read.
 
-### Verify in the Browser
+### Verify in the browser
 
-Ambitious effects rarely work on the first try, so verify them in the browser rather than from code: an effect that technically runs can still stutter, ease wrong, or land on the wrong frame. Aim the checks at timing, easing, and smoothness, batch the fixes between looks, and keep refining until the effect is extraordinary.
+Ambitious effects rarely work on the first try, so verify them in the browser rather than from code. An effect that runs can still stutter, ease wrong, or land on the wrong frame. Aim the checks at timing, easing, and smoothness, and batch the fixes between looks.
 
 ---
 
@@ -49,17 +44,17 @@ Organized by what you're trying to achieve, not by technology name.
 
 ### Make transitions feel cinematic
 - **View Transitions API** (same-document: all browsers; cross-document: no Firefox): shared element morphing between states. A list item expanding into a detail page. A button morphing into a dialog. This is the closest thing to native FLIP animations.
-- **`@starting-style`** (all browsers): animate elements from `display: none` to visible with CSS only, including entry keyframes
-- **Spring physics**: natural motion with mass, tension, and damping instead of cubic-bezier. Libraries: motion (formerly Framer Motion), GSAP, or roll your own spring solver.
+- **`@starting-style`** (all browsers): transition elements from `display: none` to visible with CSS only. Pair it with `transition-behavior: allow-discrete`.
+- **Spring physics**: natural motion with mass, tension, and damping instead of cubic-bezier. Use the project's existing motion primitives first. Otherwise: motion (formerly Framer Motion), GSAP, or a small spring solver.
 
 ### Tie animation to scroll position
-- **Scroll-driven animations** (`animation-timeline: scroll()`): CSS-only, no JS. Parallax, progress bars, reveal sequences all driven by scroll position. (Chrome/Edge/Safari; Firefox: flag only; always provide a static fallback)
+- **Scroll-driven animations** (`animation-timeline: scroll()`): CSS-only, no JS. Parallax, progress bars, reveal sequences all driven by scroll position. (Browser support changes; check current support, feature-detect with `@supports`, and provide a static fallback)
 
 ### Render beyond CSS
 - **WebGL** (all browsers): shader effects, post-processing, particle systems. Libraries: Three.js, OGL (lightweight), regl. Use for effects CSS can't express.
-- **WebGPU** (Chrome/Edge; Safari 26+; Firefox on Windows/macOS; flag only on Firefox Linux/Android): next-gen GPU compute, more powerful than WebGL. Always fall back to WebGL2; gate it behind API detection plus a `navigator.gpu.requestAdapter()` null check, so a blocklisted or headless GPU still reaches the fallback.
+- **WebGPU** (partial support; feature-detect): next-gen GPU compute, more powerful than WebGL. Always fall back to WebGL2; gate it behind API detection plus a `navigator.gpu.requestAdapter()` null check, so a blocklisted or headless GPU still reaches the fallback.
 - **Canvas 2D / OffscreenCanvas**: custom rendering, pixel manipulation, or moving heavy rendering off the main thread entirely via Web Workers + OffscreenCanvas.
-- **SVG filter chains**: displacement maps, turbulence, morphology for organic distortion effects. CSS-animatable.
+- **SVG filter chains**: displacement maps, turbulence, morphology for organic distortion effects.
 
 ### Make data feel alive
 - **Virtual scrolling**: render only visible rows for tables/lists with tens of thousands of items. No library required for simple cases; TanStack Virtual for complex ones.
@@ -77,9 +72,9 @@ Organized by what you're trying to achieve, not by technology name.
 
 ### Interact with the device
 - **Web Audio API**: spatial audio, audio-reactive visualizations, sonic feedback. Requires user gesture to start.
-- **Device APIs**: orientation, ambient light, geolocation. Use sparingly and always with user permission.
+- **Device APIs**: orientation, geolocation. Use sparingly and always with user permission.
 
-**NOTE**: This command is about enhancing how an interface FEELS, not changing what a product DOES. Adding real-time collaboration, offline support, or new backend capabilities are product decisions, not UI enhancements. Focus on making existing features feel extraordinary.
+**NOTE**: This reference is about enhancing how an interface FEELS, not changing what a product DOES. Adding real-time collaboration, offline support, or new backend capabilities are product decisions, not UI enhancements. Focus on making existing features feel extraordinary.
 
 ## Implement with Discipline
 
@@ -101,27 +96,26 @@ else if (canvas.getContext('webgl2')) { /* WebGL2 fallback */ }
 
 ### Performance rules
 
-- Target 60fps. If dropping below 50, simplify.
+- Hold the display's refresh rate. Simplify when frames drop visibly.
 - Lazy-initialize heavy resources (WebGL contexts, WASM modules) only when near viewport.
 - Pause off-screen rendering. Kill what you can't see.
-- Test on real mid-range devices, not just your development machine.
+- Test with CPU throttling and a mobile viewport, or on a mid-range device when one is available. Report which you used.
 
 ### Polish is the difference
 
-The gap between "cool" and "extraordinary" is in the last 20% of refinement: the easing curve on a spring animation, the timing offset in a staggered reveal, the subtle secondary motion that makes a transition feel physical. Don't ship the first version that works; ship the version that feels inevitable.
+The gap between "cool" and "extraordinary" is in the last 20% of refinement: the easing curve on a spring animation, the timing offset in a staggered reveal, the subtle secondary motion that makes a transition feel physical. Refine past the first version that works. Stop when the effect holds the display frame rate under the checked conditions, the fallback and reduced-motion paths work, and remaining issues are reported.
 
-**NEVER**:
-- Ship effects that cause jank on mid-range devices
-- Use bleeding-edge APIs without a functional fallback
-- Add sound without explicit user opt-in
-- Use technical ambition to mask weak design fundamentals; fix those first with other commands
-- Layer multiple competing extraordinary moments. Focus creates impact, excess creates noise
+Do not:
+- Ship effects that cause jank under the checked conditions.
+- Use a new API without a functional fallback.
+- Add sound without explicit user opt-in.
+- Use technical ambition to mask weak design fundamentals. Fix those first with [Layout](layout.md) and [Typeset](typeset.md).
+- Layer multiple competing extraordinary moments. Focus creates impact; excess creates noise.
 
 ## Verify the Result
 
-- **The wow test**: Show it to someone who hasn't seen it. Do they react?
 - **The removal test**: Take it away. Does the experience feel diminished, or does nobody notice?
-- **The device test**: Run it on a phone, a tablet, a Chromebook. Still smooth?
+- **The device test**: Is it still smooth under CPU throttling and at a mobile viewport?
 - **The context test**: Does this make sense for THIS brand and audience?
 
-"Technically extraordinary" isn't about using the newest API. It's about making an interface do something users didn't think a website could do.
+Inspect the result through [Critique](critique.md).

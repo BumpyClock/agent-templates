@@ -1,10 +1,10 @@
-> **Additional context needed**: the brand's emotional range.
-
-Make the experience memorable at moments that earn it. Delight is not a layer of generic whimsy; it is product character revealed through a useful interaction, a humane response, or an unexpectedly considered detail.
+Make the experience memorable at moments that earn it. Delight is product character revealed through a useful interaction, a humane response, or an unexpectedly considered detail.
 
 ---
 
 ## Visitor mode
+
+The modes are defined in [Layout](layout.md#visitor-mode). In native apps, platform conventions come first.
 
 - **Persuade + Experience:** personality may run through voice, composition, motion, and discovery, provided the artifact remains the focus.
 - **Operate + Read:** concentrate delight at meaningful moments such as first use, completion, recovery, or mastery. Reliability carries everything else.
@@ -20,11 +20,11 @@ Inspect the target, product voice, repeated-use frequency, and emotional context
 - an interaction whose physical or verbal response could express the brand;
 - a useful capability people might enjoy discovering.
 
-Do not manufacture a celebration for an ordinary click. Ask only when the brand's emotional range or the stakes cannot be inferred.
+Do not manufacture a celebration for an ordinary click. Infer the brand's emotional range and the stakes from the product. When they cannot be inferred, choose the restrained option and note the assumption in the report.
 
-## Define one delight thesis
+## Choose the feeling and the treatment
 
-State in one sentence what the user should feel and why that feeling belongs to this product. Then choose the smallest system that can deliver it:
+Decide what the user should feel and why that feeling belongs to this product. Then choose the smallest treatment that can deliver it:
 
 - a distinctive response to a meaningful action;
 - product-specific language that clarifies while carrying voice;
@@ -43,7 +43,7 @@ Derive the treatment from product mechanism and visual world, not a stock catalo
 - **Repeated interaction:** keep the response satisfying after the hundredth use. Variation is useful only when it remains coherent and predictable enough to trust.
 - **Discovery:** reward curiosity without hiding required functionality.
 
-Copy must use the product's language. Generic whimsy is worse than neutral clarity.
+Copy must use the product's language.
 
 ## Protect the experience
 
@@ -52,11 +52,10 @@ Delight must not:
 - delay, block, or obscure the primary task;
 - override platform conventions or accessibility;
 - add unrequested factual claims;
-- play sound without consent or ignore mute settings;
 - become mandatory, unskippable, or exhausting on repeat;
 - add a dependency or asset cost disproportionate to the moment.
 
-For authored motion, load [animate.md](animate.md). Respect screen readers, keyboard use, touch, localization, and cultural context. Nonessential loops stop when hidden. Make celebration intensity proportional to frequency and consequence.
+For authored motion, sound, and loops, follow [animate.md](animate.md). Respect screen readers, keyboard use, touch, localization, and cultural context.
 
 ## Verify
 
@@ -67,6 +66,5 @@ Use [critique.md](critique.md) to inspect the actual output. Select checks relev
 - The interface remains fast and obvious without the flourish.
 - Repetition does not turn charm into friction.
 - Relevant mute, input, and localization behavior remains intact.
-- The result feels like the selected world, not a generic “delight” treatment.
 
 Finish when the requested refinement and relevant checks are complete. Repeat checks only for changes, failures, or unresolved concerns.

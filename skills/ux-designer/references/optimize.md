@@ -1,4 +1,8 @@
-Performance is a feature. Identify the actual bottleneck for THIS interface, fix it, then measure. Don't optimize what isn't slow.
+# Optimize
+
+This file covers web interfaces. For native apps, use the platform profiler and apply the same loop.
+
+Measure the affected behavior, find the bottleneck, fix it, then measure again under the same conditions. Don't optimize what isn't slow. When no tool can measure the behavior, make only changes with a clear static cause, such as an oversized image or an image without dimensions, and report the missing measurement.
 
 ## Assess Performance Issues
 
@@ -6,7 +10,7 @@ Understand current performance and identify problems:
 
 1. **Measure the affected behavior**. Select relevant metrics from these categories:
    - **Core Web Vitals**: LCP, INP, CLS scores
-   - **Load time**: Time to interactive, first contentful paint
+   - **Load time**: First Contentful Paint, Total Blocking Time
    - **Bundle size**: JavaScript, CSS, image sizes
    - **Runtime performance**: Frame rate, memory usage, CPU usage
    - **Network**: Request count, payload sizes, waterfall
@@ -17,23 +21,17 @@ Understand current performance and identify problems:
    - How bad is it? (Perceivable? Annoying? Blocking?)
    - Who's affected? (All users? Mobile only? Slow connections?)
 
-**CRITICAL**: Measure before and after. Premature optimization wastes time. Optimize what actually matters.
-
 ## Optimization Strategy
 
 Select techniques that address the measured bottleneck within the requested scope.
-The sections below are options, not a required checklist or authorization for infrastructure changes.
+The sections below are options, not a required checklist. Infrastructure and architecture changes, such as a CDN, service worker, server-side rendering, or API redesign, are outside UI scope. Recommend them in the report instead of implementing them.
 
 ### Loading Performance
 
 **Optimize Images**:
-- Use modern formats (WebP, AVIF)
-- Proper sizing (don't load 3000px image for 300px display)
+- Size images for their display size, in modern formats, with responsive sources (`srcset`, `picture`).
 - Lazy-load images outside the initial viewport.
 - Keep likely LCP images eager, as described in [LCP guidance](https://web.dev/articles/optimize-lcp).
-- Responsive images (`srcset`, `picture` element)
-- Compress images (80-85% quality is usually imperceptible)
-- Use CDN for faster delivery
 
 Example for an initially visible hero that is likely to be the LCP element:
 
@@ -48,46 +46,10 @@ Example for an initially visible hero that is likely to be the LCP element:
 />
 ```
 
-**Reduce JavaScript Bundle**:
-- Code splitting (route-based, component-based)
-- Tree shaking (remove unused code)
-- Remove unused dependencies
-- Lazy load non-critical code
-- Use dynamic imports for large components
-
-```javascript
-// Lazy load heavy component
-const HeavyChart = lazy(() => import('./HeavyChart'));
-```
-
-**Optimize CSS**:
-- Remove unused CSS
-- Critical CSS inline, rest async
-- Minimize CSS files
-- Use CSS containment for independent regions
-
-**Optimize Fonts**:
-- Use `font-display: swap` or `optional`
-- Subset fonts (only characters you need)
-- Preload critical fonts
-- Use system fonts when appropriate
-- Limit font weights loaded
-
-```css
-@font-face {
-  font-family: 'CustomFont';
-  src: url('/fonts/custom.woff2') format('woff2');
-  font-display: swap; /* Show fallback immediately */
-  unicode-range: U+0020-007F; /* Basic Latin only */
-}
-```
-
-**Optimize Loading Strategy**:
-- Critical resources first (async/defer non-critical)
-- Preload critical assets
-- Prefetch likely next pages
-- Service worker for offline/caching
-- HTTP/2 or HTTP/3 for multiplexing
+**JavaScript, CSS, and fonts**:
+- Split and lazy-load code that the initial view does not need. Remove unused dependencies and CSS.
+- Load only the font weights in use. Use `font-display: swap` or `optional`, and preload a critical font.
+- Subset a font only by shipping a subset file. `unicode-range` limits which characters use a face. It does not shrink the file.
 
 ### Rendering Performance
 
@@ -106,58 +68,14 @@ elements.forEach((el, i) => {
 });
 ```
 
-**Optimize Rendering**:
-- Use CSS `contain` property for independent regions
-- Minimize DOM depth (flatter is faster)
-- Reduce DOM size (fewer elements)
-- Use `content-visibility: auto` for long lists
-- Virtual scrolling for very long lists (react-window, TanStack Virtual)
+**Rendering**:
+- Use `content-visibility: auto` or virtual scrolling for long lists.
+- Use CSS `contain` for independent regions.
+- Bound expensive paint areas for blur, filter, and shadow effects. Smaller, isolated areas cost less.
+- Match the frame budget to the target refresh rate, about 16.7ms at 60Hz or 8.3ms at 120Hz. Avoid long-running JavaScript during animation.
+- For scroll-linked work, prefer passive listeners, `IntersectionObserver`, or scroll-driven CSS over scroll handlers.
 
-**Reduce Paint & Composite**:
-- Use `transform` and `opacity` for reliable movement, but allow blur, filters, masks, clip paths, shadows, and color shifts when they create meaningful polish
-- Avoid casual animation of layout-driving properties (`width`, `height`, `top`, `left`, margins)
-- Use `will-change` sparingly for known expensive operations
-- Bound expensive paint areas for blur/filter/shadow effects (smaller and isolated is faster)
-
-### Animation Performance
-
-**Property Cost**:
-
-Transform and opacity can avoid layout and paint work. They do not guarantee GPU acceleration or smooth output.
-Measure the affected browser stages with the [animation performance guide](https://web.dev/articles/animations-guide).
-
-```css
-/* These properties can permit compositor-only updates. */
-.animated {
-  transform: translateX(100px);
-  opacity: 0.5;
-}
-
-/* Changes to geometry can require layout and paint. */
-.animated {
-  left: 100px;
-  width: 300px;
-}
-```
-
-**Frame Budget**:
-- Match the frame budget to the target refresh rate, about 16.7ms at 60Hz or 8.3ms at 120Hz.
-- Use `requestAnimationFrame` for JS animations
-- Debounce/throttle scroll handlers
-- Use CSS animations when possible
-- Avoid long-running JavaScript during animations
-
-**Intersection Observer**:
-```javascript
-// Efficiently detect when elements enter viewport
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      // Element is visible, lazy load or animate
-    }
-  });
-});
-```
+For animation property cost, `will-change`, and runtime choices, follow [Runtime and performance](animate.md#runtime-and-performance).
 
 ### React/Framework Optimization
 
@@ -168,66 +86,23 @@ const observer = new IntersectionObserver((entries) => {
 - Use `useMemo()` to cache expensive calculation results when measurements justify it.
 - Use `useCallback()` when stable function identity benefits a memoized child or Hook dependency.
 - Keep inline functions unless function identity causes a measured problem or affects required behavior.
-- Virtualize long lists
-- Code split routes
 
 Follow [React memoization guidance](https://react.dev/reference/react/useCallback#should-you-add-usecallback-everywhere) for the distinction between cached results and function identity.
-
-**Framework-agnostic**:
-- Minimize re-renders
-- Debounce expensive operations
-- Memoize computed values
-- Lazy load routes and components
-
-### Network Optimization
-
-**Reduce Requests**:
-- Combine small files
-- Use SVG sprites for icons
-- Inline small critical assets
-- Remove unused third-party scripts
-
-**Optimize APIs**:
-- Use pagination (don't load everything)
-- GraphQL to request only needed fields
-- Response compression (gzip, brotli)
-- HTTP caching headers
-- CDN for static assets
-
-**Optimize for Slow Connections**:
-- Adaptive loading based on connection (navigator.connection)
-- Optimistic UI updates
-- Request prioritization
-- Progressive enhancement
 
 ## Core Web Vitals Optimization
 
 ### Largest Contentful Paint (LCP < 2.5s)
-- Optimize hero images
-- Inline critical CSS
-- Preload key resources
-- Use CDN
-- Server-side rendering
+- Prioritize the LCP resource: correct size, eager loading, `fetchpriority="high"`.
+- Remove render-blocking work ahead of it.
 
 ### Interaction to Next Paint (INP < 200ms)
-- Break up long tasks
-- Defer non-critical JavaScript
-- Use web workers for heavy computation
-- Reduce JavaScript execution time
+- Break up long tasks and defer non-critical JavaScript.
+- Move heavy computation to a web worker.
 
 ### Cumulative Layout Shift (CLS < 0.1)
-- Set dimensions on images and videos
-- Don't inject content above existing content
-- Use `aspect-ratio` CSS property
-- Reserve space for ads/embeds
-- Avoid animations that cause layout shifts
-
-```css
-/* Reserve space for image */
-.image-container {
-  aspect-ratio: 16 / 9;
-}
-```
+- Set dimensions or `aspect-ratio` on images, videos, and embeds.
+- Don't inject content above existing content.
+- Avoid animations that shift layout.
 
 ## Performance Monitoring
 
@@ -236,13 +111,12 @@ Follow [React memoization guidance](https://react.dev/reference/react/useCallbac
 - WebPageTest
 - Core Web Vitals (Chrome UX Report)
 - Bundle analyzers (webpack-bundle-analyzer)
-- Performance monitoring (Sentry, DataDog, New Relic)
+- Existing performance monitoring, when the project has it
 
-Use existing tools and telemetry when available and relevant. Do not add monitoring services as part of this checklist.
+Use existing tools and telemetry when available and relevant. Do not add monitoring services.
 
 **Metric options**:
 - LCP, INP, CLS (Core Web Vitals; INP replaced FID in March 2024)
-- Time to Interactive (TTI)
 - First Contentful Paint (FCP)
 - Total Blocking Time (TBT)
 - Bundle size
@@ -251,14 +125,7 @@ Use existing tools and telemetry when available and relevant. Do not add monitor
 Select device and network conditions that represent the affected users and measured bottleneck.
 Use available hardware or suitable simulation, and report limits that affect the conclusion.
 
-**NEVER**:
-- Optimize without measuring (premature optimization)
-- Sacrifice accessibility for performance
-- Break functionality while optimizing
-- Use `will-change` everywhere (creates new layers, uses memory)
-- Lazy load above-fold content
-- Optimize micro-optimizations while ignoring major issues (optimize the biggest bottleneck first)
-- Forget about mobile performance (often slower devices, slower connections)
+Do not trade accessibility or working functionality for performance.
 
 ## Verify Improvements
 

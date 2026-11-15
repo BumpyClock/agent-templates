@@ -1,4 +1,4 @@
 interface:
-  display_name: "Ux Designer"
-  short_description: "Help with Ux Designer tasks"
-  default_prompt: "Use $ux-designer to help with Ux Designer tasks."
+  display_name: "UX Designer"
+  short_description: "Design or implement interfaces, layouts, and interactions"
+  default_prompt: "Use $ux-designer to design or implement this interface, layout, or interaction."

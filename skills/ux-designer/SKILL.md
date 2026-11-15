@@ -1,7 +1,6 @@
 ---
 name: ux-designer
 description: "Design or implement interfaces, layouts, and interactions. Use for UI work, including animation changes. Motion audits and roadmaps use improve-animations."
-context: fork
 ---
 
 ## Core idea
@@ -18,14 +17,14 @@ For a new visual direction or requested rebrand, choose a distinctive palette, t
 
 (*Principles of Great Design*, WWDC 2026). Use these as the names you reason with:
 
-1. **Purpose.** Make with intention; decide what *not* to build. Every feature asks for the user's time, attention, and trust — spend that budget only where it pays off. Users don't need to understand the underlying tech or logic, they need to get their tasks done.
-2. **Agency.** Keep people in control: offer choices, don't force a single path. Back it with forgiveness — easy undo for slips, a confirmation dialog only for genuinely destructive, irreversible actions (use sparingly; overusing it trains people to click through).
-3. **Responsibility.** Act in the user's interest. Privacy: ask at the right moment, only for what's needed, transparently. Safety: anticipate misuse and harm — especially with AI (an allergy-aware recipe app must not suggest a harmful ingredient). Add previews, confirmations, disclaimers; cut a feature whose risk outweighs its value.
-4. **Familiarity.** Build on what people already know. Use metaphors that are neither too literal nor too abstract (a trash can means delete), and honor their physics. Be consistent: things that look the same must behave the same and live in the same place (close is always top-left on macOS) so people can predict what happens next. Only break a familiar pattern if you can prove it's better — then test it, don't assume.
-5. **Flexibility.** Design for different contexts, devices, and the full range of abilities. Adapt to the platform (iPhone = quick touch; desktop = deep workflows with precise pointer control) and to the situation. Design inclusively (age, language, expertise, accessibility). When no single layout fits everyone, let people personalize — rearrange controls, hide what they don't use.
-6. **Simplicity — not minimalism.** Strip the unnecessary so the core purpose shines; burying everything in one place looks minimal but isn't simple. Be concise (plain language, no jargon, fewer steps) and clear (use hierarchy — order, spacing, contrast — so the most important thing is the most obvious). Every element earns its place; sometimes *adding* context simplifies (a video scrubber that shows time remaining). Show the common path first, advanced options one level deeper. Great design is about intentionality, start with a blank slate and only add elements that will be needed, cleaning up after is not the same as only adding what is necessary.
-7. **Craft.** Uncompromising attention to detail builds trust. Beautiful typography, colors that adapt to light/dark, clear iconography, and responsive animations that give immediate, natural feedback. Nothing is random — every spacing, timing, and alignment value is a deliberate choice you can defend. Jittery scroll, misaligned icons, and layouts that break on rotation read as carelessness. Craft needs iteration and longevity — keep evolving the design as features and hardware change.
-8. **Delight.** The result of getting the other seven right, not confetti tacked on top. Decide the emotion you want people to feel (calm, confident, excited) and reinforce it in every decision.
+1. **Purpose.** Decide what *not* to build. Every feature spends the user's time, attention, and trust. Users need to get their tasks done, not to understand the underlying tech.
+2. **Agency.** Keep people in control: offer choices, don't force a single path. Prefer easy undo. Use a confirmation dialog only for destructive, irreversible actions, because overuse trains people to click through.
+3. **Responsibility.** Act in the user's interest. Ask for private data at the right moment, only for what is needed. Anticipate misuse and harm, especially with AI (an allergy-aware recipe app must not suggest a harmful ingredient). Cut a feature whose risk outweighs its value.
+4. **Familiarity.** Build on what people already know. Things that look the same must behave the same and live in the same place (close is top-left on macOS). Break a familiar pattern only when you can show it is better.
+5. **Flexibility.** Adapt to the platform (iPhone = quick touch; desktop = deep workflows with precise pointer control) and to the range of abilities, languages, and expertise. When no single layout fits everyone, let people personalize.
+6. **Simplicity — not minimalism.** Burying everything in one place looks minimal but isn't simple. Make the most important thing the most obvious through order, spacing, and contrast. Sometimes *adding* context simplifies (a video scrubber that shows time remaining). Show the common path first, advanced options one level deeper. Start from a blank slate and add only what is needed; cleaning up afterward is not the same.
+7. **Craft.** Every spacing, timing, and alignment value is a deliberate choice you can defend. Jittery scroll, misaligned icons, and layouts that break on rotation read as carelessness.
+8. **Delight.** The result of getting the other seven right, not confetti on top. Decide the emotion people should feel (calm, confident, excited) and reinforce it in every decision.
 
 Tactical rules that serve these:
 
@@ -53,33 +52,46 @@ For design tradeoffs, prefer this order. Depart from it when a concrete benefit 
 - Preserve relevant accessibility and interaction behavior.
 - A small edit needs no design document, mockup, direction statement, or micro-polish note.
 - Use only references needed for the affected behavior.
-- Cut taglines, helper text and secondary labels. If a screen needs them to make sense, fix the layout.
+- Cut taglines, helper text, and secondary labels that repeat the heading or control. Keep text that answers a question the layout cannot answer. `references/clarify.md` owns interface copy.
 
 
 ## Reference index
-Read these when necessary:
+Read a reference only when its condition applies:
 
-- `references/design-direction.md` — personality, color foundation, layout approach, typography, named aesthetic recipes (incl. Editorial minimalism).
+- `references/full-design-workflow.md` — end-to-end workflow. Read for a new product or page, or a requested full redesign, where no existing surface sets the structure. Skip it for a feature inside an established surface.
+- `references/design-direction.md` — personality, color foundation, typeface categories, and the Editorial minimalism recipe. Read to choose a new visual direction or rebrand.
+- `references/generic-patterns.md` — built-result floor and generic template patterns to avoid by default. Read before building a new page or visual direction, and when a critique checks for generic design.
 - `references/layout.md` — structural baseline and adaptation. Read to establish, repair, or refine layout.
-- `references/page-composition.md` — shared page hierarchy, evidence, and optional composition exploration. Read for detailed full-page structure or unresolved hierarchy problems.
-- `references/data-and-evidence.md` — data accuracy, mock-data labels, tables, charts, and calculators. Read for data-heavy surfaces or placeholder content.
-- `references/craft-foundations.md` — spacing, padding, radius, depth, surface treatment rules.
+- `references/page-composition.md` — page hierarchy, evidence, and composition exploration. Read for full-page structure or unresolved hierarchy problems.
+- `references/data-and-evidence.md` — data accuracy, mock-data labels, tables, charts, calculators, and stat displays. Read for data-heavy surfaces or placeholder content.
+- `references/craft-foundations.md` — spacing scale, padding, radius, depth, and surface treatment. Read to set or change those values.
 - `references/typeset.md` — typography baseline, numeric text, and font behavior. Read to establish or refine text hierarchy, readability, or font delivery.
-- `references/components-typography-icons.md` — controls, icons, and editorial-minimal components. Typography rules reside in `references/typeset.md`.
-- `references/animate.md` — motion baseline, runtime choices, and performance constraints. Read to create or revise motion.
-- `references/interaction-visual-clarity.md` — optional interaction presets, contrast, color usage, navigation context, dark mode, and visual anti-patterns.
-- `references/accessibility.md` — controls, focus, forms, reduced motion, contrast, and touch targets. Read when the task affects these behaviors.
-- `references/critique.md` — actual-output inspection across web, native, and terminal interfaces. Read for design critiques or visual verification.
-- `references/redesign.md` — mode detection, audit-first, preservation rules, modernisation levers. Load when redesigning an existing site/page.
-- `references/clarify.md` — interface copy. Read to revise unclear labels, instructions, or state messages.
-- `references/bolder.md` — optional recipe for stronger emphasis, as a refinement or an initial direction.
-- `references/quieter.md` — optional recipe for less visual intensity, as a refinement or an initial direction.
-- `references/delight.md` — product-specific personality to add expressive details or feedback.
-- `references/optimize.md` — performance diagnosis and improvement. Read to investigate or improve interface performance.
+- `references/components-icons.md` — control treatment, icons, hit areas, and Editorial minimalism components. Read to design or restyle controls or icons.
+- `references/animate.md` — motion baseline, gesture and spring behavior, runtime choices, and performance constraints. Read to create or revise motion, including drag, swipe, and gesture release.
+- `references/interaction-visual-clarity.md` — optional motion recipes, contrast roles, color roles, navigation context, and visual anti-patterns. Read to choose a motion recipe or to check a design against the anti-patterns.
+- `references/animation-vocabulary.md` — motion glossary. Read when the user describes motion loosely or asks what an effect is called.
+- `references/overdrive.md` — technically ambitious web techniques such as View Transitions, scroll-driven animation, WebGL, and workers. Read only when the user asks for an ambitious effect or the brief needs one.
+- `references/accessibility.md` — control patterns, focus, forms, reduced motion, contrast, and touch targets. Read when the task affects these behaviors.
+- `references/clarify.md` — interface copy. Read to write or revise labels, form text, errors, helper text, or empty, loading, and success states.
+- `references/critique.md` — inspection of the actual output across web, native, and terminal interfaces. Read for a design critique or visual verification. Other references use it as their verification step.
+- `references/redesign.md` — mode detection, audit, preservation rules, and modernisation levers. Read to redesign an existing site or page.
+- `references/bolder.md` — optional recipe for stronger emphasis. Read when the user asks for a bolder result or emphasis is weak.
+- `references/quieter.md` — optional recipe for less visual intensity. Read when the user asks for a calmer result or elements compete.
+- `references/delight.md` — product-specific personality. Read when the user asks for personality, or to design first-use, completion, waiting, or recovery moments.
+- `references/optimize.md` — web performance diagnosis and improvement. Read to investigate or improve interface performance.
 - `references/polish.md` — final refinement. Read for a requested polish pass on an existing interface.
-- `references/animation-vocabulary.md` — glossary for interpreting motion descriptions and naming effects.
-- `references/full-design-workflow.md` — iterative end-to-end design workflow for new products, pages, screens, and full redesigns.
-- `references/html-design-mockups.md` — constraints for self-contained HTML design mockups.
+- `references/html-design-mockups.md` — constraints for self-contained HTML mockups. Read when the deliverable is a standalone HTML mockup or an option comparison.
+
+## Finish
+
+When the brief leaves a design choice open, take the option that the brief and product evidence best support, and report it as an assumption. Ask first only when a wrong choice would waste substantial work or change something outside the requested scope.
+
+Report in proportion to the change. A small edit needs one or two lines. For larger work, report:
+
+- what changed, with file paths;
+- assumptions you made;
+- open decisions, each with your recommendation;
+- checks you could not perform.
 
 ## Generated design reference images
 

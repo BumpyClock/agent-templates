@@ -1,6 +1,6 @@
 # Interaction and Visual Clarity
 
-Read when: you need optional motion recipes, contrast, color usage, navigation context, or dark mode guidance.
+Read when: you need an optional motion recipe, contrast roles, color roles, navigation context, or the visual anti-patterns.
 
 ## Optional Motion Recipes
 
@@ -24,11 +24,11 @@ Select a recipe only when it serves the interaction and chosen design direction.
 
 ### Contextual Icon Motion
 
-Examples include copy → copied, play → pause, and favorite → favorited.
+Examples include copy to copied, play to pause, and favorite to favorited.
 
 - When an icon state change needs emphasis, try opacity and scale for the swap.
-- For a distinct swap, try scale 0.25 → 1 with opacity 0 → 1.
-- If blur clarifies the swap, try 4px → 0 within the baseline performance constraints.
+- For a distinct swap, try scale from 0.25 to 1 with opacity from 0 to 1.
+- If blur clarifies the swap, try 4px to 0 within the baseline performance constraints.
 
 ### Press Feedback
 
@@ -36,7 +36,7 @@ Examples include copy → copied, play → pause, and favorite → favorited.
 - If scale distracts, choose static feedback or another suitable treatment.
 
 ## Contrast Hierarchy
-- Use four levels: foreground, secondary, muted, faint.
+- Use three or four contrast roles, such as foreground, secondary, muted, and faint. Text roles must meet [Color and contrast](accessibility.md#color-and-contrast).
 - Apply the system consistently across text, icons, and borders.
 
 ## Color Roles
@@ -45,32 +45,17 @@ Examples include copy → copied, play → pause, and favorite → favorited.
 - Prefer typography and spacing over extra color in data-heavy UI.
 
 ## Navigation Context
-- Provide navigation context so screens feel grounded.
+- On app screens, provide navigation context so screens feel grounded.
 - Include one or more of: navigation, location indicator, user or workspace context.
 - For sidebars, consider the same background as main content with a subtle border.
-
-## Dark Mode
-- Prefer borders over shadows for separation.
-- Adjust semantic colors to avoid harshness on dark backgrounds.
-- Keep the same hierarchy system with inverted values.
 
 ## Anti-Patterns
 Usually wrong — break one only with a stated reason tied to the design direction:
 - Dramatic drop shadows.
 - Large radius (16px or more) on small elements.
 - Asymmetric padding without reason.
-- Pure white cards on colored backgrounds.
+- Pure white cards on saturated backgrounds.
 - Thick borders (2px or more) for decoration.
 - Excessive spacing in product UI, such as margins over 48px between closely related sections. Marketing pages can use larger gaps for pacing.
 - Decorative gradients.
 - Competing brand accents without distinct roles.
-
-## Always Question
-- Did I choose a direction or default?
-- Does the direction fit the users and context?
-- Does every element feel crafted?
-- Is the depth strategy consistent?
-- Is everything aligned to the grid?
-
-## The Standard
-Design every interface as if a team obsesses over 1px differences. Aim for intricate minimalism with context-driven personality.

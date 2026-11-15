@@ -1,8 +1,4 @@
-> **Additional context needed**: quality bar and shipping constraints.
-
-Polish is refinement, never concealed redesign. Preserve the incumbent visual world, content, behavior, and everything outside scope. If the concept itself is wrong, say so and recommend redesign or `bolder` instead of smuggling in a replacement.
-
-Use [Critique](critique.md) for output inspection, evidence limits, and repeat checks.
+Polish is refinement, never concealed redesign. Preserve the incumbent visual world, content, behavior, and everything outside scope. If the concept itself is wrong, say so and recommend [Redesign](redesign.md) or [Bolder](bolder.md) instead of smuggling in a replacement.
 
 ## 1. Establish the system
 
@@ -16,14 +12,14 @@ Classify each drift before fixing it:
 - **conceptual mismatch:** the flow, information architecture, or hierarchy differs from comparable product areas;
 - **local defect:** the implementation is simply incomplete or inconsistent.
 
-Fix the cause at the narrowest correct level. Ask when a binding system principle cannot be inferred.
+Fix the cause at the narrowest correct level. When a binding system principle cannot be inferred, follow the closest comparable product area and list the assumption in the report.
 
 ## 2. Gather the evidence
 
 Inspect the affected feature with the platform-appropriate methods in [Critique](critique.md). Select representative sizes and states based on scope and risk. Determine:
 
 - whether the affected behavior works;
-- the intended quality bar and time available;
+- the quality bar, inferred from the project and the request. Assume production quality unless the user says otherwise;
 - known constraints or deliberately unfinished work;
 - the states, content lengths, roles, and input methods users will actually encounter.
 
@@ -38,8 +34,6 @@ Separate functional defects from cosmetic ones and fix in this order:
 3. flow, hierarchy, responsive, and design-system drift;
 4. visual and motion inconsistencies;
 5. code and asset cleanup.
-
-Prioritize material defects within scope before cosmetic refinements.
 
 ## 4. Polish the affected area
 
@@ -67,15 +61,15 @@ Apply these criteria only where the requested work can affect them.
 
 ### Interaction and state
 
-- Every control needs appropriate default, hover, focus, active, disabled, loading, error, and success behavior.
-- Preserve visible keyboard focus, logical tab order, labels, and platform-appropriate touch targets.
+- Give each affected control the states its behavior can enter. A submit button needs loading and error states. A plain link does not.
+- Preserve visible keyboard focus, logical tab order, labels, and touch targets, per [Accessibility](accessibility.md).
 - Keep motion coherent, interruptible, and performant. Do not add animation merely to make polish visible.
-- Validate relevant content and access conditions when the change can affect them.
+- Check content extremes and permission-dependent states when the change can affect them.
 
 ### Content and code
 
-- Keep terminology, capitalization, punctuation, and factual copy consistent. Ask before changing claims.
-- Remove debug output, dead code, unused imports, obsolete styles, and polish-created duplication.
+- Keep terminology, capitalization, punctuation, and factual copy consistent. Do not change factual claims. Flag a suspected error in the report.
+- In files you changed, remove debug output, dead code, unused imports, obsolete styles, and duplication that this work created or touched.
 - Replace custom implementations with shared components where the system owns the pattern.
 - Promote genuinely reusable values to tokens; do not create a system abstraction for one local exception.
 

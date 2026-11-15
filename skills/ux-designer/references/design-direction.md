@@ -1,6 +1,9 @@
 # Design Direction
 
+Read to choose a new visual direction or rebrand. Within an established product, keep its direction.
+
 ## Context Questions
+Answer these before you choose a direction. Report only the chosen direction and its reason.
 - What does the product do?
 - Who uses it?
 - What is the emotional job (trust, efficiency, delight, focus)?
@@ -17,10 +20,10 @@
 
 Pick one or blend two or more, but commit to a direction that fits the product.
 
-
-**Editorial minimalism** (workspace/document tools, calm SaaS — Notion-adjacent):
+### Recipe: Editorial minimalism
+Use this recipe only when the brief is a workspace or document tool, or calm SaaS, and no project palette exists. Treat the values as starting points.
 - Canvas: white or warm bone (`#F7F6F3` / `#FBFBFA`); surfaces white/near-white (`#F9F9F8`); structural borders ultra-light (`#EAEAEA` / `rgba(0,0,0,0.06)`).
-- Text: off-black (`#111` or `#2F3437`), secondary muted gray (`#787774`); body line-height 1.6.
+- Text: off-black (`#111` or `#2F3437`), secondary muted gray (`#6B6A67`, which holds 4.5:1 on the canvas colors above; verify contrast if you change either value); body line-height 1.6.
 - Type: characterful sans for UI/body, editorial serif for hero headings and quotes, monospace for code, keys, and metadata.
 - Use tight tracking (-0.02em to -0.04em) and line-height ~1.1 for the editorial serif.
 - Tag and chip colors: washed-out pastels only — pale red `#FDEBEC`/`#9F2F2D`, blue `#E1F3FE`/`#1F6C9F`, green `#EDF3EC`/`#346538`, yellow `#FBF3DB`/`#956400`.
@@ -35,7 +38,7 @@ Pick one or blend two or more, but commit to a direction that fits the product.
 - **Pure neutrals** (true grays, black/white) — minimal, bold, technical
 - **Tinted foundations** (slight color cast) — distinctive, memorable, branded
 
-**Light or dark?** Dark modes aren't just light modes inverted. Dark feels technical, focused, premium. Light feels open, approachable, clean. Choose based on context.
+**Light or dark?** Dark feels technical, focused, premium. Light feels open, approachable, clean. Choose from the use scene. For dark surfaces, keep the same hierarchy roles and retune the values, as described in [Craft Foundations](craft-foundations.md#depth-and-elevation-strategy).
 
 **Primary brand accent** — Choose one that fits the product identity. Define semantic and categorical color roles separately.
 
@@ -49,12 +52,11 @@ Use [Layout](layout.md) as the structural baseline. For detailed hierarchy or al
 - **Top navigation** for simpler tools with fewer sections
 - **Split panels** for list-detail patterns where context matters
 - **Full-screen layouts** for immersive experiences where users need to focus
-- **Responsive layouts** for adaptable experiences across devices
 - **Floating panels** for contextual actions or additional information
 
 ### Choose Typography
 
-Typography sets tone. Don't always default:
+Typography sets tone. Choose a typeface category that fits the brief. [Typeset](typeset.md) owns the default-font rule and emphasis rules.
 
 - **System fonts** — fast, native, invisible (good for native apps, existing design systems, and utility-focused products)
 - **Geometric sans** (Geist, Inter) — modern, clean, technical
@@ -63,4 +65,4 @@ Typography sets tone. Don't always default:
 - **Editorial serif** (Tiempos, Canela, GT Sectra, Domaine, Reckless) — editorial, luxury, publication, or heritage contexts with a clear brand fit.
 - **Monospace influence** — technical, developer-focused, data-heavy
 
-Pairings that work: Geist + Geist Mono, Satoshi + JetBrains Mono, Cabinet Grotesk + Inter Tight. Emphasize within a headline using italic/bold of the same family, never a second family.
+Examples of category contrast, not defaults: Geist + Geist Mono, Satoshi + JetBrains Mono, Cabinet Grotesk + Inter Tight.

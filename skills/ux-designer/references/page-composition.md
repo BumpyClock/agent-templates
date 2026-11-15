@@ -36,7 +36,7 @@ Choose the option that best supports the task.
 Distinctiveness alone does not justify a new structure.
 
 ## The First Viewport Is the Argument
-Not a masthead followed by setup. If the user saw only the first viewport, they should remember the central relationship, decision, or action — not just the title and the mood.
+For persuasive, report, and landing pages, avoid a masthead followed by setup. If the user saw only the first viewport, they should remember the central relationship, decision, or action — not just the title and the mood.
 
 ## Hierarchy and Rhythm
 Make content priority visible through emphasis, groups, and spatial rhythm:
@@ -60,4 +60,4 @@ If unequal priorities appear equivalent, adjust the hierarchy before detail refi
 ## When It Feels Wrong
 - **Busy vs loud — diagnose separately.** Busy = too much content: remove, combine, reorder. Loud = too much competing emphasis: reduce color, scale, weight, borders, surfaces, motion. Preserve one deliberate anchor either way.
 - **Weak emphasis**: strengthen one focal relationship through proportion, hierarchy, density, pacing, or placement; quiet the supporting content. Presence comes from commitment, not added effects.
-- **Too thin**: improve selection, hierarchy, and explanation of what exists; leave honest gaps. Never fill a content gap with panels, borders, icons, color fields, or decorative visuals.
+- **Too thin**: improve selection, hierarchy, and explanation of what exists; leave honest gaps. Do not add panels, icons, color fields, or decorative visuals to fill a content gap.

@@ -18,38 +18,24 @@ Choose the right tool that provides the clearest evidence for the target platfor
 Use only the methods needed to assess the requested work. No particular browser, detector, capture tool, or agent count is required.
 If execution is unavailable, use supplied captures or other accessible output. State what you could not verify.
 Source inspection can explain a defect, but it cannot prove the appearance or behavior of the actual product.
-use `6.1-terra-high` via `codex` for computer-use where necessary.
+When no local tool can drive the interface, computer use through `codex` with a Terra model at high reasoning effort is an option.
 
 ## Assess the Experience
 
 Exercise the primary user task and the states affected by the work. Inspect relevant golden path, error, empty, focus, and recovery states.
 Match the depth of assessment to the scope and risk of the change.
-Non-exhaustive list to start from:
-- Does the experience match the use case?
-- Can we simplify? is there information that is currently present that should not be here?
-  - Should it be on this screen? 
-    - if so , where can it be consolidated under so that it is discoverable.
-    - If not, is it implicit info? should it exist elsewhere in the experience? If the answer is yes, recommend removal and/or destination if it already does not exist.
+Start from these checks. Select the ones that apply:
+- Check that the experience matches the use case.
+- For each element, decide whether it belongs on this screen. If it belongs elsewhere, name the destination. If the product state already implies it, recommend removal. Example: a "connected" badge is unnecessary in a product that only works when connected. Keep the disconnected state visible.
 - Assess hierarchy, readability, composition, and fit with the product context.
-- Information density:
-  - Is the information presented on the screen required and necessary.
-  - Do we need to show this information, is some of it inferred by the product state. Eg: a connected badge is unnecessary when the user implictly understands that product only works when connected to the server.
 - Check whether controls communicate their purpose, state, and result.
-- Check interaction continuity and feedback across transitions, not just individual frames.
+- Check interaction continuity and feedback across transitions, not only individual frames.
 - Apply [Accessibility](accessibility.md) to relevant input methods, focus behavior, contrast, and reduced motion.
-- Use [Layout](layout.md) for structural assessment, including its shared page-hierarchy guidance.
-  - Think about:
-    - Spacing
-    - containers
-    - typography
-    - use of color
-- Visual polish: 
-  - Are there visual bugs or nits?
-  - Are we deviating from the existing design system and design tokens? 
-  - Are there things that you can derive from the content that would enhance this experience? Consider if that would be net positive to the experience or net negative. 
-- Animations:
-  - Are we using animations where necessary? read [Animate](animate.md) and [Animation vocabulary](animation-vocabulary.md)
-- Any signs of AI slop design? must kill. 
+- Use [Layout](layout.md) and [Page Composition](page-composition.md) for structure, spacing, containers, and hierarchy. Use [Typeset](typeset.md) for typography. Check that each use of color has a defined role.
+- Flag visual bugs and drift from the existing design system and design tokens.
+- Check whether the content suggests an addition that would improve the experience. Recommend it only when the net effect is positive.
+- When motion is in scope, check that animation appears only where it helps, using [Animate](animate.md). Use [Animation vocabulary](animation-vocabulary.md) to name effects.
+- Flag generic template patterns that are not grounded in this product, using [Generic patterns](generic-patterns.md). Recommend replacing each one unless the brief asks for it.
 
 Distinguish observed defects from aesthetic preferences and unverified concerns. Base each finding on a specific element, state, or interaction.
 Do not infer user frustration or abandonment without evidence. Describe the observed obstacle instead.
@@ -70,9 +56,9 @@ Include strengths or minor observations only when they help the user decide what
 Do not impose counts for findings, strengths, personas, or questions.
 
 For each finding, identify the affected element, observed evidence, user impact, and concrete correction.
-Include screenshots or frame references when they clarify a finding. Omit unsupported claims and empty report sections.
-For animations show the relevant part of a contact sheet that traces the animation frame by frame.
+Include screenshots or frame references when they clarify a finding. Give each capture as a file path, because the reader has not seen your tool calls. Omit unsupported claims and empty report sections.
+For a motion finding, cite the frames that show the defect. Use a frame-by-frame contact sheet when timing or easing is the defect.
 
-Ask a question only when an unresolved choice about intent, priority, scope, or constraints materially changes the next action.
+When an unresolved choice about intent, priority, scope, or constraints changes the next action, finish the work that does not depend on it. Then end the report with the question and the default you would take.
 
-Recommend corrections within the requested scope. Name a command only when it exists and directly supports the correction.
+Recommend corrections within the requested scope. Name a reference file only when it directly supports the correction.

@@ -1,20 +1,20 @@
 # Data and Evidence
 
-## Never Invent Data
+## Supplied and Unknown Data
 Preserve supplied facts, units, periods, formulas, and qualifiers exactly. Distinguish observation, derivation, projection, and recommendation. Omit unknown values or label them as unknown. Never fabricate certainty, urgency, sources, or precision.
 
 ## Mock Data
 
-Label all invented data and fictional claims as mock content, regardless of how realistic the values appear. Place the label where users can see which content it covers. Never present mock metrics, testimonials, customer endorsements, or scarcity claims as production evidence.
+In mockups, prototypes, and generated references, label all invented data and fictional claims as mock content, regardless of how realistic the values appear. Place the label where users can see which content it covers. Never present mock metrics, testimonials, customer endorsements, or scarcity claims as production evidence.
 
 ## Choose Geometry Before Components
 Map the data's meaning to a visual variable before reaching for a component:
-- Magnitude or rank → position or length on a common scale.
-- Change over time → horizontal order, aligned position.
-- Composition of a whole → proportion.
-- Threshold or range → distance from a boundary.
-- Process or dependency → connection and sequence.
-- Qualitative alternatives → aligned rows or deliberately contrasted columns.
+- Magnitude or rank: position or length on a common scale.
+- Change over time: horizontal order, aligned position.
+- Composition of a whole: proportion.
+- Threshold or range: distance from a boundary.
+- Process or dependency: connection and sequence.
+- Qualitative alternatives: aligned rows or deliberately contrasted columns.
 
 Tables for precise lookup; prose for a single conclusion; charts only when the relationship is faster to see than to read. Don't default to bars because numbers exist.
 
@@ -27,7 +27,7 @@ Tables for precise lookup; prose for a single conclusion; charts only when the r
 - The decisive series or exception gets the strongest emphasis in both themes; support recedes without becoming illegible.
 
 ## Tables Are Evidence
-- Semantic `<table>` with caption, head, body. Tables own the full evidence width of their section by default — never strand one in a narrow track beside prose to fill a split. Introduction above the table, not beside it.
+- On the web, use a semantic `<table>` with caption, head, body. By default, give a table the full width of its section. Place one beside prose only when it reads without wrapping or truncation. Introduction above the table, not beside it.
 - Header alignment matches its column's cells: text left, numbers right — including totals and placeholders. Never center a header over right-aligned values.
 - Consistent units and precision across peers; no fake precision.
 - Reorder columns around the lookup task before shrinking, wrapping, or truncating anything.
