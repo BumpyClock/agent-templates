@@ -33,7 +33,7 @@ types, and move their initial assignment from `setUp` to either be initialized i
 ```
 struct MyTests {
     var fixture = Fixture()
-    mutating func `Fixture behaves as expected`() {
+    @Test mutating func `Fixture behaves as expected`() {
         #expect(fixture.doSomething())
     }
 }
@@ -46,6 +46,7 @@ If the test mutates an instance variable with value semantics, you may need to m
 
 Replace the `test` name prefix with the `@Test` attribute. If the resulting test name includes multiple camelCase words,
 use a raw identifier with the test name in sentence case.
+Raw identifiers need Swift 6.2 or later. On an older toolchain, keep a camelCase name and pass the sentence as the display name: `@Test("Engine does not stall") func engineDoesNotStall()`.
 
 - `func testEngineDoesNotStall() { ... }` -> `@Test func `Engine does not stall`() { ... }`
 - `func testIgnition() { ... }` -> `@Test func ignition() { ... }`

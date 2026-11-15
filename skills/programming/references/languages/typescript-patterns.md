@@ -78,7 +78,7 @@ When the repository has a runtime schema library, derive types from the schema t
 import { z } from "zod";
 
 const UserSchema = z.object({
-  id: z.string().uuid(),
+  id: z.string().min(1),
   role: z.enum(["admin", "member"]),
 });
 

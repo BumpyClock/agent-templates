@@ -62,8 +62,8 @@ UIView {{100, 200}, {60, 30}}, hitPoint: {130.0, 215.0}
 ```
 
 - `{100, 200}` - origin position
-- `{50, 30}` - width and height
-- `hitPoint: {125.0, 215.0}` - calculated hitPoint point (best for tapping)
+- `{60, 30}` - width and height
+- `hitPoint: {130.0, 215.0}` - calculated hitPoint point (best for tapping)
 
 **Always prefer the hitPoint coordinates for touch events.** Only after tapping a hitPoint and confirming (via recapture) it had no effect may you fall back to a raw screenshot-estimated position.
 

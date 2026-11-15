@@ -22,12 +22,12 @@ Use these examples when the task requires a new app structure. Preserve an exist
 
 | App type | Anchor controls | Reference apps |
 |----------|-----------------|----------------|
-| Settings / config tool | `NavigationView` Left + `SettingsCard` / `SettingsExpander` | Windows Settings, Slack |
-| Document / session editor | `TabView` + full-bleed content, light chrome | Windows Terminal, VS Code, Notepad |
-| Hierarchical browser | `TreeView` + `ListView` + `BreadcrumbBar` | File Explorer, Outlook |
-| Developer tool / dashboard | `NavigationView` + card layout | WinUI 3 Gallery, GitHub Desktop |
+| Settings / config tool | `NavigationView` Left + `SettingsCard` / `SettingsExpander` | Windows Settings |
+| Document / session editor | `TabView` + full-bleed content, light chrome | Windows Terminal, Notepad |
+| Hierarchical browser | `TreeView` + `ListView` + `BreadcrumbBar` | File Explorer |
+| Developer tool / dashboard | `NavigationView` + card layout | WinUI 3 Gallery |
 | Single-purpose utility | Mode switcher + compact grid | Calculator, Snipping Tool |
-| Media / canvas / hero | `Grid` with hero surface, floating commands, **no** `NavigationView` | Photos, Spotify, Clipchamp |
+| Media / canvas / hero | `Grid` with hero surface, floating commands, **no** `NavigationView` | None listed; judge from the content |
 
 ## Reach-for-this control map
 
