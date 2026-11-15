@@ -1,10 +1,10 @@
-> **Additional context needed**: audience knowledge and emotional state.
+**Additional context needed**: audience knowledge and emotional state.
 
 Rewrite unclear interface text so users understand what happened, what matters, and what to do next. Preserve factual meaning, product terminology, and brand voice.
 
 ## Audit the language
 
-Read the affected text in context. Extend the review only when linked states or terminology require it. Identify:
+Read the entire interaction path, not isolated strings. Identify:
 
 - ambiguous nouns, verbs, and actions;
 - internal jargon or assumed knowledge;
@@ -79,7 +79,7 @@ Maintain a short terminology glossary when inconsistency spans the product. Do n
 
 ## Verify
 
-Use [critique.md](critique.md) for output inspection. Select checks relevant to the affected text and interaction:
+Read the flow in context and test:
 
 - comprehension without hidden product knowledge;
 - actionability at errors, empty states, and decision points;
@@ -91,4 +91,4 @@ Use [critique.md](critique.md) for output inspection. Select checks relevant to 
 
 The final copy is as short as it can be without removing meaning or recovery.
 
-Finish when the requested text changes and relevant checks are complete. Repeat checks only for changes, failures, or unresolved concerns.
+When the language reads cleanly, hand off to `{{command_prefix}}impeccable polish` for the final pass.

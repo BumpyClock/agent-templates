@@ -1,0 +1,1 @@
+adapted from and/or inspired by https://github.com/t3dotgg/tstack/blob/main/skills/council/SKILL.md

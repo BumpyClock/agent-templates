@@ -1,0 +1,6 @@
+interface:
+  display_name: "Council"
+  short_description: "Coordinate three-provider review and feedback"
+  default_prompt: "Use $council to bring in three delegates from different providers to review or give feedback on this request, then summarize their findings and recommended next steps."
+policy:
+  allow_implicit_invocation: false

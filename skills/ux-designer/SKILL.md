@@ -41,7 +41,6 @@ Reference files provide design defaults to adapt to the product and platform. Ac
 Preserve factual accuracy, supplied formulas and units, required content, and explicit task constraints. If these conflict or appear incorrect, resolve the issue with the user rather than silently changing them.
 
 For design tradeoffs, prefer this order. Depart from it when a concrete benefit justifies the change within the task's constraints:
-
 1. The project's stack, conventions, and established design system.
 2. Clarity of the user's primary task and the evidence that supports it.
 3. The chosen direction and visual system.
@@ -49,8 +48,6 @@ For design tradeoffs, prefer this order. Depart from it when a concrete benefit 
 5. Motion and detail refinement.
 
 ## Scale to scope
-
-- New product, page, screen, or requested full redesign: full workflow below.
 - Feature within an established surface: inherit its visual system and resolve only the affected structure, states, and interactions unless the request changes the broader direction.
 - Small change: edit the affected component or state within the existing design system.
 - Preserve relevant accessibility and interaction behavior.
@@ -58,9 +55,6 @@ For design tradeoffs, prefer this order. Depart from it when a concrete benefit 
 - Use only references needed for the affected behavior.
 - Cut taglines, helper text and secondary labels. If a screen needs them to make sense, fix the layout.
 
-## Deliverable
-
-Deliver the output the user requests. For implementation tasks, modify production code. Create separate design documents or mockups only when requested or needed to resolve a design choice.
 
 ## Reference index
 Read these when necessary:
@@ -84,31 +78,9 @@ Read these when necessary:
 - `references/optimize.md` — performance diagnosis and improvement. Read to investigate or improve interface performance.
 - `references/polish.md` — final refinement. Read for a requested polish pass on an existing interface.
 - `references/animation-vocabulary.md` — glossary for interpreting motion descriptions and naming effects.
-
-## Full design workflow
-
-Design visuals and interactions together; the steps below are iterative. Apply accessibility requirements throughout, including keyboard operation, focus, contrast, semantics, and reduced motion.
-
-1. **Gather inputs.** Establish the task, users, content, and constraints. Identify existing tokens and components in theme configs, CSS variables, or Storybook. Use `grilling` when significant decisions remain unclear, not when the brief already answers them.
-2. **Resolve direction.** Inherit the existing visual system unless a new direction is needed or requested. Use `references/design-direction.md` for that choice. When options are requested or needed to resolve uncertainty, compare 2–3 distinct directions, or 3–5 quieter-to-bolder variations within one direction. Ask the user to resolve consequential uncertainty before committing.
-3. **Define structure.** Establish the user task, content order, and key flows.
-4. **Compose layout.** Use `references/layout.md` to define regions, grid, responsive behavior, navigation, and hierarchy. Use `references/page-composition.md` when comparing alternative structures would help resolve the task.
-5. **Develop interactions and visual details.** Define states, transitions, and feedback, including loading, empty, error, and validation states. Specify color roles, typography, spacing, and tokens consistently across the affected screens. Use an interactive prototype when testing a flow or resolving a significant design choice would benefit from one; a separate mockup is not required for routine implementation.
-6. **Refine.** Check radii, optical alignment, text wrapping, numeric alignment, hit areas, image outlines, and motion behavior.
-7. **Verify the output.** Inspect the affected interface using `references/critique.md`, including accessibility and reduced-motion behavior. Review motion at reduced speed or frame by frame when needed. Test with real people in context when feasible. Report checks that could not be performed.
-
-## HTML design mockups
-
-When an HTML mockup is the chosen deliverable, use these constraints:
-
-- One file, zero dependencies: inline CSS, no build step, no CDN links, opens via double-click.
-- When comparing options, label them and keep them in one file for comparison.
-- Use the specified spacing, type scale, color tokens, and radii. When iterating on an existing design, reproduce the affected surface faithfully enough to judge the proposed changes.
-- Show key states and transitions interactively where practical, including hover, empty, and error states. Cover each target breakpoint.
-- Label fictional content and mock data clearly, as specified in `references/data-and-evidence.md`. Use real data where possible.
-- Keep the visual system consistent across sections and screens within each design option.
-- No frameworks. Use only the inline JavaScript needed to demonstrate the selected flows and states.
+- `references/full-design-workflow.md` — iterative end-to-end design workflow for new products, pages, screens, and full redesigns.
+- `references/html-design-mockups.md` — constraints for self-contained HTML design mockups.
 
 ## Generated design reference images
 
-When visual direction remains unresolved, an available image-generation tool can help compare ideas. Use it only when the exploration warrants its cost and any data sharing. Generate images for the sections or screens needed to evaluate the choice, and label them accordingly. Keep palette, typography, and surface treatment consistent within each option. Follow the layout baseline; treat generated images as visual references, not proof of interaction behavior or accessibility.
+When visual direction remains unresolved, an available image-generation tool can help explore ideas. Use it when it will be worthwhile. Send mock data to prevent data leakage. Generate images for the sections or screens needed to evaluate the choice, and label them accordingly. Keep palette, typography, and surface treatment consistent within each option. Follow the layout baseline; treat generated images as visual references, not proof of interaction behavior or accessibility.

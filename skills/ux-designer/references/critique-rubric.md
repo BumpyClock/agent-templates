@@ -1,132 +1,101 @@
-# Detailed Usability Rubric
+This is a check on the built result, not an intention. Run them together in each batched look at the render, not as separate screenshot trips; the checks share one render or contact sheet for critiquing animations.
 
-Use this reference for a detailed usability assessment or a complex task with suspected cognitive-load problems.
-Use `critique.md` for product access, evidence, scope, and reports.
-
-Assess only the criteria relevant to the users, task, platform, and inspected states. These examples are not a required feature list.
 Complete the assessment with evidence, concrete effects on the task, and explicit verification limits.
 
-## Cognitive Load
+## The floor
 
-Distinguish necessary task complexity from effort that the interface adds. Preserve information that users need for comparison or decisions.
-Option count alone does not establish overload. User knowledge, label clarity, visible context, and task structure affect the assessment.
+- **Contrast:** body and placeholder text ≥4.5:1, large text ≥3:1. On colored surfaces tint secondary text from that hue or the foreground; never gray. 
+- **Depth:** shadows carry an offset and a soft blur. A zero-offset colored halo is decoration. 
+- **Spacing:** tight groups, generous separation, more space above a heading than below it. Read the computed values. 
+- **Type:** body measure 65–75ch, display max 6rem, tracking floor -0.04em, balanced headings, obvious scale and weight steps. Run the real copy at every breakpoint and fix what overflows. 
+- **Motion:** one authored moment, not scattered effects and not one identical entrance on every section. Exponential ease-out from an already-visible default. Reach past transform and opacity: blur, backdrop-filter, clip-path, mask, and shadow belong to the palette when they stay smooth. 
+- **States:** hover, disabled, loading, error, empty. Plus real content, working controls, responsive composition, keyboard focus. 
+- **Browser surfaces:** the parts you did not draw still carry the design. Text selection, the caret, custom scrollbars, focus rings, underline offset, and the numerals in tabular data all ship with browser defaults that belong to no design system. Theme them from the palette. This is the cheapest signal that a page was built rather than assembled, and the one models skip most reliably. 
+- **Copy:** the product's own language. Controls name their action; errors name the problem and the recovery. 
+- **Coverage:** every brief requirement present and findable within seconds. 
 
-### Assessment Questions
+## Refuse
 
-- **Task focus:** Can users identify the next useful action without unrelated demands?
-- **Groups and hierarchy:** Do labels, proximity, and emphasis express meaningful relationships?
-- **Decision context:** Can users compare relevant alternatives without hidden information?
-- **Memory demands:** Must users recall a value or instruction from another screen?
-- **Task sequence:** Does each step have the information needed for its decision?
-- **Progressive disclosure:** Does it reduce distraction without loss of necessary controls or context?
-- **Terminology:** Do terms match the users' domain knowledge?
-- **Practice and feedback:** Can users learn repeated tasks through consistent patterns and clear results?
+These are the category's defaults, not bans: the brief's own words can earn any of them. Reaching for one when the axis is free means you were not deciding; recognizing that means rewriting the element, not softening it.
 
-### Problems and Corrections
+Page scaffolds:
 
-| Observed problem | Possible correction |
-|---|---|
-| An undifferentiated option list obscures relevant choices. | Group options by a meaningful category or expose useful filters. |
-| A later step requires a value from an earlier screen. | Keep that value visible at the decision point. |
-| A comparison requires repeated navigation between detail pages. | Present the relevant attributes together. |
-| Navigation provides no indication of the current section. | Show current location through an active state or appropriate path indicator. |
-| Labels require unfamiliar domain knowledge. | Use familiar terms or provide a short definition where needed. |
-| Decorative content obscures the primary task. | Reduce its prominence or remove it when it serves no user need. |
-| Related actions behave differently without a task-specific reason. | Align their labels, controls, and feedback. |
+- Same-size cards of icon plus heading plus text as the page structure. Cards are the lazy container; nested cards are always wrong. 
+- The hero-metric template: big number, small label, supporting stats, accent. 
+- A kicker or eyebrow above a heading. This one is a ban, not a default: no brief earns it back. The heading carries its own weight; delete the label and let the heading speak. 
+- Section numbers (01 / 02 / 03) unless the sequence itself carries information the reader needs. 
+- A modal for a task that needs neither interruption nor protected focus. 
+- Fade in animation on every scroll. 
 
-Treat these corrections as hypotheses until the inspected task supports them. Do not infer abandonment rates or user mistakes from layout alone.
+Surface habits:
 
-## Nielsen's Ten Usability Heuristics
+- Gradient text. Emphasis comes from weight or size. 
+- Glass and blur as decoration rather than as a specific effect. 
+- A colored `border-left` or `border-right` above 1px on cards, list items, callouts, or alerts. 
+- Hard offset shadows (`box-shadow: 4px 4px 0`) outside a world that is actually neobrutalist. The zero-blur block shadow is a costume, not a depth system; a world that did not choose it never earns it as a default. 
+- Sparklines, progress rings, and soft-shadowed rounded rectangles standing in for content. 
+- Monospace as a costume for "technical" rather than for code, data, or measurement. 
+- A system display face (Impact, Arial Black, the platform sans) as the display voice of an own-world page. Source and self-host a face whose character matches the approved lettering; the closest installed font is a failure, not a fallback. 
+- Unicode glyphs or emoji standing in for an icon system. Icons are drawn, from a real library or authored SVG, in one consistent stroke and weight. <!-- rule:skill-ban-glyph-icons -->
+- Geometric masks standing in for organic contours. A circle, polygon, or radial-gradient cutout approximating a photographic subject's edge is the cheap version of the effect and reads worse than omitting it. Derive an alpha matte from the actual image, or produce a cut-out asset. 
+- Light or dark picked by category. Pick it from the use scene: who, where, under what ambient light. 
 
-### 1. Visibility of System Status
+-- 
 
-- For operations with a perceptible delay, check that users can distinguish progress from a stalled interface.
-- Check that important actions expose their result, such as a save confirmation or a visible updated value.
-- For multi-step tasks, check that progress and the current step are clear.
-- Check that validation appears when users can act on it, without premature error messages.
+## Core criteria
 
-Example: A save control remains disabled with no status after a request fails. Users cannot distinguish failure from continued progress.
+**Design specificity:** Is the composition, interaction, and visual language grounded in this product, or could an unrelated product use it unchanged? Make this judgment before seeing detector output.
 
-### 2. Match Between System and Real World
+**Holistic design:** hierarchy, IA, emotional fit, discoverability, composition, typography, color, accessibility, states, copy, and edge cases. read relevant files from `references/`
 
-- Check that labels, units, and information order match the users' task and domain.
-- Check that icons have a recognizable meaning or an adequate label.
-- Check that text direction and sequence fit the language and platform.
+**Cognitive load:** consult the Cognitive Load Assessment in critique-rubric.md; report checklist failures and decision points with >4 visible options.
 
-Example: An account form exposes an internal database field name instead of the term users know from their account records.
+**Emotional journey:** peak-end rule, emotional valleys, reassurance at high-stakes moments.
 
-### 3. User Control and Freedom
+**Nielsen heuristics:** consult the Heuristics Scoring Guide in critique-rubric.md; score all 10 heuristics 0-4, marking any heuristic the mode-applicability rule allows as n/a instead of forcing a number.
 
-- For reversible edits, assess whether undo or another recovery path fits the risk and task.
-- For an incomplete task, check that users can cancel or leave without unintended changes.
-- For filters and selections, check that users can revise or clear their choices.
-- For irreversible actions, check that consequences are clear before commitment.
 
-Example: A modal permits an edit but offers no exit without a save. A cancel action restores control.
+## Cognitive load
 
-### 4. Consistency and Standards
+Classify each problem as intrinsic (structure it), extraneous (eliminate it), or germane (support it).
 
-- Check that the same term identifies the same concept across the inspected flow.
-- Check that equivalent actions have consistent controls and results.
-- Check that interaction patterns respect platform conventions and the established design system.
-- Distinguish intentional task differences from unexplained inconsistencies.
+**Checklist**: 8 items, count the failures.
+1. Single focus: primary task free of competing elements
+2. Chunking: ≤4 items per group
+3. Grouping: related items visually grouped
+4. Visual hierarchy: the most important thing is obvious at once
+5. One thing at a time: one decision before the next
+6. Minimal choices: ≤4 visible options per decision point
+7. Working memory: nothing to remember from a previous screen
+8. Progressive disclosure: complexity appears only when needed
 
-Example: The same icon means archive in one view and delete in another.
+Failures: 0–1 = low, 2–3 = moderate (address soon), 4+ = high (critical fix).
 
-### 5. Error Prevention
+**Working memory rule** (Cowan, 2001): count the options, actions, or facts in play at each decision point. ≤4 is fine; 5–7 needs grouping or progressive disclosure; 8+ is overloaded.
 
-- For consequential actions, assess safeguards against accidental or misunderstood changes.
-- Check that input constraints reject invalid values and accept valid task cases.
-- Check that defaults fit the task and expose consequential assumptions.
-- For substantial user input, assess protection against loss from interruption or navigation.
+Limits by surface:
+- Action buttons: 1 primary, 1–2 secondary, the rest in a menu
+- Navigation: ≤5 top-level items
+- Docs sidebars: ≤4 siblings per level
+- Long-form articles: one reading path, related links in one block at the end
+- Gallery and portfolio indexes: one decision per screen (which piece to open)
 
-Example: A destructive bulk action does not show which records it affects. A target summary makes the consequence explicit.
+**Named violations** (use these names in findings): Wall of Options, Memory Bridge, Hidden Navigation, Jargon Barrier, Visual Noise Floor, Inconsistent Pattern, Multi-Task Demand, Context Switch.
 
-### 6. Recognition Rather Than Recall
+## Nielsen's heuristic scores
+Score each of Nielsen's 10 heuristics 0–4:
+1. Visibility of system status
+2. Match between system and real world
+3. User control and freedom
+4. Consistency and standards
+5. Error prevention
+6. Recognition rather than recall
+7. Flexibility and efficiency of use
+8. Aesthetic and minimalist design
+9. Help users recognize, diagnose, and recover from errors
+10. Help and documentation
 
-- Check that users can find task-relevant actions through visible labels or understandable navigation.
-- Check that necessary values and instructions remain available at the point of use.
-- For repeated lookup tasks, assess whether recent items or suggestions reduce demonstrated recall demands.
-- Check that secondary disclosure does not conceal information needed for the current decision.
-
-Example: A checkout step requires a delivery code shown only on the previous screen.
-
-### 7. Flexibility and Efficiency of Use
-
-- For frequent tasks, assess shortcuts or alternative paths that reduce repetitive work.
-- For repeated operations on many items, assess whether a bulk action fits the task and its risks.
-- Check that efficient paths remain discoverable without extra complexity in basic use.
-- Assess customization only when different user needs justify it.
-
-Example: A daily record-review task requires repeated menu navigation for the same action. A direct control or keyboard shortcut may reduce effort.
-
-### 8. Aesthetic and Minimalist Design
-
-- Check that visible content supports the current task, necessary context, or product identity.
-- Check that hierarchy directs attention to relevant information and actions.
-- Check whether decorative emphasis competes with critical content.
-- Preserve useful detail when its removal would make the task harder.
-
-Example: Promotional cards dominate a transaction screen and obscure the transaction status.
-
-### 9. Help Users Recognize, Diagnose, and Recover from Errors
-
-- Check that error messages identify the problem in language users understand.
-- Check that recovery instructions are specific and possible in the current state.
-- Check that errors appear near the affected input or operation.
-- Check that recovery preserves valid user work when feasible.
-- Retain diagnostic codes when useful, but pair them with an explanation and next action.
-
-Example: Replace an isolated "Invalid input" message with the specific field requirement and a correction the user can make.
-
-### 10. Help and Documentation
-
-- When users need help, check that it answers the actual task question.
-- For complex requirements, check that examples or explanations appear where users need them.
-- For substantial documentation, check that users can locate relevant instructions through search or clear organization.
-- Check that help does not require users to lose their task context or entered values.
-
-Example: A form requires an unfamiliar account identifier but gives no example or explanation of where to find it.
+Scale: 0 = absent or broken; 1 = rare; 2 = partial (main flows covered, major gaps); 3 = good, minor gaps; 4 = excellent throughout. A 4 means excellent, not "good enough."
 
 ## Optional Structured Scores
 
