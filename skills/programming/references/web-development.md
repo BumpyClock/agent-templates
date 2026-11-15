@@ -22,6 +22,14 @@
 
 - Keep state ownership clear. Derive values where possible instead of syncing duplicate state through effects.
 - Respect server/client boundaries already used by repo.
+- Use the repo's existing data-fetching and state libraries. Check installed framework versions in `package.json` before using newer APIs.
+- For TypeScript domain types or external input contracts, use [TypeScript patterns](languages/typescript-patterns.md).
+
+## Security
+
+- Prefer `textContent` over `innerHTML`; sanitize untrusted HTML with a vetted library.
+- Validate URLs and redirects that come from user input.
+- Follow the repo's existing CSP, token storage, and framing policy; changing them is a separate decision.
 - Use project-provided diagnostics when useful. Treat findings and scores as signals, then re-run relevant checks after fixes.
 
 ## Verification

@@ -1,6 +1,7 @@
 # Clean Refactoring
 
-Use when a change reveals duplicate concepts, local adapters, obsolete owners, compatibility wrappers, parallel abstractions, or pressure to tack code beside an existing path.
+Use when the user asked for a refactor, or when the requested change cannot land coherently without consolidating an owner, adapter, or parallel path.
+For duplication that the change does not depend on, leave the code and list it in the report.
 
 Core rule: refactoring replaces the old shape with the simpler shape the codebase would want today. It should leave one concept with one clear owner and clear consumers.
 
@@ -18,7 +19,7 @@ For a discovered defect or new behavior, separate that work from the refactor co
 ## Rules
 
 - Do not let sunk cost decide architecture. Size the refactor by end-state quality, behavior risk, and reviewability, not by how much old code exists.
-- Search before building a new mechanism. Reuse, consolidate near-duplicates, extract shared core, or build new deliberately after seeing what exists.
+- Search before building a new mechanism. Reuse, consolidate near-duplicates inside the refactor contract, extract shared core, or build new deliberately after seeing what exists.
 - Prefer one shared primitive over duplicate adapters when their semantics match.
 - Do not preserve dev-only compatibility by default. Unshipped scaffolding should move to the clean contract immediately.
 - Preserve required public API, CLI, configuration, and stored-data compatibility unless the authorized migration replaces that contract.

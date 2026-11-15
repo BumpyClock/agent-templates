@@ -17,18 +17,7 @@ Evaluate whether type designs express useful invariants and make invalid states 
 4. Judge usefulness: invariants prevent real bugs and match business requirements.
 5. Examine enforcement: construction validates, mutation points preserve rules, compile-time guarantees used where practical.
 
-## Review output
+## Reporting
 
-```text
-## Type: <TypeName>
-
-### Invariants Identified
-- ...
-
-### Findings
-For each of encapsulation, expression, usefulness, enforcement:
-state OK or a concrete concern with the invalid state it allows.
-
-### Recommended Improvements
-- <change> — <bug class it prevents>
-```
+Report only types with a concern. For each one, name the invalid state it allows, show how code can construct that state, and give the smallest change that prevents it.
+Rank findings by the bug they allow, not by the framework step that found them. A type with no concern needs no entry.

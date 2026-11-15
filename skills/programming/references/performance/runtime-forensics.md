@@ -8,7 +8,7 @@ For a supplied capture without live access, use [trace forensics](trace-forensic
 
 1. Identify the target process and the reported symptom.
    Record the process identity, executable, build, source revision, configuration, workload, and symptom interval.
-   Confirm that the target belongs to the authorized environment.
+   A process you started, or one the user named, is in scope. Ask before attaching to a production or shared process.
    Set capture duration, resource limits, and a stop condition for service impact.
    This step ends with an identified target and a bounded capture plan.
 2. Capture the relevant signal with existing, scoped instrumentation.
@@ -23,7 +23,7 @@ For a supplied capture without live access, use [trace forensics](trace-forensic
    Record source-map or symbol gaps instead of an invented source location.
    This step ends with cited observations and separate causal hypotheses.
 4. Distinguish competing causes with a bounded check when safe and authorized.
-   Use [systematic diagnosis](../../systematic-debugging/guide.md) to select the check.
+   Use [Fix Root Causes](../../../pstack/principle-fix-root-causes/SKILL.md) to select the check.
    Prefer existing observations or a controlled reproduction over a live mutation.
    For a permitted intervention, state its prediction, affected scope, recovery procedure, and stop condition before execution.
    This step ends with supporting evidence, contradictory evidence, or a named uncertainty.
@@ -42,12 +42,12 @@ For a permitted intervention, restore the prior state when safe unless the owner
 
 Profilers and heap snapshots can pause a process or change resource use.
 Use the least intrusive capture that can answer the question.
-Stop when overhead exceeds the agreed service-impact limit.
+For a production or shared process, stop when overhead exceeds the service-impact limit the owner set.
 When a safe intervention is unavailable, report uncertainty rather than infer a confirmed cause.
 
 Restrict capture scope to the authorized process, interval, and data.
 Avoid secrets and unrelated private content in logs, captures, commands, and reports.
-Use approved local storage with a bounded retention period.
+Keep captures in local storage and delete them when the investigation ends.
 Share only the redacted evidence necessary for the diagnosis.
 
 ## Separate observations from causes
@@ -57,5 +57,5 @@ A retained object identifies reachability, not necessarily a leak.
 An intervention supports causality only to the extent that its controls exclude competing explanations.
 State those controls and their limits.
 
-For an authorized correction, continue with [systematic diagnosis](../../systematic-debugging/guide.md) or the [performance workflow](perf-issue.md).
+For an authorized correction, continue with [Fix Root Causes](../../../pstack/principle-fix-root-causes/SKILL.md) or the [performance workflow](perf-issue.md).
 Otherwise, stop at the report.

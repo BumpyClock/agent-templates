@@ -4,4 +4,4 @@ arguments:
    - name: ARGUMENTS
      type: string
 ---
-Use the `programming` skill with `systematic-debugging/guide.md` (Report-Only / Multi-Hypothesis Triage section) to accomplish tasks handed to you by the user in $ARGUMENTS.
+Use the `programming` skill with its Fix Root Causes principle, in report-only mode with competing hypotheses, to accomplish tasks handed to you by the user in $ARGUMENTS.

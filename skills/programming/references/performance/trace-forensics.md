@@ -70,5 +70,5 @@ Retain derived data only as long as the task and applicable policy require.
 Do not obtain unrelated captures or assume permission to instrument a live process.
 
 For authorized live evidence collection, use [runtime forensics](runtime-forensics.md).
-For an authorized fix, use [systematic diagnosis](../../systematic-debugging/guide.md) or the [performance workflow](perf-issue.md).
+For an authorized fix, use [Fix Root Causes](../../../pstack/principle-fix-root-causes/SKILL.md) or the [performance workflow](perf-issue.md).
 Otherwise, stop at the report.

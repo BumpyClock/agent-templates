@@ -4,11 +4,11 @@ Use when reviewing error handling, fallback behavior, retries, optional/null han
 
 ## Core principles
 
-1. Failures must surface: fail fast with concrete errors unless the spec defines safe recovery (SKILL.md).
+1. Make failures observable. Recover only when the resulting behavior remains valid.
 2. Users need actionable feedback.
 3. Fallbacks must be explicit and justified.
 4. Catch blocks must be specific enough that unexpected failures still surface.
-5. Mock or fake implementations belong only in tests.
+5. A production path does not ship a mock or fake implementation. Tests, prototypes, previews, and explicit offline modes can.
 
 ## Review process
 

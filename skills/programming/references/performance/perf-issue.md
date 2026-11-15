@@ -7,16 +7,16 @@ For diagnosis without a fix, use [runtime forensics](runtime-forensics.md) or [t
 
 1. Define the user-relevant metric and a representative workload.
    Choose a decision criterion before the edit, such as a latency target or a material reduction above measurement noise.
-   Set a bounded investigation scope and resource budget.
-   This step ends with a metric, workload, decision criterion, and budget.
+   Bound the investigation to that metric and workload.
+   This step ends with a metric, workload, and decision criterion.
 2. Measure the baseline with relevant existing tools.
-   Record the revision, build configuration, dependencies, hardware, input data, concurrency, warmup, and cache state.
-   Record the measurement command, tool version, capture settings, and artifact location.
+   Record what a rerun needs: the revision, build configuration, measurement command, and input data.
+   Record any condition that can differ between runs, such as hardware, concurrency, warmup, or cache state.
    When noise matters, repeat measurements under comparable conditions.
    Report the run count, central estimate, and dispersion.
    This step ends with a reproducible baseline or an explicit measurement blocker.
 3. Explain the dominant cost with source evidence and a relevant profile, trace, or query plan.
-   Use [systematic diagnosis](../../systematic-debugging/guide.md) to distinguish plausible mechanisms.
+   Use [Fix Root Causes](../../../pstack/principle-fix-root-causes/SKILL.md) to distinguish plausible mechanisms.
    Select a strategy below only when the evidence supports its signal.
    This step ends with a supported mechanism and a prediction that a focused change can test.
 4. Apply the smallest authorized change that addresses the supported mechanism.
@@ -69,6 +69,6 @@ Treat a microbenchmark gain as evidence for that operation, not automatically fo
 Distinguish the observed delta from the evidence that supports a causal mechanism.
 When conditions differ or the signal remains within noise, report the comparison as inconclusive.
 
-Stop at the decision criterion, the agreed budget, or an evidence blocker.
+Stop at the decision criterion or an evidence blocker.
 For an unsupported attempt, reassess the mechanism before another edit.
 Keep commits, pull requests, and broader optimization work outside this workflow unless separately authorized.

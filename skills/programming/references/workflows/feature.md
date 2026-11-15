@@ -1,7 +1,7 @@
 # Feature
 
 Use for a new or changed behavior that needs coordinated implementation.
-For a small, clear change, use the same contract and evidence without a separate plan artifact.
+For a small, clear change, use the same contract and evidence without this workflow.
 
 ## Workflow
 

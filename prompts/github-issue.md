@@ -11,7 +11,7 @@ arguments:
 Please get the details for the following issue(s): $ISSUE_NUMBER
 
 
-Use `programming` for coding and delegation guidance, and its [systematic diagnosis reference](../skills/programming/systematic-debugging/guide.md) when the cause needs investigation. When the user or repository requires test-first development, use the [test-behavior principle's TDD loop](../skills/pstack/principle-test-behavior-not-implementation/SKILL.md#test-driven-development).
+Use `programming` for coding and delegation guidance, and the [Fix Root Causes principle](../skills/pstack/principle-fix-root-causes/SKILL.md) when the cause needs investigation. When the user or repository requires test-first development, use the [test-behavior principle's TDD loop](../skills/pstack/principle-test-behavior-not-implementation/SKILL.md#test-driven-development).
 
 Fetch issue $ISSUE_NUMBER with the available GitHub tools.
 For `all`, `all issues`, or no argument, fetch the repository's issues.
@@ -31,7 +31,7 @@ If you're in plan mode create a comprehensive plan to resolve the issue.
 
 To fix the issue, create a branch named `fix/issue-<ISSUE_NUMBER>` from the repository's base branch.
 Use the `programming` skill for the fix.
-For authorized PR creation, follow [Git and release conventions](../skills/git-and-releases/SKILL.md).
+For authorized PR creation, follow [Git and release conventions](../skills/git-workflow/SKILL.md).
 Reference the issue in the PR description.
 
 Ensure all changes are tested thoroughly and there are no linting and formatting issues before creating the PR. 
