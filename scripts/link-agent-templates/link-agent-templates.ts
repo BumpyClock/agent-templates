@@ -1,5 +1,4 @@
 import {
-	copyFile,
 	mkdir,
 	readdir,
 	readFile,
@@ -12,6 +11,10 @@ import os from "node:os";
 import path from "node:path";
 import readline from "node:readline/promises";
 import { backupAndReplace, pruneBackups } from "./backups";
+import {
+	type ManagedBlockMarkers,
+	reconcileManagedBlock,
+} from "./managed-block";
 
 type AgentTool =
 	| "claude"
@@ -32,12 +35,19 @@ type CliOptions = {
 	prompt: boolean;
 };
 
-// The machine-local agent instructions file. The private baseline lives in the
-// secrets repo and is seeded (copied, not linked) into defaults/ once, so each
-// device can diverge without those edits syncing back. The seeded copy is
-// gitignored in agent-templates and is what every tool's AGENTS.local.md links to.
+// The machine-local agent instructions file. The shared part lives in the
+// private secrets repo and is written into defaults/AGENTS.local.md as a
+// marker-delimited managed block on every run, so a secrets update reaches each
+// device on its next link. Everything below the END marker is machine-local and
+// is never touched. The file is gitignored in agent-templates and is what every
+// tool's AGENTS.local.md links to.
 const LOCAL_AGENTS_RELATIVE = "defaults/AGENTS.local.md";
 const SECRETS_LOCAL_AGENTS_NAME = "AGENTS.local.md";
+const LOCAL_AGENTS_MARKERS: ManagedBlockMarkers = {
+	start:
+		"<!-- BEGIN shared AGENTS.local.md. Synced from the dotfiles secrets repo by link-agent-templates. Edits inside this block are overwritten; put machine-specific rules below the END marker. -->",
+	end: "<!-- END shared AGENTS.local.md -->",
+};
 
 function info(message: string): void {
 	console.log(`[INFO] ${message}`);
@@ -45,6 +55,10 @@ function info(message: string): void {
 
 function action(message: string): void {
 	console.log(`[ACTION] ${message}`);
+}
+
+function warn(message: string): void {
+	console.warn(`[WARN] ${message}`);
 }
 
 function defaultSecretsDir(): string {
@@ -143,7 +157,7 @@ function parseArgs(argv: string[]): CliOptions {
 			);
 			console.log("  --show, -s                    Show current link status");
 			console.log(
-				"  --no-prompt                   Never prompt; skip seeding when the",
+				"  --no-prompt                   Never prompt; skip when the",
 			);
 			console.log(
 				"                                AGENTS.local.md baseline is missing",
@@ -758,11 +772,12 @@ async function linkAgentsShared(agentTemplatesDir: string): Promise<void> {
 }
 
 // =============================================================================
-// Machine-local AGENTS.local.md seeding
+// Machine-local AGENTS.local.md sync
 // =============================================================================
 
-// Ask what to do about a missing AGENTS.local.md baseline. Only called when
-// stdin is an interactive TTY; non-interactive runs skip seeding instead.
+// Ask what to do about a missing shared baseline on a device that has no local
+// file yet. Only called when stdin is an interactive TTY; non-interactive runs
+// skip instead.
 async function promptMissingBaseline(
 	baselinePath: string,
 ): Promise<"skip" | "create" | "quit"> {
@@ -773,7 +788,7 @@ async function promptMissingBaseline(
 	try {
 		const answer = await rl.question(
 			`No AGENTS.local.md baseline at ${baselinePath}\n` +
-				`[S]kip seeding (default) · [C]reate an empty local copy · [Q]uit: `,
+				`[S]kip (default) · [C]reate an empty local copy · [Q]uit: `,
 		);
 		const choice = answer.trim().toLowerCase();
 		if (choice.startsWith("c")) return "create";
@@ -784,30 +799,34 @@ async function promptMissingBaseline(
 	}
 }
 
-// Seed defaults/AGENTS.local.md from the secrets baseline exactly once. Copied,
-// not linked, so per-device edits stay local and never sync back to secrets. An
-// existing local copy is left untouched; delete it and re-run to reset from the
-// baseline. When the baseline is missing, interactive runs are asked whether to
-// skip or create an empty local copy; non-interactive runs (or --no-prompt)
-// degrade to skipping.
-async function seedLocalAgents(
+function buildSharedBlock(baseline: string): string {
+	return `${LOCAL_AGENTS_MARKERS.start}\n${baseline.trimEnd()}\n${LOCAL_AGENTS_MARKERS.end}\n`;
+}
+
+// Keep the shared block in defaults/AGENTS.local.md equal to the secrets
+// baseline. Content outside the markers is machine-local and is preserved. A
+// pre-existing file with no markers (the old seed-once copy) gets the block
+// prepended after a backup; its old body stays below as local content and will
+// usually duplicate the shared rules until pruned by hand.
+async function syncLocalAgents(
 	agentTemplatesDir: string,
 	secretsDir: string,
 	prompt: boolean,
 ): Promise<void> {
 	const localPath = path.join(agentTemplatesDir, LOCAL_AGENTS_RELATIVE);
-
-	if (await pathExists(localPath)) {
-		info(
-			`Local AGENTS.local.md already present (leaving device-specific edits intact): ${localPath}`,
-		);
-		return;
-	}
-
 	const baselinePath = path.join(secretsDir, SECRETS_LOCAL_AGENTS_NAME);
+	const localExists = await pathExists(localPath);
+
 	if (!(await pathExists(baselinePath))) {
+		if (localExists) {
+			info(
+				`No AGENTS.local.md baseline at ${baselinePath}; leaving ${localPath} unchanged.`,
+			);
+			return;
+		}
+
 		const skipMessage =
-			`No AGENTS.local.md baseline at ${baselinePath}; skipping seed. ` +
+			`No AGENTS.local.md baseline at ${baselinePath}; skipping. ` +
 			`Create it or pass --secrets-dir to enable local agent instructions.`;
 
 		if (!prompt || !process.stdin.isTTY) {
@@ -832,9 +851,40 @@ async function seedLocalAgents(
 		return;
 	}
 
-	await mkdir(path.dirname(localPath), { recursive: true });
-	await copyFile(baselinePath, localPath);
-	action(`Seeded local AGENTS.local.md from ${baselinePath}`);
+	const block = buildSharedBlock(await readFile(baselinePath, "utf8"));
+
+	if (!localExists) {
+		await mkdir(path.dirname(localPath), { recursive: true });
+		await writeFile(localPath, block);
+		action(`Created ${localPath} with shared block from ${baselinePath}`);
+		return;
+	}
+
+	const existing = await readFile(localPath, "utf8");
+	const result = reconcileManagedBlock(existing, block, LOCAL_AGENTS_MARKERS);
+
+	switch (result.outcome) {
+		case "unchanged":
+			return;
+		case "replaced":
+			await writeFile(localPath, result.content);
+			action(`Updated shared block in ${localPath} from ${baselinePath}`);
+			return;
+		case "prepended":
+			await backupAndReplace(localPath, () =>
+				writeFile(localPath, result.content),
+			);
+			action(`Prepended shared block to ${localPath}`);
+			warn(
+				`${localPath} had no shared-block markers. Its previous contents were kept below the END marker and likely repeat the shared rules. Prune the duplicates by hand.`,
+			);
+			return;
+		case "conflict":
+			warn(
+				`${localPath} has malformed shared-block markers (missing, duplicated, or out of order). Left unchanged; fix the markers and re-run.`,
+			);
+			return;
+	}
 }
 
 // =============================================================================
@@ -850,9 +900,9 @@ async function main(): Promise<void> {
 		return;
 	}
 
-	// Seed the machine-local AGENTS.local.md before linking so the tool links
+	// Sync the machine-local AGENTS.local.md before linking so the tool links
 	// below resolve to a present file.
-	await seedLocalAgents(
+	await syncLocalAgents(
 		options.agentTemplatesDir,
 		options.secretsDir,
 		options.prompt,

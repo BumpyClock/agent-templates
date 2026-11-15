@@ -98,7 +98,8 @@ overlay removes its guidance on the next run. Existing instruction files or old
 baseline symlinks use the normal backup-and-replace behavior below.
 
 `~/.agents/AGENTS.md` still links directly to the shared baseline. Local
-`AGENTS.local.md` seeding and linking are unchanged; local contents are not
+`AGENTS.local.md` holds a shared block synced from the secrets repo on every
+run, with machine-specific content below it; local contents are not
 embedded in generated files. OpenCode and Cursor linking are unchanged; this
 change does not add global instruction destinations for them. Restart the tool
 or reload its instructions as needed after regenerating.

@@ -96,3 +96,8 @@ Report in proportion to the change. A small edit needs one or two lines. For lar
 ## Generated design reference images
 
 When visual direction remains unresolved, an available image-generation tool can help explore ideas. Use it when it will be worthwhile. Send mock data to prevent data leakage. Generate images for the sections or screens needed to evaluate the choice, and label them accordingly. Keep palette, typography, and surface treatment consistent within each option. Follow the layout baseline; treat generated images as visual references, not proof of interaction behavior or accessibility.
+
+use image-generation tool or `higgsfield` via `mcp-cli`
+
+## Design references
+you can get reference images of other apps if needed using `mobbin` via `mcp-cli`
