@@ -17,7 +17,7 @@ Detach only when the work should continue without that handle.
 
 Use weak entity access when a task must not retain its owner.
 Account for entity release and window closure after an await.
-For replaceable requests, prevent an older result from overwriting newer state.
+For replaceable requests, such as type-ahead search, prevent an older result from overwriting newer state. This ordering is expected, not hypothetical.
 
 GPUI has its own executor.
 Do not assume a Tokio reactor exists.

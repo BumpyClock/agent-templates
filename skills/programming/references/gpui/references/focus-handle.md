@@ -23,6 +23,7 @@ For window-dependent checks, use [tests](test.md).
 ## Persistent focus target example
 
 This fragment uses GPUI 0.2.2 signatures and is not compiled here.
+Newer Zed revisions take `focus(window, cx)`; check the resolved source.
 The view constructor creates `focus_handle` once with `cx.focus_handle()`.
 
 ```rust

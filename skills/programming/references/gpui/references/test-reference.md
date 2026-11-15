@@ -81,7 +81,7 @@ For cancellation, replace or release the owner before advancement and assert the
 ```rust
 let (view, cx) = cx.add_window_view(|_, cx| SearchView::new(cx));
 let focus = view.read_with(cx, |view, _| view.focus_handle.clone());
-cx.update(|window, _| focus.focus(window));
+cx.update(|window, cx| focus.focus(window, cx));
 cx.simulate_keystrokes("enter");
 ```
 

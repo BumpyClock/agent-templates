@@ -8,4 +8,4 @@ Do not add tests that only repeat independent property assignments.
 Use an event-level check when callback dispatch is the behavior at risk.
 
 For context selection, use [GPUI tests](test.md).
-When the user or repository requires TDD, use the [test-behavior principle's TDD loop](../../../../pstack/principle-test-behavior-not-implementation/SKILL.md#test-driven-development).
+For what a test should assert, use [Test Behavior, Not Implementation](../../../../pstack/principle-test-behavior-not-implementation/SKILL.md).

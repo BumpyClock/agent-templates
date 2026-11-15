@@ -29,7 +29,6 @@ Preserve the application's chosen component library and architecture.
 - For GPUI-specific test support, use [tests](references/test.md).
 - For requested component examples, use [stories](references/generate-component-story.md).
 - For component documentation, use [documentation](references/generate-component-documentation.md).
-- For requested PR text, use [PR descriptions](references/github-pull-request-description.md).
 
 ## Sources
 
