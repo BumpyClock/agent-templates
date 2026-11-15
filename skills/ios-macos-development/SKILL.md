@@ -27,7 +27,7 @@ The guides below provide supplementary examples and local tool workflows.
 | View structure or ownership refactor | [View refactor](swiftui-view-refactor/guide.md) |
 | SwiftUI performance symptoms | [Performance audit](swiftui-performance-audit/guide.md) |
 | Trace capture or analysis | [Native performance](native-app-performance/guide.md) or [Instruments](instruments-profiling/guide.md) |
-| App Intents, entities, or Shortcuts | [App Intents](ios-app-intents/guide.md) |
+| Choosing which actions and entities to expose as App Intents | [App Intents](ios-app-intents/guide.md); API rules are in the Xcode reference |
 | Live simulator inspection | [Simulator debugger](ios-debugger-agent/guide.md) |
 | Repeatable simulator automation | [Simulator scripts](ios-simulator/guide.md) |
 | Archives, certificates, TestFlight, App Store, or notarization | [Distribution](app-store-connect-cli/guide.md) |

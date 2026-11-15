@@ -25,7 +25,7 @@ UIKit apps must adopt scene-based lifecycle (`UISceneDelegate`) to function corr
 - `UIApplicationSceneManifest` exists in Info.plist with `UISceneConfigurations`, OR
 - A class conforming to `UIWindowSceneDelegate` exists
 
-**Partial migration** (ask user):
+**Partial migration** (complete the missing steps; ask only when existing scene code conflicts with the intended lifecycle):
 - Scene manifest exists but `UISceneConfigurations` empty/missing
 - `configurationForConnecting` exists but no `SceneDelegate` class
 - `SceneDelegate` exists but lifecycle methods not moved from AppDelegate

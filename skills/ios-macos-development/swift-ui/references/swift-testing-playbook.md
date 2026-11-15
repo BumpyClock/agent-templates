@@ -13,7 +13,8 @@ A hands-on, comprehensive guide for migrating from XCTest to Swift Testing and m
 
 ## Scope and test policy
 
-When the user or repository requires TDD, use the [test-behavior principle's TDD loop](../../../pstack/principle-test-behavior-not-implementation/SKILL.md#test-driven-development).
+For what a test should assert, use [Test Behavior, Not Implementation](../../../pstack/principle-test-behavior-not-implementation/SKILL.md).
+For migration rules, the [Xcode test reference](../../../programming/references/apple/upstream/modernize-tests/guide.md) wins where this playbook disagrees.
 Use the migration sections only when framework migration is part of the task. Preserve the repository's existing framework otherwise.
 
 ## **1. Migration & Tooling Baseline**

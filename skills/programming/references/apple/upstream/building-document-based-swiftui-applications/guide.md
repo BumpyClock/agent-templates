@@ -1,7 +1,3 @@
----
-name: building-document-based-swiftui-applications
-description: Build or migrate SwiftUI document apps using the Document protocol.
----
 # SwiftUI document apps
 
 Use for document creation, opening, editing, saving, export, or an authorized migration to the `Document` protocol.

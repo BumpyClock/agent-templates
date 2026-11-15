@@ -1,7 +1,3 @@
----
-name: app-intents-whats-new-27
-description: App Intents APIs introduced in iOS 26 and 27.
----
 # App Intents changes
 
 Use for a listed version-specific API or migration.

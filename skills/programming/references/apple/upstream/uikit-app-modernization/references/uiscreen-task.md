@@ -96,7 +96,7 @@ Place compatibility handling at the supported boundary that needs it.
 Update a private helper and its callers together when possible rather than deprecating the helper for hypothetical future callers.
 Thread the actual context far enough through the call chain to remove the shared-state dependency; do not add parameters to unaffected APIs.
 
-**Swift (do NOT delete the old method when adding a new overload):**
+**Swift (when callers outside the change or a public API still need the old method, keep it as a deprecated forwarder; otherwise migrate the callers and delete it):**
 
 ```swift
 // WRONG — old method removed, only new method left (breaks ABI for out-of-diff callers):
@@ -109,7 +109,7 @@ class ImageProcessor: NSObject {
     //   and there is no deprecation signal pointing them to the new API
 }
 
-// RIGHT — full deprecate-and-forward (all three parts mandatory, OLD METHOD KEPT):
+// RIGHT — full deprecate-and-forward (all three parts, when the old method must stay):
 class ImageProcessor: NSObject {
     @available(*, deprecated, message: "use generateThumbnail(for:traitCollection:) instead")
     func generateThumbnail(for image: UIImage) -> UIImage {
@@ -123,7 +123,7 @@ class ImageProcessor: NSObject {
 }
 ```
 
-**Swift initializers — the old initializer must remain as a deprecated wrapper:**
+**Swift initializers — when the old initializer must stay, keep it as a deprecated wrapper:**
 
 ```swift
 // WRONG — old init removed:

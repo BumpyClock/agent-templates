@@ -1,7 +1,3 @@
----
-name: swiftui-whats-new-27
-description: SwiftUI SDK 27 API changes and migration diagnostics.
----
 # SwiftUI changes in SDK 27
 
 Use for adoption of a listed API or a diagnostic matching its migration notes.

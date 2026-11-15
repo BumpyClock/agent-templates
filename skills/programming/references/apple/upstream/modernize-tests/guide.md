@@ -1,12 +1,12 @@
----
-name: modernize-tests
-description: "Modernize test suites to use modern Swift Testing features or migrate from XCTest."
----
 # Modernize Tests
+
+Use to modernize test suites with Swift Testing features or migrate from XCTest.
+
+This is an SDK 27 beta snapshot. Verify signatures and availability against the installed SDK, and follow the [local constraints](../../guide.md#local-constraints).
 
 Test modernization refers to two potential actions: migrating from XCTest to Swift Testing, and updating existing Swift Testing tests to use recommended patterns.
 
-XCTests should be migrated to Swift Testing when possible. However, not all XCTests can be migrated to Swift Testing.
+When the task requests migration, migrate XCTests to Swift Testing where possible. Not all XCTests can be migrated to Swift Testing.
 - UI tests (those that use XCUIAutomation) cannot be written with Swift Testing, and must remain XCTests.
 - XCTests that use the `measure { ... }` family of APIs for performance measurement cannot be migrated. However, other test methods within an XCTestCase that do not use XCTest performance APIs can be migrated.
 
@@ -242,4 +242,3 @@ improve readability, e.g. `@Test func `Authenticate, fetch summary, then check c
 - Do not introduce usage of underscore-prefixed symbols such as `#_sourceLocation`; only use public API.
   For source locations, always use the full `SourceLocation(fileID:filePath:line:column:)` initializer.
 - If the test suite already uses #_sourceLocation, do not replace the existing usage as part of modernization.
-- Split this work over multiple agents if necessary if the modernization task is complex

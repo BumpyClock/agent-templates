@@ -1,8 +1,6 @@
----
-name: adopt-c-bounds-safety
-description: Adopt or diagnose the C -fbounds-safety language extension.
----
 # C bounds safety
+
+This is an SDK 27 beta snapshot. Verify signatures and availability against the installed SDK, and follow the [local constraints](../../guide.md#local-constraints).
 
 Use for `-fbounds-safety` adoption, bounds annotations, compiler diagnostics, or runtime bounds violations.
 The extension adds compile-time restrictions and runtime bounds checks. Adoption requires annotations that describe the actual pointer contract.

@@ -1,7 +1,3 @@
----
-name: app-intents-specialist
-description: App Intents execution, entities, queries, parameters, and compatibility.
----
 # App Intents patterns
 
 Use for App Intents implementation or review.

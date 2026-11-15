@@ -17,7 +17,7 @@ The nested guides are technical references, not separately invoked skills.
 | Requested Xcode security audit or build-setting hardening | [Xcode security settings](upstream/audit-xcode-security-settings/guide.md) |
 | C bounds annotations or adoption of `-fbounds-safety` | [C bounds safety](upstream/adopt-c-bounds-safety/guide.md) |
 | XCTest migration to Swift Testing or test modernization | [Modernize tests](upstream/modernize-tests/guide.md) |
-| Device or simulator screenshots, UI inspection, or input | [Device interaction](upstream/device-interaction/guide.md) |
+| Device or simulator screenshots, UI inspection, or input, when Xcode's `DeviceInteraction` tools are available | [Device interaction](upstream/device-interaction/guide.md) |
 
 ## Local constraints
 
@@ -33,7 +33,10 @@ Do not infer distribution, account, entitlement, or security-setting change appr
 Shared scope, delegation, and validation policies still apply. Task references own API mechanics and domain-specific failure conditions, not a second execution policy.
 
 For build, concurrency, performance, simulator, or distribution workflows, use [iOS and macOS Development](../../../ios-macos-development/SKILL.md).
-For general Swift security and accessibility constraints, use [Swift and iOS](../languages/swift-ios.md).
+When Xcode's `DeviceInteraction` tools are absent, use that skill's simulator debugger.
+For App Intents and test migration, the references above own API rules and compatibility. That skill's App Intents guide and Swift Testing playbook add design workflow and examples; where they disagree, the references above win.
+Match the Swift tools version and deployment target in the project or `Package.swift` before using newer language modes.
+Keep the project's existing test framework; migrate XCTest to Swift Testing only when the task requests it.
 
 ## Source and maintenance
 

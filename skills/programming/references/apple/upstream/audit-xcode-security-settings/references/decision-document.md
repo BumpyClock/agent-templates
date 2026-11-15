@@ -22,7 +22,7 @@ For each setting considered in this run:
 - **Status unchanged** — leave the entry untouched.
 - **Status changed** (e.g., moved from Deferred to Enabled) — move the entry to the correct section. Preserve the old rationale as context (e.g., "Previously deferred because too noisy. Now enabled after codebase cleanup.").
 
-Never remove entries. The document is append/update only.
+Do not remove entries unless the user asks. Otherwise the document is append/update only.
 
 Sections:
 - **Enabled settings** — settings that are active.

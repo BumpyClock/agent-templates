@@ -44,4 +44,4 @@ try? await IntentDonationManager.shared.donate(
 
 It is easy to assume `PredictableIntent` is how you feed prediction. It is not — `PredictableIntent` only supplies the *display descriptions* the system shows when it presents a suggestion (via `predictionConfiguration`). It does not donate anything. You still call `IntentDonationManager.shared.donate(...)` for the signal; `PredictableIntent` just makes the resulting suggestion read well.
 
-Donation is the evergreen "teach the system what already happened" signal. On iOS 27+ there is a separate, complementary surface for pushing the entities that matter *right now* into suggestion surfaces (`RelevantEntities`) — for that, see the **relevance-and-context** reference in the sibling `app-intents-whats-new-27` skill.
+Donation is the evergreen "teach the system what already happened" signal. On iOS 27+ there is a separate, complementary surface for pushing the entities that matter *right now* into suggestion surfaces (`RelevantEntities`) — for that, see the **relevance-and-context** reference in the sibling [App Intents changes](../../app-intents-whats-new-27/guide.md) guide.

@@ -1,7 +1,3 @@
----
-name: swiftui-specialist
-description: SwiftUI data flow, view structure, localization, and rendering patterns.
----
 # SwiftUI patterns
 
 Use the relevant reference when writing or reviewing SwiftUI code.

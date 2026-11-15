@@ -1,11 +1,8 @@
----
-name: device-interaction
-description: "Verify app behavior on device or simulator via screenshots, UI hierarchy, and touch interactions."
----
 # Device Interaction
 
-TRIGGER when: user asks to verify/test/check if the app works on device, after implementing a UI-affecting feature that needs device verification, user says "does it work", "test this", "check on device", user reports UI doesn't work as expected, need to debug touch/interaction issues.
-DO NOT TRIGGER when: user asks about unit tests only, build-only requests without device testing, code review without device testing, simulator configuration questions, changes that don't affect UI (e.g. comments, refactors, non-UI logic).
+Use to verify app behavior on a device or simulator via screenshots, UI hierarchy, and touch interactions.
+
+This is an SDK 27 beta snapshot. Verify signatures and availability against the installed SDK, and follow the [local constraints](../../guide.md#local-constraints).
 
 ---
 
@@ -13,7 +10,6 @@ DO NOT TRIGGER when: user asks about unit tests only, build-only requests withou
 
 Keep one owner for a device interaction session so concurrent input cannot corrupt the observation.
 Work directly for a focused check. When delegation is justified by the shared execution policy, pass the session identifier, target behavior, and completion condition to its owner.
-
 
 ## Session Lifecycle
 
@@ -49,7 +45,7 @@ Omit both parameters to leave the scheme's arguments and environment unchanged.
 
 # Observations
 
-**ALWAYS** report UI issues that might be caused by code: overlapping or unreadable text, unexpectedly cropped image/text, wrong colors etc.
+In the flow under test, report UI issues that might be caused by code: overlapping or unreadable text, unexpectedly cropped image/text, wrong colors etc.
 
 ## DeviceEventSynthesize tool
 
@@ -183,5 +179,5 @@ When verifying, distinguish between these categories:
 
 - If application is not visible, retry once, as this might be caused by a slow device.
 - If tap target unclear, re-read hierarchy data for correct hitPoint coordinates.
-- You can inspect runtime logs to troubleshoot. If you suspect timing bugs, suggest to the main agent that temporarily adding `print` statements in the relevant code may help diagnose the issue.
+- You can inspect runtime logs to troubleshoot. If you suspect timing bugs, add temporary `print` statements in the relevant code and remove them afterward.
 - Report observed issues, the affected interaction, and any remaining execution limits.

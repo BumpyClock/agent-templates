@@ -56,7 +56,7 @@ struct LandmarkIntentValueQuery: IntentValueQuery {
 
 ## One OpenIntent per result type
 
-A visual result is inert until tapping it opens something, so give each result type an `OpenIntent` and the system offers "open" on it. The VI-specific rule: an `OpenIntent`'s `Value` must be a **single concrete** `AppEntity`/`AppValue`, never the `@UnionValue` — so with a multi-type (`@UnionValue`) result you write **one `OpenIntent` per case type**. (`OpenIntent` itself — the `target`, `openAppWhenRun`, the default `perform()` — is covered in the specialist skill's `url-representation`.)
+A visual result is inert until tapping it opens something, so give each result type an `OpenIntent` and the system offers "open" on it. The VI-specific rule: an `OpenIntent`'s `Value` must be a **single concrete** `AppEntity`/`AppValue`, never the `@UnionValue` — so with a multi-type (`@UnionValue`) result you write **one `OpenIntent` per case type**. (`OpenIntent` itself — the `target`, `openAppWhenRun`, the default `perform()` — is covered in the [App Intents patterns](../../app-intents-specialist/guide.md) guide's [`url-representation`](../../app-intents-specialist/references/url-representation.md).)
 
 ```swift
 import AppIntents

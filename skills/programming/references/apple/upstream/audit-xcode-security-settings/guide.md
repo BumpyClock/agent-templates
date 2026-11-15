@@ -1,8 +1,6 @@
----
-name: audit-xcode-security-settings
-description: Assess Xcode security build settings or apply authorized hardening.
----
 # Xcode security settings
+
+This is an SDK 27 beta snapshot. Verify signatures and availability against the installed SDK, and follow the [local constraints](../../guide.md#local-constraints).
 
 Use for a requested build-setting or entitlement assessment, or authorized hardening.
 Network security, code signing, and privacy API reviews are separate tasks.

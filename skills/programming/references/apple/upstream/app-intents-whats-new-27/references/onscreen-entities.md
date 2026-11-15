@@ -60,7 +60,7 @@ This uses the same `EntityIdentifier(for:identifier:)` form as the detail view, 
 - **One primary item** (a detail view, a single full-screen photo): annotate the whole screen — either the foreground `NSUserActivity`'s `appEntityIdentifier` (iOS 18.2) or the single-entity `.appEntityIdentifier(_:)` SwiftUI modifier (iOS 18.4). Siri resolves "this" to that one entity.
 - **Several meaningful items at once** (rows in a list, cards in a grid, messages in a thread): annotate each with `.appEntityIdentifier(forSelectionType:_:)` so a request like "the 2nd one" maps to the right row's entity. Don't collapse a multi-item screen to a single activity-level entity.
 
-For either to resolve, the annotated type must be a real `AppEntity` with a working `defaultQuery` (the system looks the entity up by the identifier you supply) — see `entities-and-queries` in the specialist skill.
+For either to resolve, the annotated type must be a real `AppEntity` with a working `defaultQuery` (the system looks the entity up by the identifier you supply) — see [`entities-and-queries`](../../app-intents-specialist/references/entities-and-queries.md) in the [App Intents patterns](../../app-intents-specialist/guide.md) guide.
 
 ## Finer-grained onscreen elements
 

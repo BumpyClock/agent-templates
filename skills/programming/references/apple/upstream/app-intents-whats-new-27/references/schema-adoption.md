@@ -169,13 +169,13 @@ struct CreateEventIntentAI {
 }
 ```
 
-`isAssistantOnly = true` hides the new intent from the Shortcuts app so users don't see a duplicate pair, while the old intent keeps serving existing shortcuts. Remove `isAssistantOnly` once you retire the old intent. Never rename or remove an intent while saved shortcuts or donations depend on it (see the specialist skill's identifiers-are-a-contract guardrail).
+`isAssistantOnly = true` hides the new intent from the Shortcuts app so users don't see a duplicate pair, while the old intent keeps serving existing shortcuts. Remove `isAssistantOnly` once you retire the old intent. Never rename or remove an intent while saved shortcuts or donations depend on it (see [App Intents specialist](../../app-intents-specialist/guide.md)).
 
 ## Traps
 
 - **Reaching for the deprecated `@Assistant*` spelling.** Training data over-represents `@AssistantIntent` / `@AssistantEntity` / `@AssistantEnum` and `AssistantSchema`. These are deprecated (renamed to `@AppIntent` / `@AppEntity` / `@AppEnum` and `AppSchema`). Always emit the `@App*` forms.
 - **Omitting or mistyping a schema-required property.** The schema fixes the *required* parameter/result shape: omit a required property, or give one the wrong type, and the build fails validation. You *can* add extras beyond the schema — **optional** extra parameters on an intent, or extra properties on an entity — but they surface only in the Shortcuts app; Siri and Apple Intelligence never fill or render them.
-- **Assuming a domain exists.** Never emit a domain unless verified in the SDK. When in doubt, use a generic placeholder (`.<domain>.<action>`) and tell the user to check the current SDK for the domains available to them.
+- **Assuming a domain exists.** Never emit a domain unless verified in the SDK. Look up the domain in the installed SDK. If it is absent, use a plain `AppIntent` without a schema and report that.
 
 ## Deployment target below SDK 18
 

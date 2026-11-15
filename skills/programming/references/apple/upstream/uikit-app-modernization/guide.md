@@ -1,8 +1,6 @@
----
-name: uikit-app-modernization
-description: Modernize UIKit screen, orientation, scene-lifecycle, or safe-area behavior.
----
 # UIKit app modernization
+
+This is an SDK 27 beta snapshot. Verify signatures and availability against the installed SDK, and follow the [local constraints](../../guide.md#local-constraints).
 
 Use for a requested UIKit migration in Swift or Objective-C.
 Select the task reference that matches the requested behavior rather than applying every migration to the codebase.
