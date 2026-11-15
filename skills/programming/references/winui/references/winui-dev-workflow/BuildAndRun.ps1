@@ -53,7 +53,7 @@ $analyzerDll = Join-Path $analyzerDir 'Microsoft.WindowsAppSDK.Analyzers.dll'
 $analyzerTargets = Join-Path $analyzerDir 'Microsoft.WindowsAppSDK.Analyzers.targets'
 if (-not (Test-Path -LiteralPath $analyzerDll -PathType Leaf) -or
     -not (Test-Path -LiteralPath $analyzerTargets -PathType Leaf)) {
-    Write-Error "The bundled WinUI analyzer payload is incomplete. Reinstall the winui plugin."
+    Write-Error "The bundled WinUI analyzer payload is incomplete. Restore the analyzer/ folder next to this script."
     exit 1
 }
 

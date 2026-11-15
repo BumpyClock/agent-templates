@@ -1,9 +1,6 @@
----
-name: winui-wpf-migration
-description: Port WPF behavior to WinUI 3 while preserving the application contract.
----
-
 # WPF to WinUI 3
+
+Use this guide to port WPF behavior to WinUI 3 while preserving the application contract.
 
 Choose a migration boundary from the requested scope.
 Preserve reusable domain code, valid MVVM abstractions, and supported distribution requirements.

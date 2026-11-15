@@ -227,74 +227,17 @@ async Task InitializeWebView()
 - [ ] All interactive controls have `AutomationProperties.Name`
 - [ ] Keyboard navigation works for the changed area
 - [ ] Tested with High Contrast theme enabled
-- [ ] Tab through the entire UI with keyboard only
 - [ ] Key interactive controls have stable `AutomationProperties.AutomationId` values
 - [ ] Switch to Windows High Contrast theme and verify readability
-- [ ] Run Narrator and verify all controls are announced correctly
-- [ ] Run Accessibility Insights for Windows on the app
+- [ ] For a change to accessibility behavior, check the changed area with Narrator or Accessibility Insights
 
 ---
 
 ## Code Quality
 
-### Roslyn Analyzer Setup
-
-```xml
-<ItemGroup>
-  <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="*" />
-</ItemGroup>
-```
-
-```xml
-<PropertyGroup>
-  <EnableNETAnalyzers>true</EnableNETAnalyzers>
-  <AnalysisLevel>latest-recommended</AnalysisLevel>
-  <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-  <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-  <Nullable>enable</Nullable>
-</PropertyGroup>
-```
-
-Follow **all** CA* (quality) and IDE* (code style) analyzer rules at their configured severity.
-
-### .editorconfig
-
-The project's `.editorconfig` is the source of truth for code style:
-- Private fields use `_camelCase` prefix.
-- File-scoped namespaces are required.
-- `this.` qualification is not used.
-
-### Code Cleanup Rules (After Every Edit)
-
-1. Remove unused `using` statements.
-2. Remove commented-out code.
-3. Remove unused variables and fields.
-4. Remove empty methods.
-5. Apply IDE suggestions (IDE0001–IDE0090).
-
-### Naming Conventions
-
-| Element | Convention | Example |
-|---|---|---|
-| Class / Struct | PascalCase | `MainViewModel` |
-| Interface | I + PascalCase | `INavigationService` |
-| Public method | PascalCase | `LoadDataAsync()` |
-| Private method | PascalCase | `ValidateInput()` |
-| Public property | PascalCase | `CurrentPage` |
-| Private field | _camelCase | `_settingsService` |
-| Parameter | camelCase | `userName` |
-| Local variable | camelCase | `itemCount` |
-| Constant | PascalCase | `MaxRetryCount` |
-| Async method | Suffix `Async` | `FetchDataAsync()` |
-| Boolean | Prefix `Is/Has/Can` | `IsLoading`, `HasAccess` |
-
-### File Organization
-
-Each `.cs` file should follow this order:
-1. `using` directives (System first, then others, alphabetically)
-2. Namespace declaration (file-scoped)
-3. Class/struct/interface declaration
-4. Inside the type: Constants → Static fields → Instance fields → Constructors → Properties → Public methods → Private methods → Event handlers → Nested types
+Honor the repository's analyzer configuration and `.editorconfig` at their configured severity.
+Do not add analyzer packages, change severities, or restyle code that the task does not touch.
+Remove unused `using` directives, variables, and members that your own change left behind.
 
 ---
 

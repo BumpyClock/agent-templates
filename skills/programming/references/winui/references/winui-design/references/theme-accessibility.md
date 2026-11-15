@@ -35,8 +35,10 @@ Cheaper than allocating a `SolidColorBrush` per theme and stays correct if the p
 ## High Contrast rules
 
 - Use system contrast colors or suitable platform resources for foreground and background pairs. Avoid opacity changes that reduce contrast.
-- See the HC pairing table in `brushes-and-icons.md` for which background pairs with which foreground.
-- Define each custom key needed in High Contrast, or provide a valid contrast-aware fallback. An empty dictionary does not define custom keys.
+- See the HC pairing table in [brushes-and-icons.md](brushes-and-icons.md#high-contrast-systemcolor-pairings) for which background pairs with which foreground.
+- In a contrast theme, WinUI selects one dictionary from each `ThemeDictionaries` collection. If a `HighContrast` dictionary exists, it is selected even when it is empty. A key missing from it does not fall back to the `Light`, `Dark`, or `Default` dictionary. The lookup continues to outer scopes and platform resources.
+- For an app-defined key in `Light` and `Dark`, define the same key in `HighContrast` and map it to a `SystemColor*` resource, as in the example above. If the lookup finds the key nowhere, XAML raises a parse error. The build may not detect it, so it can first appear at run time in a contrast theme.
+- For a platform key that you override (lightweight styling), an empty `HighContrast` dictionary is valid. The lookup reaches the platform's own contrast value.
 - Never set `HighContrastAdjustment="None"` to "fix" a contrast issue — it silences the system's auto-adjustment, so unless you've supplied correct system-aware brushes everywhere it makes things worse.
 
 ## Runtime theme switching

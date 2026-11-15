@@ -1,10 +1,6 @@
----
-name: winui-packaging
-description: Prepare WinUI MSIX packages, certificates, CI artifacts, or Store submissions.
----
-
 # WinUI Distribution
 
+Use this guide when you prepare WinUI MSIX packages, certificates, CI artifacts, or Store submissions.
 Separate artifact creation, certificate trust, installation, and publication.
 A package request does not itself authorize machine trust changes or Store submission.
 Preserve package identity, target architecture, and the intended distribution channel.

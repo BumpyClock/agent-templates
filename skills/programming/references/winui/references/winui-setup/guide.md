@@ -1,12 +1,9 @@
----
-name: winui-setup
-description: Inspect or repair the WinUI development toolchain.
----
-
 # WinUI Toolchain
 
+Use this guide to inspect or repair the WinUI development toolchain.
+
 Read-only prerequisite checks can proceed as part of an app task.
-A missing prerequisite does not require a new session or explicit skill invocation.
+A missing prerequisite can be handled within the current task.
 Install or upgrade tools only within the requested setup scope.
 Ask before administrator elevation or a Developer Mode change.
 

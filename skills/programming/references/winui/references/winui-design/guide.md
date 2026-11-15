@@ -1,9 +1,6 @@
----
-name: winui-design
-description: Select WinUI controls or change XAML layout, data bindings, themes, and accessibility.
----
+# WinUI Design
 
-
+Use this guide when you select WinUI controls or change XAML layout, data bindings, themes, or accessibility.
 
 ## Control discovery
 
@@ -28,7 +25,7 @@ Use these examples when the task requires a new app structure. Preserve an exist
 | Settings / config tool | `NavigationView` Left + `SettingsCard` / `SettingsExpander` | Windows Settings, Slack |
 | Document / session editor | `TabView` + full-bleed content, light chrome | Windows Terminal, VS Code, Notepad |
 | Hierarchical browser | `TreeView` + `ListView` + `BreadcrumbBar` | File Explorer, Outlook |
-| Developer tool / dashboard | `NavigationView` + card layout | Dev Home, GitHub Desktop |
+| Developer tool / dashboard | `NavigationView` + card layout | WinUI 3 Gallery, GitHub Desktop |
 | Single-purpose utility | Mode switcher + compact grid | Calculator, Snipping Tool |
 | Media / canvas / hero | `Grid` with hero surface, floating commands, **no** `NavigationView` | Photos, Spotify, Clipchamp |
 
@@ -150,11 +147,11 @@ public static bool Not(bool v) => !v;
 
 | ❌ Don't | ✅ Do instead |
 |---------|--------------|
-| Reflexively build every app as `NavigationView` Left | Pick the closest row in the silhouette table; hero / document / utility shapes are equally valid |
+| Reflexively build every app as `NavigationView` Left | Pick the closest row in the *App-shape anchors* table. Hero, document, and utility shapes are equally valid. |
 | Treat brand colour or tinted backdrop as off-pattern | Overriding `SystemAccentColor` or using a tinted `DesktopAcrylicBackdrop` is how Microsoft's own first-party apps differentiate |
 | Tiny content island on an oversized window | Either size the window to the content (see *Window sizing*) or let content fill the available space |
 | Custom pill / segmented tab switcher built by hand | `NavigationView` Top or `SelectorBar` |
-| Equal-width 50/50 column split where one pane is structural | Stable size for the structural pane, flexible for content — only if a structural pane is part of the silhouette at all |
+| Equal-width 50/50 column split where one pane is structural | Stable size for the structural pane, flexible for content. This applies only when the app shape has a structural pane. |
 | Hard-coded color literals (`#RRGGBB`, `White`) | `{ThemeResource}` brushes by semantic name |
 | `ScrollViewer` wrapped around a `ListView` / `GridView` | The collection control already scrolls — give it a constrained height |
 | Custom `ControlTemplate` for a standard control | Built-in control + lightweight style overrides |

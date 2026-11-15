@@ -1,9 +1,6 @@
----
-name: winui-dev-workflow
-description: Create, build, launch, or diagnose WinUI 3 apps with WinApp CLI.
----
-
 ### Create or Open a Project
+
+Use this guide to create, build, launch, or diagnose WinUI 3 apps with WinApp CLI.
 
 **New app** — let WinApp CLI install/update the official templates and scaffold:
 ```powershell
@@ -107,4 +104,5 @@ Install tools only within authorized setup scope. Ask before elevation or a mach
 
 ### References
 
-- `BuildAndRun.ps1` — included with this skill; adds the bundled analyzer and diagnostic defaults to `winapp run`
+- `BuildAndRun.ps1` — included with this guide; adds the bundled analyzer and diagnostic defaults to `winapp run`
+- `analyzer/Microsoft.WindowsAppSDK.Analyzers.dll` — unsigned prebuilt binary imported with microsoft/win-dev-skills plugin 0.6.0; SHA-256 `e989099a0e369a1f2c114b4d86a82789f1006d73efc719db96e9bbe45d88671c`. It runs inside the compiler when the wrapper is used.

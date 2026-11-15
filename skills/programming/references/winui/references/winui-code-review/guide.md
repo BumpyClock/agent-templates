@@ -1,10 +1,6 @@
----
-name: winui-code-review
-description: Assess WinUI-specific defects in a requested review or concrete quality concern.
----
-
 # WinUI Code Review
 
+Use this guide for a requested review or a concrete WinUI quality concern.
 Inspect affected XAML, C#, and dependencies needed to establish a defect.
 A successful build or an intended commit does not require a separate review.
 Honor repository conventions where several valid designs exist.
@@ -21,6 +17,7 @@ Require a concrete consequence before treating a pattern preference as a defect.
 - Check resource lookup across supported themes and cultures when those resources change.
 
 MVVM libraries, partial properties, command generators, and fixed spacing grids are project choices, not universal correctness requirements.
+Exception: when the app publishes with Native AOT or trimming, `[ObservableProperty]` on a field is a defect (MVVMTK0045). See [source generator patterns](../winui-packaging/references/sourcegen-patterns.md#communitytoolkitmvvm-source-generators).
 Collection replacement is valid when notifications and selection semantics remain correct.
 An `async` method does not itself move CPU work off the UI thread.
 

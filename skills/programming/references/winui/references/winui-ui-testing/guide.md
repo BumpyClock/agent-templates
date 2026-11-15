@@ -5,22 +5,22 @@ description: Inspect Windows UI Automation state or automate requested UI behavi
 
 ### Scope — any Windows app
 
-`winapp ui` drives Windows **UI Automation (UIA)**, the accessibility layer every Windows UI framework exposes, so the AutomationId-based approach in this skill works on **any** Windows desktop app: Win32, WPF, WinForms, and WinUI 3, packaged or unpackaged. The file-picker tests below already drive the OS's Win32 file dialog through the same verbs. For a non-WinUI app, use the same verbs and script template and skip the WinUI-specific gotchas (x:Bind `LostFocus` commit, ContentDialog selectors, MSIX relaunch).
+`winapp ui` drives Windows **UI Automation (UIA)**, the accessibility layer every Windows UI framework exposes, so the AutomationId-based approach in this guide works on **any** Windows desktop app: Win32, WPF, WinForms, and WinUI 3, packaged or unpackaged. The file-picker tests below already drive the OS's Win32 file dialog through the same verbs. For a non-WinUI app, use the same verbs and script template and skip the WinUI-specific gotchas (x:Bind `LostFocus` commit, ContentDialog selectors, MSIX relaunch).
 
 ### Test policy
 
-When the user or repository requires TDD, use the [test-behavior principle's TDD loop](../../../../../pstack/principle-test-behavior-not-implementation/SKILL.md#test-driven-development).
+For what a test should assert, use [Test Behavior, Not Implementation](../../../../../pstack/principle-test-behavior-not-implementation/SKILL.md).
 The examples below describe UIA mechanics, not a required test inventory.
 
 ### Approach
 
-The goal of this skill is to validate UI and app functionality automatically, without manual interaction, by exercising the app's UI elements, verifying their state, and asserting that the app behaves as expected under test conditions.
+The goal of this guide is to validate UI and app functionality automatically, without manual interaction, by exercising the app's UI elements, verifying their state, and asserting that the app behaves as expected under test conditions.
 
 There are two main approaches:
 1. Interactive exploration — manually run the app, use `winapp ui <command>` to explore the UI tree, find AutomationIds, verify element properties, and test functionality interactively. This is useful for discovery, but slow and expensive if repeated for every test iteration.
 2. Scripted batch testing — generate a `ui-tests.ps1` script that exercises selected UI contracts and asserts expected behavior in one pass. This allows you to run the tests automatically, capture results, and iterate quickly without manually interacting with the app each time.
 
-Unless the user asked for interactive exploration, or you are unfamiliar with the code/app or need to explore the UI tree to discover AutomationIds for hidden or dynamically generated elements (flyouts, dialogs, lazy-loaded content), **prefer scripted batch testing** — it is faster, repeatable, and produces a record of pass/fail results that can be reviewed and acted on.
+For a few checks, run `winapp ui` commands such as `wait-for` directly. Write a `ui-tests.ps1` script only for a repeatable suite or when the user asks for one. Explore interactively when selectors are unknown, such as flyouts, dialogs, or lazy-loaded content.
 
 ### `winapp ui` Verbs
 
@@ -33,7 +33,7 @@ Run `winapp ui --cli-schema` for the complete command structure as JSON, or `win
 
 ### Step 1: Use the Running App
 
-If the app is already running, use its PID. **Do NOT relaunch** — use the PID already captured from the build step. If the app is not running, build and launch it using the guidance in `references/winui-dev-workflow/guide.md`.
+If the app is already running, use its PID. **Do NOT relaunch** — use the PID already captured from the build step. If the app is not running, build and launch it using the [development guide](../winui-dev-workflow/guide.md).
 
 ### Step 2: Write the Test Script
 
@@ -361,7 +361,7 @@ winapp ui record -a $AppPid --duration-sec 6 --fps 30 -o "flow.mp4"
 
 ### Key Gotchas
 
-- **`set-value` does NOT commit default TextBox bindings** — WinUI 3 `x:Bind TwoWay` on TextBox.Text updates the ViewModel on `LostFocus` by default. UIA `set-value` changes the text but doesn't trigger focus events. **Fix:** apps should use `UpdateSourceTrigger=PropertyChanged` on TextBox bindings (see design skill). If the app doesn't, `invoke` a button or `click`/`focus` another element after `set-value` to trigger `LostFocus`.
+- **`set-value` does NOT commit default TextBox bindings** — WinUI 3 `x:Bind TwoWay` on TextBox.Text updates the ViewModel on `LostFocus` by default. UIA `set-value` changes the text but doesn't trigger focus events. **Fix:** move focus to another element after `set-value` so the binding commits. Do not change `UpdateSourceTrigger` to satisfy a test.
 - **Set a `RichEditBox` with `send-keys`, not `set-value`** — WinUI 3 `RichEditBox` / WPF `RichTextBox` don't support UIA value-setting. `focus` (or `--target`), then `send-keys "…" --via send-input` — which also raises real per-key `KeyDown`, so use it whenever a control reacts to individual keystrokes (or a `KeyboardAccelerator`) rather than a bulk value change.
 - **Distinguish saved data from restored state.** Inspect the data file to verify serialization. For restoration contracts, restart the app or exercise its initialization path and check restored state. If packaged-app automation prevents that check, report the execution limit. A valid file alone does not prove restoration.
 - **Use `$AppPid` not `$Pid`** — `$Pid` is a read-only automatic variable in PowerShell

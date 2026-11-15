@@ -16,7 +16,6 @@ Read only the guide needed for the current decision.
 | Inspect UI state or automate a behavior check | [UI tests](references/winui-ui-testing/guide.md) |
 | Prepare MSIX, certificates, CI, or Store submission | [Distribution](references/winui-packaging/guide.md) |
 | Port WPF behavior | [WPF migration](references/winui-wpf-migration/guide.md) |
-| Analyze an explicitly requested agent session | [Session report](references/winui-session-report/guide.md) |
 
 ## Tool choices
 
@@ -30,6 +29,6 @@ A small XAML edit does not require a sample search, setup audit, or separate cod
 ## Sources and maintenance
 
 These guides are local adaptations of [microsoft/win-dev-skills](https://github.com/microsoft/win-dev-skills), originally imported from plugin 0.6.0 (`68ae65d`).
-The archives preserve the imported originals.
+The imported originals are preserved under `skills_archive/merged-into-parent/winui-*` at the repository root.
 Check [WinApp CLI documentation](https://github.com/microsoft/WinAppCli/blob/main/docs/usage.md) against installed command help before API-sensitive work.
 Do not replace local decisions with upstream instructions during a documentation refresh.

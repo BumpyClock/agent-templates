@@ -110,9 +110,9 @@ Pair an accent background with `TextOnAccentFillColorPrimaryBrush` for foregroun
 
 Mica is a backdrop, not a brush — apply it via `Window.SystemBackdrop = new MicaBackdrop()` (or `MicaBackdrop { Kind = MicaKind.BaseAlt }` for Mica Alt). The content layer above Mica picks up `LayerFillColorDefaultBrush`; the commanding layer above Mica Alt picks up `LayerOnMicaBaseAltFillColorDefaultBrush`.
 
-### High Contrast — the only brushes allowed in an HC dictionary
+### High Contrast: SystemColor pairings
 
-The `SystemColor*Brush` family. Pair by role; never set `Opacity` on these.
+In a `HighContrast` dictionary, build values from the `SystemColor*Color` resources (referenced with `{ThemeResource}`) or the matching `SystemColor*Brush` keys below. Microsoft advises against hard-coded colors there, because users can edit contrast theme colors. Pair by role. Avoid `Opacity` on these colors, because it lowers contrast against the paired color.
 
 | Background | Foreground | Role |
 |------------|-----------|------|
@@ -122,7 +122,7 @@ The `SystemColor*Brush` family. Pair by role; never set `Opacity` on these.
 | `SystemColorHighlightColorBrush` | `SystemColorHighlightTextColorBrush` | Selected, hovered, pressed, in-progress |
 | `SystemColorButtonFaceColorBrush` | `SystemColorButtonTextColorBrush` | Buttons and interactive surfaces |
 
-If the platform brushes already work in contrast themes (they usually do), keep the dictionary empty: `<ResourceDictionary x:Key="HighContrast" />`.
+For the keys a `HighContrast` dictionary needs, and when it can stay empty, see [High Contrast rules](theme-accessibility.md#high-contrast-rules).
 
 ---
 

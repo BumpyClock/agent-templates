@@ -96,7 +96,11 @@ ShowWindow
 
 ## CommunityToolkit.Mvvm Source Generators
 
-Use partial properties (CommunityToolkit.Mvvm 8.4+). The legacy field form emits **MVVMTK0045** in WinRT/WinUI projects.
+When a WinUI 3 app publishes with Native AOT or trimming, use `[ObservableProperty]` on partial properties, not fields. The field form generates code that is not AOT compatible in WinRT apps, because the CsWinRT generator cannot produce marshalling code for it. The CsWinRT reflection fallback works only in builds without AOT or trimming.
+
+The analyzer reports the field form as warning **MVVMTK0045** whenever the CsWinRT AOT optimizer runs in automatic mode, which is the default for WinUI 3 projects. Without AOT or trimming, the field form works, and partial properties are a preference.
+
+Partial properties need CommunityToolkit.Mvvm 8.4+. With 8.4.1+ and a Roslyn 5.0+ compiler, C# 14 or later works. With 8.4.0 or an older compiler, set `<LangVersion>preview</LangVersion>`. With a lower language version, the generator reports error **MVVMTK0041**.
 
 ```csharp
 public partial class SettingsViewModel : ObservableObject
