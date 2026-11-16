@@ -14,7 +14,8 @@ Bring in three delegates to help with the user's request, usually for review
 or feedback. Use one strong model from each of three different providers, at
 high reasoning effort. If the user's instructions name council members, use
 those. Otherwise pick the latest flagship model from each provider, for
-example opus (claude), 6.1-sol (codex), and muse-wonder-full-1.0 (muse), Gemini Pro (antigravity).
+example opus (claude), 6.1-sol (codex), and muse-wonder-full-1.0 (muse), Gemini Pro (antigravity). 
+- Run the council reviews with each model in parallel.
 
 In T3 Code, use `orchestrator_capabilities` to resolve the models, then
 `delegate_task` to start one delegate per model in parallel. Elsewhere, use
