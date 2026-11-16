@@ -36,7 +36,7 @@ In round 1, leave out your own assessment and other delegates' findings, so the 
 When every delegate has returned:
 
 1. Check each finding against the code. Accept it, or reject it as incorrect, out of scope, or a nitpick. Repeated rounds invite scope creep, and keeping scope limited is your job.
-  1.1. For bugs, evaluate if it's an edge case and unlikely to occur or a valid finding that we should address. If it's an edge case or something extremely unlikely that can not happen then reject it. 
+  1.1. For bugs, evaluate if it's an edge case and unlikely to occur or a valid finding that we should address. If it's an edge case or something extremely unlikely that can not happen then reject it.  Do not design for rare or future cases nobody asked about.
 2. Report the round: each score, the accepted findings, the rejected findings with reasons, and disagreements between delegates. If a delegate gives no score, write `no score`. Do not invent one.
 3. If this session owns the implementation, fix the accepted findings and start a new round. Do not edit files while a delegate is still reviewing the same checkout.
 
