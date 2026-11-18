@@ -1,0 +1,6 @@
+interface:
+  display_name: "Prune Tests"
+  short_description: "Remove tests that guard no behavior"
+  default_prompt: "Use $prune-tests to prune redundant or implementation-bound tests in the selected path while preserving tests that catch behavioral regressions."
+policy:
+  allow_implicit_invocation: false
