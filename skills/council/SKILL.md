@@ -9,7 +9,7 @@ Bring in three delegates for the user's request, usually review or feedback. Tri
 
 ## Members
 
-Use one strong model from each of three different providers, at high reasoning effort. If the user names members, use those. Otherwise pick the latest flagship model from any three providers or model families. Examples, not a fixed roster: fable (claude), 6-astra (codex), muse-wonder-full-1.0 (muse), Gemini Pro (antigravity) all at high reasoning.
+Use one strong model from each of three different providers, at high reasoning effort. If the user names members, use those. Otherwise pick the latest flagship model from any three providers or model families. Examples, not a fixed roster: fable (claude), 6.2-astra (codex), muse-wonder-full-1.0 (muse), Gemini Pro (antigravity) all at high reasoning.
 
 In T3 Code, resolve the models with `orchestrator_capabilities`, then start one delegate per model with `delegate_task`. Elsewhere, use the harness's subagent tools or the providers' CLIs.
 

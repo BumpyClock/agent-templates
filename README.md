@@ -54,6 +54,17 @@ The `link-agent-templates.ts` script creates symlinks from this repo to the appr
 - **Pi**: `~/.pi/agent/...`
 - **Cursor**: `~/.cursor/skills` (one symlink per skill, same flat layout as Claude). This is the user-level directory Cursor loads and syncs to Cloud Agents.
 
+After linking Copilot skills, run `/skills reload` in an open Copilot CLI session,
+then use `/skills info <name>` to check that the session sees the skill. For
+Copilot Desktop, start a new chat instead of retrying in the old chat.
+`copilot skill list` checks discovery from a new CLI process, not the skill list
+held by an open session.
+
+For skills with `disable-model-invocation: true`, select `/skill-name` from the
+slash command menu. Copilot can load the skill through that command, but its
+model-facing `skill` tool returns `Skill not found` for the same skill. The linker
+preserves the flag so manual-only skills do not become automatic.
+
 ### Shared and harness-specific instructions
 
 The linker composes global instructions for Claude Code, Codex, GitHub Copilot,

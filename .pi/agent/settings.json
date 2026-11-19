@@ -1,7 +1,7 @@
 {
   "lastChangelogVersion": "1.5.2",
   "defaultProvider": "cliproxyapi",
-  "defaultModel": "gpt-6.1-sol",
+  "defaultModel": "gpt-6.2-sol",
   "defaultThinkingLevel": "medium",
   "subagents": {
     "agentOverrides": {
@@ -100,16 +100,16 @@
       "styles": []
     },
     "dynamicTitle": {
-      "model": "zai/glm-5-turbo",
-      "updateAfterTurns": 30
+      "model": "zai/glm-5.3-flash",
+      "updateAfterTurns": 120
     }
   },
   "enabledModels": [],
   "extensions": [],
   "steeringMode": "all",
   "extensionChangelogVersions": {
-    "{\"source\":\"npm:pi-lens\",\"scope\":\"user\"}": "4.4.11",
+    "{\"source\":\"npm:pi-lens\",\"scope\":\"user\"}": "4.4.12",
     "{\"source\":\"npm:@bumpyclock/pi-statusbar\",\"scope\":\"user\"}": "0.1.2",
-    "{\"source\":\"npm:pi-subagents\",\"scope\":\"user\"}": "0.87.0"
+    "{\"source\":\"npm:pi-subagents\",\"scope\":\"user\"}": "0.88.0"
   }
 }

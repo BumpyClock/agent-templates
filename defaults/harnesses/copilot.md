@@ -1,3 +1,3 @@
 ## GitHub Copilot-specific guidance
 
-<!-- Add GitHub Copilot model selection and subagent guidance here. -->
+When the user explicitly invokes a skill and its `<skill-context>` is already present, follow that context. Do not call the `skill` tool again for that skill. The tool rejects manual-only skills even after a successful slash command.

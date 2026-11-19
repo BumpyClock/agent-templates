@@ -604,6 +604,8 @@ async function linkCopilot(agentTemplatesDir: string): Promise<void> {
 	if (await pathExists(hooksSource)) {
 		await ensureLinked(hooksSource, hooksTarget);
 	}
+
+	info("Copilot sessions can keep an old skill list. Run /skills reload in an open CLI session, or start a new chat in Copilot Desktop.");
 }
 
 // =============================================================================
